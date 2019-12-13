@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    hostname: new URL('http://yoursite.com').hostname,
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.6.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}
+  };
+</script>
+
+  <meta name="description" content="一篇可以作为学习方向指引的文章分享">
+<meta name="keywords" content="归档">
+<meta property="og:type" content="article">
+<meta property="og:title" content="从框架看PHP的五种境界[转]">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2017&#x2F;04&#x2F;07&#x2F;archives&#x2F;php_career_guide_line&#x2F;index.html">
+<meta property="og:site_name" content="Log0c">
+<meta property="og:description" content="一篇可以作为学习方向指引的文章分享">
+<meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2019-12-13T03:13:58.381Z">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://yoursite.com/2017/04/07/archives/php_career_guide_line/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>从框架看PHP的五种境界[转] | Log0c</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Log0c</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-posts">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Posts</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="en">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/04/07/archives/php_career_guide_line/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Log0c">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          从框架看PHP的五种境界[转]
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2017-04-07 14:57:31" itemprop="dateCreated datePublished" datetime="2017-04-07T14:57:31+08:00">2017-04-07</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>一篇可以作为学习方向指引的文章分享</p>
+<a id="more"></a>
+
+
+<hr>
+<p>在撰写此文前首先必须申明的是本人不鄙视任何一种框架，也无意于挑起PHP框架间的战争，更没有贬低某个框架使用者的用意，本文纯粹个人的看法。你可以认为我无知也好，或者装逼也好，请不要试着在任何情况下，随便发起言语的攻击，这只是我个人的一些经验而已，你可以选择赞成或不赞成，也可以选择看与不看。</p>
+<p>还有本人基本对这些框架中的大部分都用的时间比较长，绝对不是随便出个Hello World!就在这里评论，曾任某某底层本土公司的技术总监，某某所谓巨头公司的iOS架构师和php高级程序员，XX外资创业企业的项目经理，基本上在这些职位工作期间基本上对大部分这里提到的PHP框架使用的都比较深入，也曾参与或主办过这些公司的招聘，现在虽然在创业，但是人才需求也是按照本文来的。写这篇文章的目的不在于跟阅读者挑起任何语言战争，只是希望给正在路上的PHPER提供一条适合自己的道路，如果你要骂SB，请到其他处，OK？对你没帮助你可以不看的。 好了开始我的分析吧。。。</p>
+<p>第一种境界:学院主义—无框架型<br>这是一个PHP语言的入门时期，也许也是你编程生涯的开始，可能你在读大学或者在培训部培训的初期，这个时候你正在吭HTML5,CSS3,js,jQuery还有对于你现在来说最重要的，应该学的东西PHP+MySQL。这个是你建立好的雏形的良好时机，也是最容易放弃的最难时期，并且决定你后面所有的编程职业生涯，前提是你真的想从事编程职业。</p>
+<p>常说的语言及做的事情:这个好难，太难搞了;我要考这个认证，对将来工作有帮助;找个单位实习下;接个项目练练手</p>
+<p>对各种付费虚拟产品的态度(如付费课程,付费服务器等)：买不起啊。。。学费都花了这么多，我还是找免费的吧或者能不能便宜点啊</p>
+<p>薪资水平:1.5k左右<br>公司职位:实习生<br>基本技能:html5,css3,js,jquery<br>操作系统:windows xp,windows 7,windows 8<br>编程工具:dreamweaver,eclipse,netbeans,editplus<br>PHP框架:无框架概念<br>占据人数:20%<br>第二种境界:屌丝主义—快速原型框架<br>这个时候你已经从学校或培训部毕业随之而来的劣性发展成就了这个境界，这个境界的程序员占据了PHPER人数 40%以上。为什么说是屌丝主义？经过前期的培训部速成培训(这个境界大部分是XXX100，XXX兄弟连等出来的)，你基本掌握了一些国内的CMS的使用与二次开发，以及一些类似Thinkphp,Codeigniter,Brophp等低层次框架的开发，并且去一些不怎么样的所谓创业公司或者大部分去了一些企业网站制作公司做一些企业网站，小模块，小系统的开发，然后你会说我好强大，认为PHP也就全会了，做了井底之蛙。。。崇尚quick and dirty。也就是这部分在国外不存在的人导致了PHP在国内长期被Rails,Nodejs等使用者鄙视。</p>
+<p>语言行为及特征状态:</p>
+<p>看不懂任何英语技术，英语文档，凡事没有培训部在搞的，只有英文文档的东西国内一律没大公司在用，都非主流，排斥英文文档和新技术，以及各种超出他学习能力范围的技术。</p>
+<p>不知道的技术一律会说，这些技术没有公司或者很少公司在用，谁要学。。。，大公司都是自己开发框架的。。。。</p>
+<p>比如 AngularJS,Emberjs,Hadoop,MongoDB,Nodejs,Rails,Requirejs等有点极客的都没听说过，然后会认为Java,.NET这种是企业级，C语言算法才是王道，用的公司多，真正的高手用C扩展PHP的，我想说别他妈这么屌丝好吗，你个XXX，我想说请你睁眼看看世界，好吗？别动不动别人说些你不懂的就说JAVA，C算法，数据结构这些，你懂吗，你个屌丝一枚的。。。你的垃圾公司没在用，不证明其它好的公司没在用，不是大家都用TP和CI的，OK？就知道php+mysql了？</p>
+<p>对真懂PHP的人的态度</p>
+<p>TP很给力啊，能开发的话什么框架都无所谓，技术高你就自己开发一个啊<br>你自己什么都不懂还来装逼<br>TP够用了，CI够用了<br>你有本事用C扩展个框架啊，SB<br>对各种付费虚拟产品的态度(如付费课程,付费服务器等)<br>广告，X你ma<br>收费的视频课程谁要，SB<br>免费空间，免费主机找找看<br>用开源的东西收费，无耻<br>喜欢用虚拟主机，只选择PHP5.2的空间上架或者用windows服务器<br>喜欢windows，认为用mac的都是装逼<br>认为只有兼容所有浏览器，至少也要支持IE8的才是正常的网站<br>让他付钱，他宁愿死<br>操作系统:windows xp,windows 7,windows 8</p>
+<p>使用的技能：Discuz,DEDECMS，Thinkphp,Yii Framework1,Codeigniter,Jquery…<br>PHP框架：Thinkphp,Codeigniter<br>所在公司：做企业站，做地方门户，做行业门户，做管理系统等<br>经常去的网站：CI中国，PHP100，Thinkphp官网,phpchina,discuz官方论坛,dedecms论坛等<br>编程工具:dreamweaver,eclipse,notpad++,editplus,EclipsePHP Studio(就xxx100那个垃圾出的工具)<br>薪资待遇：2.5k-5k<br>占据人数：40%<br>第三种境界：崇拜主义—全栈型框架<br>这部分人一般都是大学本科以上毕业，非培训部速成。但是由于前期也是很薄弱，学校里老师教的可能还不如速成培训部的，所以除了观念的不同，大部分实用技术不如速成培训部出来的。但是观念基本决定了后面走的路不一样。这部分人当中大部分转了ios,Rails等技术甚至一大半都转行了，甚于一小部分进入了PHPER行列。因为在学校英文都是过了一定等级的，看基本的英文文档还是比较可以，再加上可能由于学历限制去了一些比较还可以的公司，从基础程序员甚至实习生做起，还可以的公司一般都会使用大量只有英文文档的技术，比如我以前一个同事刚毕业的时候去应聘一个新美合资PHP工程师的职位，要求就是懂Agavi框架，还要懂前端的restful框架-backbone,其实那时候backbone刚出来还不错的。然后就在试用期死啃这两个框架，因为有大量比较散的中文文档，所以终于吭懂了，以后看其它部分中英文都有点的文档等基本也可以尝试看看了，但是毕竟也能通过半英语学习了，然后进步都是很快。但是一个悲催的转折点又来了，这时候就看你的选择了。</p>
+<p>是什么转折点呢？就是对某一个框架(这里框架只是某种技术的狭义说法)出现了比较大的喜欢程度，而且这个框架也基本中文文档不全，但是用的中小型有新意的创业型公司，外资企业，合资企业都蛮多的，薪资待遇也还不错，尤其那些不能看英文文档的人让他获得了优越感，再加上这些框架本身都是基于composer包,php-fig最新标准等发布的，并且学习使用也不是很复杂，深深的让他喜欢上了此款框架，在这个时候基本上出于已经产生的西方主义的好奇心，他已经掌握了一些类似bootstrap,backbone等简单的前端UI技术以及轻量MV*框架，这个时候也许真的是做什么项目，只要是web，他都可以做了，并且出于中小型高端企业的要求，他需要会的还有Linux服务器的各种架设比如web服务器，邮件服务器等，这个时候基本上他如果有客户资源自己都可以做产品创业了。所以转则点就是他这个时候选择不思进取(当然创业不算，因为创业者是最牛逼的)，一直用他掌握的框架迅速的开发各种东西，还是学新的框架？如果是前者，将导致他永久的崇拜一个比较简单的全栈框架，然后永久的等待这个框架的新版本发布，而不会转移视线，更别说学新的东西了，这样基本上升就很困难了，比如说用larvel框架，那么别人跟你说zf2,sf2，你会说太复杂的东西不好，太复杂的东西不适合我。。。请改进一步吧，会有更尖端的东西等着你</p>
+<p>对各种付费虚拟产品的态度(如付费课程,付费服务器等)<br>不需要课程了，谢谢，我用xxx就够了，那个太复杂不适合我<br>嗯，我正在找这个视频，买的，自己看这么复杂的文档太累<br>阿里云还是不错的<br>代码放Ucloud，静态资源放七牛吧<br>感觉BAE不错</p>
+<p>使用的技能:bootstrap,jquery-mobile,zurb foundation,backbone,laravel4/zf1/cakephp/fuelphp/Yii2,linux服务器等</p>
+<p>PHP框架：laravel4,zend framework1,cakephp,fuelphp,Yii Framework2<br>操作系统:windows 7,windows 8,mac osx,linux<br>所在公司：电子商务，门户媒体，社交网络，各类创新型网站等<br>编程工具：sublime Text,PHPstorm,vim<br>经常去的网站：segmentfault，德问，v2ex,ruby-china,github,cnode等<br>薪资待遇：6k-10k<br>占据人数：25%<br>第四种境界：完美主义—组件型框架<br>一般这个境界的PHP程序员基本处于一种完美状态了，基本上一个人能完成一个项目所有的东西，包括前端(前端可以设计的非常潮或者说fashion),后端，以及服务器的架设优化，包括云计算底层的开发，各种虚拟化的东西，比如KVM等，基本已经掌握各种开发，但是开发经验不一定就多，年龄不会超过30，基本会各种技术，移动，底层，前端，后端，mac,linux什么的都可以拿起就玩，会用最屌的开发工具—emacs进行自己的编码，崇尚完美主义，喜欢把用户体验和架构都做的一点瑕疵都没有，比如一个颜色的调度课程都要花去他一整天的功夫，但是在团队开发面前，更能发挥出这个境界的威力，因为还没达到第五种神的境界，所以过于最求强大，不仅会带来项目时间上的硬伤，也会给项目带来超级大的成本花费，包括学员的学习成本，强大的框架需要的维护成本等等。适合在一些比较大的巨头企业或者大公司或者外资创业企业做项目领导或者首席架构等职位，单论技术，已经在PHP方面可以算是很强大了。你需要会的是学习期至少一年多到两年的symfony2框架，而不是几天就会的laravel，所以花费的学习成本是极其大的，承担的风险也大，一般在这个境界的PHP程序员，国内并不多，但是也不是很少，这个阶段的程序员一般都是从其它编程语言转过来的，比如rails或者nodejs或者Python等，但是java和.net由于本身就不符合极客的历史潮流，转换到PHP已经无法到这里了，一般直接转屌丝码农境界去了。rails或node等转过来的程序员一般都理解依赖注入，监听器，过滤器等等技术面，并且node里的npm和rails里的gem与php的composer是一样的，sf2和zf2的bundle机制也是与rails相同的，所以导致了rails程序员一转3，4个月就会sf2的情况，再加上zf2和sf2本身没中文文档，所以必须是英文比较好的才能学会，尤其sf2，有book,cookbook,refenrencebook,componentbook，bundlesbook等等,而且必须用几十个第三方bundle才能完成一个真正意义上的应用，复杂度是难以想象的，但是复杂的东西有其强大之处，比如</p>
+<p>hwioauthbundle,fosuserbundle,fosrestbundle等，都是非常不错的，fosrestbundle中根据group加载关联推到rest，而不必全部加载关联数据就是个很不错的例子，而asseticbundle直接可以合并压缩js和css,并且基于node的组件，更是把sf2的强大发挥的淋漓尽致，但是每个bundle的学习成本基本比学整个laravel4框架难度还大，而且全是github的wiki没有任何中文，这就不但加大了技术学习成本也加大了语言学习成本，所以到达这个境界需要无比的毅力和探索的好奇心，两者缺一不可。</p>
+<p>对各种付费虚拟产品的态度(如付费课程,付费服务器等)</p>
+<p>嗯，有需要，课程买好了,有空看看哦<br>udemy上的课程做的很不错，一般$99的课程都不错的，我买了Rails<br>我觉得paas比较好，国内paas都不给力啊<br>感觉qingcloud很不错，一直在用<br>使用的技能：</p>
+<p>前端:Anauglar/ember/backbone,jquery,bootstrap/foundation,Sass,Scss,Less…各种restful技术<br>后端:Symfony2/Zend Framework2,Rails,Nodejs<br>运维:Linux玩的超级熟练,Mongodb,Mysql已经Redis,Nginx等不管web还是其它服务器都能架设，优化并维护，还有各种虚拟化KVM等<br>底层:还不给力<br>移动:一般以IOS开发的居多，可能会有安卓的开发<br>HTML5:Sencha Touch等这些框架随便玩玩<br>PHP框架：symfony2,zend framework2<br>所在公司：各类创新型网站,移动开发,云计算web层开发(可能兼顾底层)等<br>经常去的网站：stackoverflow,google,github等<br>编程工具:sublime text , emacs,text mate<br>薪资待遇：11k-15k<br>占据人数：10%<br>第五种境界：极客主义—微型框架<br>请注意：这种境界必须经过前面的第四种境界才能到达</p>
+<p>这个境界不必多说，相信仁者见仁，智者见智了。第二种境界的码农会说这个连他们都不如，但是第四种境界的高手会对他们膜拜，只就是极客的魅力，只让高手膜拜。微型框架之所以有这个效应是因为你学框架本身，一晚上就会，你要用的像个极客，也许难度早已超出你的想象，是第四种境界的好几倍，比如你要restful，随随便便调用一下，symfony2的组件再通过组件调用fosrestbundle,直接就可以写rest服务器了，如果你是菜鸟，就会直接返回json，这就是微型框架高明之处，神与菜鸟就一念之隔。不多说自己体会。只有一个比喻，还记得神雕侠侣吗？第三种境界就是独孤求败30岁前用的锋利无比的剑，第四种境界就是他中年用的也是杨过后来用的重80斤却不开锋的剑，第五种境界就是他晚年用的木剑，其实是回归原始无剑胜有剑了，此时不需要什么强大的了，微型框架各种引入(别跟我最后来一句牛人自己开发框架，OK？那是傻逼产生垃圾做的东西)，都是神的。。。。。。。</p>
+<p>只能说你的薪资不低于20k了，如果是这个境界，也可以自己选择创业哦。</p>
+<hr>
+<h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><p><a href="http://www.chenhaizan.cn/article-php~from~the~frame~to~see~the~five~state.html" target="_blank" rel="noopener">原文地址</a></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E5%BD%92%E6%A1%A3/" rel="tag"># 归档</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2017/03/17/archives/first_internship/" rel="prev" title="第一份实习总结">
+      <i class="fa fa-chevron-left"></i> 第一份实习总结
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2017/06/28/archives/phpstorm_userful_shortcut/" rel="next" title="PHPStorm常用快捷键">
+      PHPStorm常用快捷键 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#参考"><span class="nav-number">1.</span> <span class="nav-text">参考</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name"></p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+          <span class="site-state-item-count">26</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/carlclone" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;carlclone" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://leetcode.com/carlclone" title="LeetCode → https:&#x2F;&#x2F;leetcode.com&#x2F;carlclone" rel="noopener" target="_blank"><i class="fa fa-fw fa-code"></i>LeetCode</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder"></span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.6.0
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

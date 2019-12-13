@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    hostname: new URL('http://yoursite.com').hostname,
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.6.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}
+  };
+</script>
+
+  <meta name="description" content="无">
+<meta name="keywords" content="归档">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Redis应用场景-理解总结">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2017&#x2F;08&#x2F;09&#x2F;archives&#x2F;redis_sum&#x2F;index.html">
+<meta property="og:site_name" content="Log0c">
+<meta property="og:description" content="无">
+<meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2019-12-13T03:13:58.382Z">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://yoursite.com/2017/08/09/archives/redis_sum/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>Redis应用场景-理解总结 | Log0c</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Log0c</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-posts">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Posts</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="en">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/08/09/archives/redis_sum/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Log0c">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Redis应用场景-理解总结
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2017-08-09 14:57:31" itemprop="dateCreated datePublished" datetime="2017-08-09T14:57:31+08:00">2017-08-09</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>无</p>
+<a id="more"></a>
+
+<h1 id="数据类型"><a href="#数据类型" class="headerlink" title="数据类型"></a>数据类型</h1><p><strong>所有类型都是基于键值对存在</strong></p>
+<h2 id="String-字符串（也可以是数字）"><a href="#String-字符串（也可以是数字）" class="headerlink" title="String 字符串（也可以是数字）"></a>String 字符串（也可以是数字）</h2><p>常用命令<code>set,get,decr,incr,mget</code></p>
+<h2 id="Hash-哈希映射表-（PHP的数组就是hash-table）"><a href="#Hash-哈希映射表-（PHP的数组就是hash-table）" class="headerlink" title="Hash 哈希映射表 （PHP的数组就是hash table）"></a>Hash 哈希映射表 （PHP的数组就是hash table）</h2><p>常用命令<code>hget,hset,hgetall</code></p>
+<p>使用场景：和php数组作用类似。结构化的信息，如用户的一系列信息，商品的信息，由许多子信息构成，使用字符串需要序列化存储，修改需要反序列化再修改，Redis的Hash结构可以使你像在数据库中Update一个属性一样只修改某一项属性值。</p>
+<h2 id="List"><a href="#List" class="headerlink" title="List"></a>List</h2><p>常用命令<code>lpush,rpush,lpop,rpop,lrange</code><br>使用数据结构中的双向链表实现，lrange类似于线性表查询操作(关注列表，粉丝列表)，push和pop操作类似数据结构中的队列和栈的操作</p>
+<h2 id="Set-集合"><a href="#Set-集合" class="headerlink" title="Set 集合"></a>Set 集合</h2><p>常用命令<code>sadd,spop,smembers,sunion</code><br>类似于list，但是set中不允许有重复元素（自动排重）</p>
+<p>使用场景：set提供了判断某个成员是否在一个set集合内。可以存储一些集合性的数据。比如在微博应用中，可以将一个用户所有的关注人存在一个集合中，将其所有粉丝存在一个集合。使用求交集实现共同关注，共同喜好，使用差集实现二度好友（可能认识的好友），还有求并集。</p>
+<p>最后，上面对集合的操作，可以使用不同的命令选择返回给客户端，或者存到新的集合。</p>
+<h2 id="Sorted-Set-有序集合"><a href="#Sorted-Set-有序集合" class="headerlink" title="Sorted Set 有序集合"></a>Sorted Set 有序集合</h2><p>常用命令<code>zadd,zrange,zrem,zcard</code></p>
+<p>和set类似，但多了一个score字段实现自动排序，有序的并且不重复的集合</p>
+<p>使用场景：<br>1.微博的博文发布时间作为score，则取出来的时候就已经按时间排序<br>2.带优先级的消息队列，普通消息，重要消息</p>
+<h2 id="Pub-Sub"><a href="#Pub-Sub" class="headerlink" title="Pub/Sub"></a>Pub/Sub</h2><p>发布和订阅功能，对某一个key值进行发布和订阅，发布后，所有订阅该key的客户端都会收到消息</p>
+<p>使用场景：即时消息系统，实时聊天，群聊</p>
+<p>还有些不常用的不列举了</p>
+<h1 id="其他使用场景"><a href="#其他使用场景" class="headerlink" title="其他使用场景"></a>其他使用场景</h1><p>在数据类型介绍中对一些场景进行了总结，这里是一些补充的部分。<br>1.用于快速读取数据（缓存）<br>2.作为计数器（Counter），如点赞，收藏数</p>
+<h1 id="具体使用Demo，优化案例"><a href="#具体使用Demo，优化案例" class="headerlink" title="具体使用Demo，优化案例"></a>具体使用Demo，优化案例</h1><p>1.显示最新的项目列表<br><code>SELECT * FROM foo WHERE ... ORDER BY time DESC LIMIT 10</code>  常用的显示最新10条数据，数据越多越慢</p>
+<p>Demo：用户的最新n条评论<br>使用Redis的List的队列功能，先进先出，在存入数据库的同时将对应评论的ID LPUSH到列表中。<br><code>LPUSH latest.comments</code> <ID></p>
+<p>裁剪列表长度为5000<br><code>LTRIM latests.comments 0 5000</code>  ，当需要获取超出5000个的最新评论的时候，才去数据库读取</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">FUNCTION get_latest_comments(start, num_items):  </span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line">    id_list &#x3D; redis.lrange(&quot;latest.comments&quot;,start,start+num_items - 1)  </span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line">    IF id_list.length &lt; num_items  </span></pre></td></tr><tr><td class="gutter"><pre><span class="line">4</span></pre></td><td class="code"><pre><span class="line">        id_list &#x3D; SQL_DB(&quot;SELECT ... ORDER BY time LIMIT ...&quot;)  </span></pre></td></tr><tr><td class="gutter"><pre><span class="line">5</span></pre></td><td class="code"><pre><span class="line">    END  </span></pre></td></tr><tr><td class="gutter"><pre><span class="line">6</span></pre></td><td class="code"><pre><span class="line">    RETURN id_list  </span></pre></td></tr><tr><td class="gutter"><pre><span class="line">7</span></pre></td><td class="code"><pre><span class="line">END</span></pre></td></tr></table></figure>
+
+<p>2.删除和过滤<br>这个还没看懂</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">我们可以使用LREM来删除评论。如果删除操作非常少，另一个选择是直接跳过评论条目的入口，报告说该评论已经不存在。</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line">       有些时候你想要给不同的列表附加上不同的过滤器。如果过滤器的数量受到限制，你可以简单的为每个不同的过滤器使用不同的Redis列表。毕竟每个列表只有5000条项目，但Redis却能够使用非常少的内存来处理几百万条项目。</span></pre></td></tr></table></figure>
+<p>3.排行榜相关</p>
+<p>每次获得新得分时，我们用这样的代码<br><code>ZADD leaderboard  &lt;score&gt;  &lt;username&gt;</code></p>
+<p>获取前100名高分用户<code>ZREVRANGE leaderboard 0 99</code>   从大到小 ZRANGE从小到大<br>获得特定用户的全球排名 <code>ZRANK leaderboard &lt;username&gt;</code></p>
+<p>4.按照用户投票和时间排序（还不是很明白）<br>  score = points / time^alpha<br>  因此用户的投票会相应的把新闻挖出来，但时间会按照一定的指数将新闻埋下去。</p>
+<p>5.处理过期项目(具体应用场景？)</p>
+<p>6.计数</p>
+<p>7.特定时间内的特定项目</p>
+<p>8、实时分析正在发生的情况，用于数据统计与防止垃圾邮件等</p>
+<p>9、Pub/Sub</p>
+<p>10、队列</p>
+<p>11、缓存</p>
+<h1 id="一些概念"><a href="#一些概念" class="headerlink" title="一些概念"></a>一些概念</h1><p>Redis是单线程的</p>
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><p><a href="http://blog.csdn.net/hguisu/article/details/8836819" target="_blank" rel="noopener">Redis应用场景</a><br><a href="https://redis.io/documentation" target="_blank" rel="noopener">Redis官方文档</a><br><a href="http://www.redis.cn/commands.html" target="_blank" rel="noopener">Redis中文命令文档</a></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E5%BD%92%E6%A1%A3/" rel="tag"># 归档</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2017/08/05/archives/laravel_code_book_reading/" rel="prev" title="Laravel框架关键技术-阅读总结">
+      <i class="fa fa-chevron-left"></i> Laravel框架关键技术-阅读总结
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2017/08/09/archives/mac_py_env_deploy/" rel="next" title="Mac Python环境miniConda +Scrapy搭建">
+      Mac Python环境miniConda +Scrapy搭建 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#数据类型"><span class="nav-number">1.</span> <span class="nav-text">数据类型</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#String-字符串（也可以是数字）"><span class="nav-number">1.1.</span> <span class="nav-text">String 字符串（也可以是数字）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Hash-哈希映射表-（PHP的数组就是hash-table）"><span class="nav-number">1.2.</span> <span class="nav-text">Hash 哈希映射表 （PHP的数组就是hash table）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#List"><span class="nav-number">1.3.</span> <span class="nav-text">List</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Set-集合"><span class="nav-number">1.4.</span> <span class="nav-text">Set 集合</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Sorted-Set-有序集合"><span class="nav-number">1.5.</span> <span class="nav-text">Sorted Set 有序集合</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Pub-Sub"><span class="nav-number">1.6.</span> <span class="nav-text">Pub/Sub</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#其他使用场景"><span class="nav-number">2.</span> <span class="nav-text">其他使用场景</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#具体使用Demo，优化案例"><span class="nav-number">3.</span> <span class="nav-text">具体使用Demo，优化案例</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#一些概念"><span class="nav-number">4.</span> <span class="nav-text">一些概念</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#参考"><span class="nav-number">5.</span> <span class="nav-text">参考</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name"></p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+          <span class="site-state-item-count">26</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/carlclone" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;carlclone" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://leetcode.com/carlclone" title="LeetCode → https:&#x2F;&#x2F;leetcode.com&#x2F;carlclone" rel="noopener" target="_blank"><i class="fa fa-fw fa-code"></i>LeetCode</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder"></span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.6.0
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    hostname: new URL('http://yoursite.com').hostname,
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.6.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}
+  };
+</script>
+
+  <meta name="description" content="目标: 能用自己的话精炼正确地总结出每一节的知识点 , 就算完成目标了">
+<meta name="keywords" content="基础补足">
+<meta property="og:type" content="article">
+<meta property="og:title" content="知识点的reduce_网络编程">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;09&#x2F;25&#x2F;knowledge_map_reduce&#x2F;network_programming&#x2F;index.html">
+<meta property="og:site_name" content="Log0c">
+<meta property="og:description" content="目标: 能用自己的话精炼正确地总结出每一节的知识点 , 就算完成目标了">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;images&#x2F;epoll.png">
+<meta property="og:updated_time" content="2019-12-13T03:13:58.384Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;images&#x2F;epoll.png">
+
+<link rel="canonical" href="http://yoursite.com/2019/09/25/knowledge_map_reduce/network_programming/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>知识点的reduce_网络编程 | Log0c</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Log0c</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-posts">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Posts</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="en">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/09/25/knowledge_map_reduce/network_programming/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Log0c">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          知识点的reduce_网络编程
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2019-09-25 00:00:00" itemprop="dateCreated datePublished" datetime="2019-09-25T00:00:00+08:00">2019-09-25</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <blockquote>
+<p> 目标: 能用自己的话精炼正确地总结出每一节的知识点 , 就算完成目标了</p>
+</blockquote>
+<a id="more"></a>
+
+<h1 id="TCP三次握手"><a href="#TCP三次握手" class="headerlink" title="TCP三次握手"></a>TCP三次握手</h1><blockquote>
+<p>涉及到安全的模型,脑子里都要有一个前置条件 , 双方互不信任 , 信道不可靠</p>
+</blockquote>
+<p><code>网络课 04</code></p>
+<p>1 确认SN</p>
+<p>2.这个问题的本质是, 双方基于”信道不可靠”的前提下的通信, 但是通信双发需要就某个问题达成一致. 而要解决这个问题, 无论你在消息中包含什么信息, 三次通信是理论上的最小值. 所以三次握手不是TCP本身的要求, 而是为了满足”在不可靠信道上可靠地传输信息”这一需求所导致的</p>
+<p>3.建立两个单向连接的过程</p>
+<ul>
+<li><p>客户端结束阻塞在connect  , ESTABLISHED 客户端到服务端的单向连接</p>
+</li>
+<li><p>服务端结束阻塞在accept , ESTABLISHED 服务端到客户端的单向连接</p>
+</li>
+</ul>
+<p>4.TCP 的设计思想是 best effort , 即尽最大努力去保证可靠性 , 这也是一个体现</p>
+<h1 id="消息队列和事件循环"><a href="#消息队列和事件循环" class="headerlink" title="消息队列和事件循环"></a>消息队列和事件循环</h1><p><code>浏览器课 15</code></p>
+<h2 id="经典实现"><a href="#经典实现" class="headerlink" title="经典实现"></a>经典实现</h2><p>1.浏览器的Javascript异步实现 , 渲染进程,IO进程和事件队列的关系</p>
+<p>2.网络框架如Netty 的  , 多路复用(select , poll , epoll )+非阻塞IO  事件循环模型</p>
+<p>3.消息队列课程中,老师实现的RPC框架 也使用到了事件循环模型</p>
+<h2 id="事件循环模型的演化过程"><a href="#事件循环模型的演化过程" class="headerlink" title="事件循环模型的演化过程?"></a>事件循环模型的演化过程?</h2><blockquote>
+<p> 背景 : 有多个任务要执行</p>
+</blockquote>
+<p>1.最基本的顺序执行</p>
+<p>2.为了解决1中不能在执行途中插入新的任务 , 新增了”循环”和”事件”</p>
+<p>3.为了解决2中不能接收来自其他线程的任务,新增了”消息队列” , 并且在从队列中获取任务的时候需要加锁 , 是block queue</p>
+<p>4 更进一步想要接收来自其他进程的任务 , 需要IPC通信 , 然后有一个专门的线程负责接收并插入队列 , 这个线程就是IO线程  (chrome浏览器中 , 渲染主线程负责事件执行 , IO线程负责事件分发)</p>
+<h2 id="后续"><a href="#后续" class="headerlink" title="后续"></a>后续</h2><p> 实现一遍事件循环模型</p>
+<h1 id="select-感知多个I-O事件"><a href="#select-感知多个I-O事件" class="headerlink" title="select 感知多个I-O事件"></a>select 感知多个I-O事件</h1><p><code>网络编程课 20</code></p>
+<h2 id="什么是IO多路复用"><a href="#什么是IO多路复用" class="headerlink" title="什么是IO多路复用?"></a>什么是IO多路复用?</h2><p>一个网络程序里通常会有多种IO , 比如 标准输入输出 , 网络套接字IO , 在单进程的情况下 , 一般只能阻塞在一种IO上等待 , 而IO多路复用就类似上面的事件循环 , 将多种IO看成不同的事件 , 解决了阻塞在一种IO上的问题</p>
+<p>在这里 , 内核则相当于上文中派发任务的”IO进程”  , 应用程序则相当于”渲染进程”</p>
+<p>但有一个区别是,linux的多路复用实现并没有用到队列 ,  非linux的kqueue实现则使用了队列</p>
+<h2 id="select的使用方法"><a href="#select的使用方法" class="headerlink" title="select的使用方法?"></a>select的使用方法?</h2><p>设置一个描述符集合 , 一个读事件集合 , 写事件集合 , 异常事件集合<br>描述符基数是当前最大描述符 +1；<br>每次 select 调用完成之后，记得要重置待测试集合</p>
+<h2 id="SIGPIPE信号是什么"><a href="#SIGPIPE信号是什么" class="headerlink" title="SIGPIPE信号是什么?"></a>SIGPIPE信号是什么?</h2><p>待查资料</p>
+<h2 id="select可以对unix管道-pipe-进行检测么-检测的就绪条件是什么"><a href="#select可以对unix管道-pipe-进行检测么-检测的就绪条件是什么" class="headerlink" title="select可以对unix管道(pipe)进行检测么? 检测的就绪条件是什么?"></a>select可以对unix管道(pipe)进行检测么? 检测的就绪条件是什么?</h2><p>待查资料</p>
+<h2 id="根据我们前面的描述，一个描述符集合哪些描述符被设置为-1，需要进行检测是完全可以知道的，你认为-select-函数里一定需要传入描述字基数这个值么？请你分析一下这样设计的目的又是什么呢？"><a href="#根据我们前面的描述，一个描述符集合哪些描述符被设置为-1，需要进行检测是完全可以知道的，你认为-select-函数里一定需要传入描述字基数这个值么？请你分析一下这样设计的目的又是什么呢？" class="headerlink" title="根据我们前面的描述，一个描述符集合哪些描述符被设置为 1，需要进行检测是完全可以知道的，你认为 select 函数里一定需要传入描述字基数这个值么？请你分析一下这样设计的目的又是什么呢？"></a>根据我们前面的描述，一个描述符集合哪些描述符被设置为 1，需要进行检测是完全可以知道的，你认为 select 函数里一定需要传入描述字基数这个值么？请你分析一下这样设计的目的又是什么呢？</h2><p>因为内核扫描集合是从大到小扫描的 , 比如集合{ 0 , 1 ,4 } ,  4表示为 fd[5-1] , 如果没有给基数, 内核还需要多扫描一遍获得这个数 , 但又引出一个问题 , 为什么要从大到小扫描? 突然想起一个”局部性原理” , 越接近当前时间生成的描述符越容易被访问到(越容易有事件发生 ) , 类似LRU缓存 , 是这样吗?</p>
+<h1 id="poll：另一种I-O多路复用"><a href="#poll：另一种I-O多路复用" class="headerlink" title="poll：另一种I-O多路复用"></a>poll：另一种I-O多路复用</h1><p><code>网络编程课 21</code></p>
+<blockquote>
+<p>产生背景: select默认最大值为1024</p>
+</blockquote>
+<h2 id="使用方法"><a href="#使用方法" class="headerlink" title="使用方法?"></a>使用方法?</h2><p>传入pollfd结构体组成的数组 , 数组大小可以突破1024 , pollfd的结构:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">struct pollfd &#123;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line">    int    fd;       &#x2F;* file descriptor *&#x2F;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line">    short  events;   &#x2F;* events to look for *&#x2F;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">4</span></pre></td><td class="code"><pre><span class="line">    short  revents;  &#x2F;* events returned *&#x2F;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">5</span></pre></td><td class="code"><pre><span class="line"> &#125;;</span></pre></td></tr></table></figure>
+
+
+
+<h2 id="第一道，在我们的程序里-event-set-数组的大小固定为-INIT-SIZE，这在实际的生产环境肯定是需要改进的。你知道如何改进吗？"><a href="#第一道，在我们的程序里-event-set-数组的大小固定为-INIT-SIZE，这在实际的生产环境肯定是需要改进的。你知道如何改进吗？" class="headerlink" title="第一道，在我们的程序里 event_set 数组的大小固定为 INIT_SIZE，这在实际的生产环境肯定是需要改进的。你知道如何改进吗？"></a>第一道，在我们的程序里 event_set 数组的大小固定为 INIT_SIZE，这在实际的生产环境肯定是需要改进的。你知道如何改进吗？</h2><p>使用数据结构课中的动态数组的扩容缩容方案</p>
+<h2 id="第二道，如果我们进行了改进，那么接下来把连接描述字-connect-fd-也加入到-event-set-里，如何配合进行改造呢？"><a href="#第二道，如果我们进行了改进，那么接下来把连接描述字-connect-fd-也加入到-event-set-里，如何配合进行改造呢？" class="headerlink" title="第二道，如果我们进行了改进，那么接下来把连接描述字 connect_fd 也加入到 event_set 里，如何配合进行改造呢？"></a>第二道，如果我们进行了改进，那么接下来把连接描述字 connect_fd 也加入到 event_set 里，如何配合进行改造呢？</h2><h1 id="非阻塞I-O"><a href="#非阻塞I-O" class="headerlink" title="非阻塞I-O"></a>非阻塞I-O</h1><p><code>网络编程课 22</code></p>
+<h2 id="高性能网络编程的演进过程"><a href="#高性能网络编程的演进过程" class="headerlink" title="高性能网络编程的演进过程?"></a>高性能网络编程的演进过程?</h2><p>1.阻塞IO , 等待内核完成</p>
+<p>2.非阻塞IO, 立即返回 ,  使用轮询检查完成情况</p>
+<p>3.非阻塞IO+多路复用 , 减少轮询造成的CPU时间浪费</p>
+<p>需要特别注意非阻塞的write操作 , 每次都可能只write了一部分到发送缓冲区 , 所以要用偏移量把剩下的在后面继续发出去 ( 因此各自框架抽象出了buffer , 隐藏对socket字节流的直接操作 )</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">ssize_t writen(int fd, const void * data, size_t n)</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line">&#123;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line">    size_t      nleft;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">4</span></pre></td><td class="code"><pre><span class="line">    ssize_t     nwritten;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">5</span></pre></td><td class="code"><pre><span class="line">    const char  *ptr;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">6</span></pre></td><td class="code"><pre><span class="line"> </span></pre></td></tr><tr><td class="gutter"><pre><span class="line">7</span></pre></td><td class="code"><pre><span class="line">    ptr &#x3D; data;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">8</span></pre></td><td class="code"><pre><span class="line">    nleft &#x3D; n;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">9</span></pre></td><td class="code"><pre><span class="line">    &#x2F;&#x2F; 如果还有数据没被拷贝完成，就一直循环</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">10</span></pre></td><td class="code"><pre><span class="line">    while (nleft &gt; 0) &#123;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">11</span></pre></td><td class="code"><pre><span class="line">        if ( (nwritten &#x3D; write(fd, ptr, nleft)) &lt;&#x3D; 0) &#123;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">12</span></pre></td><td class="code"><pre><span class="line">           &#x2F;* 这里 EINTR 是非阻塞 non-blocking 情况下，通知我们再次调用 write() *&#x2F;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">13</span></pre></td><td class="code"><pre><span class="line">            if (nwritten &lt; 0 &amp;&amp; errno &#x3D;&#x3D; EINTR)</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">14</span></pre></td><td class="code"><pre><span class="line">                nwritten &#x3D; 0;      </span></pre></td></tr><tr><td class="gutter"><pre><span class="line">15</span></pre></td><td class="code"><pre><span class="line">            else</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">16</span></pre></td><td class="code"><pre><span class="line">                return -1;         &#x2F;* 出错退出 *&#x2F;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">17</span></pre></td><td class="code"><pre><span class="line">        &#125;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">18</span></pre></td><td class="code"><pre><span class="line"> </span></pre></td></tr><tr><td class="gutter"><pre><span class="line">19</span></pre></td><td class="code"><pre><span class="line">        &#x2F;* 指针增大，剩下字节数变小 *&#x2F;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">20</span></pre></td><td class="code"><pre><span class="line">        nleft -&#x3D; nwritten;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">21</span></pre></td><td class="code"><pre><span class="line">        ptr   +&#x3D; nwritten;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">22</span></pre></td><td class="code"><pre><span class="line">    &#125;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">23</span></pre></td><td class="code"><pre><span class="line">    return n;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">24</span></pre></td><td class="code"><pre><span class="line">&#125;</span></pre></td></tr></table></figure>
+
+<p>作者还描述了read和write在不同模式下各自可能的异常 , 之后实操可以用到</p>
+<h2 id="这一节的代码比较多-思考题也还没看"><a href="#这一节的代码比较多-思考题也还没看" class="headerlink" title="这一节的代码比较多, 思考题也还没看?"></a>这一节的代码比较多, 思考题也还没看?</h2><h1 id="epoll"><a href="#epoll" class="headerlink" title="epoll"></a>epoll</h1><p><code>网络编程课 23</code></p>
+<p><img src="/images/epoll.png" alt="image-20191120140931373"></p>
+<h2 id="使用方法-1"><a href="#使用方法-1" class="headerlink" title="使用方法?"></a>使用方法?</h2><p>epoll_create() 创建epoll实例<br>epoll_ctl 增加删除 事件<br>epoll_wait() 挂起进程 , 等待内核IO事件分发</p>
+<h2 id="边缘触发-VS-条件触发"><a href="#边缘触发-VS-条件触发" class="headerlink" title="边缘触发 VS 条件触发 ?"></a>边缘触发 VS 条件触发 ?</h2><p>后面有一节, 好像是epoll源码解析的, 讲到了他们的底层实现<br>目前的理解: 边缘触发只触发一次(只有第一次满足条件的时候才触发) , 条件触发会触发多次 , 直到进行了read操作读取</p>
+<p>ET比LT效率要高 , 但异常处理也更为复杂</p>
+<p>这部分只涉及到高效性的问题 , 无需重点关注</p>
+<h2 id="events的二进制mask-设计"><a href="#events的二进制mask-设计" class="headerlink" title="events的二进制mask 设计 ?"></a>events的二进制mask 设计 ?</h2><p>EPOLLIN | EPOLLET<br>二进制遍历int mask的方法: </p>
+<h2 id="实践题两道-修改20节select的代码-看看是ET还是LT-同理修改21节poll的代码"><a href="#实践题两道-修改20节select的代码-看看是ET还是LT-同理修改21节poll的代码" class="headerlink" title="实践题两道 , 修改20节select的代码 , 看看是ET还是LT ,  同理修改21节poll的代码"></a>实践题两道 , 修改20节select的代码 , 看看是ET还是LT ,  同理修改21节poll的代码</h2><h2 id="epoll惊群问题"><a href="#epoll惊群问题" class="headerlink" title="epoll惊群问题?"></a>epoll惊群问题?</h2><h1 id="C10K问题：高并发模型设计"><a href="#C10K问题：高并发模型设计" class="headerlink" title="C10K问题：高并发模型设计"></a>C10K问题：高并发模型设计</h1><p><code>网络编程课 24</code></p>
+<h2 id="C10K"><a href="#C10K" class="headerlink" title="C10K = ?"></a>C10K = ?</h2><p>C10K = Client 10000 or Connection 10000 =  10000个并发连接 ?</p>
+<h2 id="演化过程"><a href="#演化过程" class="headerlink" title="演化过程?"></a>演化过程?</h2><blockquote>
+<p>主要线索: 如何感知和调度IO事件 (阻塞/非阻塞 , 多路复用),处理上万个套接字的IO  , 如何分配进程,线程资源给上万个连接?</p>
+</blockquote>
+<p>1.阻塞IO+进程</p>
+<p>2.阻塞IO+线程</p>
+<p>3.非阻塞IO轮询+线程</p>
+<p>4.非阻塞IO+多路复用+线程   (避免轮询浪费CPU时间,交出控制权)</p>
+<p>5.非阻塞IO+多路复用+多线程 , 所谓的主从reactor模式 , epoll事件分发器可以叫做reactor , 也叫事件驱动或eventloop , 也就是浏览器渲染的运行方式 , 主渲染 , 从进行事件分发</p>
+<p>6.异步非阻塞IO+多线程 , AIO相关的在30节有说 , 没有深入了解</p>
+<h2 id="异步-阻塞非阻塞"><a href="#异步-阻塞非阻塞" class="headerlink" title="异步 阻塞非阻塞"></a>异步 阻塞非阻塞</h2><p>同步异步指的是 从内核态读取数据到用户态的过程 , 需要等待的是同步, 交给内核来完成 , 直接返回的是异步</p>
+<p>阻塞非阻塞指的是 , 当某个描述符不可读时 , 阻塞会陷入等待 , 而非阻塞直接返回</p>
+<p>同步 IO , 阻塞 CPU 等待 IO 中断<br>异步 IO , 腾出 CPU 时间 , 等有IO中断发生的时候再通知 CPU</p>
+<p>同步调用和异步调用的区别是，是否等待被调用方执行完成并返回结果<br>阻塞和非阻塞的区别是 , 被调用方是否立即返回结果,不管是否执行完成</p>
+<p>虽然说有多路复用的存在 , 阻塞和非阻塞似乎没有什么太大的区别 , 但是为了程序的健壮性(fd可读事件是不是有可能会误触发？还有22节一个监听套接字的极端情况) , 依然推荐使用非阻塞</p>
+<h2 id="Netty是-用哪种模型"><a href="#Netty是-用哪种模型" class="headerlink" title="Netty是 用哪种模型?"></a>Netty是 用哪种模型?</h2><p>reactor模型 , 底层是Java的NIO</p>
+<h2 id="C10M问题-单机处理千万级并发-能实现吗-瓶颈在哪"><a href="#C10M问题-单机处理千万级并发-能实现吗-瓶颈在哪" class="headerlink" title="C10M问题? 单机处理千万级并发 , 能实现吗 , 瓶颈在哪?"></a>C10M问题? 单机处理千万级并发 , 能实现吗 , 瓶颈在哪?</h2><h1 id="优雅地关闭还是粗暴地关闭"><a href="#优雅地关闭还是粗暴地关闭" class="headerlink" title="优雅地关闭还是粗暴地关闭"></a>优雅地关闭还是粗暴地关闭</h1><p><code>网络编程课11</code></p>
+<p>close 直接关闭单向读写</p>
+<p>shutdown只关闭单向写 , 等到对方发送FIN才关闭单向读</p>
+<p>close后,继续发送数据的话,会收到RST报文,  继续写入会触发SIGPIPE信号 , 不处理会发送错误</p>
+<h1 id="TIME-WAIT"><a href="#TIME-WAIT" class="headerlink" title="TIME-WAIT"></a>TIME-WAIT</h1><p><code>网络编程课  10</code></p>
+<p>1 保证被动关闭方收到ACK  ( 否则被动方重发FIN的时候会收到RST报文, 关闭错误)</p>
+<p>2 避免旧连接的迷路报文影响新的”化身”连接 ( 2MSL的时间保证报文消失)</p>
+<p>过多的解决方案:</p>
+<p>复用TIME_WAIT端口</p>
+<p>减少TIME_WAIT时间</p>
+<p>不适合的解决方案 和造成的后果:</p>
+<p>跳过TIME_WAIT</p>
+<p>暴力重置连接状态</p>
+<p>SO_LINGER强制关闭</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E5%9F%BA%E7%A1%80%E8%A1%A5%E8%B6%B3/" rel="tag"># 基础补足</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2019/09/13/redis_code_book_reading/" rel="prev" title="Redis 设计与实现 第二遍笔记">
+      <i class="fa fa-chevron-left"></i> Redis 设计与实现 第二遍笔记
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2019/10/25/archives/2019_end_sum/" rel="next" title="2019年末自省">
+      2019年末自省 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#TCP三次握手"><span class="nav-number">1.</span> <span class="nav-text">TCP三次握手</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#消息队列和事件循环"><span class="nav-number">2.</span> <span class="nav-text">消息队列和事件循环</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#经典实现"><span class="nav-number">2.1.</span> <span class="nav-text">经典实现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#事件循环模型的演化过程"><span class="nav-number">2.2.</span> <span class="nav-text">事件循环模型的演化过程?</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#后续"><span class="nav-number">2.3.</span> <span class="nav-text">后续</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#select-感知多个I-O事件"><span class="nav-number">3.</span> <span class="nav-text">select 感知多个I-O事件</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是IO多路复用"><span class="nav-number">3.1.</span> <span class="nav-text">什么是IO多路复用?</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#select的使用方法"><span class="nav-number">3.2.</span> <span class="nav-text">select的使用方法?</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SIGPIPE信号是什么"><span class="nav-number">3.3.</span> <span class="nav-text">SIGPIPE信号是什么?</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#select可以对unix管道-pipe-进行检测么-检测的就绪条件是什么"><span class="nav-number">3.4.</span> <span class="nav-text">select可以对unix管道(pipe)进行检测么? 检测的就绪条件是什么?</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#根据我们前面的描述，一个描述符集合哪些描述符被设置为-1，需要进行检测是完全可以知道的，你认为-select-函数里一定需要传入描述字基数这个值么？请你分析一下这样设计的目的又是什么呢？"><span class="nav-number">3.5.</span> <span class="nav-text">根据我们前面的描述，一个描述符集合哪些描述符被设置为 1，需要进行检测是完全可以知道的，你认为 select 函数里一定需要传入描述字基数这个值么？请你分析一下这样设计的目的又是什么呢？</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#poll：另一种I-O多路复用"><span class="nav-number">4.</span> <span class="nav-text">poll：另一种I-O多路复用</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#使用方法"><span class="nav-number">4.1.</span> <span class="nav-text">使用方法?</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#第一道，在我们的程序里-event-set-数组的大小固定为-INIT-SIZE，这在实际的生产环境肯定是需要改进的。你知道如何改进吗？"><span class="nav-number">4.2.</span> <span class="nav-text">第一道，在我们的程序里 event_set 数组的大小固定为 INIT_SIZE，这在实际的生产环境肯定是需要改进的。你知道如何改进吗？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#第二道，如果我们进行了改进，那么接下来把连接描述字-connect-fd-也加入到-event-set-里，如何配合进行改造呢？"><span class="nav-number">4.3.</span> <span class="nav-text">第二道，如果我们进行了改进，那么接下来把连接描述字 connect_fd 也加入到 event_set 里，如何配合进行改造呢？</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#非阻塞I-O"><span class="nav-number">5.</span> <span class="nav-text">非阻塞I-O</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#高性能网络编程的演进过程"><span class="nav-number">5.1.</span> <span class="nav-text">高性能网络编程的演进过程?</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#这一节的代码比较多-思考题也还没看"><span class="nav-number">5.2.</span> <span class="nav-text">这一节的代码比较多, 思考题也还没看?</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#epoll"><span class="nav-number">6.</span> <span class="nav-text">epoll</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#使用方法-1"><span class="nav-number">6.1.</span> <span class="nav-text">使用方法?</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#边缘触发-VS-条件触发"><span class="nav-number">6.2.</span> <span class="nav-text">边缘触发 VS 条件触发 ?</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#events的二进制mask-设计"><span class="nav-number">6.3.</span> <span class="nav-text">events的二进制mask 设计 ?</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实践题两道-修改20节select的代码-看看是ET还是LT-同理修改21节poll的代码"><span class="nav-number">6.4.</span> <span class="nav-text">实践题两道 , 修改20节select的代码 , 看看是ET还是LT ,  同理修改21节poll的代码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#epoll惊群问题"><span class="nav-number">6.5.</span> <span class="nav-text">epoll惊群问题?</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#C10K问题：高并发模型设计"><span class="nav-number">7.</span> <span class="nav-text">C10K问题：高并发模型设计</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#C10K"><span class="nav-number">7.1.</span> <span class="nav-text">C10K = ?</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#演化过程"><span class="nav-number">7.2.</span> <span class="nav-text">演化过程?</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#异步-阻塞非阻塞"><span class="nav-number">7.3.</span> <span class="nav-text">异步 阻塞非阻塞</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Netty是-用哪种模型"><span class="nav-number">7.4.</span> <span class="nav-text">Netty是 用哪种模型?</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#C10M问题-单机处理千万级并发-能实现吗-瓶颈在哪"><span class="nav-number">7.5.</span> <span class="nav-text">C10M问题? 单机处理千万级并发 , 能实现吗 , 瓶颈在哪?</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#优雅地关闭还是粗暴地关闭"><span class="nav-number">8.</span> <span class="nav-text">优雅地关闭还是粗暴地关闭</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#TIME-WAIT"><span class="nav-number">9.</span> <span class="nav-text">TIME-WAIT</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name"></p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+          <span class="site-state-item-count">26</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/carlclone" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;carlclone" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://leetcode.com/carlclone" title="LeetCode → https:&#x2F;&#x2F;leetcode.com&#x2F;carlclone" rel="noopener" target="_blank"><i class="fa fa-fw fa-code"></i>LeetCode</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder"></span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.6.0
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

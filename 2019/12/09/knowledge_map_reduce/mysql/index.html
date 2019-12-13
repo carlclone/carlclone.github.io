@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    hostname: new URL('http://yoursite.com').hostname,
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.6.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}
+  };
+</script>
+
+  <meta name="description" content="…">
+<meta name="keywords" content="基础补足">
+<meta property="og:type" content="article">
+<meta property="og:title" content="知识点的reduce_mysql">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;12&#x2F;09&#x2F;knowledge_map_reduce&#x2F;mysql&#x2F;index.html">
+<meta property="og:site_name" content="Log0c">
+<meta property="og:description" content="…">
+<meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2019-12-13T03:25:38.636Z">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://yoursite.com/2019/12/09/knowledge_map_reduce/mysql/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>知识点的reduce_mysql | Log0c</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Log0c</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-posts">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Posts</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="en">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/09/knowledge_map_reduce/mysql/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Log0c">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          知识点的reduce_mysql
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2019-12-09 00:00:00" itemprop="dateCreated datePublished" datetime="2019-12-09T00:00:00+08:00">2019-12-09</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>…</p>
+<a id="more"></a>
+
+<h1 id="B-Tree-和B-more-Tree-4、b-树特性"><a href="#B-Tree-和B-more-Tree-4、b-树特性" class="headerlink" title="B-Tree 和B more Tree (4、b+树特性)"></a>B-Tree 和B more Tree (4、b+树特性)</h1><p>B more Tree产生的原因: 常规的树结构不能很好地支持”区间查询” (需要进行一次从根节点开始的中序遍历,时间复杂度O(n) , 因为树结构不支持从某个节点开始有序遍历)</p>
+<p>和跳跃表很相似 , 但却是两个不一样的演化分支 </p>
+<p>所有的数据都放在叶子节点 , 并串成链表 , 其他节点都是索引节点 , 不存数据</p>
+<p>继承了树结构优势的同时支持了快速的区间查询</p>
+<p>所以B+树更加适合在区间查询的情况，通常B+树用于数据库索引，而B树则常用于文件索引。</p>
+<h1 id="Optimistic-Lock-Pessimistic-Lock"><a href="#Optimistic-Lock-Pessimistic-Lock" class="headerlink" title="Optimistic Lock / Pessimistic Lock"></a>Optimistic Lock / Pessimistic Lock</h1><p>前置知识 :加锁操作会有额外的CPU消耗</p>
+<p>乐观锁假设发生冲突的情况很少 , 不对数据进行加锁操作 , 只在更新或者查询的时候检查这个时间段内是否被其他人修改 , 后续处理一般是重试<br>悲观锁则相反,使用数据的时候立即加锁,其他人只能等待锁释放后才能使用</p>
+<p>InnoDB的RC和RR事务底层的MVCC实现就是一个乐观锁, 在正确的场景下使用乐观锁可以提高并发度</p>
+<h1 id="事务在InnoDB中的部分实现细节-vs-Redis"><a href="#事务在InnoDB中的部分实现细节-vs-Redis" class="headerlink" title="事务在InnoDB中的部分实现细节 vs Redis"></a>事务在InnoDB中的部分实现细节 vs Redis</h1><h1 id="ACID"><a href="#ACID" class="headerlink" title="ACID"></a>ACID</h1><blockquote>
+<p>WARNING : 和分布式中CAP的C区分开,不是一个概念</p>
+</blockquote>
+<p>Atomicity 事务的语句要么全部执行要么全部回滚</p>
+<p>Isolation 多个事务同时执行互不影响  (InnoDB提供了多种隔离级别,供用户在并发度和隔离性之间权衡后选择合适的级别 , 较常使用的是RC和RR , 使用MVCC实现)</p>
+<p>Durability 持久性 , redolog 先顺序写磁盘 , 之后再写入正确的位置(要求随机IO,耗时) , 官方文档成为doublewrite buffer </p>
+<p>Consistency 定义最模糊的一个性质 , 但根据官方文档里的实现和Wikipedia:<br>保证数据库约束不被违反 (依据wiki的定义主要是这条)</p>
+<p>(依据官方文档的实现:doublewrite buffer和crash recovery)<br>保证事务提交后,未来的事务一定能看到影响 (崩溃后重启,会从redolog中读取写入正确位置后再执行其他事务)<br>保证事务中的操作能正确,有效地执行</p>
+<h2 id="资料"><a href="#资料" class="headerlink" title="资料"></a>资料</h2><p><a href="https://dev.mysql.com/doc/refman/5.6/en/mysql-acid.html" target="_blank" rel="noopener">https://dev.mysql.com/doc/refman/5.6/en/mysql-acid.html</a><br><a href="https://en.wikipedia.org/wiki/ACID#Consistency" target="_blank" rel="noopener">https://en.wikipedia.org/wiki/ACID#Consistency</a><br><a href="https://developpaper.com/question/how-to-understand-consistency-in-mysql/" target="_blank" rel="noopener">https://developpaper.com/question/how-to-understand-consistency-in-mysql/</a></p>
+<h1 id="Clustered-Index-vs-Non-Clustered-Index"><a href="#Clustered-Index-vs-Non-Clustered-Index" class="headerlink" title="Clustered Index vs Non-Clustered Index"></a>Clustered Index vs Non-Clustered Index</h1><p>CI 的叶子节点保存的是整行的完整数据 , NCI的叶子节点只保存了CI的主键ID</p>
+<p>如果从NCI查,并且不是覆盖索引,此时还需要返回CI中再查一次</p>
+<h1 id="Unique-Index-vs-Normal-Index"><a href="#Unique-Index-vs-Normal-Index" class="headerlink" title="Unique Index vs Normal Index"></a>Unique Index vs Normal Index</h1><p>UI每次维护的时候还需要检查唯一性 , 写性能损耗比NI的高<br>查性能的差异可以忽略不计,因此能用NI的时候用NI</p>
+<h1 id="不适合建立索引的场景"><a href="#不适合建立索引的场景" class="headerlink" title="不适合建立索引的场景"></a>不适合建立索引的场景</h1><p>频繁写 , 频繁维护索引, 在非递增的情况下还容易产生页分裂<br>重复值过多 , 用”二分查找”的思维去理解, 例子:性别字段, 过滤掉一半之后依然需要遍历表一半的数据 (时间复杂度退化成O(n/2))<br>varchar字段建索引更容易产生页分裂 (未查证)</p>
+<h1 id="联合索引"><a href="#联合索引" class="headerlink" title="联合索引"></a>联合索引</h1><p>可以理解为多维有序数组多层遍历,取符合的数据</p>
+<p>当然实际上是Bmore Tree的区间查询过程, 先搜索树找到第一个符合条件的叶子节点,再从叶子节点链表向后遍历</p>
+<p>一些特殊但是能用到该索引的场景:<br>1.匹配第一列数据的左边一部分+第二列等值匹配(从数据结构的角度看第二列部分匹配似乎也可以,未查证)<br>2.第一列范围查找+第二列等值匹配 </p>
+<p>后续:测试+查高性能MySQL</p>
+<h1 id="7-select-from-t-where-a-and-b-gt-order-by-c-limit-0-100-如何加索引"><a href="#7-select-from-t-where-a-and-b-gt-order-by-c-limit-0-100-如何加索引" class="headerlink" title="7. select * from t where a=? and b&gt;? order by c limit 0,100 如何加索引"></a>7. select * from t where a=? and b&gt;? order by c limit 0,100 如何加索引</h1><p>a b c<br>1 2 3<br>1 3 9<br>1 9 3<br>2 9 4<br>. . .<br>. . .</p>
+<p>基于MySQL 5.6之后的索引下推规则分析</p>
+<p>(a,b,c)的情况: 先筛选出3条数据,再判断b </p>
+<p>(b,a,c)的情况: 可能筛选出n多条的数据,再每一条判断a</p>
+<p>这个案例下 (a,b,c) 更优</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E5%9F%BA%E7%A1%80%E8%A1%A5%E8%B6%B3/" rel="tag"># 基础补足</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2019/12/01/knowledge_map_reduce/tricks/" rel="prev" title="知识点的reduce_积攒下来的编程技巧/方法">
+      <i class="fa fa-chevron-left"></i> 知识点的reduce_积攒下来的编程技巧/方法
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#B-Tree-和B-more-Tree-4、b-树特性"><span class="nav-number">1.</span> <span class="nav-text">B-Tree 和B more Tree (4、b+树特性)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Optimistic-Lock-Pessimistic-Lock"><span class="nav-number">2.</span> <span class="nav-text">Optimistic Lock / Pessimistic Lock</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#事务在InnoDB中的部分实现细节-vs-Redis"><span class="nav-number">3.</span> <span class="nav-text">事务在InnoDB中的部分实现细节 vs Redis</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#ACID"><span class="nav-number">4.</span> <span class="nav-text">ACID</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#资料"><span class="nav-number">4.1.</span> <span class="nav-text">资料</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Clustered-Index-vs-Non-Clustered-Index"><span class="nav-number">5.</span> <span class="nav-text">Clustered Index vs Non-Clustered Index</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Unique-Index-vs-Normal-Index"><span class="nav-number">6.</span> <span class="nav-text">Unique Index vs Normal Index</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#不适合建立索引的场景"><span class="nav-number">7.</span> <span class="nav-text">不适合建立索引的场景</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#联合索引"><span class="nav-number">8.</span> <span class="nav-text">联合索引</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#7-select-from-t-where-a-and-b-gt-order-by-c-limit-0-100-如何加索引"><span class="nav-number">9.</span> <span class="nav-text">7. select * from t where a=? and b&gt;? order by c limit 0,100 如何加索引</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name"></p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+          <span class="site-state-item-count">26</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/carlclone" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;carlclone" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://leetcode.com/carlclone" title="LeetCode → https:&#x2F;&#x2F;leetcode.com&#x2F;carlclone" rel="noopener" target="_blank"><i class="fa fa-fw fa-code"></i>LeetCode</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder"></span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.6.0
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

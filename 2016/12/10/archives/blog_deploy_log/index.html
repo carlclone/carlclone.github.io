@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    hostname: new URL('http://yoursite.com').hostname,
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.6.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}
+  };
+</script>
+
+  <meta name="description" content="无">
+<meta name="keywords" content="归档">
+<meta property="og:type" content="article">
+<meta property="og:title" content="博客服务器环境搭建记录">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2016&#x2F;12&#x2F;10&#x2F;archives&#x2F;blog_deploy_log&#x2F;index.html">
+<meta property="og:site_name" content="Log0c">
+<meta property="og:description" content="无">
+<meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2019-12-13T03:13:58.378Z">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://yoursite.com/2016/12/10/archives/blog_deploy_log/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>博客服务器环境搭建记录 | Log0c</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Log0c</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-posts">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Posts</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="en">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/12/10/archives/blog_deploy_log/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Log0c">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          博客服务器环境搭建记录
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2016-12-10 14:57:31" itemprop="dateCreated datePublished" datetime="2016-12-10T14:57:31+08:00">2016-12-10</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>无</p>
+<a id="more"></a>
+
+<blockquote>
+<p>用了差不多半天的时间把博客部署了起来，做一下过程的记录</p>
+</blockquote>
+<h1 id="服务器"><a href="#服务器" class="headerlink" title="服务器"></a>服务器</h1><p>Ubuntu 14.04+PHP7.1+MySQL5.7+Nginx<br>大部分参照<a href="https://lufficc.com/blog/step-by-step-teach-you-to-deploy-your-laravel-application-to-server" target="_blank" rel="noopener"><strong>此文</strong></a></p>
+<h2 id="修改Root密码-sudo-passwd-root"><a href="#修改Root密码-sudo-passwd-root" class="headerlink" title="修改Root密码 sudo passwd root"></a>修改Root密码 sudo passwd root</h2><h2 id="配置MySQL远端访问和root登录"><a href="#配置MySQL远端访问和root登录" class="headerlink" title="配置MySQL远端访问和root登录"></a>配置MySQL远端访问和root登录</h2><h3 id="启动和登录MySQL"><a href="#启动和登录MySQL" class="headerlink" title="启动和登录MySQL"></a>启动和登录MySQL</h3><p>查看mysql安装的路径和依赖：<code>whereis mysql</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">mysql: &#x2F;usr&#x2F;bin&#x2F;mysql &#x2F;etc&#x2F;mysql &#x2F;usr&#x2F;lib&#x2F;mysql &#x2F;usr&#x2F;include&#x2F;mysql &#x2F;usr&#x2F;share&#x2F;mysql &#x2F;usr&#x2F;share&#x2F;man&#x2F;man1&#x2F;mysql.1.gz</span></pre></td></tr></table></figure>
+
+<p>这时你会发现 mysql以服务形式自启动<br>这时候在本机可以通过 mysql -r root -p你的密码  登录了</p>
+<h3 id="开启远程访问"><a href="#开启远程访问" class="headerlink" title="开启远程访问"></a>开启远程访问</h3><p>默认情况下远程访问会出现 </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">Can’t connect to MySQL server on ‘192.168.10.18′ (10061)</span></pre></td></tr></table></figure>
+
+<p>错误，是因为mysql的默认配置为了增强安全性，禁止了非本机的访问，在ubuntu中是这样，debian中也是。禁止的方式以前是在my.cnf中有一句 <code>skip-network</code> 现在则变成了：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line"># Instead of skip-networking the default is now to listen only on # localhost which is more compatible and is not less secure. bind-address &#x3D; 127.0.0.1</span></pre></td></tr></table></figure>
+
+<p>就是只监听本机地址。所以，如果要开放局域网内的访问，需要注释掉这一句，或者改成：<code>bind-address = 0.0.0.0</code> 就行了</p>
+<p><code># vi /etc/mysql/my.cnf</code><br>修改 <code>bind-address = 127.0.0.1</code>  为  <code>bind-address = 0.0.0.0</code><br>修改完成后重启MySQL服务<code># sudo /etc/init.d/mysql restart</code></p>
+<p>这样改完3306端口就开始监听了,但是MYSQL的权限还没有打开ROOT远程登陆<br>Mysql默认是不允许远程连接的，因为有很大的安全隐患。<br>需要手动增加可以远程访问数据库的用户。<br>方法一、本地登入mysql，更改 “mysql” 数据库里的 “user” 表里的 “host” 项，将”localhost”改为”%”</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">#mysql -u root -proot</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line">mysql&gt;use mysql;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line">mysql&gt;update user set host &#x3D; &#39;%&#39; where user &#x3D; &#39;root&#39;;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">4</span></pre></td><td class="code"><pre><span class="line">mysql&gt;select host, user from user;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">5</span></pre></td><td class="code"><pre><span class="line">mysql&gt;FLUSH PRIVILEGES;</span></pre></td></tr></table></figure>
+
+<p>修改完这些就可以远程访问了。</p>
+<h3 id="mysql数据库重启命令"><a href="#mysql数据库重启命令" class="headerlink" title="mysql数据库重启命令"></a>mysql数据库重启命令</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">启动：sudo &#x2F;etc&#x2F;init.d&#x2F;mysql start</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line">停止：sudo &#x2F;etc&#x2F;init.d&#x2F;mysql stop</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line">重启：sudo &#x2F;etc&#x2F;init.d&#x2F;mysql restart</span></pre></td></tr></table></figure>
+
+<h1 id="XBlog-Laravel5-3"><a href="#XBlog-Laravel5-3" class="headerlink" title="XBlog(Laravel5.3)"></a>XBlog(Laravel5.3)</h1><p>大部分参照<a href="https://lufficc.com/blog/how-to-install-my-blog" target="_blank" rel="noopener"><strong>此文</strong></a></p>
+<h2 id="七牛云存储配置"><a href="#七牛云存储配置" class="headerlink" title="七牛云存储配置"></a>七牛云存储配置</h2><p><a href="http://jingyan.baidu.com/article/5552ef47d98291518ffbc9bc.html" target="_blank" rel="noopener">AccessKey和SecretKey的获取</a><br>Bucket 就是空间名<br>域名有三种：默认domain，HTTPS domain，自定义domain<br>默认域名在七牛云个人中心首页</p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><h2 id="需要深入学习的点"><a href="#需要深入学习的点" class="headerlink" title="需要深入学习的点"></a>需要深入学习的点</h2><ul>
+<li>Nginx+fpm</li>
+<li>VIM快捷键</li>
+<li>Linux命令</li>
+<li>Laravel核心概念</li>
+<li>设计模式</li>
+<li>Redis</li>
+<li>and so on….</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E5%BD%92%E6%A1%A3/" rel="tag"># 归档</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item"></div>
+      <div class="post-nav-item">
+    <a href="/2016/12/18/archives/black_sierra/" rel="next" title="K480N安装黑苹果记录">
+      K480N安装黑苹果记录 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#服务器"><span class="nav-number">1.</span> <span class="nav-text">服务器</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#修改Root密码-sudo-passwd-root"><span class="nav-number">1.1.</span> <span class="nav-text">修改Root密码 sudo passwd root</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#配置MySQL远端访问和root登录"><span class="nav-number">1.2.</span> <span class="nav-text">配置MySQL远端访问和root登录</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#启动和登录MySQL"><span class="nav-number">1.2.1.</span> <span class="nav-text">启动和登录MySQL</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#开启远程访问"><span class="nav-number">1.2.2.</span> <span class="nav-text">开启远程访问</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#mysql数据库重启命令"><span class="nav-number">1.2.3.</span> <span class="nav-text">mysql数据库重启命令</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#XBlog-Laravel5-3"><span class="nav-number">2.</span> <span class="nav-text">XBlog(Laravel5.3)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#七牛云存储配置"><span class="nav-number">2.1.</span> <span class="nav-text">七牛云存储配置</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#总结"><span class="nav-number">3.</span> <span class="nav-text">总结</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#需要深入学习的点"><span class="nav-number">3.1.</span> <span class="nav-text">需要深入学习的点</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name"></p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+          <span class="site-state-item-count">26</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/carlclone" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;carlclone" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://leetcode.com/carlclone" title="LeetCode → https:&#x2F;&#x2F;leetcode.com&#x2F;carlclone" rel="noopener" target="_blank"><i class="fa fa-fw fa-code"></i>LeetCode</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder"></span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.6.0
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

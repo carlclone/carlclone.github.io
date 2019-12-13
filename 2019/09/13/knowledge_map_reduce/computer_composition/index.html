@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    hostname: new URL('http://yoursite.com').hostname,
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.6.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}
+  };
+</script>
+
+  <meta name="description" content="浮点数表示 IEEE754标准">
+<meta name="keywords" content="基础补足">
+<meta property="og:type" content="article">
+<meta property="og:title" content="知识点的reduce_计算机组成原理">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;09&#x2F;13&#x2F;knowledge_map_reduce&#x2F;computer_composition&#x2F;index.html">
+<meta property="og:site_name" content="Log0c">
+<meta property="og:description" content="浮点数表示 IEEE754标准">
+<meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2019-12-13T03:13:58.384Z">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://yoursite.com/2019/09/13/knowledge_map_reduce/computer_composition/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>知识点的reduce_计算机组成原理 | Log0c</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Log0c</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-posts">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Posts</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="en">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/09/13/knowledge_map_reduce/computer_composition/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Log0c">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          知识点的reduce_计算机组成原理
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2019-09-13 00:00:00" itemprop="dateCreated datePublished" datetime="2019-09-13T00:00:00+08:00">2019-09-13</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="浮点数表示-IEEE754标准"><a href="#浮点数表示-IEEE754标准" class="headerlink" title="浮点数表示 IEEE754标准"></a>浮点数表示 IEEE754标准</h1><a id="more"></a>
+
+
+<p>浮点数的产生过程 , 用尽量少的占用位置表示尽量大的数字 , 一张小纸无法写下有82位的整数 , 但科学计数法可以 .</p>
+<h2 id="部分十进制浮点数无法精确表示的原因"><a href="#部分十进制浮点数无法精确表示的原因" class="headerlink" title="部分十进制浮点数无法精确表示的原因"></a>部分十进制浮点数无法精确表示的原因</h2><p>将0.1十进制数转换为二进制数的过程 , 将小数点右移 , 也就是X2 , 取整数部分,直到小数部分为0</p>
+<p>0.1X2=0.2      0.0</p>
+<p>0.2X2=0.4      0.00</p>
+<p>0.4X2=0.8      0.000</p>
+<p>0.8X2=1.6      0.0001</p>
+<p>0.6X2=1.2      0.00011</p>
+<p>0.2X2=0.4      0.000110</p>
+<p>开始无限循环…….</p>
+<p>而浮点数的有效位是有限的 , 因此出现了误差</p>
+<h2 id="浮点数的加法"><a href="#浮点数的加法" class="headerlink" title="浮点数的加法"></a>浮点数的加法</h2><p>先对齐指数位(小的向大的对齐) , 然后有效位相加 , 因此较小的数在对齐的时候也会损失精度 , 指数位相差越大 , 相加的误差就越大 , </p>
+<p>例子:</p>
+<p>解决浮点数加法问题的方案 : Kahan Summation 算法</p>
+<h2 id="定点数-Decimal"><a href="#定点数-Decimal" class="headerlink" title="定点数(Decimal)"></a>定点数(Decimal)</h2><p>浮点数适合不需要非常精确结果的情况</p>
+<p>如果想要精确表示十进制小数 , 小数位确定 , 可以使用定点数(Decimal) </p>
+<p>定点数的表示法是: 一部分比特用来表示整数部分 , 一部分比特用来表示小数 , 缺点是能表示的数字范围很小</p>
+<p>0.1的定点数表示 , 假设计算机只能处理8比特,不考虑负数</p>
+<p>前面4比特可以表示整数范围0-9 , 后面4比特表示小数范围0-9 , 可表示0-9.9的数</p>
+<p>0000 0001</p>
+<p>应用场景 , 最常用的是在超市、银行这样需要用小数记录金额的情况里。在超市里面，我们的小数最多也就到分</p>
+<h2 id="历史上惨重的浮点数事件-警示"><a href="#历史上惨重的浮点数事件-警示" class="headerlink" title="历史上惨重的浮点数事件 , 警示!!!!"></a>历史上惨重的浮点数事件 , 警示!!!!</h2><p>1991年海湾战争 , 导弹计算失误致使美军28人死亡260人受伤 , 0.000000095的时间误差, 在距离上被放大到573米 , 防御系统没有启动 (生命的代价)</p>
+<p>1996年欧洲宇航局, 10多亿美元的航天器在39秒后烟消云散 , 源于错误地把浮点数当做整型使用 , 看似极其小的问题被无限放大</p>
+<p>1980年温哥华股票交易所, 使用floor去掉了小数位 , 在每天数百万次的交易中积累成天文数字</p>
+<h2 id="延伸"><a href="#延伸" class="headerlink" title="延伸"></a>延伸</h2><p>业务上的处理方法 : 银行家算法</p>
+<p>实现一遍IEEE754</p>
+<h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><ol>
+<li><p>64位的浮点数加法在相差多大后 , 小的那个数完全丢失?</p>
+</li>
+<li><p>PHP中的浮点数底层是如何处理的 , 和IEEE754的浮点数表现不一样</p>
+</li>
+</ol>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p>1.计算机组成原理课15 ,16</p>
+<p>2.<a href="https://mp.weixin.qq.com/s/0KDPWQXhBIsDDQwo3FYlag" target="_blank" rel="noopener">公众号&lt;是不是很酷&gt; - 浮点数文章</a></p>
+<p>3.<a href="https://www.jianshu.com/p/7c636d8f18d5" target="_blank" rel="noopener">网页资料</a></p>
+<p>4.IEEE754官方资料 </p>
+<p><a href="https://ieeexplore.ieee.org/document/4610935" target="_blank" rel="noopener">https://ieeexplore.ieee.org/document/4610935</a></p>
+<p><a href="https://zh.wikipedia.org/zh-hans/IEEE_754" target="_blank" rel="noopener">https://zh.wikipedia.org/zh-hans/IEEE_754</a></p>
+<p>5.<a href="https://blog.csdn.net/crjmail/article/details/79723051" target="_blank" rel="noopener">实现参考</a></p>
+<h1 id="为什么while-true-会把cpu占用率打满-while-true-sleep-1-不会"><a href="#为什么while-true-会把cpu占用率打满-while-true-sleep-1-不会" class="headerlink" title="为什么while(true){}会把cpu占用率打满,while(true){sleep(1)}不会"></a>为什么while(true){}会把cpu占用率打满,while(true){sleep(1)}不会</h1><p>以下内容是当前的理解,不一定正确 </p>
+<p> cpu占用率的定义 , 某个时间的cpu时间片实际有线程在运行的时间</p>
+<p>sleep(1)会阻塞当前线程(放入等待队列) , 而{} 会分尽量多的时间片给当前线程 </p>
+<p>参考<a href="https://www.v2ex.com/t/622020#reply34" target="_blank" rel="noopener">https://www.v2ex.com/t/622020#reply34</a></p>
+<p><a href="https://www.v2ex.com/t/352157" target="_blank" rel="noopener">https://www.v2ex.com/t/352157</a></p>
+<p><a href="https://blog.csdn.net/zhuyijian135757/article/details/42269329" target="_blank" rel="noopener">https://blog.csdn.net/zhuyijian135757/article/details/42269329</a></p>
+<p><a href="https://blog.csdn.net/liangrui1988/article/details/79230480" target="_blank" rel="noopener">https://blog.csdn.net/liangrui1988/article/details/79230480</a></p>
+<p><a href="https://www.jianshu.com/p/669015fc537c" target="_blank" rel="noopener">https://www.jianshu.com/p/669015fc537c</a></p>
+<p><a href="https://bbs.csdn.net/topics/390478522" target="_blank" rel="noopener">https://bbs.csdn.net/topics/390478522</a></p>
+<p>cpu利用率</p>
+<p><a href="http://www.easemob.com/news/1242" target="_blank" rel="noopener">http://www.easemob.com/news/1242</a></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">		       </span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line">ipwx:  </span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line">这种典型就是操作系统原理没学过才会发出的疑问。科班还是有科班的底蕴的。</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">4</span></pre></td><td class="code"><pre><span class="line">		        </span></pre></td></tr><tr><td class="gutter"><pre><span class="line">5</span></pre></td><td class="code"><pre><span class="line">ipwx:</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">6</span></pre></td><td class="code"><pre><span class="line">这么说吧，线程占用 cpu 必须是在运行，而线程被操作系统调度才会被运行。因为 io 或者其他原因阻塞，线程会进入操作系统的等待队列，不会被运行。线程即使不进入阻塞，也不一定一直运行，操作系统随时可以打断线程，让它暂停，让渡资源给别的线程运行一段时间，再切换回来。当然资源充足情况下操作系统一般不会主动打断线程运行。</span></pre></td></tr></table></figure>
+
+
+
+<p>关键词 java 无限循环 阻塞 cpu占用率实际是什么</p>
+<h1 id="栈空间和堆空间"><a href="#栈空间和堆空间" class="headerlink" title="栈空间和堆空间"></a>栈空间和堆空间</h1><p><code>浏览器课 12</code></p>
+<h2 id="语言分类"><a href="#语言分类" class="headerlink" title="语言分类"></a>语言分类</h2><p>静态语言: 在使用前就确认变量的数据类型</p>
+<p>动态语言: 在运行过程中需要检查数据类型 , 不需要在声明的时候确认</p>
+<p>强类型: 不支持隐式类型转换</p>
+<p>弱类型: 支持隐式类型转换</p>
+<p>隐式类型转换: 把int变量赋值给bool变量 , 赋值过程中编译器悄悄把int转换为了bool</p>
+<p>PHP / Javascript 动态,弱类型</p>
+<p>Go / Java 静态,强类型</p>
+<p>C 静态,弱类型</p>
+<p>Python 动态,强类型</p>
+<h2 id="代码空间分析"><a href="#代码空间分析" class="headerlink" title="代码空间分析"></a>代码空间分析</h2><p>代码空间</p>
+<p>栈空间</p>
+<p>堆空间</p>
+<h2 id="代码执行过程"><a href="#代码执行过程" class="headerlink" title="代码执行过程"></a>代码执行过程</h2><p>创建函数执行上下文 , 原始类型存在上下文 的变量环境中 , 引用类型只存储地址 , 真正存储位置是堆</p>
+<h2 id="引用存在堆的原因"><a href="#引用存在堆的原因" class="headerlink" title="引用存在堆的原因"></a>引用存在堆的原因</h2><p>栈空间不能太大, 影响上下文切换效率</p>
+<p>引用类型占用空间一般较大,而且大小不确定</p>
+<p>堆空间很大,缺点是分配和回收内存耗时</p>
+<h2 id="闭包的内存模型"><a href="#闭包的内存模型" class="headerlink" title="闭包的内存模型"></a>闭包的内存模型</h2><p>和我之前想的一样, 将这个闭包所包含的上下文状态封装到一个引用类型的对象里了</p>
+<h2 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h2><p>JS对象完整拷贝</p>
+<p>1 手动递归遍历拷贝</p>
+<p>2 json编码再解码</p>
+<h1 id="内存保护"><a href="#内存保护" class="headerlink" title="内存保护"></a>内存保护</h1><p><code>组成原理课 41</code></p>
+<p>内存空间有个保护机制, 在代码空间里的才拥有”可执行”权限 , 其他的没有 , 因此要防止注入攻击的话 , 保证变量在正确的空间里就行了 , 反推的话 , MySQL有prepare阶段可以区分执行代码和参数 , 避免在词法分析阶段当成可执行的一部分 , 后端可以编码,转义 , 前端也可以进行限制</p>
+<h1 id="二进制编码"><a href="#二进制编码" class="headerlink" title="二进制编码"></a>二进制编码</h1><p><code>组成原理课 11</code></p>
+<h2 id="进制转换"><a href="#进制转换" class="headerlink" title="进制转换"></a>进制转换</h2><p>低 - &gt; 高      左移(x2) 相加        1011 = 1X2^3+0X2^2 ….</p>
+<p>高 - &gt; 低     右移(/2)取余 </p>
+<h2 id="正负数二进制表示法"><a href="#正负数二进制表示法" class="headerlink" title="正负数二进制表示法"></a>正负数二进制表示法</h2><p>原码表示 , 最左一位表示正负号</p>
+<p>补码 , 最左一位依然表示正负号 , 但也参与计算</p>
+<p>补码能多表示一个数 , 并且加法不需要额外特殊处理 , 底层电路更简单</p>
+<p>比如两位的二进制数</p>
+<blockquote>
+<p>二进制补码表示</p>
+</blockquote>
+<p>​           10      11     00   01</p>
+<p>​            -2      -1       0     1</p>
+<blockquote>
+<p>原码表示</p>
+</blockquote>
+<p>​        11   10   00   01 </p>
+<p>​        -1     0     0     1</p>
+<h2 id="字符编码"><a href="#字符编码" class="headerlink" title="字符编码"></a>字符编码</h2><blockquote>
+<p>ASCII字符集</p>
+</blockquote>
+<p>占用 1个字节 8位二进制数</p>
+<p>15 的整数表示00001111 , ASCII字符串表示 0011 0001 0011 0101 </p>
+<blockquote>
+<p>UNICODE字符集</p>
+</blockquote>
+<p>UNICODE第二层编码 UTF8 UFT16 UTF32<br>完整表示Unicode需要21位 , 0x0~0x10FFFF ,  1114112个字符</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">  比如，“汉字”对应的Unicode值是0x6c49和0x5b57，而编码实现是：</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line">char data_utf8[]&#x3D;&#123;0xE6,0xB1,0x89,0xE5,0xAD,0x97&#125;;&#x2F;&#x2F;UTF-8编码</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">4</span></pre></td><td class="code"><pre><span class="line">char16_t data_utf16[]&#x3D;&#123;0x6C49,0x5B57&#125;;        &#x2F;&#x2F;UTF-16编码</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">5</span></pre></td><td class="code"><pre><span class="line">char32_t data_utf32[]&#x3D;&#123;0x00006C49,0x00005B57&#125;;&#x2F;&#x2F;UTF-32编码</span></pre></td></tr></table></figure>
+
+
+
+<p>UTF8的8表示以1字节为单位, 有1个字节,2个字节,3个字节,4个字节</p>
+<p>UTF16以2字节为单位</p>
+<p>UTF32基本等同于UNICODE , 4字节为单位</p>
+<blockquote>
+<p>字符编码模型演化过程</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">在计算机中，要建立一种“字符编码模型”，需要四步【4】。</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line">要有一个字符库，确定这些字符足够表意。 比如ASCII字符集，已经足够表示英语，但不能表示中文，于是产生GB2312字符集。</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">4</span></pre></td><td class="code"><pre><span class="line">第一层编码，给每个字符编个数字，英文叫Code Point 或 Code Position。比如ASCII字符集中，65表示“A”，97表示“a”。</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">5</span></pre></td><td class="code"><pre><span class="line">第二层编码，确定表示字符的二进制位数（8位，16位，32位）。ASCII使用7位，DBCS（双字节字符集）使用16位。</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">6</span></pre></td><td class="code"><pre><span class="line">第三层编码，确定字符二进制值的存储格式（大端法，小端法）。比如X86机器使用小端法。</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">7</span></pre></td><td class="code"><pre><span class="line">    一种字符集一般只有一种编码方式，当字符集不够用时，会增加一些新的符号，形成新的字符集。对于新的符号会有新的数字，新的编码格式。所以有时“字符集”和“字符编码”的概念并不严格区分。比如ASCII码，可以指128个字符的字符集，也可以指对这128个字符的编码方式。不过有的字符集有多种编码格式，比如Unicode字符集，Utf8、Utf16都是其编码格式（第二层编码）。</span></pre></td></tr></table></figure>
+
+
+
+<blockquote>
+<p>总结一遍</p>
+</blockquote>
+<ol>
+<li>确定字符库</li>
+<li>第一层编码,给每个字符编个数字 , 英文叫Code point或Code Position , 如ASCII的’A’ 为65</li>
+<li>第二层编码,确定字符的二进制位数 , ASCII是7位 , UTF8是变长</li>
+<li>第三层编码,确定二进制值的存储格式(大端小端) , x86为小端</li>
+</ol>
+<h2 id="参考资料-1"><a href="#参考资料-1" class="headerlink" title="参考资料"></a>参考资料</h2><p><a href="https://www.cnblogs.com/notbecoder/p/4840783.html" target="_blank" rel="noopener">https://www.cnblogs.com/notbecoder/p/4840783.html</a> 字符集和字符编码</p>
+<h2 id="问题-1"><a href="#问题-1" class="headerlink" title="问题"></a>问题</h2><p>1.Go中对字符编码的各种隐式处理</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E5%9F%BA%E7%A1%80%E8%A1%A5%E8%B6%B3/" rel="tag"># 基础补足</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2019/07/25/archives/2019_review_plan/" rel="prev" title="近一年学习,工作总结,之后的计划">
+      <i class="fa fa-chevron-left"></i> 近一年学习,工作总结,之后的计划
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2019/09/13/knowledge_map_reduce/language_trait_and_implementation/" rel="next" title="知识点的reduce_语言特性_底层实现">
+      知识点的reduce_语言特性_底层实现 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#浮点数表示-IEEE754标准"><span class="nav-number">1.</span> <span class="nav-text">浮点数表示 IEEE754标准</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#部分十进制浮点数无法精确表示的原因"><span class="nav-number">1.1.</span> <span class="nav-text">部分十进制浮点数无法精确表示的原因</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#浮点数的加法"><span class="nav-number">1.2.</span> <span class="nav-text">浮点数的加法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#定点数-Decimal"><span class="nav-number">1.3.</span> <span class="nav-text">定点数(Decimal)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#历史上惨重的浮点数事件-警示"><span class="nav-number">1.4.</span> <span class="nav-text">历史上惨重的浮点数事件 , 警示!!!!</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#延伸"><span class="nav-number">1.5.</span> <span class="nav-text">延伸</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#问题"><span class="nav-number">1.6.</span> <span class="nav-text">问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考资料"><span class="nav-number">1.7.</span> <span class="nav-text">参考资料</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#为什么while-true-会把cpu占用率打满-while-true-sleep-1-不会"><span class="nav-number">2.</span> <span class="nav-text">为什么while(true){}会把cpu占用率打满,while(true){sleep(1)}不会</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#栈空间和堆空间"><span class="nav-number">3.</span> <span class="nav-text">栈空间和堆空间</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#语言分类"><span class="nav-number">3.1.</span> <span class="nav-text">语言分类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#代码空间分析"><span class="nav-number">3.2.</span> <span class="nav-text">代码空间分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#代码执行过程"><span class="nav-number">3.3.</span> <span class="nav-text">代码执行过程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#引用存在堆的原因"><span class="nav-number">3.4.</span> <span class="nav-text">引用存在堆的原因</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#闭包的内存模型"><span class="nav-number">3.5.</span> <span class="nav-text">闭包的内存模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#题目"><span class="nav-number">3.6.</span> <span class="nav-text">题目</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#内存保护"><span class="nav-number">4.</span> <span class="nav-text">内存保护</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#二进制编码"><span class="nav-number">5.</span> <span class="nav-text">二进制编码</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#进制转换"><span class="nav-number">5.1.</span> <span class="nav-text">进制转换</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#正负数二进制表示法"><span class="nav-number">5.2.</span> <span class="nav-text">正负数二进制表示法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#字符编码"><span class="nav-number">5.3.</span> <span class="nav-text">字符编码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考资料-1"><span class="nav-number">5.4.</span> <span class="nav-text">参考资料</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#问题-1"><span class="nav-number">5.5.</span> <span class="nav-text">问题</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name"></p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+          <span class="site-state-item-count">26</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/carlclone" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;carlclone" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://leetcode.com/carlclone" title="LeetCode → https:&#x2F;&#x2F;leetcode.com&#x2F;carlclone" rel="noopener" target="_blank"><i class="fa fa-fw fa-code"></i>LeetCode</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder"></span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.6.0
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
