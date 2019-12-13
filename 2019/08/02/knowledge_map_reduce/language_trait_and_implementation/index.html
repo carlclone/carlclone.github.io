@@ -49,14 +49,14 @@
 <meta name="keywords" content="基础补足">
 <meta property="og:type" content="article">
 <meta property="og:title" content="知识点的reduce_语言特性_底层实现">
-<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;09&#x2F;13&#x2F;knowledge_map_reduce&#x2F;language_trait_and_implementation&#x2F;index.html">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;08&#x2F;02&#x2F;knowledge_map_reduce&#x2F;language_trait_and_implementation&#x2F;index.html">
 <meta property="og:site_name" content="Log0c">
 <meta property="og:description" content="Py 的协程 &#x2F; JS的协程">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2019-12-13T03:25:38.635Z">
+<meta property="og:updated_time" content="2019-12-13T05:21:41.309Z">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="http://yoursite.com/2019/09/13/knowledge_map_reduce/language_trait_and_implementation/">
+<link rel="canonical" href="http://yoursite.com/2019/08/02/knowledge_map_reduce/language_trait_and_implementation/">
 
 
 <script id="page-configurations">
@@ -174,7 +174,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="en">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/09/13/knowledge_map_reduce/language_trait_and_implementation/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/08/02/knowledge_map_reduce/language_trait_and_implementation/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -197,7 +197,7 @@
               </span>
               <span class="post-meta-item-text">Posted on</span>
 
-              <time title="Created: 2019-09-13 00:00:00" itemprop="dateCreated datePublished" datetime="2019-09-13T00:00:00+08:00">2019-09-13</time>
+              <time title="Created: 2019-08-02 00:00:00" itemprop="dateCreated datePublished" datetime="2019-08-02T00:00:00+08:00">2019-08-02</time>
             </span>
 
           
@@ -270,6 +270,44 @@
 <h1 id="用Go的-buffered-channel-实现对象池"><a href="#用Go的-buffered-channel-实现对象池" class="headerlink" title="用Go的 buffered channel 实现对象池"></a>用Go的 buffered channel 实现对象池</h1><p>是否使用对象池的权衡: channel的线程安全实现,锁机制带来的开销 vs 对象创建开销</p>
 <p>放回时满了抛出error<br>获取时引入超时机制</p>
 <p>关于超时 , slow response 和quick failure , 惊群的危害</p>
+<h1 id="为什么php-的foreach比for快"><a href="#为什么php-的foreach比for快" class="headerlink" title="为什么php 的foreach比for快"></a>为什么php 的foreach比for快</h1><p> 因为php数组的底层是哈希结构 , bucket之间是一条双向链表 , foreach的时候直接取next的值即可 , 同时foreach是根据插入顺序遍历的 , 如果需要有序遍历 , 只能用for循环</p>
+<p> for比foreach慢的原因 , 可能是多出的一个条件判断造成的 , 因此能用foreach就尽量用foreach</p>
+<h1 id="php-的foreach小陷阱"><a href="#php-的foreach小陷阱" class="headerlink" title="php 的foreach小陷阱"></a>php 的foreach小陷阱</h1> <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">$arr &#x3D; array(&#39;1&#39;,&#39;2&#39;,&#39;3&#39;);</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line">foreach($arr as &amp;$v)&#123;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line">&#125;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">4</span></pre></td><td class="code"><pre><span class="line">foreach($arr as $v)&#123;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">5</span></pre></td><td class="code"><pre><span class="line">&#125;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">6</span></pre></td><td class="code"><pre><span class="line">var_dump($arr);</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">7</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">8</span></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F;结果</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">9</span></pre></td><td class="code"><pre><span class="line">array</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">10</span></pre></td><td class="code"><pre><span class="line">  0 &#x3D;&gt; string &#39;1&#39; (length&#x3D;1)</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">11</span></pre></td><td class="code"><pre><span class="line">  1 &#x3D;&gt; string &#39;2&#39; (length&#x3D;1)</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">12</span></pre></td><td class="code"><pre><span class="line">  2 &#x3D;&gt; &amp;string &#39;2&#39; (length&#x3D;1)</span></pre></td></tr></table></figure>
+
+
+
+<p> 预期结果应该是1 2 3 , 为什么是1 2 2 呢 ?</p>
+<p> 因为在第一个循环的最后一次执行中 , 由于$v为引用变量，所以$v 与 $arr[ 2 ] 指向了同一个地址空间 , 于是在第二次循环的时候 , 不断将值赋给arr[2]的zval结构体,  arr的变化如下:</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">[ 1 , 2 , 1 ]</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line">[ 1 , 2 , 2 ]</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">4</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">5</span></pre></td><td class="code"><pre><span class="line">[ 1, 2 , 2 ]</span></pre></td></tr></table></figure>
+
+<h1 id="unset"><a href="#unset" class="headerlink" title="unset"></a>unset</h1><p> unset只删除php层引用变量的映射关系 , 并不会清空底层zval变量的内存空间</p>
+<h1 id="为什么要小心使用PHP的引用"><a href="#为什么要小心使用PHP的引用" class="headerlink" title="为什么要小心使用PHP的引用"></a>为什么要小心使用PHP的引用</h1><p> PHP采用的复制机制是“引用计数，写时复制”，也就是说，即便在PHP里复制一个变量，最初的形式从根本上说其实仍然是引用的形式，只有当变量的内容发生变化时，才会出现真正的复制。</p>
+<h1 id="引用和指针的区别"><a href="#引用和指针的区别" class="headerlink" title="引用和指针的区别"></a>引用和指针的区别</h1><p>在C中指针是一个存储内存地址的变量</p>
+<p>在PHP中引用则是在存储变量键值对的哈希表中增加一对键值对 , 值指向同一个结构体 , 因此几乎不产生额外空间 </p>
+<p>写时复制</p>
+<p>写时改变</p>
+<p><a href="https://blog.csdn.net/JathamJ/article/details/73189194" target="_blank" rel="noopener">https://blog.csdn.net/JathamJ/article/details/73189194</a></p>
+<p><a href="https://blog.csdn.net/chen1083376511/article/details/82721749" target="_blank" rel="noopener">https://blog.csdn.net/chen1083376511/article/details/82721749</a></p>
+<h2 id="C语言里的三种参数传递-现代魔法学院"><a href="#C语言里的三种参数传递-现代魔法学院" class="headerlink" title="C语言里的三种参数传递  - 现代魔法学院"></a><a href="nowamagic.net/academy/detail/1205552">C语言里的三种参数传递 </a> - 现代魔法学院</h2><p>在开始之前，请务必看这篇文章： <a href="http://www.nowamagic.net/librarys/veda/detail/2126" target="_blank" rel="noopener">漫谈C指针：参数传递的三道题目</a></p>
+<p>我们都知道：C语言中函数参数的传递有：<a href="http://www.nowamagic.net/academy/tag/值传递" target="_blank" rel="noopener">值传递</a>、地址传递、引用传递这三种形式。题一为值传递，题二为地址传递，题三为引用传递。</p>
+<p>值传递大家都应该很清楚，作为参数的变量，传递给函数执行后，自己的变量值是不变的。它（实参）仅仅只是把值赋给了形参，自己实际上是没有参与函数运算的，参与的是形参，这个就是参数的值传递。</p>
+<p>地址传递呢？地址传递跟值传递也没有什么不同，值传递是把变量的值传递给形参去参与函数运算，而地址传递则把变量的地址传递给形参去参与函数运算。当然，如果函数改变了变量地址的值，实参的值也会变化的。</p>
+<p>最后是<a href="http://www.nowamagic.net/academy/tag/引用传递" target="_blank" rel="noopener">引用传递</a>，也是我们本小节的重点。引用传递的调用方式与值传递一样的，而形参则引用了实参，在函数里头操作的是实参，而不是像上面两种操作形参那样。也就是函数是直接修改实参的值了。</p>
+<h1 id="php变量和变量名是如何映射的"><a href="#php变量和变量名是如何映射的" class="headerlink" title="php变量和变量名是如何映射的"></a>php变量和变量名是如何映射的</h1><p>变量是一个zval结构体 , 通过哈希表键值对将变量名和变量映射起来 </p>
+<p>参考: </p>
+<p><a href="http://www.laruence.com/2010/12/08/1716.html" target="_blank" rel="noopener">如何获取一个变量的名字</a><br><a href="https://segmentfault.com/a/1190000018535960" target="_blank" rel="noopener">https://segmentfault.com/a/1190000018535960</a><br><a href="https://segmentfault.com/blog/xuzheng_tech_growth" target="_blank" rel="noopener">许铮的技术成长之路</a><br><a href="https://www.jianshu.com/p/53fcf6128dcd" target="_blank" rel="noopener">https://www.jianshu.com/p/53fcf6128dcd</a></p>
+<blockquote>
+<p>每一个php变量都会由变量类型、value值、引用计数次数和是否是引用变量四部分组成</p>
+</blockquote>
+<blockquote>
+<p>而变量name是如何与变量容器关联起来的呢？其实也是使用了php的一个内部机制，即哈希表。每个变量的变量名和指向zval结构的指针被存储在哈希表内，以此实现了变量名到变量容器的映射</p>
+</blockquote>
+<blockquote>
+<p>其实不是的，变量存储也有作用域的概念。全局变量被存储到了全局符号表内，而局部变量也就是指函数或对象内的变量，则被存储到了活动符号表内（每个函数或对象都单独维护了自己的活动符号表。活动符号表的生命周期，从函数或对象被调用时开始，到调用完成时结束）</p>
+</blockquote>
+<blockquote>
+<p>我们这次主要讲一下手动销毁，即unset，每次销毁时都会将符号表内的变量名和对应的zval结构进行销毁，并将对应的内存归还到php所维护的内存池内（按内存大小划分到对应内存列表中）</p>
+</blockquote>
 
     </div>
 
@@ -288,11 +326,11 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2019/09/13/knowledge_map_reduce/computer_composition/" rel="prev" title="知识点的reduce_计算机组成原理">
-      <i class="fa fa-chevron-left"></i> 知识点的reduce_计算机组成原理
+    <a href="/2019/06/25/archives/tcp_little_sum/" rel="prev" title="TCP 小记">
+      <i class="fa fa-chevron-left"></i> TCP 小记
     </a></div>
       <div class="post-nav-item">
-    <a href="/2019/09/13/redis_code_book_reading/" rel="next" title="Redis 设计与实现 第二遍笔记">
+    <a href="/2019/08/20/redis_code_book_reading/" rel="next" title="Redis 设计与实现 第二遍笔记">
       Redis 设计与实现 第二遍笔记 <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
@@ -332,7 +370,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Py-的协程-JS的协程"><span class="nav-number">1.</span> <span class="nav-text">Py 的协程 / JS的协程</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Coroutine-模型对比"><span class="nav-number">1.1.</span> <span class="nav-text">Coroutine 模型对比</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Coroutine-概念"><span class="nav-number">1.2.</span> <span class="nav-text">Coroutine 概念</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#模型适用场景"><span class="nav-number">1.3.</span> <span class="nav-text">模型适用场景</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#python-并发编程-demo代码-注释"><span class="nav-number">1.4.</span> <span class="nav-text">python 并发编程 demo代码+注释</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考资料"><span class="nav-number">1.5.</span> <span class="nav-text">参考资料</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Py的并发接口"><span class="nav-number">1.6.</span> <span class="nav-text">Py的并发接口</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#异步编程风格的演化"><span class="nav-number">1.7.</span> <span class="nav-text">异步编程风格的演化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#完"><span class="nav-number">1.8.</span> <span class="nav-text">完</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#如何理解JS的作用域，作用域的底层实现"><span class="nav-number">1.8.1.</span> <span class="nav-text">如何理解JS的作用域，作用域的底层实现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Promise的出现背景，设计思想"><span class="nav-number">1.8.2.</span> <span class="nav-text">Promise的出现背景，设计思想</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#this的值到底是谁？"><span class="nav-number">1.8.3.</span> <span class="nav-text">this的值到底是谁？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#扩展学习"><span class="nav-number">1.8.4.</span> <span class="nav-text">扩展学习</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#用Go的-buffered-channel-实现对象池"><span class="nav-number">2.</span> <span class="nav-text">用Go的 buffered channel 实现对象池</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Py-的协程-JS的协程"><span class="nav-number">1.</span> <span class="nav-text">Py 的协程 / JS的协程</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Coroutine-模型对比"><span class="nav-number">1.1.</span> <span class="nav-text">Coroutine 模型对比</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Coroutine-概念"><span class="nav-number">1.2.</span> <span class="nav-text">Coroutine 概念</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#模型适用场景"><span class="nav-number">1.3.</span> <span class="nav-text">模型适用场景</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#python-并发编程-demo代码-注释"><span class="nav-number">1.4.</span> <span class="nav-text">python 并发编程 demo代码+注释</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考资料"><span class="nav-number">1.5.</span> <span class="nav-text">参考资料</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Py的并发接口"><span class="nav-number">1.6.</span> <span class="nav-text">Py的并发接口</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#异步编程风格的演化"><span class="nav-number">1.7.</span> <span class="nav-text">异步编程风格的演化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#完"><span class="nav-number">1.8.</span> <span class="nav-text">完</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#如何理解JS的作用域，作用域的底层实现"><span class="nav-number">1.8.1.</span> <span class="nav-text">如何理解JS的作用域，作用域的底层实现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Promise的出现背景，设计思想"><span class="nav-number">1.8.2.</span> <span class="nav-text">Promise的出现背景，设计思想</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#this的值到底是谁？"><span class="nav-number">1.8.3.</span> <span class="nav-text">this的值到底是谁？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#扩展学习"><span class="nav-number">1.8.4.</span> <span class="nav-text">扩展学习</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#用Go的-buffered-channel-实现对象池"><span class="nav-number">2.</span> <span class="nav-text">用Go的 buffered channel 实现对象池</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#为什么php-的foreach比for快"><span class="nav-number">3.</span> <span class="nav-text">为什么php 的foreach比for快</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#php-的foreach小陷阱"><span class="nav-number">4.</span> <span class="nav-text">php 的foreach小陷阱</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#unset"><span class="nav-number">5.</span> <span class="nav-text">unset</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#为什么要小心使用PHP的引用"><span class="nav-number">6.</span> <span class="nav-text">为什么要小心使用PHP的引用</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#引用和指针的区别"><span class="nav-number">7.</span> <span class="nav-text">引用和指针的区别</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#C语言里的三种参数传递-现代魔法学院"><span class="nav-number">7.1.</span> <span class="nav-text">C语言里的三种参数传递  - 现代魔法学院</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#php变量和变量名是如何映射的"><span class="nav-number">8.</span> <span class="nav-text">php变量和变量名是如何映射的</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -352,7 +390,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-count">2</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
