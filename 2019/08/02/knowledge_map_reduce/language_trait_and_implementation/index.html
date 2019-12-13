@@ -45,15 +45,15 @@
   };
 </script>
 
-  <meta name="description" content="Py 的协程 &#x2F; JS的协程">
+  <meta name="description" content="…">
 <meta name="keywords" content="基础补足">
 <meta property="og:type" content="article">
 <meta property="og:title" content="知识点的reduce_语言特性_底层实现">
 <meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;08&#x2F;02&#x2F;knowledge_map_reduce&#x2F;language_trait_and_implementation&#x2F;index.html">
 <meta property="og:site_name" content="Log0c">
-<meta property="og:description" content="Py 的协程 &#x2F; JS的协程">
+<meta property="og:description" content="…">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2019-12-13T05:21:41.309Z">
+<meta property="og:updated_time" content="2019-12-13T05:24:09.905Z">
 <meta name="twitter:card" content="summary">
 
 <link rel="canonical" href="http://yoursite.com/2019/08/02/knowledge_map_reduce/language_trait_and_implementation/">
@@ -211,10 +211,10 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h1 id="Py-的协程-JS的协程"><a href="#Py-的协程-JS的协程" class="headerlink" title="Py 的协程 / JS的协程"></a>Py 的协程 / JS的协程</h1><a id="more"></a>
+        <p>…</p>
+<a id="more"></a>
 
-
-<h2 id="Coroutine-模型对比"><a href="#Coroutine-模型对比" class="headerlink" title="Coroutine 模型对比"></a>Coroutine 模型对比</h2><p>Go的是m:n的协程线程模型 , 并且支持多核并行</p>
+<h1 id="Py-的协程-JS的协程"><a href="#Py-的协程-JS的协程" class="headerlink" title="Py 的协程 / JS的协程"></a>Py 的协程 / JS的协程</h1><h2 id="Coroutine-模型对比"><a href="#Coroutine-模型对比" class="headerlink" title="Coroutine 模型对比"></a>Coroutine 模型对比</h2><p>Go的是m:n的协程线程模型 , 并且支持多核并行</p>
 <p>Py的是m:1的单线程事件循环模型 ,  只支持并发 , 因此在cpu bound的场景下使用协程没有优势</p>
 <p>js的await / async也是协程 , 和py模型一样 , 但是使用方式不太一样, js可以直接执行异步函数 , py生成的是Coroutine object , 要配合其他才能执行</p>
 <h2 id="Coroutine-概念"><a href="#Coroutine-概念" class="headerlink" title="Coroutine 概念"></a>Coroutine 概念</h2><p>1.是用户态的并发调度</p>
