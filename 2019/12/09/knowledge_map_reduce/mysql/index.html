@@ -53,7 +53,7 @@
 <meta property="og:site_name" content="Log0c">
 <meta property="og:description" content="…">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2019-12-13T03:25:38.636Z">
+<meta property="og:updated_time" content="2019-12-14T13:17:49.168Z">
 <meta name="twitter:card" content="summary">
 
 <link rel="canonical" href="http://yoursite.com/2019/12/09/knowledge_map_reduce/mysql/">
@@ -215,7 +215,7 @@
 <a id="more"></a>
 
 <h1 id="B-Tree-和B-more-Tree-4、b-树特性"><a href="#B-Tree-和B-more-Tree-4、b-树特性" class="headerlink" title="B-Tree 和B more Tree (4、b+树特性)"></a>B-Tree 和B more Tree (4、b+树特性)</h1><p>B more Tree产生的原因: 常规的树结构不能很好地支持”区间查询” (需要进行一次从根节点开始的中序遍历,时间复杂度O(n) , 因为树结构不支持从某个节点开始有序遍历)</p>
-<p>和跳跃表很相似 , 但却是两个不一样的演化分支 </p>
+<p>和跳跃表(多级链表索引,每一级都定位到更小的范围,最后找到元素)很相似 , 但却是两个不一样的演化分支 </p>
 <p>所有的数据都放在叶子节点 , 并串成链表 , 其他节点都是索引节点 , 不存数据</p>
 <p>继承了树结构优势的同时支持了快速的区间查询</p>
 <p>所以B+树更加适合在区间查询的情况，通常B+树用于数据库索引，而B树则常用于文件索引。</p>
@@ -235,10 +235,6 @@
 <p>如果从NCI查,并且不是覆盖索引,此时还需要返回CI中再查一次</p>
 <h1 id="Unique-Index-vs-Normal-Index"><a href="#Unique-Index-vs-Normal-Index" class="headerlink" title="Unique Index vs Normal Index"></a>Unique Index vs Normal Index</h1><p>UI每次维护的时候还需要检查唯一性 , 写性能损耗比NI的高<br>查性能的差异可以忽略不计,因此能用NI的时候用NI</p>
 <h1 id="不适合建立索引的场景"><a href="#不适合建立索引的场景" class="headerlink" title="不适合建立索引的场景"></a>不适合建立索引的场景</h1><p>频繁写 , 频繁维护索引, 在非递增的情况下还容易产生页分裂<br>重复值过多 , 用”二分查找”的思维去理解, 例子:性别字段, 过滤掉一半之后依然需要遍历表一半的数据 (时间复杂度退化成O(n/2))<br>varchar字段建索引更容易产生页分裂 (未查证)</p>
-<h1 id="联合索引"><a href="#联合索引" class="headerlink" title="联合索引"></a>联合索引</h1><p>可以理解为多维有序数组多层遍历,取符合的数据</p>
-<p>当然实际上是Bmore Tree的区间查询过程, 先搜索树找到第一个符合条件的叶子节点,再从叶子节点链表向后遍历</p>
-<p>一些特殊但是能用到该索引的场景:<br>1.匹配第一列数据的左边一部分+第二列等值匹配(从数据结构的角度看第二列部分匹配似乎也可以,未查证)<br>2.第一列范围查找+第二列等值匹配 </p>
-<p>后续:测试+查高性能MySQL</p>
 <h1 id="7-select-from-t-where-a-and-b-gt-order-by-c-limit-0-100-如何加索引"><a href="#7-select-from-t-where-a-and-b-gt-order-by-c-limit-0-100-如何加索引" class="headerlink" title="7. select * from t where a=? and b&gt;? order by c limit 0,100 如何加索引"></a>7. select * from t where a=? and b&gt;? order by c limit 0,100 如何加索引</h1><p>a b c<br>1 2 3<br>1 3 9<br>1 9 3<br>2 9 4<br>. . .<br>. . .</p>
 <p>基于MySQL 5.6之后的索引下推规则分析</p>
 <p>(a,b,c)的情况: 先筛选出3条数据,再判断b </p>
@@ -303,7 +299,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#B-Tree-和B-more-Tree-4、b-树特性"><span class="nav-number">1.</span> <span class="nav-text">B-Tree 和B more Tree (4、b+树特性)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Optimistic-Lock-Pessimistic-Lock"><span class="nav-number">2.</span> <span class="nav-text">Optimistic Lock / Pessimistic Lock</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#事务在InnoDB中的部分实现细节-vs-Redis"><span class="nav-number">3.</span> <span class="nav-text">事务在InnoDB中的部分实现细节 vs Redis</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#ACID"><span class="nav-number">4.</span> <span class="nav-text">ACID</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#资料"><span class="nav-number">4.1.</span> <span class="nav-text">资料</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Clustered-Index-vs-Non-Clustered-Index"><span class="nav-number">5.</span> <span class="nav-text">Clustered Index vs Non-Clustered Index</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Unique-Index-vs-Normal-Index"><span class="nav-number">6.</span> <span class="nav-text">Unique Index vs Normal Index</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#不适合建立索引的场景"><span class="nav-number">7.</span> <span class="nav-text">不适合建立索引的场景</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#联合索引"><span class="nav-number">8.</span> <span class="nav-text">联合索引</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#7-select-from-t-where-a-and-b-gt-order-by-c-limit-0-100-如何加索引"><span class="nav-number">9.</span> <span class="nav-text">7. select * from t where a=? and b&gt;? order by c limit 0,100 如何加索引</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#B-Tree-和B-more-Tree-4、b-树特性"><span class="nav-number">1.</span> <span class="nav-text">B-Tree 和B more Tree (4、b+树特性)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Optimistic-Lock-Pessimistic-Lock"><span class="nav-number">2.</span> <span class="nav-text">Optimistic Lock / Pessimistic Lock</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#事务在InnoDB中的部分实现细节-vs-Redis"><span class="nav-number">3.</span> <span class="nav-text">事务在InnoDB中的部分实现细节 vs Redis</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#ACID"><span class="nav-number">4.</span> <span class="nav-text">ACID</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#资料"><span class="nav-number">4.1.</span> <span class="nav-text">资料</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Clustered-Index-vs-Non-Clustered-Index"><span class="nav-number">5.</span> <span class="nav-text">Clustered Index vs Non-Clustered Index</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Unique-Index-vs-Normal-Index"><span class="nav-number">6.</span> <span class="nav-text">Unique Index vs Normal Index</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#不适合建立索引的场景"><span class="nav-number">7.</span> <span class="nav-text">不适合建立索引的场景</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#7-select-from-t-where-a-and-b-gt-order-by-c-limit-0-100-如何加索引"><span class="nav-number">8.</span> <span class="nav-text">7. select * from t where a=? and b&gt;? order by c limit 0,100 如何加索引</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 

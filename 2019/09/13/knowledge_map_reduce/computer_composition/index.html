@@ -53,7 +53,7 @@
 <meta property="og:site_name" content="Log0c">
 <meta property="og:description" content="…">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2019-12-13T05:23:59.443Z">
+<meta property="og:updated_time" content="2019-12-14T13:17:49.161Z">
 <meta name="twitter:card" content="summary">
 
 <link rel="canonical" href="http://yoursite.com/2019/09/13/knowledge_map_reduce/computer_composition/">
@@ -252,9 +252,13 @@
 <p><a href="https://ieeexplore.ieee.org/document/4610935" target="_blank" rel="noopener">https://ieeexplore.ieee.org/document/4610935</a></p>
 <p><a href="https://zh.wikipedia.org/zh-hans/IEEE_754" target="_blank" rel="noopener">https://zh.wikipedia.org/zh-hans/IEEE_754</a></p>
 <p>5.<a href="https://blog.csdn.net/crjmail/article/details/79723051" target="_blank" rel="noopener">实现参考</a></p>
-<h1 id="为什么while-true-会把cpu占用率打满-while-true-sleep-1-不会"><a href="#为什么while-true-会把cpu占用率打满-while-true-sleep-1-不会" class="headerlink" title="为什么while(true){}会把cpu占用率打满,while(true){sleep(1)}不会"></a>为什么while(true){}会把cpu占用率打满,while(true){sleep(1)}不会</h1><p>以下内容是当前的理解,不一定正确 </p>
+<h1 id="为什么while-true-会把cpu占用率打满-while-true-sleep-1-不会"><a href="#为什么while-true-会把cpu占用率打满-while-true-sleep-1-不会" class="headerlink" title="为什么while(true){}会把cpu占用率打满,while(true){sleep(1)}不会"></a>为什么while(true){}会把cpu占用率打满,while(true){sleep(1)}不会</h1><blockquote>
+<p>linux 性能优化课有讲到,后面回顾的时候总结下来</p>
+</blockquote>
+<p>以下内容是当前的理解,不一定正确 </p>
 <p> cpu占用率的定义 , 某个时间的cpu时间片实际有线程在运行的时间</p>
 <p>sleep(1)会阻塞当前线程(放入等待队列) , 而{} 会分尽量多的时间片给当前线程 </p>
+<p>循环监听要记得 sleep , 避免空转占满 cpu 时间</p>
 <p>参考<a href="https://www.v2ex.com/t/622020#reply34" target="_blank" rel="noopener">https://www.v2ex.com/t/622020#reply34</a></p>
 <p><a href="https://www.v2ex.com/t/352157" target="_blank" rel="noopener">https://www.v2ex.com/t/352157</a></p>
 <p><a href="https://blog.csdn.net/zhuyijian135757/article/details/42269329" target="_blank" rel="noopener">https://blog.csdn.net/zhuyijian135757/article/details/42269329</a></p>
