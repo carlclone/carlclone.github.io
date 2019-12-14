@@ -45,12 +45,14 @@
   };
 </script>
 
-  <meta property="og:type" content="website">
+  <meta name="description" content="联合索引可以理解为多维有序数组多层遍历,取符合的数据 当然实际上是Bmore Tree的区间查询过程, 先搜索树找到第一个符合条件的叶子节点,再从叶子节点链表向后遍历 5.5 之前只能匹配第一列,然后依个回主键索引再判断第二个条件 5.6 之后的索引下推功能,可以直接先排除掉不符合条件的数据,减少回主键索引查询的次数 最左前缀原则: 最左N个字段 or 字符串索引的最左M个字符 索引第一列区分度越">
+<meta property="og:type" content="website">
 <meta property="og:title" content="Log0c">
 <meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;drafts&#x2F;wrong.html">
 <meta property="og:site_name" content="Log0c">
+<meta property="og:description" content="联合索引可以理解为多维有序数组多层遍历,取符合的数据 当然实际上是Bmore Tree的区间查询过程, 先搜索树找到第一个符合条件的叶子节点,再从叶子节点链表向后遍历 5.5 之前只能匹配第一列,然后依个回主键索引再判断第二个条件 5.6 之后的索引下推功能,可以直接先排除掉不符合条件的数据,减少回主键索引查询的次数 最左前缀原则: 最左N个字段 or 字符串索引的最左M个字符 索引第一列区分度越">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2019-12-14T13:40:50.442Z">
+<meta property="og:updated_time" content="2019-12-14T13:52:22.794Z">
 <meta name="twitter:card" content="summary">
 
 <link rel="canonical" href="http://yoursite.com/drafts/wrong">
@@ -190,7 +192,16 @@
       
       
       <div class="post-body">
-          
+          <h1 id="联合索引"><a href="#联合索引" class="headerlink" title="联合索引"></a>联合索引</h1><p>可以理解为多维有序数组多层遍历,取符合的数据</p>
+<p>当然实际上是Bmore Tree的区间查询过程, 先搜索树找到第一个符合条件的叶子节点,再从叶子节点链表向后遍历</p>
+<p>5.5 之前只能匹配第一列,然后依个回主键索引再判断第二个条件</p>
+<p>5.6 之后的索引下推功能,可以直接先排除掉不符合条件的数据,减少回主键索引查询的次数</p>
+<p>最左前缀原则: 最左N个字段 or 字符串索引的最左M个字符</p>
+<p>索引第一列区分度越高越好,当然也要考虑复用 (其他列只用于覆盖索引或遍历链表时条件排除)</p>
+<p>后续:测试+查高性能MySQL</p>
+<p>参考:<br>mysql 45讲-第5讲</p>
+<p>好像还是理解错了,算了 <a href="https://blog.csdn.net/klchht/article/details/78146443" target="_blank" rel="noopener">https://blog.csdn.net/klchht/article/details/78146443</a></p>
+
       </div>
       
       
@@ -230,6 +241,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#联合索引"><span class="nav-number">1.</span> <span class="nav-text">联合索引</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
