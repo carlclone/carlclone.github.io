@@ -45,25 +45,18 @@
   };
 </script>
 
-  <meta name="description" content="一个值得深入学习源码的laravel扩展">
-<meta name="keywords" content="归档">
+  <meta name="description" content="…">
+<meta name="keywords" content="基础补足">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Laravel-Admin源码阅读--编程思想收获">
-<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2017&#x2F;07&#x2F;20&#x2F;archives&#x2F;laravel_admin_code_reading&#x2F;index.html">
+<meta property="og:title" content="mit 6.824 diary">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;04&#x2F;23&#x2F;knowledge_map_reduce&#x2F;mit6_824&#x2F;index.html">
 <meta property="og:site_name" content="Log0c">
-<meta property="og:description" content="一个值得深入学习源码的laravel扩展">
+<meta property="og:description" content="…">
 <meta property="og:locale" content="en">
-<meta property="og:image" content="http:&#x2F;&#x2F;upload-images.jianshu.io&#x2F;upload_images&#x2F;3830995-fe1641edd7516a18.png?imageMogr2&#x2F;auto-orient&#x2F;strip%7CimageView2&#x2F;2&#x2F;w&#x2F;1240">
-<meta property="og:image" content="http:&#x2F;&#x2F;upload-images.jianshu.io&#x2F;upload_images&#x2F;3830995-9f4ffa01a5a08ae7.png?imageMogr2&#x2F;auto-orient&#x2F;strip%7CimageView2&#x2F;2&#x2F;w&#x2F;1240">
-<meta property="og:image" content="http:&#x2F;&#x2F;upload-images.jianshu.io&#x2F;upload_images&#x2F;3830995-dcb37b8268567b0d.png?imageMogr2&#x2F;auto-orient&#x2F;strip%7CimageView2&#x2F;2&#x2F;w&#x2F;1240">
-<meta property="og:image" content="http:&#x2F;&#x2F;upload-images.jianshu.io&#x2F;upload_images&#x2F;3830995-266b280d7c9fc334.png?imageMogr2&#x2F;auto-orient&#x2F;strip%7CimageView2&#x2F;2&#x2F;w&#x2F;1240">
-<meta property="og:image" content="http:&#x2F;&#x2F;upload-images.jianshu.io&#x2F;upload_images&#x2F;3830995-0fe28b8726a94fbe.png?imageMogr2&#x2F;auto-orient&#x2F;strip%7CimageView2&#x2F;2&#x2F;w&#x2F;1240">
-<meta property="og:image" content="http:&#x2F;&#x2F;upload-images.jianshu.io&#x2F;upload_images&#x2F;3830995-4742a345d38a54e0.png?imageMogr2&#x2F;auto-orient&#x2F;strip%7CimageView2&#x2F;2&#x2F;w&#x2F;1240">
-<meta property="og:updated_time" content="2019-12-13T03:13:58.380Z">
+<meta property="og:updated_time" content="2020-04-23T13:23:07.771Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http:&#x2F;&#x2F;upload-images.jianshu.io&#x2F;upload_images&#x2F;3830995-fe1641edd7516a18.png?imageMogr2&#x2F;auto-orient&#x2F;strip%7CimageView2&#x2F;2&#x2F;w&#x2F;1240">
 
-<link rel="canonical" href="http://yoursite.com/2017/07/20/archives/laravel_admin_code_reading/">
+<link rel="canonical" href="http://yoursite.com/2020/04/23/knowledge_map_reduce/mit6_824/">
 
 
 <script id="page-configurations">
@@ -77,7 +70,7 @@
   };
 </script>
 
-  <title>Laravel-Admin源码阅读--编程思想收获 | Log0c</title>
+  <title>mit 6.824 diary | Log0c</title>
   
 
 
@@ -181,7 +174,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="en">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/07/20/archives/laravel_admin_code_reading/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/04/23/knowledge_map_reduce/mit6_824/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -194,7 +187,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          Laravel-Admin源码阅读--编程思想收获
+          mit 6.824 diary
         </h1>
 
         <div class="post-meta">
@@ -203,8 +196,9 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">Posted on</span>
+              
 
-              <time title="Created: 2017-07-20 14:57:31" itemprop="dateCreated datePublished" datetime="2017-07-20T14:57:31+08:00">2017-07-20</time>
+              <time title="Created: 2020-04-23 00:00:00 / Modified: 21:23:07" itemprop="dateCreated datePublished" datetime="2020-04-23T00:00:00+08:00">2020-04-23</time>
             </span>
 
           
@@ -218,20 +212,17 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>一个值得深入学习源码的laravel扩展</p>
+        <p>…</p>
 <a id="more"></a>
 
 
-<h1 id="数据模型表格Grid的代码追踪"><a href="#数据模型表格Grid的代码追踪" class="headerlink" title="数据模型表格Grid的代码追踪"></a>数据模型表格Grid的代码追踪</h1><p>传入Eloquent模型和使用者Grid相关自定义设置的闭包</p>
-<p><img src="http://upload-images.jianshu.io/upload_images/3830995-fe1641edd7516a18.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="Paste_Image.png"></p>
-<p>Laravel的Facade实现<br><img src="http://upload-images.jianshu.io/upload_images/3830995-9f4ffa01a5a08ae7.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="Paste_Image.png"></p>
-<p>Admin类的grid方法主体，将前面两个参数传入实例化的Grid类中（依赖注入）<br><img src="http://upload-images.jianshu.io/upload_images/3830995-dcb37b8268567b0d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="Paste_Image.png"></p>
-<p>初始化构造（依赖注入）<br><img src="http://upload-images.jianshu.io/upload_images/3830995-266b280d7c9fc334.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="Paste_Image.png"></p>
-<p>追踪builder闭包的使用情况</p>
-<p>将当前Grid类作为参数传入闭包，执行使用者在闭包中的自定义设置</p>
-<h1 id="导出表格方法"><a href="#导出表格方法" class="headerlink" title="导出表格方法"></a>导出表格方法</h1><p><img src="http://upload-images.jianshu.io/upload_images/3830995-0fe28b8726a94fbe.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="Paste_Image.png"></p>
-<h1 id="表格过滤方法"><a href="#表格过滤方法" class="headerlink" title="表格过滤方法"></a>表格过滤方法</h1><p><img src="http://upload-images.jianshu.io/upload_images/3830995-4742a345d38a54e0.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="Paste_Image.png"></p>
-
+<p>第一个 lab 的 test case 在今天全部稳定 pass 了 , 比起平时写业务一条路写到底 , 分布式带来了许多新鲜感 , 要考虑的的东西也从单线程变成了多线程并发,各种 race 条件 , 很多时候没有良好的定义就只能全部推翻重来了</p>
+<p>虽说 test case 是 pass 了 , 但是论文里提到的很多点依然很值得动手实现 , 主要是 fault tolerance 相关的功能 , 比如我的代码里就没有考虑到在写文件的时候崩溃的场景 , 或者 worker 完成了task但是已经失活 , 还有 master crash 后 , 如何进行 recovery  (对重要状态进行持久化 , 日志追加)</p>
+<p>我的学习过程是直接看 Lec1 的 intro , 然后是 mapreduce paper ,<br>虽然老师长得很帅 (神牛 robert morris , 蠕虫病毒作者 , 老爸是安全局科学家 ,羡慕了), 但是之前看过分布式的相关理论 , mapreduce 又是类似大文件分割统计的面试题泛化 , go 的并发编程也比较熟了 , 视频和 lec2就跳过了</p>
+<p>第一次读论文 , 感觉学一个概念 , 读最原始的论文 , 似乎少了很多疑惑和额外的搜索</p>
+<p>但是raft 的论文已经看了两天了 , 还没有开始动手 , 哈哈哈</p>
+<p><a href="https://github.com/carlclone/MIT-6.824-LAB.git/" target="_blank" rel="noopener">mit-6.824 labs</a></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">mapreduce</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line">input is (already) split into M files</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">4</span></pre></td><td class="code"><pre><span class="line">  Input1 -&gt; Map -&gt; a,1 b,1</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">5</span></pre></td><td class="code"><pre><span class="line">  Input2 -&gt; Map -&gt;     b,1</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">6</span></pre></td><td class="code"><pre><span class="line">  Input3 -&gt; Map -&gt; a,1     c,1</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">7</span></pre></td><td class="code"><pre><span class="line">                    |   |   |</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">8</span></pre></td><td class="code"><pre><span class="line">                    |   |   -&gt; Reduce -&gt; c,1</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">9</span></pre></td><td class="code"><pre><span class="line">                    |   -----&gt; Reduce -&gt; b,2</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">10</span></pre></td><td class="code"><pre><span class="line">                    ---------&gt; Reduce -&gt; a,2</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">11</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">12</span></pre></td><td class="code"><pre><span class="line">解决的问题:</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">13</span></pre></td><td class="code"><pre><span class="line">让用户只需要关心 map 和 reduce</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">14</span></pre></td><td class="code"><pre><span class="line">隐藏:</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">15</span></pre></td><td class="code"><pre><span class="line">sending app code to servers</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">16</span></pre></td><td class="code"><pre><span class="line">  tracking which tasks are done</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">17</span></pre></td><td class="code"><pre><span class="line">  moving data from Maps to Reduces</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">18</span></pre></td><td class="code"><pre><span class="line">  balancing load over servers</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">19</span></pre></td><td class="code"><pre><span class="line">  recovering from failures</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">20</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">21</span></pre></td><td class="code"><pre><span class="line">MapReduce single-handedly made big cluster computation popular.</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">22</span></pre></td><td class="code"><pre><span class="line">  - Not the most efficient or flexible.</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">23</span></pre></td><td class="code"><pre><span class="line">  + Scales well.</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">24</span></pre></td><td class="code"><pre><span class="line">  + Easy to program -- failures and data movement are hidden.</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">25</span></pre></td><td class="code"><pre><span class="line">  These were good trade-offs in practice.</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">26</span></pre></td><td class="code"><pre><span class="line">  We&#39;ll see some more advanced successors later in the course.</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">27</span></pre></td><td class="code"><pre><span class="line">  Have fun with the lab!</span></pre></td></tr></table></figure>
     </div>
 
     
@@ -240,7 +231,7 @@
 
       <footer class="post-footer">
           <div class="post-tags">
-              <a href="/tags/%E5%BD%92%E6%A1%A3/" rel="tag"># 归档</a>
+              <a href="/tags/%E5%9F%BA%E7%A1%80%E8%A1%A5%E8%B6%B3/" rel="tag"># 基础补足</a>
           </div>
 
         
@@ -249,13 +240,10 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2017/06/28/archives/phpstorm_userful_shortcut/" rel="prev" title="PHPStorm常用快捷键">
-      <i class="fa fa-chevron-left"></i> PHPStorm常用快捷键
+    <a href="/2019/12/09/knowledge_map_reduce/mysql/" rel="prev" title="知识点的reduce_mysql">
+      <i class="fa fa-chevron-left"></i> 知识点的reduce_mysql
     </a></div>
-      <div class="post-nav-item">
-    <a href="/2017/07/21/archives/zsh_alias_backup/" rel="next" title="onmyZsh Alias备份">
-      onmyZsh Alias备份 <i class="fa fa-chevron-right"></i>
-    </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     
@@ -293,7 +281,6 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#数据模型表格Grid的代码追踪"><span class="nav-number">1.</span> <span class="nav-text">数据模型表格Grid的代码追踪</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#导出表格方法"><span class="nav-number">2.</span> <span class="nav-text">导出表格方法</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#表格过滤方法"><span class="nav-number">3.</span> <span class="nav-text">表格过滤方法</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
