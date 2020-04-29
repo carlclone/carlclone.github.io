@@ -53,7 +53,7 @@
 <meta property="og:site_name" content="Log0c">
 <meta property="og:description" content="…">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2020-04-23T13:15:59.899Z">
+<meta property="og:updated_time" content="2020-04-23T14:55:59.300Z">
 <meta name="twitter:card" content="summary">
 
 <link rel="canonical" href="http://yoursite.com/2019/08/02/knowledge_map_reduce/language_trait_and_implementation/">
@@ -214,8 +214,8 @@
         <p>…</p>
 <a id="more"></a>
 
-<h1 id="Py-的协程-JS的协程"><a href="#Py-的协程-JS的协程" class="headerlink" title="Py 的协程 / JS的协程"></a>Py 的协程 / JS的协程</h1><h2 id="Coroutine-模型对比"><a href="#Coroutine-模型对比" class="headerlink" title="Coroutine 模型对比"></a>Coroutine 模型对比</h2><p>Go的是m:n的协程线程模型 , 并且支持多核并行</p>
-<p>Py的是m:1的单线程事件循环模型 ,  只支持并发 , 因此在cpu bound的场景下使用协程没有优势</p>
+<h1 id="Py-的协程-JS的协程"><a href="#Py-的协程-JS的协程" class="headerlink" title="Py 的协程 / JS的协程"></a>Py 的协程 / JS的协程</h1><h2 id="Coroutine-模型对比"><a href="#Coroutine-模型对比" class="headerlink" title="Coroutine 模型对比"></a>Coroutine 模型对比</h2><p>Go的是m:n的协程线程模型 , 并且支持多核并行 , 实现了自动调度 , 是相对完整的协程模型</p>
+<p>Py的是m:1的单线程事件循环模型 ,  只支持并发 , 因此在cpu bound的场景下使用协程没有优势 , 没有实现自动调度 , 由用户决定调度位置</p>
 <p>js的await / async也是协程 , 和py模型一样 , 但是使用方式不太一样, js可以直接执行异步函数 , py生成的是Coroutine object , 要配合其他才能执行</p>
 <h2 id="Coroutine-概念"><a href="#Coroutine-概念" class="headerlink" title="Coroutine 概念"></a>Coroutine 概念</h2><p>1.是用户态的并发调度</p>
 <p>2.协程类似线程 , 但是线程的控制权是操作系统 , 用户没有控制权限 , 而协程把控制权交给了用户 </p>
@@ -383,7 +383,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
           <a href="/archives">
-          <span class="site-state-item-count">26</span>
+          <span class="site-state-item-count">28</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -401,6 +401,12 @@
       </span>
       <span class="links-of-author-item">
         <a href="https://leetcode.com/carlclone" title="LeetCode → https:&#x2F;&#x2F;leetcode.com&#x2F;carlclone" rel="noopener" target="_blank"><i class="fa fa-fw fa-code"></i>LeetCode</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://learnku.com/blog/carlclone" title="LaravelChina → https:&#x2F;&#x2F;learnku.com&#x2F;blog&#x2F;carlclone" rel="noopener" target="_blank"><i class="fa fa-fw fa-instagram"></i>LaravelChina</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.jianshu.com/u/baea2de7cc1a" title="Jianshu → https:&#x2F;&#x2F;www.jianshu.com&#x2F;u&#x2F;baea2de7cc1a" rel="noopener" target="_blank"><i class="fa fa-fw fa-instagram"></i>Jianshu</a>
       </span>
   </div>
 

@@ -53,7 +53,7 @@
 <meta property="og:site_name" content="Log0c">
 <meta property="og:description" content="…">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2020-04-23T13:15:59.901Z">
+<meta property="og:updated_time" content="2020-04-23T14:55:59.302Z">
 <meta name="twitter:card" content="summary">
 
 <link rel="canonical" href="http://yoursite.com/2019/12/01/knowledge_map_reduce/tricks/">
@@ -216,16 +216,18 @@
 
 
 
-<h1 id="push-代码前的Checklist"><a href="#push-代码前的Checklist" class="headerlink" title="push 代码前的Checklist"></a>push 代码前的Checklist</h1><p>1.可能出错的代码加try catch避免扩大影响范围<br>2.检查副作用</p>
 <h1 id="尽早错误"><a href="#尽早错误" class="headerlink" title="尽早错误"></a>尽早错误</h1><blockquote>
 <p>已经被我频繁地使用于检查变量为空的情况</p>
 </blockquote>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F;嵌套写法</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line">if (a &#x3D;&#x3D; true) &#123;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line">	if (b &#x3D;&#x3D; true) &#123;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">4</span></pre></td><td class="code"><pre><span class="line">		doSomething()</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">5</span></pre></td><td class="code"><pre><span class="line">	&#125;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">6</span></pre></td><td class="code"><pre><span class="line">&#125;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">7</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">8</span></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F;尽早错误写法</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">9</span></pre></td><td class="code"><pre><span class="line">if (a!&#x3D;true) &#123;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">10</span></pre></td><td class="code"><pre><span class="line">	return</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">11</span></pre></td><td class="code"><pre><span class="line">&#125;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">12</span></pre></td><td class="code"><pre><span class="line">if (b!&#x3D;true) &#123;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">13</span></pre></td><td class="code"><pre><span class="line">	return</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">14</span></pre></td><td class="code"><pre><span class="line">&#125;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">15</span></pre></td><td class="code"><pre><span class="line">doSomething()</span></pre></td></tr></table></figure>
 
-
-
-
-
+<h2 id="其他尽早错误的例子"><a href="#其他尽早错误的例子" class="headerlink" title="其他尽早错误的例子"></a>其他尽早错误的例子</h2><blockquote>
+<p>10x程序员工作法27 尽早暴露问题</p>
+</blockquote>
+<p>1.重构的作者Martin flower写的文章 - <a href="https://www.martinfowler.com/ieeeSoftware/failFast.pdf" target="_blank" rel="noopener">fail fast</a></p>
+<p>2.尽早检查参数错误,而不是让已经错误的参数继续往后流入数据库,导致难以分析错误来源</p>
+<p>3.数据库配置,缺少重要配置的时候直接报错,而不是设立默认值,比如最大连接数默认值10,配置项拼写错误,读取不到配置,然后在线上造成异常的缓慢,并可能耗费几天的时间来排查</p>
+<p>4.做需求,做项目,有问题尽早提出来,越拖越难解决</p>
 <h1 id="避免使用否定条件"><a href="#避免使用否定条件" class="headerlink" title="避免使用否定条件"></a>避免使用否定条件</h1><blockquote>
 <p>这条不是硬性要求,但能提高代码可读性</p>
 </blockquote>
@@ -281,6 +283,7 @@
 <p>可以把更多的精力放在实现细节上, 而不是被全局绕晕 , 形成一个阅读单元 , 点线面最后串成网</p>
 <h2 id="最后-最重要的是，把主要的流程用流程图或者时序图画出来，把重点的算法、原理用文字写出来。"><a href="#最后-最重要的是，把主要的流程用流程图或者时序图画出来，把重点的算法、原理用文字写出来。" class="headerlink" title="最后,最重要的是，把主要的流程用流程图或者时序图画出来，把重点的算法、原理用文字写出来。"></a>最后,最重要的是，把主要的流程用流程图或者时序图画出来，把重点的算法、原理用文字写出来。</h2><h2 id="作业"><a href="#作业" class="headerlink" title="作业"></a>作业</h2><p>课后，建议你找一个你熟悉的开源项目，可以是消息相关的，也可以是无关的开源项目，确定一个问题，用这节课中讲到的“带着问题和答案去读源码”的方法，去读一点源码。然后，最重要的是，把主要的流程用流程图或者时序图画出来，把重点的算法、原理用文字写出来。</p>
 <h2 id="下面的评论"><a href="#下面的评论" class="headerlink" title="下面的评论"></a>下面的评论</h2><p>实在不行你还可以跟着别人的源码解析文章去读源码。 (我就是这样….)</p>
+<h1 id="push-代码前的Checklist"><a href="#push-代码前的Checklist" class="headerlink" title="push 代码前的Checklist"></a>push 代码前的Checklist</h1><p>1.可能出错的代码加try catch避免扩大影响范围<br>2.检查副作用<br>3.影响范围估算<br>4.幂等性检查</p>
 
     </div>
 
@@ -343,7 +346,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#push-代码前的Checklist"><span class="nav-number">1.</span> <span class="nav-text">push 代码前的Checklist</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#尽早错误"><span class="nav-number">2.</span> <span class="nav-text">尽早错误</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#避免使用否定条件"><span class="nav-number">3.</span> <span class="nav-text">避免使用否定条件</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#二进制位运算标志位表示状态"><span class="nav-number">4.</span> <span class="nav-text">二进制位运算标志位表示状态</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#延伸"><span class="nav-number">4.1.</span> <span class="nav-text">延伸</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#不要在一开始就过度抽象，先思考模型的最小状态"><span class="nav-number">5.</span> <span class="nav-text">不要在一开始就过度抽象，先思考模型的最小状态</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#学习开源代码该如何入手？"><span class="nav-number">6.</span> <span class="nav-text">学习开源代码该如何入手？</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#先看文档-而且确保是最新的-中文可能不是最新的"><span class="nav-number">6.1.</span> <span class="nav-text">先看文档, 而且确保是最新的 , 中文可能不是最新的</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#然后问自己这些问题"><span class="nav-number">6.2.</span> <span class="nav-text">然后问自己这些问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#之后-带着问题去读源码-最好是带着问题的答案去读"><span class="nav-number">6.3.</span> <span class="nav-text">之后, 带着问题去读源码 ,  最好是带着问题的答案去读</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#最后-最重要的是，把主要的流程用流程图或者时序图画出来，把重点的算法、原理用文字写出来。"><span class="nav-number">6.4.</span> <span class="nav-text">最后,最重要的是，把主要的流程用流程图或者时序图画出来，把重点的算法、原理用文字写出来。</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#作业"><span class="nav-number">6.5.</span> <span class="nav-text">作业</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#下面的评论"><span class="nav-number">6.6.</span> <span class="nav-text">下面的评论</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#尽早错误"><span class="nav-number">1.</span> <span class="nav-text">尽早错误</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#其他尽早错误的例子"><span class="nav-number">1.1.</span> <span class="nav-text">其他尽早错误的例子</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#避免使用否定条件"><span class="nav-number">2.</span> <span class="nav-text">避免使用否定条件</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#二进制位运算标志位表示状态"><span class="nav-number">3.</span> <span class="nav-text">二进制位运算标志位表示状态</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#延伸"><span class="nav-number">3.1.</span> <span class="nav-text">延伸</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#不要在一开始就过度抽象，先思考模型的最小状态"><span class="nav-number">4.</span> <span class="nav-text">不要在一开始就过度抽象，先思考模型的最小状态</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#学习开源代码该如何入手？"><span class="nav-number">5.</span> <span class="nav-text">学习开源代码该如何入手？</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#先看文档-而且确保是最新的-中文可能不是最新的"><span class="nav-number">5.1.</span> <span class="nav-text">先看文档, 而且确保是最新的 , 中文可能不是最新的</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#然后问自己这些问题"><span class="nav-number">5.2.</span> <span class="nav-text">然后问自己这些问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#之后-带着问题去读源码-最好是带着问题的答案去读"><span class="nav-number">5.3.</span> <span class="nav-text">之后, 带着问题去读源码 ,  最好是带着问题的答案去读</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#最后-最重要的是，把主要的流程用流程图或者时序图画出来，把重点的算法、原理用文字写出来。"><span class="nav-number">5.4.</span> <span class="nav-text">最后,最重要的是，把主要的流程用流程图或者时序图画出来，把重点的算法、原理用文字写出来。</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#作业"><span class="nav-number">5.5.</span> <span class="nav-text">作业</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#下面的评论"><span class="nav-number">5.6.</span> <span class="nav-text">下面的评论</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#push-代码前的Checklist"><span class="nav-number">6.</span> <span class="nav-text">push 代码前的Checklist</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -356,7 +359,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
           <a href="/archives">
-          <span class="site-state-item-count">26</span>
+          <span class="site-state-item-count">28</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -374,6 +377,12 @@
       </span>
       <span class="links-of-author-item">
         <a href="https://leetcode.com/carlclone" title="LeetCode → https:&#x2F;&#x2F;leetcode.com&#x2F;carlclone" rel="noopener" target="_blank"><i class="fa fa-fw fa-code"></i>LeetCode</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://learnku.com/blog/carlclone" title="LaravelChina → https:&#x2F;&#x2F;learnku.com&#x2F;blog&#x2F;carlclone" rel="noopener" target="_blank"><i class="fa fa-fw fa-instagram"></i>LaravelChina</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.jianshu.com/u/baea2de7cc1a" title="Jianshu → https:&#x2F;&#x2F;www.jianshu.com&#x2F;u&#x2F;baea2de7cc1a" rel="noopener" target="_blank"><i class="fa fa-fw fa-instagram"></i>Jianshu</a>
       </span>
   </div>
 

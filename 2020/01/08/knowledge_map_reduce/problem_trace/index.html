@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    hostname: new URL('http://yoursite.com').hostname,
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.6.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}
+  };
+</script>
+
+  <meta name="description" content="未完待续">
+<meta name="keywords" content="基础补足">
+<meta property="og:type" content="article">
+<meta property="og:title" content="知识点的reduce_问题排查">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;01&#x2F;08&#x2F;knowledge_map_reduce&#x2F;problem_trace&#x2F;index.html">
+<meta property="og:site_name" content="Log0c">
+<meta property="og:description" content="未完待续">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;images&#x2F;linux_perf_tools_1.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;images&#x2F;linux_perf_tools_2.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;images&#x2F;linux_perf_tools_3.png">
+<meta property="og:updated_time" content="2020-04-23T14:55:59.301Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;images&#x2F;linux_perf_tools_1.png">
+
+<link rel="canonical" href="http://yoursite.com/2020/01/08/knowledge_map_reduce/problem_trace/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>知识点的reduce_问题排查 | Log0c</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Log0c</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-posts">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Posts</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="en">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/08/knowledge_map_reduce/problem_trace/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Log0c">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          知识点的reduce_问题排查
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2020-01-08 00:00:00" itemprop="dateCreated datePublished" datetime="2020-01-08T00:00:00+08:00">2020-01-08</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>未完待续</p>
+<a id="more"></a>
+
+<blockquote>
+<p>linux性能优化实战 学习总结</p>
+</blockquote>
+<h1 id="学习方向指导图"><a href="#学习方向指导图" class="headerlink" title="学习方向指导图"></a>学习方向指导图</h1><p><img src="/images/linux_perf_tools_1.png" alt=""><br><img src="/images/linux_perf_tools_2.png" alt=""><br><img src="/images/linux_perf_tools_3.png" alt=""></p>
+<h1 id="ps命令"><a href="#ps命令" class="headerlink" title="ps命令"></a>ps命令</h1><p>参考tldr常用</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">- List all running processes:</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line">    ps aux</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">4</span></pre></td><td class="code"><pre><span class="line">- List all running processes including the full command string:</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">5</span></pre></td><td class="code"><pre><span class="line">    ps auxww</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">6</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">7</span></pre></td><td class="code"><pre><span class="line">- Search for a process that matches a string:</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">8</span></pre></td><td class="code"><pre><span class="line">    ps aux | grep string</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">9</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">10</span></pre></td><td class="code"><pre><span class="line">- List all processes of the current user in extra full format:</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">11</span></pre></td><td class="code"><pre><span class="line">    ps --user $(id -u) -F</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">12</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">13</span></pre></td><td class="code"><pre><span class="line">- List all processes of the current user as a tree:</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">14</span></pre></td><td class="code"><pre><span class="line">    ps --user $(id -u) f</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">15</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">16</span></pre></td><td class="code"><pre><span class="line">- Get the parent pid of a process:</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">17</span></pre></td><td class="code"><pre><span class="line">    ps -o ppid&#x3D; -p pid</span></pre></td></tr></table></figure>
+
+
+
+<h1 id="平均负载的理解"><a href="#平均负载的理解" class="headerlink" title="平均负载的理解"></a>平均负载的理解</h1><blockquote>
+<p>定义</p>
+</blockquote>
+<p>1,5,15分钟时间内的平均活跃进程数</p>
+<blockquote>
+<p>活跃进程 </p>
+</blockquote>
+<p>处于<code>running/runnable</code> , <code>wait</code>,<code>iowait</code>的进程 , 在<code>ps</code>里看到的<code>STAT</code>是<code>R</code>和<code>D</code>的进程 ,<code>wait</code>也算入平均负载的原因可能是上下文切换的资源消耗</p>
+<blockquote>
+<p>其他</p>
+</blockquote>
+<p>1 当负载超过逻辑核心数百分之70就要小心</p>
+<p>2 和cpu使用率不一样的地方是 , io 密集型程序的cpu使用率不一定高 </p>
+<p>3 iowait高, 排查系统存储是否有问题</p>
+<p>4 软中断和硬中断高,排查内核的中断服务程序</p>
+<h2 id="模拟cpu负载"><a href="#模拟cpu负载" class="headerlink" title="模拟cpu负载"></a>模拟cpu负载</h2><p><code>stress</code> 模拟平均负载升高工具<br><code>stress —cpu 1 —timeout 600</code> 模拟cpu使用率,<br><code>stress -i 1 —timeout 600</code>  模拟io压力(不停执行sync)<br><code>stress -c 8 —timeout 600</code> , 模拟大量进程 , 8个在争抢2个cpu, 导致cpu过载 </p>
+<h2 id="工具"><a href="#工具" class="headerlink" title="工具"></a>工具</h2><blockquote>
+<p>查看负载<br><code>watch -d uptime</code>  </p>
+</blockquote>
+<p><code>top,htop,atop</code> </p>
+<p><code>mpstat</code>用于看各个cpu的用户态,内核态,iowait等的占比 , pidstat查看进程的资源占用信息</p>
+<blockquote>
+<p>查看cpu数  </p>
+</blockquote>
+<p><code>grep ‘model name’ /proc/cpuinfo | wc -l</code> (/proc是linux的一个虚拟文件系统,保存了系统的各种信息 <code>/proc/stat</code> <code>/proc/[pid]/stat</code>)<br><code>mpstat -P ALL 5</code>  监控所有cpu , 每5秒输出一组数据<br><code>pidstat -u 5</code>  1  5秒后输出一组</p>
+<h2 id="一些案例"><a href="#一些案例" class="headerlink" title="一些案例"></a>一些案例</h2><h1 id="上下文切换"><a href="#上下文切换" class="headerlink" title="上下文切换"></a>上下文切换</h1><blockquote>
+<p>定义</p>
+</blockquote>
+<p>上下文=cpu寄存器+计数器<br>上下文切换=保存上一个任务的寄存器+计数器,读取下一个任务的信息到寄存器+计数器,跳到指定位置运行<br>任务的种类:进程,线程,硬件中断(会触发中断处理程序, 中断事件-&gt;取对应事件的处理程序,执行)</p>
+<blockquote>
+<p>其他</p>
+</blockquote>
+<p>一般不需要关注,但过多的上下文切换会缩短真正在运行的时间<br>上下文切换超过1万次就要注意了</p>
+<h2 id="模拟大量切换"><a href="#模拟大量切换" class="headerlink" title="模拟大量切换"></a>模拟大量切换</h2><p><code>sysbench —threads=10 —max-time=300 threads run</code> 模拟多线程切换问题    10个线程 5分钟</p>
+<h2 id="查看工具"><a href="#查看工具" class="headerlink" title="查看工具"></a>查看工具</h2><p><code>vm stat 1 1</code>  查看上下文切换次数<br><code>pidstat -w -u 1</code><br><code>pidstat -wt 1</code> 看线程的指标<br><code>watch -d cat /proc/interrupts</code>  查看中断次数 </p>
+<h2 id="一些案例-1"><a href="#一些案例-1" class="headerlink" title="一些案例"></a>一些案例</h2><h1 id="cpu使用率高的排查步骤"><a href="#cpu使用率高的排查步骤" class="headerlink" title="cpu使用率高的排查步骤"></a>cpu使用率高的排查步骤</h1><blockquote>
+<p>定位进程</p>
+</blockquote>
+<p>top , pidstat </p>
+<blockquote>
+<p>定位具体函数</p>
+</blockquote>
+<p>perf top  实时定位<br>perf record , perf report  保存记录,离线分析<br>gdb  不适合线上定位, 会中断程序运行,用于线下进一步定位<br>strace 定位系统调用函数</p>
+<p>推荐还是用perf</p>
+<h2 id="案例实验"><a href="#案例实验" class="headerlink" title="案例实验"></a>案例实验</h2><p><code>apt install docker.io sysstat linux-tools-common apache2-utils</code></p>
+<p><code>docker run —name nginx -p 10000:80 -itd feisky/nginx</code><br><code>docker run —name phpfpm -itd —network container:nginx feiksy/php-fpm</code></p>
+<p><code>curl 127.0.0.1:10000</code><br><code>ab -c 10 -n 100 https://127.0.0.1:10000/</code></p>
+<p>top 定位进程<br>perf top -g -p 21515 定位函数</p>
+<p>docker rm -f nginx phpfpm<br>docker run —name nginx -p 10000:80 -itd feisky/nginx:cpu-fix<br>docker run —name phpfpm -itd —network container:nginx feiksy/php-fpm:cpu-fix</p>
+<h1 id="案例-cpu使用率高却找不到对应进程"><a href="#案例-cpu使用率高却找不到对应进程" class="headerlink" title="案例:cpu使用率高却找不到对应进程"></a>案例:cpu使用率高却找不到对应进程</h1><p>docker run —name nginx -p 10000:80 -itd feisky/nginx:sp<br>docker run —name phpfpm -itd —network container:nginx feiksy/php-fpm:sp</p>
+<p>top<br>pidstat 1      ps aux|grep 24344 交叉确认<br>pstree | grep stress 获取进程树 找到父进程<br>docker cp phpfpm:/app . 拷贝源码到本地</p>
+<p>grep stress -r app 在代码里找stress<br>pref record -g  记录15秒性能报告 函数调用情况<br>perf report 分析报告</p>
+<p>没有权限创建临时文件 , 导致频繁失败</p>
+<p>execsnoop , 动态追踪短时进程 , 输出短时进程的基本信息 , 还可用于分析linux内核的运行时行为</p>
+<p>短时进程,关键是要找到父进程</p>
+<h2 id="可能出现这种问题的情况"><a href="#可能出现这种问题的情况" class="headerlink" title="可能出现这种问题的情况"></a>可能出现这种问题的情况</h2><p>1.短时进程 , 应用调用了其他二进制程序,运行时间短,top什么不容易发现<br>2.应用在不停崩溃重启</p>
+<h1 id="僵尸进程"><a href="#僵尸进程" class="headerlink" title="僵尸进程"></a>僵尸进程</h1><p>top    按下1查看全部cpu ,   zombie属性查看僵尸进程数<br>ps aux | grep /app<br>dstat 1 10 查看cpu with io , 读写数变化<br>pidstat -d -p 4344 1 3        -d显示io统计<br>strace 跟踪进程系统调用   strace</p>
+<p>R Running/Runnable<br>I Idle<br>D Disk Sleep 不可中断睡眠,如大量iowait时就可能有大量D状态的进程<br>S Sleep 可中断睡眠<br>Z Zombie 子进程已经退出,但父进程没有回收子进程的资源 , 重点关注长时间处于Z的进程<br>T</p>
+<h2 id="案例"><a href="#案例" class="headerlink" title="案例"></a>案例</h2><h1 id="网络问题排查-性能优化"><a href="#网络问题排查-性能优化" class="headerlink" title="网络问题排查/性能优化"></a>网络问题排查/性能优化</h1><h2 id="netstat"><a href="#netstat" class="headerlink" title="netstat"></a>netstat</h2><p>tldr 常用</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">netstat</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line">Displays network-related information such as open connections, open socket ports, etc.</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">4</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">5</span></pre></td><td class="code"><pre><span class="line">- List all ports:</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">6</span></pre></td><td class="code"><pre><span class="line">    netstat -a</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">7</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">8</span></pre></td><td class="code"><pre><span class="line">- List all listening ports:</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">9</span></pre></td><td class="code"><pre><span class="line">    netstat -l</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">10</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">11</span></pre></td><td class="code"><pre><span class="line">- List listening TCP ports:</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">12</span></pre></td><td class="code"><pre><span class="line">    netstat -t</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">13</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">14</span></pre></td><td class="code"><pre><span class="line">- Display PID and program names for a specific protocol:</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">15</span></pre></td><td class="code"><pre><span class="line">    netstat -p protocol</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">16</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">17</span></pre></td><td class="code"><pre><span class="line">- List information continuously:</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">18</span></pre></td><td class="code"><pre><span class="line">    netstat -c</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">19</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">20</span></pre></td><td class="code"><pre><span class="line">- Print the routing table:</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">21</span></pre></td><td class="code"><pre><span class="line">    netstat -nr</span></pre></td></tr></table></figure>
+
+<h2 id="大量处于TIME-WAIT状态的连接"><a href="#大量处于TIME-WAIT状态的连接" class="headerlink" title="大量处于TIME_WAIT状态的连接"></a>大量处于TIME_WAIT状态的连接</h2><p>Linux性能优化 40,43,44,52</p>
+<p>占用大量内存和接口资源,无法建立新连接</p>
+<p>场景 用wrk模拟高并发负载下 , nginx作为客户端,连接php-fpm, 大量fpm执行超时,nginx主动断开连接<br>造成的问题 , TIME_WAIT占用住端口,无法建立新连接</p>
+<p>优化方案<br>增大处于TIME_WAIT的连接数 net.ipv4.tcp_max_tw_buckets  (避免TIME_WAIT超出时被系统直接关闭连接,违反TCP)<br>增大连接跟踪表的大小 net.netfilter.nf_conntrack_max (这个案例里Docker用到了NAT,NAT和防火墙用到了连接跟踪表)<br>减小 net.ipv4.tcp_fin_timeout (尽快释放资源)<br>减小 net.netfilter.nf_conntrack_tcp_timeout_time_wait 尽快释放资源<br>开启端口复用 net.ipv4.tcp_tw_reuse  , 被占用的端口也能用于新连接<br>增大端口范围 net.ipv4.ip_local_port_range<br>增大系统文件描述符数量 fs.nr_open 增加最大连接数<br>应用程序的 systemd 配置文件中，配置 LimitNOFILE ，设置应用程序的最大文件 描述符数。</p>
+<h2 id="SYN-FLOOD-攻击"><a href="#SYN-FLOOD-攻击" class="headerlink" title="SYN FLOOD 攻击"></a>SYN FLOOD 攻击</h2><p>特征: sar -n DEV 1 , PPS特别多,BPS特别小</p>
+<p>发送大量SYN包, 服务端发送SYN+ACK包后等待客户端的ACK包,直到超时,期间占用大量资源,无法服务正常客户请求<br>这种状态的连接称为半开连接 , 连接表被占满后无法建立新连接<br>此时的服务端会有大量的SYN_RECEIVED状态的连接 , 用netstat -n -p | grep SYN_REC | wc -l 查看 , or ss -s</p>
+<p>单ip攻击 用iptable拒绝<br>多ip , hping3 -randip模拟 , 增大SYN_REC的最大数, 减少连接重试次数 , 使用TCP syn Cookies</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E5%9F%BA%E7%A1%80%E8%A1%A5%E8%B6%B3/" rel="tag"># 基础补足</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2019/12/30/knowledge_map_reduce/algorithm/" rel="prev" title="知识点的reduce_算法">
+      <i class="fa fa-chevron-left"></i> 知识点的reduce_算法
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#学习方向指导图"><span class="nav-number">1.</span> <span class="nav-text">学习方向指导图</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#ps命令"><span class="nav-number">2.</span> <span class="nav-text">ps命令</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#平均负载的理解"><span class="nav-number">3.</span> <span class="nav-text">平均负载的理解</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#模拟cpu负载"><span class="nav-number">3.1.</span> <span class="nav-text">模拟cpu负载</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#工具"><span class="nav-number">3.2.</span> <span class="nav-text">工具</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#一些案例"><span class="nav-number">3.3.</span> <span class="nav-text">一些案例</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#上下文切换"><span class="nav-number">4.</span> <span class="nav-text">上下文切换</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#模拟大量切换"><span class="nav-number">4.1.</span> <span class="nav-text">模拟大量切换</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#查看工具"><span class="nav-number">4.2.</span> <span class="nav-text">查看工具</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#一些案例-1"><span class="nav-number">4.3.</span> <span class="nav-text">一些案例</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#cpu使用率高的排查步骤"><span class="nav-number">5.</span> <span class="nav-text">cpu使用率高的排查步骤</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#案例实验"><span class="nav-number">5.1.</span> <span class="nav-text">案例实验</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#案例-cpu使用率高却找不到对应进程"><span class="nav-number">6.</span> <span class="nav-text">案例:cpu使用率高却找不到对应进程</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#可能出现这种问题的情况"><span class="nav-number">6.1.</span> <span class="nav-text">可能出现这种问题的情况</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#僵尸进程"><span class="nav-number">7.</span> <span class="nav-text">僵尸进程</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#案例"><span class="nav-number">7.1.</span> <span class="nav-text">案例</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#网络问题排查-性能优化"><span class="nav-number">8.</span> <span class="nav-text">网络问题排查/性能优化</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#netstat"><span class="nav-number">8.1.</span> <span class="nav-text">netstat</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#大量处于TIME-WAIT状态的连接"><span class="nav-number">8.2.</span> <span class="nav-text">大量处于TIME_WAIT状态的连接</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SYN-FLOOD-攻击"><span class="nav-number">8.3.</span> <span class="nav-text">SYN FLOOD 攻击</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name"></p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+          <span class="site-state-item-count">28</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/carlclone" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;carlclone" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://leetcode.com/carlclone" title="LeetCode → https:&#x2F;&#x2F;leetcode.com&#x2F;carlclone" rel="noopener" target="_blank"><i class="fa fa-fw fa-code"></i>LeetCode</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://learnku.com/blog/carlclone" title="LaravelChina → https:&#x2F;&#x2F;learnku.com&#x2F;blog&#x2F;carlclone" rel="noopener" target="_blank"><i class="fa fa-fw fa-instagram"></i>LaravelChina</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.jianshu.com/u/baea2de7cc1a" title="Jianshu → https:&#x2F;&#x2F;www.jianshu.com&#x2F;u&#x2F;baea2de7cc1a" rel="noopener" target="_blank"><i class="fa fa-fw fa-instagram"></i>Jianshu</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder"></span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.6.0
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

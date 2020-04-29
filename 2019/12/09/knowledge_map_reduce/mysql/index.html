@@ -53,7 +53,7 @@
 <meta property="og:site_name" content="Log0c">
 <meta property="og:description" content="…">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2020-04-23T13:15:59.900Z">
+<meta property="og:updated_time" content="2020-04-23T14:55:59.300Z">
 <meta name="twitter:card" content="summary">
 
 <link rel="canonical" href="http://yoursite.com/2019/12/09/knowledge_map_reduce/mysql/">
@@ -222,6 +222,7 @@
 <h1 id="Optimistic-Lock-Pessimistic-Lock"><a href="#Optimistic-Lock-Pessimistic-Lock" class="headerlink" title="Optimistic Lock / Pessimistic Lock"></a>Optimistic Lock / Pessimistic Lock</h1><p>前置知识 :加锁操作会有额外的CPU消耗</p>
 <p>乐观锁假设发生冲突的情况很少 , 不对数据进行加锁操作 , 只在更新或者查询的时候检查这个时间段内是否被其他人修改 , 后续处理一般是重试<br>悲观锁则相反,使用数据的时候立即加锁,其他人只能等待锁释放后才能使用</p>
 <p>InnoDB的RC和RR事务底层的MVCC实现就是一个乐观锁, 在正确的场景下使用乐观锁可以提高并发度</p>
+<p>等等！乐观锁不就是汇编里的原子操作CAS ，先检查内存中的旧值，如果被修改了就更新失败</p>
 <h1 id="事务在InnoDB中的部分实现细节-vs-Redis"><a href="#事务在InnoDB中的部分实现细节-vs-Redis" class="headerlink" title="事务在InnoDB中的部分实现细节 vs Redis"></a>事务在InnoDB中的部分实现细节 vs Redis</h1><h1 id="ACID"><a href="#ACID" class="headerlink" title="ACID"></a>ACID</h1><blockquote>
 <p>WARNING : 和分布式中CAP的C区分开,不是一个概念</p>
 </blockquote>
@@ -240,6 +241,8 @@
 <p>(a,b,c)的情况: 先筛选出3条数据,再判断b </p>
 <p>(b,a,c)的情况: 可能筛选出n多条的数据,再每一条判断a</p>
 <p>这个案例下 (a,b,c) 更优</p>
+<p>仔细分析一下这题为什么要这样加索引</p>
+<p>加上c 减少filesort , a,b顺序可以用到联合索引的两列 , (b,a,c) 只能用到第一列索引, 因为在树搜索的时候会产生多个分支, 所以引擎选择从第一个元素向后遍历</p>
 
     </div>
 
@@ -262,8 +265,8 @@
       <i class="fa fa-chevron-left"></i> 知识点的reduce_积攒下来的编程技巧/方法
     </a></div>
       <div class="post-nav-item">
-    <a href="/2020/04/23/knowledge_map_reduce/mit6_824/" rel="next" title="mit 6.824 diary">
-      mit 6.824 diary <i class="fa fa-chevron-right"></i>
+    <a href="/2019/12/30/knowledge_map_reduce/algorithm/" rel="next" title="知识点的reduce_算法">
+      知识点的reduce_算法 <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
       </footer>
@@ -315,7 +318,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
           <a href="/archives">
-          <span class="site-state-item-count">26</span>
+          <span class="site-state-item-count">28</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -333,6 +336,12 @@
       </span>
       <span class="links-of-author-item">
         <a href="https://leetcode.com/carlclone" title="LeetCode → https:&#x2F;&#x2F;leetcode.com&#x2F;carlclone" rel="noopener" target="_blank"><i class="fa fa-fw fa-code"></i>LeetCode</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://learnku.com/blog/carlclone" title="LaravelChina → https:&#x2F;&#x2F;learnku.com&#x2F;blog&#x2F;carlclone" rel="noopener" target="_blank"><i class="fa fa-fw fa-instagram"></i>LaravelChina</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.jianshu.com/u/baea2de7cc1a" title="Jianshu → https:&#x2F;&#x2F;www.jianshu.com&#x2F;u&#x2F;baea2de7cc1a" rel="noopener" target="_blank"><i class="fa fa-fw fa-instagram"></i>Jianshu</a>
       </span>
   </div>
 
