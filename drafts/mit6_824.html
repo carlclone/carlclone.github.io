@@ -53,7 +53,7 @@
 <meta property="og:site_name" content="Log0c">
 <meta property="og:description" content="…">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2020-04-23T13:49:55.541Z">
+<meta property="og:updated_time" content="2020-04-29T14:05:52.153Z">
 <meta name="twitter:card" content="summary">
 
 <link rel="canonical" href="http://yoursite.com/drafts/mit6_824">
@@ -196,14 +196,26 @@
           <p>…</p>
 <a id="more"></a>
 
-
-<p>第一个 lab 的 test case 在今天全部稳定 pass 了 , 比起平时写业务一条路写到底 , 分布式带来了许多新鲜感 , 要考虑的的东西也从单线程变成了多线程并发,各种 race 条件 , 很多时候没有良好的定义就只能全部推翻重来了</p>
+<h2 id="Lab2-Raft"><a href="#Lab2-Raft" class="headerlink" title="Lab2 Raft"></a>Lab2 Raft</h2><p>记录1 : debug了4个小时 , 发现总有一个情况全部follower都会变成candidate , 看了测试用例 , 发现是断开了第一个leader , 导致了发送投票请求阻塞在这个leader上超时了<br>解决方案: 把每个发送请求放到一个goroutine里并发执行</p>
+<p>记录2:给他人投票的时候忘记重置超时时间了</p>
+<p>记录3:多线程debug好痛苦,只能到处打印,有没有其他好方法啊</p>
+<p>记录4:Lab2A 使用了之前分布式调度项目和Chrome V8引擎学到的事件循环模型,<br>全部事件经由管道交给Eventloop线程执行 ,避免了锁的使用,感觉给2B,2C开了个好头</p>
+<p>记录5:etcd的raft是类似一个状态机的设计,完全看不懂,后面想学学</p>
+<h1 id="Lab1-MapReduce"><a href="#Lab1-MapReduce" class="headerlink" title="Lab1 MapReduce"></a>Lab1 MapReduce</h1><p>第一个 lab 的 test case 在今天全部稳定 pass 了 , 比起平时写业务一条路写到底 , 分布式带来了许多新鲜感 , 要考虑的的东西也从单线程变成了多线程并发,各种 race 条件 , 很多时候没有良好的定义就只能全部推翻重来了</p>
+<p>这里有一篇关于<a href="https://pdos.csail.mit.edu/6.824/labs/raft-locking.txt" target="_blank" rel="noopener">锁的文章</a></p>
 <p>虽说 test case 是 pass 了 , 但是论文里提到的很多点依然很值得动手实现 , 主要是 fault tolerance 相关的功能 , 比如我的代码里就没有考虑到在写文件的时候崩溃的场景 , 或者 worker 完成了task但是已经失活 , 还有 master crash 后 , 如何进行 recovery  (对重要状态进行持久化 , 日志追加)</p>
 <p>我的学习过程是直接看 Lec1 的 intro , 然后是 mapreduce paper ,<br>虽然老师长得很帅 (神牛 robert morris , 蠕虫病毒作者 , 老爸是安全局科学家 ,羡慕了), 但是之前看过分布式的相关理论 , mapreduce 又是类似大文件分割统计的面试题泛化 ,  视频和 lec2就跳过了</p>
 <p>第一次读论文 , 感觉学一个概念 , 读最原始的论文 , 似乎少了很多疑惑和额外的搜索</p>
 <p>但是raft 的论文已经看了两天了 , 还没有开始动手 , 哈哈哈</p>
 <p><a href="https://github.com/carlclone/MIT-6.824-LAB.git/" target="_blank" rel="noopener">mit-6.824 labs</a></p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">mapreduce</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line">input is (already) split into M files</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">4</span></pre></td><td class="code"><pre><span class="line">  Input1 -&gt; Map -&gt; a,1 b,1</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">5</span></pre></td><td class="code"><pre><span class="line">  Input2 -&gt; Map -&gt;     b,1</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">6</span></pre></td><td class="code"><pre><span class="line">  Input3 -&gt; Map -&gt; a,1     c,1</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">7</span></pre></td><td class="code"><pre><span class="line">                    |   |   |</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">8</span></pre></td><td class="code"><pre><span class="line">                    |   |   -&gt; Reduce -&gt; c,1</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">9</span></pre></td><td class="code"><pre><span class="line">                    |   -----&gt; Reduce -&gt; b,2</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">10</span></pre></td><td class="code"><pre><span class="line">                    ---------&gt; Reduce -&gt; a,2</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">11</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">12</span></pre></td><td class="code"><pre><span class="line">解决的问题:</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">13</span></pre></td><td class="code"><pre><span class="line">让用户只需要关心 map 和 reduce</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">14</span></pre></td><td class="code"><pre><span class="line">隐藏:</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">15</span></pre></td><td class="code"><pre><span class="line">sending app code to servers</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">16</span></pre></td><td class="code"><pre><span class="line">  tracking which tasks are done</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">17</span></pre></td><td class="code"><pre><span class="line">  moving data from Maps to Reduces</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">18</span></pre></td><td class="code"><pre><span class="line">  balancing load over servers</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">19</span></pre></td><td class="code"><pre><span class="line">  recovering from failures</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">20</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">21</span></pre></td><td class="code"><pre><span class="line">MapReduce single-handedly made big cluster computation popular.</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">22</span></pre></td><td class="code"><pre><span class="line">  - Not the most efficient or flexible.</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">23</span></pre></td><td class="code"><pre><span class="line">  + Scales well.</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">24</span></pre></td><td class="code"><pre><span class="line">  + Easy to program -- failures and data movement are hidden.</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">25</span></pre></td><td class="code"><pre><span class="line">  These were good trade-offs in practice.</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">26</span></pre></td><td class="code"><pre><span class="line">  We&#39;ll see some more advanced successors later in the course.</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">27</span></pre></td><td class="code"><pre><span class="line">  Have fun with the lab!</span></pre></td></tr></table></figure>
+
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">rf.mu.Lock()</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line">  rf.currentTerm +&#x3D; 1</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line">  rf.state &#x3D; Candidate</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">4</span></pre></td><td class="code"><pre><span class="line">  for &lt;each peer&gt; &#123;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">5</span></pre></td><td class="code"><pre><span class="line">    go func() &#123;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">6</span></pre></td><td class="code"><pre><span class="line">      rf.mu.Lock()</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">7</span></pre></td><td class="code"><pre><span class="line">      args.Term &#x3D; rf.currentTerm</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">8</span></pre></td><td class="code"><pre><span class="line">      rf.mu.Unlock()</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">9</span></pre></td><td class="code"><pre><span class="line">      Call(&quot;Raft.RequestVote&quot;, &amp;args, ...)</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">10</span></pre></td><td class="code"><pre><span class="line">      &#x2F;&#x2F; handle the reply...</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">11</span></pre></td><td class="code"><pre><span class="line">    &#125; ()</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">12</span></pre></td><td class="code"><pre><span class="line">  &#125;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">13</span></pre></td><td class="code"><pre><span class="line">  rf.mu.Unlock()</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">14</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">15</span></pre></td><td class="code"><pre><span class="line">go发现有其他goroutine引用了变量currentTerm , 把currentTerm移到了堆空间里 , 主和子goroutine都看到同一个任期变量 , 导致变化的时候每个peer看到的可能不一致 , </span></pre></td></tr><tr><td class="gutter"><pre><span class="line">16</span></pre></td><td class="code"><pre><span class="line">所以需要将任期以参数穿进去 , 此时go会对每个goroutine的currentTerm进行一次拷贝 , 保证任期的一致</span></pre></td></tr></table></figure>
+
+
+
+
       </div>
       
       
@@ -243,6 +255,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Lab2-Raft"><span class="nav-number">1.</span> <span class="nav-text">Lab2 Raft</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Lab1-MapReduce"><span class="nav-number"></span> <span class="nav-text">Lab1 MapReduce</span></a></div>
       </div>
       <!--/noindex-->
 
@@ -255,7 +268,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
           <a href="/archives">
-          <span class="site-state-item-count">28</span>
+          <span class="site-state-item-count">29</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
