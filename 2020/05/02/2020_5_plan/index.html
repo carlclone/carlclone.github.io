@@ -45,15 +45,15 @@
   };
 </script>
 
-  <meta name="description" content="…">
+  <meta name="description" content="给自己定了3个带Lab作业的课程">
 <meta name="keywords" content="基础补足">
 <meta property="og:type" content="article">
-<meta property="og:title" content="2020年学习计划">
+<meta property="og:title" content="2020年学习记录">
 <meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;05&#x2F;02&#x2F;2020_5_plan&#x2F;index.html">
 <meta property="og:site_name" content="Log0c">
-<meta property="og:description" content="…">
+<meta property="og:description" content="给自己定了3个带Lab作业的课程">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2020-05-01T16:07:36.548Z">
+<meta property="og:updated_time" content="2020-05-03T02:48:04.395Z">
 <meta name="twitter:card" content="summary">
 
 <link rel="canonical" href="http://yoursite.com/2020/05/02/2020_5_plan/">
@@ -70,7 +70,7 @@
   };
 </script>
 
-  <title>2020年学习计划 | Log0c</title>
+  <title>2020年学习记录 | Log0c</title>
   
 
 
@@ -187,7 +187,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          2020年学习计划
+          2020年学习记录
         </h1>
 
         <div class="post-meta">
@@ -196,9 +196,8 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">Posted on</span>
-              
 
-              <time title="Created: 2020-05-02 00:00:00 / Modified: 00:07:36" itemprop="dateCreated datePublished" datetime="2020-05-02T00:00:00+08:00">2020-05-02</time>
+              <time title="Created: 2020-05-02 00:00:00" itemprop="dateCreated datePublished" datetime="2020-05-02T00:00:00+08:00">2020-05-02</time>
             </span>
 
           
@@ -212,14 +211,55 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>…</p>
+        <p>给自己定了3个带Lab作业的课程</p>
 <a id="more"></a>
 
-<p>给自己找了 3 个带 Lab 的课程</p>
-<p><a href="http://nil.csail.mit.edu/6.824/2020/schedule.html" target="_blank" rel="noopener">MIT6.824 2020</a> 只做 Lab1 和 Lab2 , 目前做到 2A,卡在 2B</p>
-<p><a href="https://15445.courses.cs.cmu.edu/fall2019/" target="_blank" rel="noopener">CMU15/445 2019</a> , 只做 Lab1 前置知识 C++还没看完</p>
-<p><a href="https://computer-networks.github.io/sp19/assignments.html" target="_blank" rel="noopener">CMU15/441 2019</a> , 只做 Lab1 前置知识 C, UNIX 网络编程</p>
-<p>希望能在 7 月前完成</p>
+
+
+<h1 id="MIT6-824-2020"><a href="#MIT6-824-2020" class="headerlink" title="MIT6.824 2020"></a><a href="http://nil.csail.mit.edu/6.824/2020/schedule.html" target="_blank" rel="noopener">MIT6.824 2020</a></h1><blockquote>
+<p>开始于 2020-04-20</p>
+</blockquote>
+<p>暂时只打算做 <code>Lab1</code> 和 <code>Lab2</code> , <code>Lab2</code> 太耗时了而且后面的 两个<code>lab</code> 都依赖于它, 目前做完了 <code>Lab1</code> 和<code>Lab 2A ,2B</code> , 还是相当耗时的一个课程</p>
+<p><code>2A</code> , <code>Raft</code> 的选举阶段 重写了 2 遍 , </p>
+<p>第一次重写是因为代码太乱 ,担心后面的 <code>lab</code> 会被影响 (结果还是发生了)</p>
+<p>第二次重写是因为写完复制阶段发现选举阶段有 bug , 又重新跑回去 debug 了</p>
+<p><code>2B</code> 重写了一遍 , 主要是因为没有一个一个测试过 , 直接把整个阶段的代码先写完导致到处都是 bug (平时写业务都得 debug ,是谁给你的勇气一次写完的?)</p>
+<p>重写的时候抽出了很多 helper 方法, 减少阅读压力 </p>
+<p>日志也全部重新打了一遍 , 并且按照阶段分开写到不同的文件中 , 多线程也只能靠打日志了,如果日志打好了 debug 起来事半功倍 </p>
+<p>看论文和资料 , 还有 debug 的过程相当耗时,有时候一个 bug 就是一天,不过整理了日志之后有所改善</p>
+<p>做到 2B 这里整整花了 13 天,后面还有一个2c ,持久化的lab , 6 月再做..</p>
+<blockquote>
+<p>遇到的一些问题和收获</p>
+</blockquote>
+<p><code>debug</code> ++</p>
+<p><code>打日志</code> ++</p>
+<p>日志打的太频繁(磁盘 IO)导致一个 test 超时了 , 日志开销也是要注意的点</p>
+<p>某个线程忘记 sleep 导致 cpu 百分百 = =</p>
+<p>….</p>
+<blockquote>
+<p>go 相关</p>
+</blockquote>
+<p>1.不要在 for 里用 defer,不可预测</p>
+<p>2.shared memory+lock 的多线程开发模式时 , 有的变量要用闭包包起来, copy 一份线程独立的 , 比如 for 循环时候的 i 变量</p>
+<p>3.利用 select+time.After() 实现超时机制</p>
+<p>4.go race 检测死锁</p>
+<p>….</p>
+<blockquote>
+<p>资料</p>
+</blockquote>
+<p>schedule 里给的资料很完善 ,不过做的时候还是另外找了些中文资料</p>
+<p>两个动画:</p>
+<p><a href="https://raft.github.io/" target="_blank" rel="noopener">https://raft.github.io/</a></p>
+<p><a href="http://thesecretlivesofdata.com/" target="_blank" rel="noopener">http://thesecretlivesofdata.com/</a></p>
+<p><a href="https://gocode.cc/project/14/article/134" target="_blank" rel="noopener">etcd 的 Raft 实现</a></p>
+<p><a href="https://www.zhihu.com/question/29597104" target="_blank" rel="noopener">如何的才能更好的学习MIT6.824分布式系统课程？</a></p>
+<p><a href="https://zhuanlan.zhihu.com/p/103849249" target="_blank" rel="noopener">MIT 6.824 2020 Raft 实现细节汇总</a></p>
+<p><a href="https://blog.csdn.net/daaikuaichuan/article/details/98627822" target="_blank" rel="noopener">Raft 算法详解</a></p>
+<p><a href="https://www.cnblogs.com/linbingdong/p/6442673.html" target="_blank" rel="noopener">论文翻译</a></p>
+<h1 id="CMU15-445-2019"><a href="#CMU15-445-2019" class="headerlink" title="CMU15/445 2019"></a><a href="https://15445.courses.cs.cmu.edu/fall2019/" target="_blank" rel="noopener">CMU15/445 2019</a></h1><p>只做 Lab1 前置知识 C++还没看完</p>
+<p>A tour of C++</p>
+<h1 id="CMU15-441-2019"><a href="#CMU15-441-2019" class="headerlink" title="CMU15/441 2019"></a><a href="https://computer-networks.github.io/sp19/assignments.html" target="_blank" rel="noopener">CMU15/441 2019</a></h1><p>只做 Lab1 </p>
+<p>前置知识 C, UNIX 网络编程 , 并发编程,同步原语 ,直接看前置课程 <a href="https://www.cs.cmu.edu/~213/schedule.html" target="_blank" rel="noopener">CMU15-213</a> 和 CSAPP</p>
 
     </div>
 
@@ -279,6 +319,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#MIT6-824-2020"><span class="nav-number">1.</span> <span class="nav-text">MIT6.824 2020</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#CMU15-445-2019"><span class="nav-number">2.</span> <span class="nav-text">CMU15/445 2019</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#CMU15-441-2019"><span class="nav-number">3.</span> <span class="nav-text">CMU15/441 2019</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
