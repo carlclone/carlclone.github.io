@@ -53,7 +53,7 @@
 <meta property="og:site_name" content="Log0c">
 <meta property="og:description" content="…">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2020-04-29T14:05:52.153Z">
+<meta property="og:updated_time" content="2020-06-09T15:22:12.585Z">
 <meta name="twitter:card" content="summary">
 
 <link rel="canonical" href="http://yoursite.com/drafts/mit6_824">
@@ -201,6 +201,7 @@
 <p>记录3:多线程debug好痛苦,只能到处打印,有没有其他好方法啊</p>
 <p>记录4:Lab2A 使用了之前分布式调度项目和Chrome V8引擎学到的事件循环模型,<br>全部事件经由管道交给Eventloop线程执行 ,避免了锁的使用,感觉给2B,2C开了个好头</p>
 <p>记录5:etcd的raft是类似一个状态机的设计,完全看不懂,后面想学学</p>
+<p>记录6:频繁使用channel导致peer同时超时 , 课堂老师推荐用shared data + lock 有这个原因吧?</p>
 <h1 id="Lab1-MapReduce"><a href="#Lab1-MapReduce" class="headerlink" title="Lab1 MapReduce"></a>Lab1 MapReduce</h1><p>第一个 lab 的 test case 在今天全部稳定 pass 了 , 比起平时写业务一条路写到底 , 分布式带来了许多新鲜感 , 要考虑的的东西也从单线程变成了多线程并发,各种 race 条件 , 很多时候没有良好的定义就只能全部推翻重来了</p>
 <p>这里有一篇关于<a href="https://pdos.csail.mit.edu/6.824/labs/raft-locking.txt" target="_blank" rel="noopener">锁的文章</a></p>
 <p>虽说 test case 是 pass 了 , 但是论文里提到的很多点依然很值得动手实现 , 主要是 fault tolerance 相关的功能 , 比如我的代码里就没有考虑到在写文件的时候崩溃的场景 , 或者 worker 完成了task但是已经失活 , 还有 master crash 后 , 如何进行 recovery  (对重要状态进行持久化 , 日志追加)</p>
@@ -268,14 +269,14 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
           <a href="/archives">
-          <span class="site-state-item-count">29</span>
+          <span class="site-state-item-count">32</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-count">3</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
