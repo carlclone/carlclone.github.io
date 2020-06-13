@@ -45,18 +45,18 @@
   };
 </script>
 
-  <meta name="description" content="我的加锁策略对Raft的所有共享状态(属性)进行find usage , 在所有write的地方加锁">
-<meta name="keywords" content="课程学习">
+  <meta name="description" content="…">
+<meta name="keywords" content="基础补足">
 <meta property="og:type" content="article">
-<meta property="og:title" content="MIT6.824 Lab2 Raft">
-<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;05&#x2F;02&#x2F;knowledge_map_reduce&#x2F;mit6_824_lab2&#x2F;index.html">
+<meta property="og:title" content="mysql serializable的问题">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;05&#x2F;14&#x2F;knowledge_map_reduce&#x2F;a-serializable-problem&#x2F;index.html">
 <meta property="og:site_name" content="Log0c">
-<meta property="og:description" content="我的加锁策略对Raft的所有共享状态(属性)进行find usage , 在所有write的地方加锁">
+<meta property="og:description" content="…">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2020-06-09T15:22:12.581Z">
+<meta property="og:updated_time" content="2020-06-13T02:52:20.773Z">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="http://yoursite.com/2020/05/02/knowledge_map_reduce/mit6_824_lab2/">
+<link rel="canonical" href="http://yoursite.com/2020/05/14/knowledge_map_reduce/a-serializable-problem/">
 
 
 <script id="page-configurations">
@@ -70,7 +70,7 @@
   };
 </script>
 
-  <title>MIT6.824 Lab2 Raft | Log0c</title>
+  <title>mysql serializable的问题 | Log0c</title>
   
 
 
@@ -174,7 +174,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="en">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/05/02/knowledge_map_reduce/mit6_824_lab2/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/05/14/knowledge_map_reduce/a-serializable-problem/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -187,7 +187,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          MIT6.824 Lab2 Raft
+          mysql serializable的问题
         </h1>
 
         <div class="post-meta">
@@ -197,7 +197,7 @@
               </span>
               <span class="post-meta-item-text">Posted on</span>
 
-              <time title="Created: 2020-05-02 00:00:00" itemprop="dateCreated datePublished" datetime="2020-05-02T00:00:00+08:00">2020-05-02</time>
+              <time title="Created: 2020-05-14 00:00:00" itemprop="dateCreated datePublished" datetime="2020-05-14T00:00:00+08:00">2020-05-14</time>
             </span>
 
           
@@ -211,9 +211,12 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <a id="more"></a>
+        <p>…</p>
+<a id="more"></a>
 
-<h2 id="我的加锁策略"><a href="#我的加锁策略" class="headerlink" title="我的加锁策略"></a>我的加锁策略</h2><p>对Raft的所有共享状态(属性)进行find usage , 在所有write的地方加锁</p>
+<p>这个问题是我在上15-445数据库<a href="https://15445.courses.cs.cmu.edu/fall2019/slides/17-twophaselocking.pdf" target="_blank" rel="noopener">Two phase locking</a> 这一节时 , 助教在演示mysql和postgres两个数据库的deadlock detection差异时候发现的. 助教先把隔离级别设为了serializable , 然后在这基础上演示了mysql的死锁</p>
+<p>在这之前我基本没用过这个隔离级别,从各处得到的答案都是两个事物会串行化执行, 但很明显不是, 底层依然是有并发的.</p>
+<p>于是我往回翻了几节重看了<a href="https://15445.courses.cs.cmu.edu/fall2019/slides/16-concurrencycontrol.pdf" target="_blank" rel="noopener">concurrency control</a>这一节 , 发现了两个概念: Serial Schedule 和Serializable Schedule , Serial才是真正的串行执行 , Serializable翻译过来应该是可串行 ,<br>也就是数据库会尝试让两个事务的执行在最终看起来就像是串行的一样 , 但实际上为了提高性能 , 还是会在没有conflict schedule的情况下 , 在不同的事务之间穿插执行语句 , 容忍中间状态的不一致(但这个不一致只是在内部看起来,不会被应用层面看见) </p>
 
     </div>
 
@@ -223,7 +226,7 @@
 
       <footer class="post-footer">
           <div class="post-tags">
-              <a href="/tags/%E8%AF%BE%E7%A8%8B%E5%AD%A6%E4%B9%A0/" rel="tag"># 课程学习</a>
+              <a href="/tags/%E5%9F%BA%E7%A1%80%E8%A1%A5%E8%B6%B3/" rel="tag"># 基础补足</a>
           </div>
 
         
@@ -232,12 +235,12 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2020/01/08/knowledge_map_reduce/problem_trace/" rel="prev" title="知识点的reduce_问题排查">
-      <i class="fa fa-chevron-left"></i> 知识点的reduce_问题排查
+    <a href="/2020/05/02/knowledge_map_reduce/mit6_824_lab1/" rel="prev" title="MIT6.824 Lab1 MapReduce">
+      <i class="fa fa-chevron-left"></i> MIT6.824 Lab1 MapReduce
     </a></div>
       <div class="post-nav-item">
-    <a href="/2020/05/02/knowledge_map_reduce/mit6_824_lab1/" rel="next" title="MIT6.824 Lab1 MapReduce">
-      MIT6.824 Lab1 MapReduce <i class="fa fa-chevron-right"></i>
+    <a href="/2020/05/18/knowledge_map_reduce/network-course/" rel="next" title="计算机网络课程分享">
+      计算机网络课程分享 <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
       </footer>
@@ -276,7 +279,6 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#我的加锁策略"><span class="nav-number">1.</span> <span class="nav-text">我的加锁策略</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -289,7 +291,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
           <a href="/archives">
-          <span class="site-state-item-count">32</span>
+          <span class="site-state-item-count">34</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>

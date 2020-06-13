@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    hostname: new URL('http://yoursite.com').hostname,
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.6.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}
+  };
+</script>
+
+  <meta name="description" content="…">
+<meta name="keywords" content="基础补足">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CS144 课程总结">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;06&#x2F;12&#x2F;cs144&#x2F;index.html">
+<meta property="og:site_name" content="Log0c">
+<meta property="og:description" content="…">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;images&#x2F;wrappintint32.png">
+<meta property="og:updated_time" content="2020-06-13T02:52:41.238Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;images&#x2F;wrappintint32.png">
+
+<link rel="canonical" href="http://yoursite.com/2020/06/12/cs144/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>CS144 课程总结 | Log0c</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Log0c</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-posts">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Posts</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="en">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/06/12/cs144/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Log0c">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          CS144 课程总结
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2020-06-12 00:00:00" itemprop="dateCreated datePublished" datetime="2020-06-12T00:00:00+08:00">2020-06-12</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>…</p>
+<a id="more"></a>
+
+
+<p><a href="https://github.com/carlclone/CS144" target="_blank" rel="noopener">cs144 github</a></p>
+<p>总体任务是实现一个 TCP 协议</p>
+<h1 id="TCP-完结"><a href="#TCP-完结" class="headerlink" title="TCP 完结"></a>TCP 完结</h1><p>TCP 相关的 Lab 到这就做完了, 有幸找到了这门对我来说难度适中质量也很高的课程 , 更加深入了 TCP 协议的理解 , 后续的长期目标是<br>看 RFC 文档和 Linux 协议栈实现,学习工程级别上 TCP 做了哪些优化 ,  完成 CMU15-441 课程的TCP Reno 拥塞控制算法</p>
+<h1 id="Lab0"><a href="#Lab0" class="headerlink" title="Lab0"></a>Lab0</h1><blockquote>
+<p>一个类 curl 程序</p>
+</blockquote>
+<p>第一个 lab 是一个简单的网页内容获取程序 , 直接调用 Linux 的 TCP 协议栈接口 ,会在之后完成 lab4 时,使用自己写的 TCP 协议替换系统实现</p>
+<blockquote>
+<p>基于内存的可靠字节流</p>
+</blockquote>
+<p>lab0的另一个任务 , 实际上是一个字节流的队列 , 和 Java 里的 stream 设计类似, 一端 writer 写入,一端 reader 读出,写入一端有关闭操作 ,<br>重点还是要理解 eof 的判断</p>
+<p>Writer 的接口</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; Write a string of bytes into the stream. Write as many</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; as will fit, and return the number of bytes written.</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line">size_t write(const std::string &amp;data);</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">4</span></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; Returns the number of additional bytes that the stream has space for</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">5</span></pre></td><td class="code"><pre><span class="line">size_t remaining_capacity() const;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">6</span></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; Signal that the byte stream has reached its ending</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">7</span></pre></td><td class="code"><pre><span class="line">void end_input();</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">8</span></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; Indicate that the stream suffered an error</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">9</span></pre></td><td class="code"><pre><span class="line">void set_error();</span></pre></td></tr></table></figure>
+
+<p>Reader 的接口</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; Peek at next &quot;len&quot; bytes of the stream</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line">std::string peek_output(const size_t len) const;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; Remove &#96;&#96;len&#39;&#39; bytes from the buffer</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">4</span></pre></td><td class="code"><pre><span class="line">void pop_output(const size_t len);</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">5</span></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; Read (i.e., copy and then pop) the next &quot;len&quot; bytes of the stream</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">6</span></pre></td><td class="code"><pre><span class="line">std::string read(const size_t len);</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">7</span></pre></td><td class="code"><pre><span class="line">bool input_ended() const; &#x2F;&#x2F; &#96;true&#96; if the stream input has ended</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">8</span></pre></td><td class="code"><pre><span class="line">bool eof() const; &#x2F;&#x2F; &#96;true&#96; if the output has reached the ending</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">9</span></pre></td><td class="code"><pre><span class="line">bool error() const; &#x2F;&#x2F; &#96;true&#96; if the stream has suffered an error</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">10</span></pre></td><td class="code"><pre><span class="line">size_t buffer_size() const; &#x2F;&#x2F; the maximum amount that can currently be peeked&#x2F;read</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">11</span></pre></td><td class="code"><pre><span class="line">bool buffer_empty() const; &#x2F;&#x2F; &#96;true&#96; if the buffer is empty</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">12</span></pre></td><td class="code"><pre><span class="line">size_t bytes_written() const; &#x2F;&#x2F; Total number of bytes written</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">13</span></pre></td><td class="code"><pre><span class="line">size_t bytes_read() const; &#x2F;&#x2F; Total number of bytes popped</span></pre></td></tr></table></figure>
+
+<p>额外添加的 member</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">private:</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line">    &#x2F;&#x2F; Your code here -- add private members as necessary.</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line">    size_t capcity,bytesInPipe,bytesReadTotal,bytesWriteTotal;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">4</span></pre></td><td class="code"><pre><span class="line">    bool _ended;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">5</span></pre></td><td class="code"><pre><span class="line">    std::deque&lt;char&gt; bytesPipe;</span></pre></td></tr></table></figure>
+
+
+<h1 id="Lab1"><a href="#Lab1" class="headerlink" title="Lab1"></a>Lab1</h1><p>lab0 实现的是 tcp 协议和应用层交互的接口(提供可靠字节流) , 而 lab1 的任务则是将不连续的segment 重组成连续的字节流 , case 很多,<br>需要仔细阅读提供的测试用例 , 需要解决的主要问题: segment 乱序,overlapping,增量更新, 第二次重写时发现拆解成字节为单位来处理会更简单一些,<br>直接放代码了..</p>
+<p><a href="https://github.com/carlclone/CS144/blob/master/libsponge/stream_reassembler.cc" target="_blank" rel="noopener">tcp_reassembler.cc</a><br><a href="https://github.com/carlclone/CS144/blob/master/libsponge/stream_reassembler.hh" target="_blank" rel="noopener">tcp_reassembler.hh</a></p>
+<h1 id="Lab2"><a href="#Lab2" class="headerlink" title="Lab2"></a>Lab2</h1><p>难度从这个 lab 开始稳步上升 , lab2 第一个任务是实现一个称为 WrappingInt32 的数据类型 , 在 lab1 时对字节的索引值是使用的 uint64,<br>正常情况下不容易耗尽, 但是由于 tcp 协议在网络中传输, 还需要考虑到减少网络流量的问题 , 加上 ISN 是随机初始的值 , int32 一定不够用 ,<br>于是设计出了一个”环形”的 int32 , 2^0+17 , 2^1+17 在 WrappinggInt32 的值是相同的 , 但后者是绕了一圈后的 seqno , 如何把它们区分开呢?<br>receiver 会存储一个”最后的 int64 的 seqno”作为 checkpoint, 我们所要做的就是找到离 checkpoint 最近的一个值 </p>
+<p>我的思路是找到这个 int32 值绕圈后第一次比 checkpoint大的值 , 然后再往回绕一圈找到第一个比 cp 小的值 , 这里遇到了一个 Corner case ,<br>当第一个比 checkpoint 大的值就在第一圈的时候,往回绕成为了负数 , 但实现使用的是 uint64,相减后变成了一个很大的值 , 此时只需要在之前判断减数是否大于被减数即可</p>
+<p><img src="/images/wrappintint32.png" alt="image-20191120140931373"></p>
+<p>第二个任务是实现一个 TCP Receiver , 主要职责是对syn,fin 和 payload  进行接收处理,并”告知”对方 ackno和 window_size (实际上 receiver 不负责发送,<br>告知的这一步会交给TCPConnection这个上级 处理,receiver 只生成 ackno) . 需要注意一点这个 lab 对上一个 lab 的 reassembler 增加了新的 case ,<br>主要是容量限制 , 如果没有仔细阅读 guide 就开始做(比如我) , 回去fix bug 吧</p>
+<p>tcp header 的构成</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">uint16_t sport &#x3D; 0;         &#x2F;&#x2F;!&lt; source port</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line">   uint16_t dport &#x3D; 0;         &#x2F;&#x2F;!&lt; destination port</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line">   WrappingInt32 seqno&#123;0&#125;;     &#x2F;&#x2F;!&lt; sequence number</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">4</span></pre></td><td class="code"><pre><span class="line">   WrappingInt32 ackno&#123;0&#125;;     &#x2F;&#x2F;!&lt; ack number</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">5</span></pre></td><td class="code"><pre><span class="line">   uint8_t doff &#x3D; LENGTH &#x2F; 4;  &#x2F;&#x2F;!&lt; data offset</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">6</span></pre></td><td class="code"><pre><span class="line">   bool urg &#x3D; false;           &#x2F;&#x2F;!&lt; urgent flag</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">7</span></pre></td><td class="code"><pre><span class="line">   bool ack &#x3D; false;           &#x2F;&#x2F;!&lt; ack flag</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">8</span></pre></td><td class="code"><pre><span class="line">   bool psh &#x3D; false;           &#x2F;&#x2F;!&lt; push flag</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">9</span></pre></td><td class="code"><pre><span class="line">   bool rst &#x3D; false;           &#x2F;&#x2F;!&lt; rst flag</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">10</span></pre></td><td class="code"><pre><span class="line">   bool syn &#x3D; false;           &#x2F;&#x2F;!&lt; syn flag</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">11</span></pre></td><td class="code"><pre><span class="line">   bool fin &#x3D; false;           &#x2F;&#x2F;!&lt; fin flag</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">12</span></pre></td><td class="code"><pre><span class="line">   uint16_t win &#x3D; 0;           &#x2F;&#x2F;!&lt; window size</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">13</span></pre></td><td class="code"><pre><span class="line">   uint16_t cksum &#x3D; 0;         &#x2F;&#x2F;!&lt; checksum</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">14</span></pre></td><td class="code"><pre><span class="line">   uint16_t uptr &#x3D; 0;          &#x2F;&#x2F;!&lt; urgent pointer</span></pre></td></tr></table></figure>
+
+
+<h1 id="Lab3"><a href="#Lab3" class="headerlink" title="Lab3"></a>Lab3</h1><p>Lab3 是 TCP Sender 的实现 , 主要职责就是根据 win_size , 从 outbound bytestream 中取出数据,组成 segment 发送 , 耐心做就能做出来 ,<br>一个排查了比较久的 bug 是我在每次超时,触发重传时忘记了判断重传队列为空的情况 , 此时 cpp 的队列front() 方法不会报错,而是 会返回一个默认值 segment ,<br>导致我一直摸不着头脑是在哪里产生的奇怪 seqno 和 doff 值 </p>
+<h1 id="Lab4"><a href="#Lab4" class="headerlink" title="Lab4"></a>Lab4</h1><p>Lab4 是 TCPConnection , 也是本门课最难的一个lab,是 receiver 和 sender 的”上级”, 职责是将它们产生的内容组合起来, 真正地发送出去 ,<br>维护整个 TCP 有限状态机的转换 , 还有为了实现 clean shutdown 作出的权衡</p>
+<h1 id="Lab5-和-Lab6"><a href="#Lab5-和-Lab6" class="headerlink" title="Lab5 和 Lab6"></a>Lab5 和 Lab6</h1><p>粗略看了一下 guide 难度不高,也很有趣 , 会抽空完成</p>
+<p>Lab5 是自己完成 IP 包的构成,序列化反序列化, 并通过 network interface 转换成链路层的 Ethernet frame ,<br>也就是要通过 ARP 或者 ip-&gt;mac 映射表 , 找到下一跳的 mac 地址 </p>
+<p>Lab6 是 IP Router , 利用 Lab5 完成的 network interface , 根据 ip prefix length 路由到不同的口上….好吧记不清了</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E5%9F%BA%E7%A1%80%E8%A1%A5%E8%B6%B3/" rel="tag"># 基础补足</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/06/09/recent_lab2/" rel="prev" title="说说最近做的 Lab">
+      <i class="fa fa-chevron-left"></i> 说说最近做的 Lab
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#TCP-完结"><span class="nav-number">1.</span> <span class="nav-text">TCP 完结</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Lab0"><span class="nav-number">2.</span> <span class="nav-text">Lab0</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Lab1"><span class="nav-number">3.</span> <span class="nav-text">Lab1</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Lab2"><span class="nav-number">4.</span> <span class="nav-text">Lab2</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Lab3"><span class="nav-number">5.</span> <span class="nav-text">Lab3</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Lab4"><span class="nav-number">6.</span> <span class="nav-text">Lab4</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Lab5-和-Lab6"><span class="nav-number">7.</span> <span class="nav-text">Lab5 和 Lab6</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name"></p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+          <span class="site-state-item-count">34</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/carlclone" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;carlclone" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://leetcode.com/carlclone" title="LeetCode → https:&#x2F;&#x2F;leetcode.com&#x2F;carlclone" rel="noopener" target="_blank"><i class="fa fa-fw fa-code"></i>LeetCode</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://learnku.com/blog/carlclone" title="LaravelChina → https:&#x2F;&#x2F;learnku.com&#x2F;blog&#x2F;carlclone" rel="noopener" target="_blank"><i class="fa fa-fw fa-instagram"></i>LaravelChina</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.jianshu.com/u/baea2de7cc1a" title="Jianshu → https:&#x2F;&#x2F;www.jianshu.com&#x2F;u&#x2F;baea2de7cc1a" rel="noopener" target="_blank"><i class="fa fa-fw fa-instagram"></i>Jianshu</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder"></span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.6.0
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
