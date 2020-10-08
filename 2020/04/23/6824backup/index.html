@@ -45,15 +45,15 @@
   };
 </script>
 
-  <meta name="description" content="…">
+  <meta name="description" content="&amp;nbsp;">
 <meta name="keywords" content="基础补足">
 <meta property="og:type" content="article">
-<meta property="og:title" content="mit 6.824 diary">
+<meta property="og:title" content="mit 6.824 小记">
 <meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;04&#x2F;23&#x2F;6824backup&#x2F;index.html">
 <meta property="og:site_name" content="Log0c">
-<meta property="og:description" content="…">
+<meta property="og:description" content="&amp;nbsp;">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2020-10-04T05:28:42.487Z">
+<meta property="og:updated_time" content="2020-10-08T02:35:42.936Z">
 <meta name="twitter:card" content="summary">
 
 <link rel="canonical" href="http://yoursite.com/2020/04/23/6824backup/">
@@ -70,7 +70,7 @@
   };
 </script>
 
-  <title>mit 6.824 diary | Log0c</title>
+  <title>mit 6.824 小记 | Log0c</title>
   
 
 
@@ -187,7 +187,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          mit 6.824 diary
+          mit 6.824 小记
         </h1>
 
         <div class="post-meta">
@@ -211,7 +211,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>…</p>
+        <p>&nbsp;</p>
 <a id="more"></a>
 
 <h2 id="Lab2-Raft"><a href="#Lab2-Raft" class="headerlink" title="Lab2 Raft"></a>Lab2 Raft</h2><p>记录1 : debug了4个小时 , 发现总有一个情况全部follower都会变成candidate , 看了测试用例 , 发现是断开了第一个leader , 导致了发送投票请求阻塞在这个leader上超时了<br>解决方案: 把每个发送请求放到一个goroutine里并发执行</p>
@@ -221,7 +221,7 @@
 <p>记录5:etcd的raft是类似一个状态机的设计,完全看不懂,后面想学学</p>
 <p>记录6:频繁使用channel导致peer同时超时 , 课堂老师推荐用shared data + lock 有这个原因吧?</p>
 <p>7:未加锁或者waitGroup , 导致超时后的投票请求和超时前的叠加在一起 , 在peers数不足的时候获得多数投票的假象</p>
-<h1 id="Lab1-MapReduce"><a href="#Lab1-MapReduce" class="headerlink" title="Lab1 MapReduce"></a>Lab1 MapReduce</h1><p>第一个 lab 的 test case 在今天全部稳定 pass 了 , 比起平时写业务一条路写到底 , 分布式带来了许多新鲜感 , 要考虑的的东西也从单线程变成了多线程并发,各种 race 条件 , 很多时候没有良好的定义就只能全部推翻重来了</p>
+<h2 id="Lab1-MapReduce"><a href="#Lab1-MapReduce" class="headerlink" title="Lab1 MapReduce"></a>Lab1 MapReduce</h2><p>第一个 lab 的 test case 在今天全部稳定 pass 了 , 比起平时写业务一条路写到底 , 分布式带来了许多新鲜感 , 要考虑的的东西也从单线程变成了多线程并发,各种 race 条件 , 很多时候没有良好的定义就只能全部推翻重来了</p>
 <p>这里有一篇关于<a href="https://pdos.csail.mit.edu/6.824/labs/raft-locking.txt" target="_blank" rel="noopener">锁的文章</a></p>
 <p>虽说 test case 是 pass 了 , 但是论文里提到的很多点依然很值得动手实现 , 主要是 fault tolerance 相关的功能 , 比如我的代码里就没有考虑到在写文件的时候崩溃的场景 , 或者 worker 完成了task但是已经失活 , 还有 master crash 后 , 如何进行 recovery  (对重要状态进行持久化 , 日志追加)</p>
 <p>我的学习过程是直接看 Lec1 的 intro , 然后是 mapreduce paper ,<br>虽然老师长得很帅 (神牛 robert morris , 蠕虫病毒作者 , 老爸是安全局科学家 ,羡慕了), 但是之前看过分布式的相关理论 , mapreduce 又是类似大文件分割统计的面试题泛化 ,  视频和 lec2就跳过了</p>
@@ -253,12 +253,12 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2020/01/08/knowledge_map_reduce/problem_trace/" rel="prev" title="知识点的reduce_问题排查">
-      <i class="fa fa-chevron-left"></i> 知识点的reduce_问题排查
+    <a href="/2020/01/08/knowledge_map_reduce/problem_trace/" rel="prev" title="知识点的reduce-问题排查">
+      <i class="fa fa-chevron-left"></i> 知识点的reduce-问题排查
     </a></div>
       <div class="post-nav-item">
-    <a href="/2020/05/02/2020_5_plan/" rel="next" title="2020年学习记录">
-      2020年学习记录 <i class="fa fa-chevron-right"></i>
+    <a href="/2020/05/02/2020_5_plan/" rel="next" title="2020年学习计划">
+      2020年学习计划 <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
       </footer>
@@ -297,7 +297,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Lab2-Raft"><span class="nav-number">1.</span> <span class="nav-text">Lab2 Raft</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Lab1-MapReduce"><span class="nav-number"></span> <span class="nav-text">Lab1 MapReduce</span></a></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Lab2-Raft"><span class="nav-number">1.</span> <span class="nav-text">Lab2 Raft</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Lab1-MapReduce"><span class="nav-number">2.</span> <span class="nav-text">Lab1 MapReduce</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -310,14 +310,14 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
           <a href="/archives">
-          <span class="site-state-item-count">36</span>
+          <span class="site-state-item-count">38</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-count">5</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>

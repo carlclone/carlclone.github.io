@@ -45,15 +45,15 @@
   };
 </script>
 
-  <meta name="description" content="…">
+  <meta name="description" content="一道题发现了以前许多实现的性能问题,基础的重要性">
 <meta name="keywords" content="算法">
 <meta property="og:type" content="article">
-<meta property="og:title" content="一道看似简单的整数转二进制字符串题目">
+<meta property="og:title" content="看似简单的整数转二进制字符串题目">
 <meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;10&#x2F;07&#x2F;int-to-binary-string&#x2F;index.html">
 <meta property="og:site_name" content="Log0c">
-<meta property="og:description" content="…">
+<meta property="og:description" content="一道题发现了以前许多实现的性能问题,基础的重要性">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2020-10-08T02:03:53.288Z">
+<meta property="og:updated_time" content="2020-10-08T02:19:47.963Z">
 <meta name="twitter:card" content="summary">
 
 <link rel="canonical" href="http://yoursite.com/2020/10/07/int-to-binary-string/">
@@ -70,7 +70,7 @@
   };
 </script>
 
-  <title>一道看似简单的整数转二进制字符串题目 | Log0c</title>
+  <title>看似简单的整数转二进制字符串题目 | Log0c</title>
   
 
 
@@ -187,7 +187,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          一道看似简单的整数转二进制字符串题目
+          看似简单的整数转二进制字符串题目
         </h1>
 
         <div class="post-meta">
@@ -211,7 +211,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>…</p>
+        <p>一道题发现了以前许多实现的性能问题,基础的重要性</p>
 <a id="more"></a>
 
 <h2 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h2><p>将整数(整数负数和 0) 转换成补码(two’s complement) 的二进制表示</p>
@@ -245,6 +245,13 @@
 <blockquote>
 <p>当 n==0 停止</p>
 </blockquote>
+<blockquote>
+<p><a href="https://stackoverflow.com/questions/6878590/the-maximum-value-for-an-int-type-in-go" target="_blank" rel="noopener">如何获取某个整数类型的最大最小值</a></p>
+</blockquote>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> MaxUint = ^<span class="keyword">uint</span>(<span class="number">0</span>) </span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> MinUint = <span class="number">0</span> </span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> MaxInt = <span class="keyword">int</span>(MaxUint &gt;&gt; <span class="number">1</span>) </span></pre></td></tr><tr><td class="gutter"><pre><span class="line">4</span></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> MinInt = -MaxInt - <span class="number">1</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">5</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">6</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">7</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">8</span></pre></td><td class="code"><pre><span class="line"><span class="keyword">uint8</span>  : <span class="number">0</span> to <span class="number">255</span> </span></pre></td></tr><tr><td class="gutter"><pre><span class="line">9</span></pre></td><td class="code"><pre><span class="line"><span class="keyword">uint16</span> : <span class="number">0</span> to <span class="number">65535</span> </span></pre></td></tr><tr><td class="gutter"><pre><span class="line">10</span></pre></td><td class="code"><pre><span class="line"><span class="keyword">uint32</span> : <span class="number">0</span> to <span class="number">4294967295</span> </span></pre></td></tr><tr><td class="gutter"><pre><span class="line">11</span></pre></td><td class="code"><pre><span class="line"><span class="keyword">uint64</span> : <span class="number">0</span> to <span class="number">18446744073709551615</span> </span></pre></td></tr><tr><td class="gutter"><pre><span class="line">12</span></pre></td><td class="code"><pre><span class="line"><span class="keyword">int8</span>   : <span class="number">-128</span> to <span class="number">127</span> </span></pre></td></tr><tr><td class="gutter"><pre><span class="line">13</span></pre></td><td class="code"><pre><span class="line"><span class="keyword">int16</span>  : <span class="number">-32768</span> to <span class="number">32767</span> </span></pre></td></tr><tr><td class="gutter"><pre><span class="line">14</span></pre></td><td class="code"><pre><span class="line"><span class="keyword">int32</span>  : <span class="number">-2147483648</span> to <span class="number">2147483647</span> </span></pre></td></tr><tr><td class="gutter"><pre><span class="line">15</span></pre></td><td class="code"><pre><span class="line"><span class="keyword">int64</span>  : <span class="number">-9223372036854775808</span> to <span class="number">9223372036854775807</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">16</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">17</span></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">printMinMaxValue</span><span class="params">()</span></span> &#123;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">18</span></pre></td><td class="code"><pre><span class="line">    <span class="comment">// integer max</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">19</span></pre></td><td class="code"><pre><span class="line">    fmt.Printf(<span class="string">"max int64 = %+v\n"</span>, math.MaxInt64)</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">20</span></pre></td><td class="code"><pre><span class="line">    fmt.Printf(<span class="string">"max int32 = %+v\n"</span>, math.MaxInt32)</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">21</span></pre></td><td class="code"><pre><span class="line">    fmt.Printf(<span class="string">"max int16 = %+v\n"</span>, math.MaxInt16)</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">22</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">23</span></pre></td><td class="code"><pre><span class="line">    <span class="comment">// integer min</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">24</span></pre></td><td class="code"><pre><span class="line">    fmt.Printf(<span class="string">"min int64 = %+v\n"</span>, math.MinInt64)</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">25</span></pre></td><td class="code"><pre><span class="line">    fmt.Printf(<span class="string">"min int32 = %+v\n"</span>, math.MinInt32)</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">26</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">27</span></pre></td><td class="code"><pre><span class="line">    fmt.Printf(<span class="string">"max flloat64= %+v\n"</span>, math.MaxFloat64)</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">28</span></pre></td><td class="code"><pre><span class="line">    fmt.Printf(<span class="string">"max float32= %+v\n"</span>, math.MaxFloat32)</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">29</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">30</span></pre></td><td class="code"><pre><span class="line">    <span class="comment">// etc you can see more int the `math`package</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">31</span></pre></td><td class="code"><pre><span class="line">&#125;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">32</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">33</span></pre></td><td class="code"><pre><span class="line">max <span class="keyword">int64</span> = <span class="number">9223372036854775807</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">34</span></pre></td><td class="code"><pre><span class="line">max <span class="keyword">int32</span> = <span class="number">2147483647</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">35</span></pre></td><td class="code"><pre><span class="line">max <span class="keyword">int16</span> = <span class="number">32767</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">36</span></pre></td><td class="code"><pre><span class="line">min <span class="keyword">int64</span> = <span class="number">-9223372036854775808</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">37</span></pre></td><td class="code"><pre><span class="line">min <span class="keyword">int32</span> = <span class="number">-2147483648</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">38</span></pre></td><td class="code"><pre><span class="line">max flloat64= <span class="number">1.7976931348623157e+308</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">39</span></pre></td><td class="code"><pre><span class="line">max <span class="keyword">float32</span>= <span class="number">3.4028234663852886e+38</span></span></pre></td></tr></table></figure>
+
+
+
 <h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p>更好的实现可以参考 java 的 toBinaryString()方法</p>
 <p><a href="https://codereview.stackexchange.com/questions/144913/implementing-my-own-integer-tobinarystringint-n-method" target="_blank" rel="noopener">Implementing my own Integer.toBinaryString(int n) method</a></p>
 <p><a href="https://www.cnblogs.com/simpleito/p/10787827.html" target="_blank" rel="noopener">补码复习</a></p>
@@ -271,8 +278,8 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2020/10/04/mac_related/mac-note-stalled/" rel="prev" title="mac Notes.app 卡死问题">
-      <i class="fa fa-chevron-left"></i> mac Notes.app 卡死问题
+    <a href="/2020/10/04/proxy-lab-summary/" rel="prev" title="CSAPP Proxy Lab 总结">
+      <i class="fa fa-chevron-left"></i> CSAPP Proxy Lab 总结
     </a></div>
       <div class="post-nav-item"></div>
     </div>
@@ -325,14 +332,14 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
           <a href="/archives">
-          <span class="site-state-item-count">36</span>
+          <span class="site-state-item-count">38</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-count">5</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>

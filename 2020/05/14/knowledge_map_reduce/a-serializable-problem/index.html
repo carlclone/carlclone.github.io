@@ -45,15 +45,15 @@
   };
 </script>
 
-  <meta name="description" content="…">
+  <meta name="description" content="&amp;nbsp;">
 <meta name="keywords" content="基础补足">
 <meta property="og:type" content="article">
 <meta property="og:title" content="mysql serializable的问题">
 <meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;05&#x2F;14&#x2F;knowledge_map_reduce&#x2F;a-serializable-problem&#x2F;index.html">
 <meta property="og:site_name" content="Log0c">
-<meta property="og:description" content="…">
+<meta property="og:description" content="&amp;nbsp;">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2020-10-04T05:28:42.488Z">
+<meta property="og:updated_time" content="2020-10-08T02:33:45.456Z">
 <meta name="twitter:card" content="summary">
 
 <link rel="canonical" href="http://yoursite.com/2020/05/14/knowledge_map_reduce/a-serializable-problem/">
@@ -211,12 +211,12 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>…</p>
+        <p>&nbsp;</p>
 <a id="more"></a>
 
-<p>这个问题是我在上15-445数据库<a href="https://15445.courses.cs.cmu.edu/fall2019/slides/17-twophaselocking.pdf" target="_blank" rel="noopener">Two phase locking</a> 这一节时 , 助教在演示mysql和postgres两个数据库的deadlock detection差异时候发现的. 助教先把隔离级别设为了serializable , 然后在这基础上演示了mysql的死锁</p>
-<p>在这之前我基本没用过这个隔离级别,从各处得到的答案都是两个事物会串行化执行, 但很明显不是, 底层依然是有并发的.</p>
-<p>于是我往回翻了几节重看了<a href="https://15445.courses.cs.cmu.edu/fall2019/slides/16-concurrencycontrol.pdf" target="_blank" rel="noopener">concurrency control</a>这一节 , 发现了两个概念: Serial Schedule 和Serializable Schedule , Serial才是真正的串行执行 , Serializable翻译过来应该是可串行 ,<br>也就是数据库会尝试让两个事务的执行在最终看起来就像是串行的一样 , 但实际上为了提高性能 , 还是会在没有conflict schedule的情况下 , 在不同的事务之间穿插执行语句 , 容忍中间状态的不一致(但这个不一致只是在内部看起来,不会被应用层面看见) </p>
+<p>这个问题是在上15-445数据库<a href="https://15445.courses.cs.cmu.edu/fall2019/slides/17-twophaselocking.pdf" target="_blank" rel="noopener">Two phase locking</a> 这一节时 , 助教在演示mysql和postgres两个数据库的死锁检测差异时候的一个发现. 助教先把隔离级别设为了serializable , 然后在这基础上演示了mysql的死锁</p>
+<p>在这之前基本没用过这个隔离级别,从各处得到的答案都是两个事物会串行化执行, 但很明显不是, 底层依然是有并发的.</p>
+<p>于是往回翻了几节重看了<a href="https://15445.courses.cs.cmu.edu/fall2019/slides/16-concurrencycontrol.pdf" target="_blank" rel="noopener">concurrency control</a>这一节 , 发现了两个概念: Serial Schedule 和Serializable Schedule , Serial才是真正的串行执行 , Serializable翻译过来应该是可串行 ,<br>数据库会尝试让两个事务的执行在最终看起来就像是串行的一样 , 但实际上为了提高性能 , 还是会在没有conflict schedule 和保证最终和序列执行的结果一致的情况下 , 在不同的事务之间穿插执行语句 , 容忍中间状态的不一致(但这个不一致只是在内部看起来,不会被应用层面看见) </p>
 
     </div>
 
@@ -235,8 +235,8 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2020/05/02/2020_5_plan/" rel="prev" title="2020年学习记录">
-      <i class="fa fa-chevron-left"></i> 2020年学习记录
+    <a href="/2020/05/02/2020_5_plan/" rel="prev" title="2020年学习计划">
+      <i class="fa fa-chevron-left"></i> 2020年学习计划
     </a></div>
       <div class="post-nav-item">
     <a href="/2020/05/18/knowledge_map_reduce/network-course/" rel="next" title="计算机网络课程分享">
@@ -291,14 +291,14 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
           <a href="/archives">
-          <span class="site-state-item-count">36</span>
+          <span class="site-state-item-count">38</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-count">5</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
