@@ -45,17 +45,17 @@
   };
 </script>
 
-  <meta name="description" content="Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub.">
+  <meta name="description" content="LRU Cache 的实现思路from 数据结构与算法之美课 06 , 20 讲 思想: 最新访问到的更容易再次被访问 先实现一个只有双向链表结构的版本 , 此时的查询复杂度是 O(n)(核心: 访问到后移动到头部 , 满了移除尾部的第一个) 再用哈希表改进查询复杂度为 O(1) 题外话其实这些策略都来源于生活,类比你的书架,淘汰书的策略 , 缓存淘汰策略,除了LRU,还有最频繁使用,先进先出翻译">
 <meta property="og:type" content="website">
-<meta property="og:title" content="Hello Worldjjk">
-<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;test&#x2F;hello-world.html">
+<meta property="og:title" content="Log0c">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;data-structure.html">
 <meta property="og:site_name" content="Log0c">
-<meta property="og:description" content="Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub.">
+<meta property="og:description" content="LRU Cache 的实现思路from 数据结构与算法之美课 06 , 20 讲 思想: 最新访问到的更容易再次被访问 先实现一个只有双向链表结构的版本 , 此时的查询复杂度是 O(n)(核心: 访问到后移动到头部 , 满了移除尾部的第一个) 再用哈希表改进查询复杂度为 O(1) 题外话其实这些策略都来源于生活,类比你的书架,淘汰书的策略 , 缓存淘汰策略,除了LRU,还有最频繁使用,先进先出翻译">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2015-09-24T16:00:00.000Z">
+<meta property="og:updated_time" content="2020-10-04T05:34:09.099Z">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="http://yoursite.com/test/hello-world">
+<link rel="canonical" href="http://yoursite.com/data-structure">
 
 
 <script id="page-configurations">
@@ -69,7 +69,7 @@
   };
 </script>
 
-  <title>Hello Worldjjk | Log0c
+  <title> | Log0c
   </title>
   
 
@@ -178,7 +178,7 @@
     <div class="post-block" lang="en">
       <header class="post-header">
 
-<h1 class="post-title" itemprop="name headline">Hello Worldjjk
+<h1 class="post-title" itemprop="name headline">
 </h1>
 
 <div class="post-meta">
@@ -192,21 +192,29 @@
       
       
       <div class="post-body">
-          <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
-<a id="more"></a>
-
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">$ hexo server</span></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">$ hexo generate</span></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html" target="_blank" rel="noopener">Deployment</a></p>
+          <h1 id="LRU-Cache-的实现思路"><a href="#LRU-Cache-的实现思路" class="headerlink" title="LRU Cache 的实现思路"></a>LRU Cache 的实现思路</h1><p>from 数据结构与算法之美课 06 , 20 讲</p>
+<p>思想: 最新访问到的更容易再次被访问</p>
+<p>先实现一个只有双向链表结构的版本 , 此时的查询复杂度是 O(n)<br>(核心: 访问到后移动到头部 , 满了移除尾部的第一个)</p>
+<p>再用哈希表改进查询复杂度为 O(1)</p>
+<h2 id="题外话"><a href="#题外话" class="headerlink" title="题外话"></a>题外话</h2><p>其实这些策略都来源于生活,类比你的书架,淘汰书的策略 , 缓存淘汰策略,除了LRU,还有最频繁使用,先进先出<br>翻译一下:<br>LRU 就是最久(时间维度)没被访问的可以走人<br>LFU 最少(频率维度)被访问到的可以走人<br>FIFO 谁先来谁先走人</p>
+<h2 id="演化过程"><a href="#演化过程" class="headerlink" title="演化过程"></a>演化过程</h2><blockquote>
+<p>数据结构之美 06 | 20</p>
+</blockquote>
+<blockquote>
+<p>新的学习方式 从源头慢慢演化 而不是一开始就给出庞然大物</p>
+</blockquote>
+<p>1.淘汰策略 :最久没被访问的先被淘汰</p>
+<p>使用链表 , 和一个属性记录链表长度 , 当有新增缓存超出长度时, 删除头节点 (数组后移大量数据复杂度O(n))</p>
+<p>2.单链表添加和删除操作都是O(n),改为双向链表(有前驱指针)<br><a href="">LRUCache第一版-只用链表</a></p>
+<p>3.从链表中查找缓存的复杂度为O(n),增加哈希结构将复杂度降到O(1) , key为key , 值为链表节点<br><a href="">LRUCache第二版-复合数据结构,添加哈希表</a></p>
+<blockquote>
+<p>至此 , 添加删除查询操作都优化为了O(1)</p>
+</blockquote>
+<p>4.redis的近似LRU实现 (优化空间复杂度)<br>(尚未深入学习)</p>
+<h2 id="开源项目中的LRU-Cache"><a href="#开源项目中的LRU-Cache" class="headerlink" title="开源项目中的LRU Cache"></a>开源项目中的LRU Cache</h2><p> <a href="https://github.com/hashicorp/golang-lru" target="_blank" rel="noopener">golang-lru</a><br> <a href="https://yq.aliyun.com/articles/63034" target="_blank" rel="noopener">redis</a></p>
+<h1 id="一些算法解决方案的演化过程"><a href="#一些算法解决方案的演化过程" class="headerlink" title="一些算法解决方案的演化过程"></a>一些算法解决方案的演化过程</h1><blockquote>
+<p>刘宇波老师的算法课<br>王争老师的算法课</p>
+</blockquote>
 
       </div>
       
@@ -247,7 +255,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Quick-Start"><span class="nav-number">1.</span> <span class="nav-text">Quick Start</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Create-a-new-post"><span class="nav-number">1.1.</span> <span class="nav-text">Create a new post</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Run-server"><span class="nav-number">1.2.</span> <span class="nav-text">Run server</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Generate-static-files"><span class="nav-number">1.3.</span> <span class="nav-text">Generate static files</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Deploy-to-remote-sites"><span class="nav-number">1.4.</span> <span class="nav-text">Deploy to remote sites</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#LRU-Cache-的实现思路"><span class="nav-number">1.</span> <span class="nav-text">LRU Cache 的实现思路</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#题外话"><span class="nav-number">1.1.</span> <span class="nav-text">题外话</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#演化过程"><span class="nav-number">1.2.</span> <span class="nav-text">演化过程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#开源项目中的LRU-Cache"><span class="nav-number">1.3.</span> <span class="nav-text">开源项目中的LRU Cache</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#一些算法解决方案的演化过程"><span class="nav-number">2.</span> <span class="nav-text">一些算法解决方案的演化过程</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -260,14 +268,14 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
           <a href="/archives">
-          <span class="site-state-item-count">34</span>
+          <span class="site-state-item-count">36</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-count">4</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
