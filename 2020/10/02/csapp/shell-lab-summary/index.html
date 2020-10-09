@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    hostname: new URL('http://yoursite.com').hostname,
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.6.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}
+  };
+</script>
+
+  <meta name="description" content="断断续续地做完了 shell lab,做一下回顾">
+<meta name="keywords" content="CSAPP">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CSAPP Shell Lab 总结">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;10&#x2F;02&#x2F;csapp&#x2F;shell-lab-summary&#x2F;index.html">
+<meta property="og:site_name" content="Log0c">
+<meta property="og:description" content="断断续续地做完了 shell lab,做一下回顾">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;images&#x2F;image-20201003114320000.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;images&#x2F;image-20201003114446424.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;images&#x2F;image-20201003174855077.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;images&#x2F;image-20201003174910566.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;images&#x2F;image-20201009085919491.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;images&#x2F;image-20201003131138951.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;images&#x2F;image-20201003131230478.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;images&#x2F;image-20201003132247872.png">
+<meta property="og:updated_time" content="2020-10-09T02:02:03.914Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;images&#x2F;image-20201003114320000.png">
+
+<link rel="canonical" href="http://yoursite.com/2020/10/02/csapp/shell-lab-summary/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>CSAPP Shell Lab 总结 | Log0c</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Log0c</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-posts">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Posts</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="en">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/10/02/csapp/shell-lab-summary/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Log0c">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          CSAPP Shell Lab 总结
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2020-10-02 00:00:00" itemprop="dateCreated datePublished" datetime="2020-10-02T00:00:00+08:00">2020-10-02</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>断断续续地做完了 shell lab,做一下回顾</p>
+<a id="more"></a>
+
+<p>还是花了不少时间,尤其是信号那部分,看了不少资料,才知道了linux 是用一个二进制位集合存储的各个信号的状态,因此信号是不能排队的,所以在收到 SIGCHLD 的时候要尝试 waitpid 收割多个子进程</p>
+<blockquote>
+<p>命令解析部分,老师已经给写好了~~ 我们需要实现的是</p>
+</blockquote>
+<ul>
+<li><p>几个内建命令 (bg,fg,quit,&amp;,jobs)</p>
+</li>
+<li><p>外部命令的执行 (fork 子进程后 execve 执行)</p>
+</li>
+<li><p>Job 和子进程 的管理</p>
+</li>
+<li><p>信号处理 (子进程发的, 使用者发的 ctrl+c , SIGSTP …)</p>
+</li>
+</ul>
+<blockquote>
+<p>一些要注意的点</p>
+</blockquote>
+<ul>
+<li><p>前台运行和后台运行的区别 : 主进程是否 waitpid</p>
+</li>
+<li><p>父进程 blocked 了SIGCHLD 后,子进程 fork 后要立即取消 blocked (继承了父进程的 blocked 集合) , 这样子进程才能收到子进程的子进程发出的 SIGCHLD 信号</p>
+</li>
+<li><p>前后台运行的进程输出流都继承了父进程的 stdout fd</p>
+</li>
+<li><p>执行 ls 后执行 ps , ls 变成 defunct (僵尸进程) , 因为父进程没有回收 , 此时只能等父进程退出后由init 进程来回收了,没有退出之前一直会占用着资源</p>
+</li>
+<li><p>信号是不排队的 , sigchld只回收了一个进程 , 也产生僵尸进程</p>
+</li>
+<li><p>没有对 execve 不存在的进行判断 ,子进程跳过 execve 继续执行 tsh 剩余代码, 成了 tsh 套娃</p>
+<p> <img src="/images/image-20201003114320000.png" alt="image-20201003114320000"></p>
+<p><img src="/images/image-20201003114446424.png" alt="image-20201003114446424"></p>
+</li>
+<li><p>未修改子进程的 pgid , 导致后台进程也收到信号被杀掉了 (trace07 子进程需要脱离进程组, 否则所有子进程都会被杀掉)</p>
+</li>
+<li><p>Sigchld handler 和主进程之间是异步的(并发问题) , 如果 deleteJob 在 addjob 之前执行会出问题</p>
+</li>
+</ul>
+<h2 id="流程"><a href="#流程" class="headerlink" title="流程"></a>流程</h2><p>用 mermaid 画了一下图</p>
+<h3 id="执行命令的主流程"><a href="#执行命令的主流程" class="headerlink" title="执行命令的主流程"></a>执行命令的主流程</h3><p><img src="/images/image-20201003174855077.png" alt="image-20201003174855077"></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">sequenceDiagram</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line">participant client</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line">participant proc</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">4</span></pre></td><td class="code"><pre><span class="line">    participant subProc</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">5</span></pre></td><td class="code"><pre><span class="line">    proc-&gt;&gt;proc:blocked at stdin</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">6</span></pre></td><td class="code"><pre><span class="line">client-&gt;&gt;proc:sent &#39;ls&#39;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">7</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">8</span></pre></td><td class="code"><pre><span class="line">    proc-&gt;&gt;subProc:fork</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">9</span></pre></td><td class="code"><pre><span class="line">    subProc-&gt;&gt;subProc:execve</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">10</span></pre></td><td class="code"><pre><span class="line">    note right of subProc:replace code address space with new code</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">11</span></pre></td><td class="code"><pre><span class="line">    note right of subProc:extend subProc some env , like signal set</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">12</span></pre></td><td class="code"><pre><span class="line">    proc-&gt;&gt;subProc:if is fg , wait</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">13</span></pre></td><td class="code"><pre><span class="line">    proc-&gt;&gt;proc:else block at stdin</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">14</span></pre></td><td class="code"><pre><span class="line">    subProc-&gt;&gt;proc:exit</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">15</span></pre></td><td class="code"><pre><span class="line">    proc-&gt;&gt;proc:run sigchld handler</span></pre></td></tr></table></figure>
+
+<h3 id="暂停-前后台切换流程"><a href="#暂停-前后台切换流程" class="headerlink" title="暂停,前后台切换流程"></a>暂停,前后台切换流程</h3><p><img src="/images/image-20201003174910566.png" alt="image-20201003174910566"></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">sequenceDiagram</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line">participant client</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line">participant proc</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">4</span></pre></td><td class="code"><pre><span class="line"> participant jobList</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">5</span></pre></td><td class="code"><pre><span class="line">    participant subProc</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">6</span></pre></td><td class="code"><pre><span class="line">       </span></pre></td></tr><tr><td class="gutter"><pre><span class="line">7</span></pre></td><td class="code"><pre><span class="line">    </span></pre></td></tr><tr><td class="gutter"><pre><span class="line">8</span></pre></td><td class="code"><pre><span class="line">client-&gt;&gt;proc:sent &#39;ctrl+z&#39;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">9</span></pre></td><td class="code"><pre><span class="line">proc-&gt;&gt;subProc:sent SIGSTP </span></pre></td></tr><tr><td class="gutter"><pre><span class="line">10</span></pre></td><td class="code"><pre><span class="line">subProc-&gt;&gt;subProc:stopped</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">11</span></pre></td><td class="code"><pre><span class="line">subProc-&gt;&gt;proc:sent SIGCHLD</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">12</span></pre></td><td class="code"><pre><span class="line">proc-&gt;&gt;jobList:set state&#x3D;ST</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">13</span></pre></td><td class="code"><pre><span class="line">jobList-&gt;&gt;proc:there has no state&#x3D;FG job , stop waiting</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">14</span></pre></td><td class="code"><pre><span class="line">client-&gt;&gt;proc:bg &#x2F;fg jobid</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">15</span></pre></td><td class="code"><pre><span class="line">proc-&gt;&gt;subProc:sent SIGCONT</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">16</span></pre></td><td class="code"><pre><span class="line">subProc-&gt;&gt;subProc:start running</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">17</span></pre></td><td class="code"><pre><span class="line">    jobList-&gt;&gt;proc:if bg ,there has no state&#x3D;FG job , stop waiting</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">18</span></pre></td><td class="code"><pre><span class="line">        jobList-&gt;&gt;proc:if fg ,there has  state&#x3D;FG job , wait</span></pre></td></tr></table></figure>
+
+
+
+<h3 id="信号处理流程-信号进程的并发竞争问题-信号没有排队机制"><a href="#信号处理流程-信号进程的并发竞争问题-信号没有排队机制" class="headerlink" title="信号处理流程 , 信号进程的并发竞争问题, 信号没有排队机制"></a>信号处理流程 , 信号进程的并发竞争问题, 信号没有排队机制</h3><p><img src="/images/image-20201009085919491.png" alt="image-20201009085919491"></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">sequenceDiagram</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line">    participant sysEvent</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line">    participant kernel</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">4</span></pre></td><td class="code"><pre><span class="line">    participant pendingSet</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">5</span></pre></td><td class="code"><pre><span class="line">    participant sigchldHandler</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">6</span></pre></td><td class="code"><pre><span class="line">    participant blockedSet</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">7</span></pre></td><td class="code"><pre><span class="line">    participant proc</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">8</span></pre></td><td class="code"><pre><span class="line">    </span></pre></td></tr><tr><td class="gutter"><pre><span class="line">9</span></pre></td><td class="code"><pre><span class="line">    proc-&gt;&gt;blockedSet:set SIGCHLD blocked  </span></pre></td></tr><tr><td class="gutter"><pre><span class="line">10</span></pre></td><td class="code"><pre><span class="line">        note right of proc:set SIGCHLD blocked to  prevent deleteJobs before addJob</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">11</span></pre></td><td class="code"><pre><span class="line">    sysEvent-&gt;&gt;kernel:chld exit(0)</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">12</span></pre></td><td class="code"><pre><span class="line">        kernel-&gt;&gt;pendingSet:set SIGCHLD pending</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">13</span></pre></td><td class="code"><pre><span class="line">    sysEvent-&gt;&gt;kernel:another chld exit(0)</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">14</span></pre></td><td class="code"><pre><span class="line">    kernel-&gt;&gt;pendingSet:set SIGCHLD pending </span></pre></td></tr><tr><td class="gutter"><pre><span class="line">15</span></pre></td><td class="code"><pre><span class="line">    note right of kernel:(only one signal is set , signal dont queue)</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">16</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">17</span></pre></td><td class="code"><pre><span class="line">proc-&gt;&gt;proc:addJob</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">18</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">19</span></pre></td><td class="code"><pre><span class="line">    proc-&gt;&gt;blockedSet:set SIGCHLD unblocked</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">20</span></pre></td><td class="code"><pre><span class="line">    pendingSet-&gt;&gt;sigchldHandler:pending!</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">21</span></pre></td><td class="code"><pre><span class="line">    blockedSet-&gt;&gt;sigchldHandler:unblocked!</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">22</span></pre></td><td class="code"><pre><span class="line">    sigchldHandler-&gt;&gt;sigchldHandler:deleteJobs</span></pre></td></tr></table></figure>
+
+<h2 id="资料"><a href="#资料" class="headerlink" title="资料"></a>资料</h2><p><code>shell lab</code>的 <code>README.pdf</code> 和 <code>CSAPP 第八章</code></p>
+<p><a href="https://www.youtube.com/watch?v=kC8uW4bS_MM&list=PLLchAlP_W0GfYWjv6Off6lfk4xNe_l-QB&index=13&t=6s" target="_blank" rel="noopener">recitation shell lab</a></p>
+<p><a href="https://www.youtube.com/watch?v=OMhhyGUQ5BI&list=PLLchAlP_W0GfYWjv6Off6lfk4xNe_l-QB&index=10&t=4s" target="_blank" rel="noopener">cs35实验环境配置 test1-3</a></p>
+<p><a href="https://www.youtube.com/watch?v=xAW_pNBlfnI&t=1266s" target="_blank" rel="noopener">shell lab debug -gdb</a></p>
+<p><a href="https://www.youtube.com/watch?v=CJDKTaXLK6s&t=2400s" target="_blank" rel="noopener">shell lab hd</a></p>
+<p><a href="https://www.youtube.com/watch?v=jUcqT37FdUI&list=PLLchAlP_W0GfYWjv6Off6lfk4xNe_l-QB&index=42&t=460s" target="_blank" rel="noopener">what are double pointer in c</a> </p>
+<h2 id="常用命令"><a href="#常用命令" class="headerlink" title="常用命令"></a>常用命令</h2><p><code>make clean ; make</code></p>
+<p><code>quit ,bg,fg,&amp;,jobs :built-in command</code></p>
+<p><code>myspin 3 : sleep for n second</code></p>
+<p>use tshref as a reference shell </p>
+<p><code>make test01 02 .... : tsh</code></p>
+<p><code>make rtest01 02  : tshref</code></p>
+<h2 id="工具"><a href="#工具" class="headerlink" title="工具"></a>工具</h2><p>gdb /clion /cgdb</p>
+<p>strace</p>
+<p>man page (查阅系统调用函数, 查阅命令使用)</p>
+<h2 id="调试"><a href="#调试" class="headerlink" title="调试"></a>调试</h2><p>调试方法看了 <a href="https://www.youtube.com/watch?v=xAW_pNBlfnI&t=1266s" target="_blank" rel="noopener">youtube 这个作者</a>的方法,总结了一些功能</p>
+<p><code>gdb ./tsh</code>  </p>
+<p><code>/bin/ls</code></p>
+<p><code>run</code></p>
+<p><code>n</code>  next 的缩写</p>
+<p><code>s</code>  step into</p>
+<p><code>ctrl+c</code> 回到 gdb (SIGINT 会被 gdb 拦截, tsh 不会收到)</p>
+<p><code>layout</code> 展示代码界面</p>
+<p><code>list sigint_handler</code></p>
+<p><code>signal SIGINT</code> , 发信号到 tsh</p>
+<p><code>break eval</code> 在 eval 函数下断点 , 执行到断点处, 那一行不会被执行</p>
+<p><code>c</code>  continue (back to tsh)</p>
+<p><code>p</code> cmdline 打印 cmdline 变量</p>
+<p><code>break sigchld_handler</code></p>
+<p><code>bt</code> 打印 backtrace</p>
+<p><img src="/images/image-20201003131138951.png" alt="image-20201003131138951"></p>
+<p><code>frame</code></p>
+<p><img src="/images/image-20201003131230478.png" alt="image-20201003131230478"></p>
+<p><code>call fgpid(jobs)</code> 可以实时调用函数!  (clion 的 evaluate expression 好像也可以)</p>
+<p><code>set detach-on-fork off</code> ,  (gdb进入子进程 并暂停子进程)</p>
+<p><code>info inferiors</code>  (list of current being controled process by gdb)</p>
+<p><code>Inferior 3</code> 进入某个process</p>
+<p><code>finish</code> 跑到结束 or breakpoint</p>
+<p><code>info proc</code> 查看当前进程信息</p>
+<p><code>detach inferior 3</code> 放弃控制该进程</p>
+<p><img src="/images/image-20201003132247872.png" alt="image-20201003132247872"></p>
+<p><code>info break</code>  断点列表</p>
+<p><code>delete 1</code>  delete breakpoint</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/CSAPP/" rel="tag"># CSAPP</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/06/12/cs144/" rel="prev" title="CS144 Labs总结">
+      <i class="fa fa-chevron-left"></i> CS144 Labs总结
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/10/02/csapp/proxy-lab-summary/" rel="next" title="CSAPP Proxy Lab 总结">
+      CSAPP Proxy Lab 总结 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#流程"><span class="nav-number">1.</span> <span class="nav-text">流程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#执行命令的主流程"><span class="nav-number">1.1.</span> <span class="nav-text">执行命令的主流程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#暂停-前后台切换流程"><span class="nav-number">1.2.</span> <span class="nav-text">暂停,前后台切换流程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#信号处理流程-信号进程的并发竞争问题-信号没有排队机制"><span class="nav-number">1.3.</span> <span class="nav-text">信号处理流程 , 信号进程的并发竞争问题, 信号没有排队机制</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#资料"><span class="nav-number">2.</span> <span class="nav-text">资料</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#常用命令"><span class="nav-number">3.</span> <span class="nav-text">常用命令</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#工具"><span class="nav-number">4.</span> <span class="nav-text">工具</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#调试"><span class="nav-number">5.</span> <span class="nav-text">调试</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name"></p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+          <span class="site-state-item-count">39</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/carlclone" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;carlclone" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://leetcode.com/carlclone" title="LeetCode → https:&#x2F;&#x2F;leetcode.com&#x2F;carlclone" rel="noopener" target="_blank"><i class="fa fa-fw fa-code"></i>LeetCode</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://learnku.com/blog/carlclone" title="LaravelChina → https:&#x2F;&#x2F;learnku.com&#x2F;blog&#x2F;carlclone" rel="noopener" target="_blank"><i class="fa fa-fw fa-instagram"></i>LaravelChina</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.jianshu.com/u/baea2de7cc1a" title="Jianshu → https:&#x2F;&#x2F;www.jianshu.com&#x2F;u&#x2F;baea2de7cc1a" rel="noopener" target="_blank"><i class="fa fa-fw fa-instagram"></i>Jianshu</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder"></span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.6.0
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
