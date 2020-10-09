@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    hostname: new URL('http://yoursite.com').hostname,
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.6.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}
+  };
+</script>
+
+  <meta name="description" content="使用buffered channel编写了一个协程池 (连接池)go 分布式crontab mongodb的snowfalke发号器全局唯一tb 主从分离,分库分表没有做过但了解的还行 , 引导interviewer问下去吧 linux性能优化实战里找个调试找性能问题的案例性能提升和性能测试案例fpm worker进程池配置遇到的坑主从不一致1发送到审核队列, 审核读的是从库 , 解决方案是连同需">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Log0c">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;drafts_2&#x2F;%E6%A1%88%E4%BE%8B%E7%A7%AF%E7%B4%AF.html">
+<meta property="og:site_name" content="Log0c">
+<meta property="og:description" content="使用buffered channel编写了一个协程池 (连接池)go 分布式crontab mongodb的snowfalke发号器全局唯一tb 主从分离,分库分表没有做过但了解的还行 , 引导interviewer问下去吧 linux性能优化实战里找个调试找性能问题的案例性能提升和性能测试案例fpm worker进程池配置遇到的坑主从不一致1发送到审核队列, 审核读的是从库 , 解决方案是连同需">
+<meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2020-10-09T03:01:10.114Z">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://yoursite.com/drafts_2/%E6%A1%88%E4%BE%8B%E7%A7%AF%E7%B4%AF">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: false,
+    isPage: true,
+    isArchive: false
+  };
+</script>
+
+  <title> | Log0c
+  </title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Log0c</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-posts">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Posts</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+  
+  
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+    
+    
+    
+    <div class="post-block" lang="en">
+      <header class="post-header">
+
+<h1 class="post-title" itemprop="name headline">
+</h1>
+
+<div class="post-meta">
+  
+
+</div>
+
+</header>
+
+      
+      
+      
+      <div class="post-body">
+          <h1 id="使用buffered-channel编写了一个协程池-连接池"><a href="#使用buffered-channel编写了一个协程池-连接池" class="headerlink" title="使用buffered channel编写了一个协程池 (连接池)"></a>使用buffered channel编写了一个协程池 (连接池)</h1><h1 id="go-分布式crontab-mongodb的snowfalke发号器全局唯一"><a href="#go-分布式crontab-mongodb的snowfalke发号器全局唯一" class="headerlink" title="go 分布式crontab mongodb的snowfalke发号器全局唯一"></a>go 分布式crontab mongodb的snowfalke发号器全局唯一</h1><h1 id="tb-主从分离-分库分表"><a href="#tb-主从分离-分库分表" class="headerlink" title="tb 主从分离,分库分表"></a>tb 主从分离,分库分表</h1><p>没有做过但了解的还行 , 引导interviewer问下去吧</p>
+<h1 id="linux性能优化实战里找个调试找性能问题的案例"><a href="#linux性能优化实战里找个调试找性能问题的案例" class="headerlink" title="linux性能优化实战里找个调试找性能问题的案例"></a>linux性能优化实战里找个调试找性能问题的案例</h1><h1 id="性能提升和性能测试案例"><a href="#性能提升和性能测试案例" class="headerlink" title="性能提升和性能测试案例"></a>性能提升和性能测试案例</h1><h1 id="fpm-worker进程池配置遇到的坑"><a href="#fpm-worker进程池配置遇到的坑" class="headerlink" title="fpm worker进程池配置遇到的坑"></a>fpm worker进程池配置遇到的坑</h1><h1 id="主从不一致"><a href="#主从不一致" class="headerlink" title="主从不一致"></a>主从不一致</h1><p>1发送到审核队列, 审核读的是从库 , 解决方案是连同需要分析的数据一同发到队列中,避开主从不一致的数据<br>2查主库<br>3同时写缓存,审核优先读缓存</p>
+<p>主从延迟正常是毫秒级的,到秒级就不正常了</p>
+<h1 id="如何优化联系人关联-地理位置周边查询-浏览记录-短信记录关键词查询"><a href="#如何优化联系人关联-地理位置周边查询-浏览记录-短信记录关键词查询" class="headerlink" title="如何优化联系人关联,地理位置周边查询,浏览记录,短信记录关键词查询"></a>如何优化联系人关联,地理位置周边查询,浏览记录,短信记录关键词查询</h1><p>ES是一个 , 还可以顺便说到ES<br>这里可以容忍短时间的数据同步不一致</p>
+<h1 id="屏蔽主从分离之后数据库访问的细节"><a href="#屏蔽主从分离之后数据库访问的细节" class="headerlink" title="屏蔽主从分离之后数据库访问的细节"></a>屏蔽主从分离之后数据库访问的细节</h1><p>1 嵌入应用的方案<br>2 代理中间件  (谨慎,出问题就麻烦)</p>
+<h1 id="mysql如何配置同步复制-而不是异步复制"><a href="#mysql如何配置同步复制-而不是异步复制" class="headerlink" title="mysql如何配置同步复制, 而不是异步复制"></a>mysql如何配置同步复制, 而不是异步复制</h1><h1 id="mysql配置主从的相关参数-检查状态相关命令"><a href="#mysql配置主从的相关参数-检查状态相关命令" class="headerlink" title="mysql配置主从的相关参数 检查状态相关命令"></a>mysql配置主从的相关参数 检查状态相关命令</h1><p>show slave status\G seconds_behind_master<br>对比bin log的offset</p>
+<h1 id="优势-高并发-分布式理论"><a href="#优势-高并发-分布式理论" class="headerlink" title="优势,高并发,分布式理论???"></a>优势,高并发,分布式理论???</h1><h1 id="对分布式和高并发感兴趣-买了许多极客时间上的课程-能看到平时工作遇不到的有趣案例-将来项目并发起来后可以用到的各自优化方案-然后说案例-问问能不能说说学来的案例"><a href="#对分布式和高并发感兴趣-买了许多极客时间上的课程-能看到平时工作遇不到的有趣案例-将来项目并发起来后可以用到的各自优化方案-然后说案例-问问能不能说说学来的案例" class="headerlink" title="对分布式和高并发感兴趣 , 买了许多极客时间上的课程,能看到平时工作遇不到的有趣案例 ,将来项目并发起来后可以用到的各自优化方案, 然后说案例 (问问能不能说说学来的案例)"></a>对分布式和高并发感兴趣 , 买了许多极客时间上的课程,能看到平时工作遇不到的有趣案例 ,将来项目并发起来后可以用到的各自优化方案, 然后说案例 (问问能不能说说学来的案例)</h1><h1 id="分库分表"><a href="#分库分表" class="headerlink" title="分库分表"></a>分库分表</h1><p>踩坑<br>不影响线上业务的解决方案</p>
+<p>解决的问题,单表过大,磁盘空间,索引占用也变大(需要从磁盘读索引影响查询),读写性能问题,提高写入性能</p>
+<p>短信表 有个主表存版本 , 作为全局唯一id<br> 分表存每个版本包含的短信 , 用版本id作为分区键</p>
+<p>垂直拆分 按模块拆<br>水平拆 按数据特点,使用特点 (哈希拆 , 按时间区间范围拆)</p>
+<p>水平分再水平分 , 相当于多级索引 , 如通过昵称先找到 id , 再去找用户信息    (需要根据用户名查询通讯录,又建了个昵称对应 id 的表当做二级索引?)<br>例如 Hbase，MongoDB 都提供 auto sharding 的特性 , 可以考虑使用这些 NoSQL 数据库替代传统的关系型数据库 </p>
+<p>首先选择原生支持自动分库分表的数据库集群，例如GreenPlum、Elasticsearch或其它解决方案，方便开发和运维；其次考虑使用中间件做代理。 (这是为什么要学 ES 和 mongo的原因吧) 集群,分片,复制<br>分库分表是解决了一些问题，但维护起来也是比较麻烦的</p>
+<h1 id="占用过高-如何排查"><a href="#占用过高-如何排查" class="headerlink" title="占用过高,如何排查"></a>占用过高,如何排查</h1><p>性能优化课 05 | 18 | 26 27 28 29 (看各种案例篇)</p>
+<p>使用top / ps / pidstat 找出使用率高的进程  (top按下1 每个cpu的使用率)<br>再使用perf top 找出占用cpu时间最多的函数 (实时的)  , perf record 和perf report可以分析保存一段时间内的 </p>
+<p>因为gdb会中断程序,在线上往往是不允许的 , 适合在分析的后期 , 线下使用</p>
+<p>nginx+php的例子:<br>top 1 找出占用高的php-fpm<br>perf top -g -p 21515 找到占用高的函数</p>
+<h2 id="自己的经验"><a href="#自己的经验" class="headerlink" title="自己的经验"></a>自己的经验</h2><p>xdebug dump下来 , 使用phpstorm 的xdebug profiler可视化分析 , 存了图在notes里 , 再用 tcpdump 抓包,wireshark 分析</p>
+<h1 id="内存泄露排查"><a href="#内存泄露排查" class="headerlink" title="内存泄露排查"></a>内存泄露排查</h1><h1 id="从浏览器开始-lnmp开始到结束-经过框架-暂时只说到ip层"><a href="#从浏览器开始-lnmp开始到结束-经过框架-暂时只说到ip层" class="headerlink" title="从浏览器开始 , lnmp开始到结束,经过框架 , 暂时只说到ip层"></a>从浏览器开始 , lnmp开始到结束,经过框架 , 暂时只说到ip层</h1><p>url -&gt; dns -&gt; ip<br>三次握手建立 tcp<br>发送请求<br>nginx 从tcp 缓冲区中读取数据 , ,解析 http,封装成 fastcgi 协议格式,<br>通过 9000 端口把连接请求发给 fpm , fpm 把连接事件分配给一个 worker<br>worker 和 nginx 建立连接,收到请求,<br>开始处理, php 生命周期 , 模块初始化,请求初始化,开始处理请求, 请求结束处理 , 等待下一个请求</p>
+<p>框架请求处理过程:<br>composer 注册自动加载<br>实例化容器<br>实例化 HttpKernel 核心类<br>实例化各种基础服务,如配置,路由,保存到容器<br>经过前置中间件,如?<br>封装请求为 request 类,<br>经过自定义中间件, 所有中间件通过闭包的装饰器模式聚合为一个函数, 将请求层层执行<br>经过路由查找,实例化控制器, 开始处理业务逻辑<br>封装为 response 类, 返回结果 , 结束</p>
+<p>底层网络协议:<br>url-&gt;dns-&gt;ip<br>建立 tcp<br>https 过程<br>ip</p>
+<h2 id="想象在回答面试官"><a href="#想象在回答面试官" class="headerlink" title="想象在回答面试官"></a>想象在回答面试官</h2><p>首先会通过查询本地dns缓存,如果没有则通过dns协议查ip<br>通过ip和服务端的80端口进程进行三次握手,建立tcp连接<br>(如果此时是https协议,还需要验证证书,从证书中获得公钥,通过非对称加密协商对称秘钥,然后对之后的http数据进行加密解密)<br>开始传输请求,服务器从tcp缓冲区根据协议长度字段获取字节流,组装成完整http包,<br>到达nginx master进程,nginx为事件循环模型,将请求分发给对应的worker进程<br>(nginx worker进程做了什么处理,待学习)<br>worker进程将请求解析成fastcgi协议格式,通过9000端口发送给php-fpm,<br>php-fpm也是事件循环模型,分发给worker,<br>worker开始php生命周期</p>
+<h1 id="如何保证接口安全"><a href="#如何保证接口安全" class="headerlink" title="如何保证接口安全"></a>如何保证接口安全</h1><blockquote>
+<p>趣谈网络协议 https章节<br>参考微信oauth认证,sdk等过程的参数<br>参考自己的笔记 , HTTPS的演化过程</p>
+</blockquote>
+
+      </div>
+      
+      
+      
+    </div>
+    
+
+    
+    
+    
+  </div>
+
+
+          </div>
+          
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#使用buffered-channel编写了一个协程池-连接池"><span class="nav-number">1.</span> <span class="nav-text">使用buffered channel编写了一个协程池 (连接池)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#go-分布式crontab-mongodb的snowfalke发号器全局唯一"><span class="nav-number">2.</span> <span class="nav-text">go 分布式crontab mongodb的snowfalke发号器全局唯一</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#tb-主从分离-分库分表"><span class="nav-number">3.</span> <span class="nav-text">tb 主从分离,分库分表</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#linux性能优化实战里找个调试找性能问题的案例"><span class="nav-number">4.</span> <span class="nav-text">linux性能优化实战里找个调试找性能问题的案例</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#性能提升和性能测试案例"><span class="nav-number">5.</span> <span class="nav-text">性能提升和性能测试案例</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#fpm-worker进程池配置遇到的坑"><span class="nav-number">6.</span> <span class="nav-text">fpm worker进程池配置遇到的坑</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#主从不一致"><span class="nav-number">7.</span> <span class="nav-text">主从不一致</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#如何优化联系人关联-地理位置周边查询-浏览记录-短信记录关键词查询"><span class="nav-number">8.</span> <span class="nav-text">如何优化联系人关联,地理位置周边查询,浏览记录,短信记录关键词查询</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#屏蔽主从分离之后数据库访问的细节"><span class="nav-number">9.</span> <span class="nav-text">屏蔽主从分离之后数据库访问的细节</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#mysql如何配置同步复制-而不是异步复制"><span class="nav-number">10.</span> <span class="nav-text">mysql如何配置同步复制, 而不是异步复制</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#mysql配置主从的相关参数-检查状态相关命令"><span class="nav-number">11.</span> <span class="nav-text">mysql配置主从的相关参数 检查状态相关命令</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#优势-高并发-分布式理论"><span class="nav-number">12.</span> <span class="nav-text">优势,高并发,分布式理论???</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#对分布式和高并发感兴趣-买了许多极客时间上的课程-能看到平时工作遇不到的有趣案例-将来项目并发起来后可以用到的各自优化方案-然后说案例-问问能不能说说学来的案例"><span class="nav-number">13.</span> <span class="nav-text">对分布式和高并发感兴趣 , 买了许多极客时间上的课程,能看到平时工作遇不到的有趣案例 ,将来项目并发起来后可以用到的各自优化方案, 然后说案例 (问问能不能说说学来的案例)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#分库分表"><span class="nav-number">14.</span> <span class="nav-text">分库分表</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#占用过高-如何排查"><span class="nav-number">15.</span> <span class="nav-text">占用过高,如何排查</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#自己的经验"><span class="nav-number">15.1.</span> <span class="nav-text">自己的经验</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#内存泄露排查"><span class="nav-number">16.</span> <span class="nav-text">内存泄露排查</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#从浏览器开始-lnmp开始到结束-经过框架-暂时只说到ip层"><span class="nav-number">17.</span> <span class="nav-text">从浏览器开始 , lnmp开始到结束,经过框架 , 暂时只说到ip层</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#想象在回答面试官"><span class="nav-number">17.1.</span> <span class="nav-text">想象在回答面试官</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#如何保证接口安全"><span class="nav-number">18.</span> <span class="nav-text">如何保证接口安全</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name"></p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+          <span class="site-state-item-count">39</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/carlclone" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;carlclone" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://leetcode.com/carlclone" title="LeetCode → https:&#x2F;&#x2F;leetcode.com&#x2F;carlclone" rel="noopener" target="_blank"><i class="fa fa-fw fa-code"></i>LeetCode</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://learnku.com/blog/carlclone" title="LaravelChina → https:&#x2F;&#x2F;learnku.com&#x2F;blog&#x2F;carlclone" rel="noopener" target="_blank"><i class="fa fa-fw fa-instagram"></i>LaravelChina</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.jianshu.com/u/baea2de7cc1a" title="Jianshu → https:&#x2F;&#x2F;www.jianshu.com&#x2F;u&#x2F;baea2de7cc1a" rel="noopener" target="_blank"><i class="fa fa-fw fa-instagram"></i>Jianshu</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder"></span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.6.0
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

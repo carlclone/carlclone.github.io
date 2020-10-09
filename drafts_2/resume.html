@@ -45,17 +45,17 @@
   };
 </script>
 
-  <meta name="description" content="XSS极客时间安全课浏览器课 不在输入的时候做限制, 在输出的时候做编码 , 减少对用户的限制 , 还可以在后端查询到有问题的输入 注入恶意代码到打开的页面中 案例:窃取cookie,登录后台查看机密信息xss获取cookie 登入后台的案例https:&#x2F;&#x2F;mp.weixin.qq.com&#x2F;s&#x2F;CXn8BP3BFLD5KK5xzDpc1A 类型存储型 , 持久化到数据库 , 所有打开页面的都会执行">
+  <meta name="description" content="自荐你好，我叫林聪聪，从16年开始学习编程，第一门语言是PHP，第一份实习是做高校线下招生的微信平台和相关的后台功能 ， 第一份正式工作是中小学生教育活动的微信平台，小程序和相关后台 ，目前在从事现金贷的公司，开发维护安卓App的API接口 ， 在19年3月的一次面试中，受到面试官的提点，意识到自己和计算机科班的差距之大，开始了打基础的计划，跟着慕课网和极客时间的老师学习完毕了基础的数据结构和算法">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Log0c">
-<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;security.html">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;drafts_2&#x2F;resume.html">
 <meta property="og:site_name" content="Log0c">
-<meta property="og:description" content="XSS极客时间安全课浏览器课 不在输入的时候做限制, 在输出的时候做编码 , 减少对用户的限制 , 还可以在后端查询到有问题的输入 注入恶意代码到打开的页面中 案例:窃取cookie,登录后台查看机密信息xss获取cookie 登入后台的案例https:&#x2F;&#x2F;mp.weixin.qq.com&#x2F;s&#x2F;CXn8BP3BFLD5KK5xzDpc1A 类型存储型 , 持久化到数据库 , 所有打开页面的都会执行">
+<meta property="og:description" content="自荐你好，我叫林聪聪，从16年开始学习编程，第一门语言是PHP，第一份实习是做高校线下招生的微信平台和相关的后台功能 ， 第一份正式工作是中小学生教育活动的微信平台，小程序和相关后台 ，目前在从事现金贷的公司，开发维护安卓App的API接口 ， 在19年3月的一次面试中，受到面试官的提点，意识到自己和计算机科班的差距之大，开始了打基础的计划，跟着慕课网和极客时间的老师学习完毕了基础的数据结构和算法">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2020-10-04T05:49:16.476Z">
+<meta property="og:updated_time" content="2020-10-09T03:01:10.113Z">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="http://yoursite.com/security">
+<link rel="canonical" href="http://yoursite.com/drafts_2/resume">
 
 
 <script id="page-configurations">
@@ -192,30 +192,27 @@
       
       
       <div class="post-body">
-          <h1 id="XSS"><a href="#XSS" class="headerlink" title="XSS"></a>XSS</h1><p>极客时间安全课<br>浏览器课</p>
-<p>不在输入的时候做限制, 在输出的时候做编码 , 减少对用户的限制 , 还可以在后端查询到有问题的输入</p>
-<p>注入恶意代码到打开的页面中</p>
-<p>案例:<br>窃取cookie,登录后台查看机密信息<br>xss获取cookie 登入后台的案例<a href="https://mp.weixin.qq.com/s/CXn8BP3BFLD5KK5xzDpc1A" target="_blank" rel="noopener">https://mp.weixin.qq.com/s/CXn8BP3BFLD5KK5xzDpc1A</a></p>
-<p>类型<br>存储型 , 持久化到数据库 , 所有打开页面的都会执行脚本<br>反射型 , 常见于诱导链接, 恶意脚本在get的query参数中<br>DOM型 , 网页劫持 , 比如臭名昭著的长城宽带,劫持了路由器, 在传输过程中修改了http数据</p>
-<p>方案<br>过滤, 转码<br>CSP : Content Security Policy , 浏览器自带策略 , 限制域名加载js , 限制提交数据到第三方 , 禁止未授权脚本,提供上报机制,尽快发现XSS攻击<br>HttpOnly: 用在Cookie上, 使得js脚本无法获取Cookie<br>验证码, 防止脚本冒充用户提交数据</p>
-<h1 id="CSRF"><a href="#CSRF" class="headerlink" title="CSRF"></a>CSRF</h1><p>利用用户的登录状态, 调取第三方网站的接口</p>
-<p>和xss的区别, 不需要注入恶意代码到页面 , 利用服务器漏洞和用户登录状态</p>
-<p>get请求,伪装成图片,打开页面自动请求</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">&lt;img src&#x3D;&quot;https:&#x2F;&#x2F;time.geekbang.org&#x2F;sendcoin?user&#x3D;hacker&amp;number&#x3D;100&quot;&gt;</span></pre></td></tr></table></figure>
-
-<p>post请求,隐藏的,自动提交的表单</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">&lt;form id&#x3D;&#39;hacker&#39;&gt;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line">&lt;input type&#x3D;hidden&gt;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line">&lt;&#x2F;form&gt;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">4</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">5</span></pre></td><td class="code"><pre><span class="line">&lt;script&gt;document.getElementById(&#39;hacker&#39;).submit();&lt;&#x2F;script&gt;</span></pre></td></tr></table></figure>
-
-<p>诱导链接</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">&lt;img src&#x3D;&quot;美女图片&quot;&gt;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line">    &lt;a href&#x3D;&quot;攻击地址&quot; target&#x3D;&quot;_blank&quot;&gt;下载美女图片&lt;&#x2F;a&gt;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line">&lt;&#x2F;img&gt;</span></pre></td></tr></table></figure>
-
-<p>方案<br>Cookie Samesite属性, 禁止从第三方网站请求后发送cookie</p>
-<p>验证Origin , Referrer属性的站点 (Referrer不是可以修改吗)</p>
-<p>CSRF Token</p>
-<h1 id="经常见到的nonce属性是什么"><a href="#经常见到的nonce属性是什么" class="headerlink" title="经常见到的nonce属性是什么?"></a>经常见到的nonce属性是什么?</h1><p>参考<br><a href="https://www.cnblogs.com/jayinnn/p/9560888.html" target="_blank" rel="noopener">https://www.cnblogs.com/jayinnn/p/9560888.html</a><br><a href="https://www.cnblogs.com/bestzrz/archive/2011/09/03/2164620.html" target="_blank" rel="noopener">https://www.cnblogs.com/bestzrz/archive/2011/09/03/2164620.html</a></p>
-<p>nonce = number once = 仅使用一次的数值</p>
-<p>常用于防止Replay-attack , 由服务端生成的一个随机值 , 在此基础上加上时间戳,避免生成相同随机值的问题 ,<br>存储于数据库中, 并使用过期时间减小数据库压力 , 定期删除 , 避免使用过期nonce进行攻击, 还需要验证nonce的时间再查库</p>
-<p>https<br>微信支付sdk</p>
+          <h1 id="自荐"><a href="#自荐" class="headerlink" title="自荐"></a>自荐</h1><p>你好，我叫林聪聪，从16年开始学习编程，第一门语言是<code>PHP</code>，第一份实习是做高校线下招生的微信平台和相关的后台功能 ， 第一份正式工作是中小学生教育活动的微信平台，小程序和相关后台 ，目前在从事现金贷的公司，开发维护安卓<code>App</code>的<code>API</code>接口 ， 在19年3月的一次面试中，受到面试官的提点，意识到自己和计算机科班的差距之大，开始了打基础的计划，跟着慕课网和极客时间的老师学习完毕了基础的数据结构和算法，补充了和工作相关的操作系统和计算机网络原理， 跟随课程完成了<code>go</code>开发的分布式计划任务平台，并在极客时间接触到了几门分布式理论相关的课程，感兴趣的情况下看完了大部分 ， 在<code>V2EX</code>社区的推荐下开始了学习<code>MIT6.824</code>分布式系统和<code>CMU15-445</code>数据库课程 ， 目前完成了分布式的<code>Lab1 MapReduce</code>的实现和<code>Lab2 Raft</code>共识算法的Leader选举阶段和日志复制阶段的<code>go</code>代码实现 ， 希望能得到一次<code>go</code>开发工程师岗位的面试机会</p>
+<p>业余时间喜欢折腾黑苹果，完善了<code>K580S</code>笔记本和<code>Dell Optiplex3050</code>微型机的黑苹果驱动 ，也是自己在用的两台机器</p>
+<p>这是我的<a href="https://github.com/carlclone" target="_blank" rel="noopener">Github</a> , 我的<a href="https://carlclone.github.io/" target="_blank" rel="noopener">博客</a> , 我的<a href="https://leetcode.com/carlclone" target="_blank" rel="noopener">Leetcode</a></p>
+<h2 id="学习过的课程"><a href="#学习过的课程" class="headerlink" title="学习过的课程"></a>学习过的课程</h2><h3 id="认真读过的书籍和文章"><a href="#认真读过的书籍和文章" class="headerlink" title="认真读过的书籍和文章"></a>认真读过的书籍和文章</h3><h3 id="我的文章"><a href="#我的文章" class="headerlink" title="我的文章"></a>我的文章</h3><p>Redis设计与实现  <a href="https://carlclone.github.io/2019/08/20/redis_code_book_reading/" target="_blank" rel="noopener">阅读笔记</a><br><a href="https://thesquareplanet.com/blog/students-guide-to-raft/" target="_blank" rel="noopener">Student’s guide to Raft</a><br><a href="http://nil.csail.mit.edu/6.824/2020/papers/raft-extended.pdf" target="_blank" rel="noopener">raft-extended</a></p>
+<p><a href="">Lab1 MapReduce 笔记</a><br><a href="">Lab2 Raft笔记</a><br><a href="">BufferpoolManager 笔记</a><br><a href="">分布式Crontab 笔记</a></p>
+<h3 id="国外高校课程"><a href="#国外高校课程" class="headerlink" title="国外高校课程"></a>国外高校课程</h3><blockquote>
+<p>实践和理论结合课</p>
+</blockquote>
+<p><a href="https://pdos.csail.mit.edu/6.824/schedule.html" target="_blank" rel="noopener">MIT6.824</a> Lab1 / Lab2</p>
+<h3 id="极客时间"><a href="#极客时间" class="headerlink" title="极客时间"></a>极客时间</h3><blockquote>
+<p>主要学习计算机理论知识</p>
+</blockquote>
+<p><a href="https://time.geekbang.org/course/intro/160" target="_blank" rel="noopener">Go语言从入门到实战</a>  学习笔记</p>
+<p>消息队列原理课程的RPC框架作业<br>使用java反射完成了RPC框架的<br>作业1 实现一个Json请求Serializer<br>作业2 支持单个Service多方法和方法可传入多个参数</p>
+<p><a href="">分布式技术原理与算法解析</a></p>
+<h3 id="Laracasts的大部分课程"><a href="#Laracasts的大部分课程" class="headerlink" title="Laracasts的大部分课程"></a><a href="https://laracasts.com/" target="_blank" rel="noopener">Laracasts</a>的大部分课程</h3><blockquote>
+<p>一个关于laravel和php的进阶学习网站, 类似railcast</p>
+</blockquote>
+<h3 id="慕课网"><a href="#慕课网" class="headerlink" title="慕课网"></a>慕课网</h3><p>刘宇波 数据结构 算法<br>go crontab</p>
+<h2 id="正在学习"><a href="#正在学习" class="headerlink" title="正在学习"></a>正在学习</h2><p>CMU15-445数据库课程 ，阅读书籍A tour of C++给Lab1实现BufferPoolManager做准备 ， Task1是实现LRU的精简版 ， Task2是实现BufferPoolManager管理数据库中内存和硬盘page的置换<br>MIT6.824 Lab3基于Lab2的Raft实现一个key-value服务</p>
+<h2 id="长期计划"><a href="#长期计划" class="headerlink" title="长期计划"></a>长期计划</h2><p>CMU15-213 CSAPP和课程相关 Lab<br>CMU15-441 计算机网络Lab ,实现WebServer 和一个传输协议</p>
 
       </div>
       
@@ -256,7 +253,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#XSS"><span class="nav-number">1.</span> <span class="nav-text">XSS</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#CSRF"><span class="nav-number">2.</span> <span class="nav-text">CSRF</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#经常见到的nonce属性是什么"><span class="nav-number">3.</span> <span class="nav-text">经常见到的nonce属性是什么?</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#自荐"><span class="nav-number">1.</span> <span class="nav-text">自荐</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#学习过的课程"><span class="nav-number">1.1.</span> <span class="nav-text">学习过的课程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#认真读过的书籍和文章"><span class="nav-number">1.1.1.</span> <span class="nav-text">认真读过的书籍和文章</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#我的文章"><span class="nav-number">1.1.2.</span> <span class="nav-text">我的文章</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#国外高校课程"><span class="nav-number">1.1.3.</span> <span class="nav-text">国外高校课程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#极客时间"><span class="nav-number">1.1.4.</span> <span class="nav-text">极客时间</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Laracasts的大部分课程"><span class="nav-number">1.1.5.</span> <span class="nav-text">Laracasts的大部分课程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#慕课网"><span class="nav-number">1.1.6.</span> <span class="nav-text">慕课网</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#正在学习"><span class="nav-number">1.2.</span> <span class="nav-text">正在学习</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#长期计划"><span class="nav-number">1.3.</span> <span class="nav-text">长期计划</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 

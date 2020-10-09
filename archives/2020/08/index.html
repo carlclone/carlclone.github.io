@@ -45,18 +45,14 @@
   };
 </script>
 
-  <meta name="description" content="&amp;nbsp;">
-<meta name="keywords" content="基础补足">
-<meta property="og:type" content="article">
-<meta property="og:title" content="mysql serializable的问题">
-<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;05&#x2F;14&#x2F;knowledge_map_reduce&#x2F;a-serializable-problem&#x2F;index.html">
+  <meta property="og:type" content="website">
+<meta property="og:title" content="Log0c">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;archives&#x2F;2020&#x2F;08&#x2F;index.html">
 <meta property="og:site_name" content="Log0c">
-<meta property="og:description" content="&amp;nbsp;">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2020-10-09T03:01:09.879Z">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="http://yoursite.com/2020/05/14/knowledge_map_reduce/a-serializable-problem/">
+<link rel="canonical" href="http://yoursite.com/archives/2020/08/">
 
 
 <script id="page-configurations">
@@ -64,13 +60,13 @@
   CONFIG.page = {
     sidebar: "",
     isHome: false,
-    isPost: true,
+    isPost: false,
     isPage: false,
-    isArchive: false
+    isArchive: true
   };
 </script>
 
-  <title>mysql serializable的问题 | Log0c</title>
+  <title>Archive | Log0c</title>
   
 
 
@@ -169,88 +165,50 @@
           <div class="content">
             
 
-  <div class="posts-expand">
-      
   
   
-  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="en">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/05/14/knowledge_map_reduce/a-serializable-problem/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Log0c">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          mysql serializable的问题
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2020-05-14 00:00:00" itemprop="dateCreated datePublished" datetime="2020-05-14T00:00:00+08:00">2020-05-14</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
+  
+  <div class="post-block">
+    <div class="posts-collapse">
+      <div class="collection-title">
+        
+        <span class="collection-header">OK! 39 posts in total. Keep on posting.</span>
+      </div>
 
       
-        <p>&nbsp;</p>
-<a id="more"></a>
-
-<p>这个问题是在上15-445数据库<a href="https://15445.courses.cs.cmu.edu/fall2019/slides/17-twophaselocking.pdf" target="_blank" rel="noopener">Two phase locking</a> 这一节时 , 助教在演示mysql和postgres两个数据库的死锁检测差异时候的一个发现. 助教先把隔离级别设为了serializable , 然后在这基础上演示了mysql的死锁</p>
-<p>在这之前基本没用过这个隔离级别,从各处得到的答案都是两个事物会串行化执行, 但很明显不是, 底层依然是有并发的.</p>
-<p>于是往回翻了几节重看了<a href="https://15445.courses.cs.cmu.edu/fall2019/slides/16-concurrencycontrol.pdf" target="_blank" rel="noopener">concurrency control</a>这一节 , 发现了两个概念: Serial Schedule 和Serializable Schedule , Serial才是真正的串行执行 , Serializable翻译过来应该是可串行 ,<br>数据库会尝试让两个事务的执行在最终看起来就像是串行的一样 , 但实际上为了提高性能 , 还是会在没有conflict schedule 和保证最终和序列执行的结果一致的情况下 , 在不同的事务之间穿插执行语句 , 容忍中间状态的不一致(但这个不一致只是在内部看起来,不会被应用层面看见) </p>
-
+    <div class="collection-year">
+      <h1 class="collection-header">2020</h1>
     </div>
 
-    
-    
-    
+  <article itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
 
-      <footer class="post-footer">
-          <div class="post-tags">
-              <a href="/tags/%E5%9F%BA%E7%A1%80%E8%A1%A5%E8%B6%B3/" rel="tag"># 基础补足</a>
-          </div>
+      <div class="post-meta">
+        <time itemprop="dateCreated"
+              datetime="2020-08-04T00:00:00+08:00"
+              content="2020-08-04">
+          08-04
+        </time>
+      </div>
 
-        
+      <h2 class="post-title">
+          <a class="post-title-link" href="/2020/08/04/go-distributed-crontab/" itemprop="url">
+            <span itemprop="name">Go 分布式 Crontab 平台总结</span>
+          </a>
+      </h2>
 
-
-        
-    <div class="post-nav">
-      <div class="post-nav-item">
-    <a href="/2020/05/02/2020_5_plan/" rel="prev" title="2020年学习计划">
-      <i class="fa fa-chevron-left"></i> 2020年学习计划
-    </a></div>
-      <div class="post-nav-item">
-    <a href="/2020/05/18/knowledge_map_reduce/network-course/" rel="next" title="计算机网络课程分享">
-      计算机网络课程分享 <i class="fa fa-chevron-right"></i>
-    </a></div>
-    </div>
-      </footer>
-    
+    </header>
   </article>
+
+
+    </div>
+  </div>
   
   
   
 
-  </div>
+  
+
 
 
           </div>

@@ -45,18 +45,17 @@
   };
 </script>
 
-  <meta name="description" content="&amp;nbsp;">
-<meta name="keywords" content="csapp">
-<meta property="og:type" content="article">
-<meta property="og:title" content="go 分布式 crontab 平台总结">
-<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;10&#x2F;04&#x2F;go-distributed-crontab&#x2F;index.html">
+  <meta name="description" content="warning别像上次面试那样闹脾气 , 好好对待 不要简写, 认真写 , 先画好图和写伪代码 ,  说不定会看伪代码 准备好铅笔 , 时间可能会长一点 , 询问能否写伪代码 ,  紧张没法克服 , 所以就现在先把解法都看一遍吧 这次写算法题主要体现思想吧 , 难度降一点 , 毕竟又不是微软面试 , 还考察边界, robust和错误处理 深圳研究院好像都是go和算法和网络的 , 准备一下? sel">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Log0c">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;drafts_2&#x2F;360_series&#x2F;360_interview_round_4_prepare.html">
 <meta property="og:site_name" content="Log0c">
-<meta property="og:description" content="&amp;nbsp;">
+<meta property="og:description" content="warning别像上次面试那样闹脾气 , 好好对待 不要简写, 认真写 , 先画好图和写伪代码 ,  说不定会看伪代码 准备好铅笔 , 时间可能会长一点 , 询问能否写伪代码 ,  紧张没法克服 , 所以就现在先把解法都看一遍吧 这次写算法题主要体现思想吧 , 难度降一点 , 毕竟又不是微软面试 , 还考察边界, robust和错误处理 深圳研究院好像都是go和算法和网络的 , 准备一下? sel">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2020-10-09T02:05:05.249Z">
+<meta property="og:updated_time" content="2020-10-09T03:01:10.112Z">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="http://yoursite.com/2020/10/04/go-distributed-crontab/">
+<link rel="canonical" href="http://yoursite.com/drafts_2/360_series/360_interview_round_4_prepare">
 
 
 <script id="page-configurations">
@@ -64,13 +63,14 @@
   CONFIG.page = {
     sidebar: "",
     isHome: false,
-    isPost: true,
-    isPage: false,
+    isPost: false,
+    isPage: true,
     isArchive: false
   };
 </script>
 
-  <title>go 分布式 crontab 平台总结 | Log0c</title>
+  <title> | Log0c
+  </title>
   
 
 
@@ -165,90 +165,71 @@
       <div class="main-inner">
         <div class="content-wrap">
           
+  
+  
 
           <div class="content">
             
 
   <div class="posts-expand">
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="en">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/10/04/go-distributed-crontab/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Log0c">
-    </span>
+    
+    
+    
+    <div class="post-block" lang="en">
       <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          go 分布式 crontab 平台总结
-        </h1>
 
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
+<h1 class="post-title" itemprop="name headline">
+</h1>
 
-              <time title="Created: 2020-10-04 00:00:00" itemprop="dateCreated datePublished" datetime="2020-10-04T00:00:00+08:00">2020-10-04</time>
-            </span>
-
+<div class="post-meta">
+  
+  <ul class="breadcrumb">
           
+            <li><a href="/drafts_2/">DRAFTS_2</a></li>
+            <li><a href="/drafts_2/360_series/">360_SERIES</a></li>
+            <li>360_INTERVIEW_ROUND_4_PREPARE</li>
+          
+  </ul>
 
-        </div>
-      </header>
+</div>
 
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
+</header>
 
       
-        <p>&nbsp;</p>
-<a id="more"></a>
+      
+      
+      <div class="post-body">
+          <h1 id="warning"><a href="#warning" class="headerlink" title="warning"></a>warning</h1><p>别像上次面试那样闹脾气 , 好好对待</p>
+<p>不要简写, 认真写 , 先画好图和写伪代码 ,  说不定会看伪代码</p>
+<p>准备好铅笔 , 时间可能会长一点 , 询问能否写伪代码 ,  紧张没法克服 , 所以就现在先把解法都看一遍吧</p>
+<p>这次写算法题主要体现思想吧 , 难度降一点 , 毕竟又不是微软面试 , 还考察边界, robust和错误处理</p>
+<p>深圳研究院好像都是go和算法和网络的 , 准备一下?</p>
+<h1 id="self-intro"><a href="#self-intro" class="headerlink" title="self intro"></a>self intro</h1><blockquote>
+<p>30-60s的 主要工作,学习经历介绍</p>
+</blockquote>
+<p>你好,我叫林聪聪,<br>我从大四开学开始学习PHP , 并在学校附近找了一份实习 ,  在毕业后接触到了Laravel , 学习了一段时间后在家附近找了一份Laravel的工作 ,<br>后来辗转来到了深圳一直工作到现在, 19 年对计算机基础知识进行了补足 ,主要是数据结构,算法,网络协议,一些开源项目的底层执行原理学习,<br>并学习了第一门静态语言go,<br>最近则在结合案例学习 Linux 问题排查和性能优化的知识</p>
+<h1 id="project-experience"><a href="#project-experience" class="headerlink" title="project experience"></a>project experience</h1><h2 id="github-go-项目"><a href="#github-go-项目" class="headerlink" title="github go 项目"></a>github go 项目</h2><p>go_crontab_project_summary.md</p>
+<h3 id="产生的背景"><a href="#产生的背景" class="headerlink" title="产生的背景"></a>产生的背景</h3><p>对分布式和 go 并发编程的一个实践</p>
+<h3 id="遇到的问题-难点-不管多小都可以"><a href="#遇到的问题-难点-不管多小都可以" class="headerlink" title="遇到的问题/难点 (不管多小都可以)"></a>遇到的问题/难点 (不管多小都可以)</h3><h3 id="主要架构"><a href="#主要架构" class="headerlink" title="主要架构"></a>主要架构</h3><h3 id="学到了什么"><a href="#学到了什么" class="headerlink" title="学到了什么"></a>学到了什么</h3><p>对分布式和遇到的问题有了一个基本的了解 (分布式锁 , CAP , 二阶段协议, 大多数理论) ,最近在上极客时间上的分布式理论课程<br>对 go 的并发编程有了一个亲身实践 ( 上下文控制协程 , channel 通信,阻塞,timer 定时器)<br>select+超时 实现无阻塞 + 避免立即返回(尝试一段时间)</p>
+<h2 id="公司项目"><a href="#公司项目" class="headerlink" title="公司项目"></a>公司项目</h2><h2 id="架构-流程"><a href="#架构-流程" class="headerlink" title="架构 流程"></a>架构 流程</h2><p>硬核空间java面试</p>
 
-
-<p>之前遗留了许多问题没有解决或者理清楚 , 这次重新回顾一下</p>
-
+      </div>
+      
+      
+      
     </div>
+    
+  <ul class="breadcrumb">
+          
+            <li><a href="/drafts_2/">DRAFTS_2</a></li>
+            <li><a href="/drafts_2/360_series/">360_SERIES</a></li>
+            <li>360_INTERVIEW_ROUND_4_PREPARE</li>
+          
+  </ul>
 
     
     
     
-
-      <footer class="post-footer">
-          <div class="post-tags">
-              <a href="/tags/csapp/" rel="tag"># csapp</a>
-          </div>
-
-        
-
-
-        
-    <div class="post-nav">
-      <div class="post-nav-item">
-    <a href="/2020/10/04/mac_related/mac-note-stalled/" rel="prev" title="mac Notes.app 卡死问题">
-      <i class="fa fa-chevron-left"></i> mac Notes.app 卡死问题
-    </a></div>
-      <div class="post-nav-item">
-    <a href="/2020/10/07/int-to-binary-string/" rel="next" title="看似简单的整数转二进制字符串题目">
-      看似简单的整数转二进制字符串题目 <i class="fa fa-chevron-right"></i>
-    </a></div>
-    </div>
-      </footer>
-    
-  </article>
-  
-  
-  
-
   </div>
 
 
@@ -278,6 +259,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#warning"><span class="nav-number">1.</span> <span class="nav-text">warning</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#self-intro"><span class="nav-number">2.</span> <span class="nav-text">self intro</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#project-experience"><span class="nav-number">3.</span> <span class="nav-text">project experience</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#github-go-项目"><span class="nav-number">3.1.</span> <span class="nav-text">github go 项目</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#产生的背景"><span class="nav-number">3.1.1.</span> <span class="nav-text">产生的背景</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#遇到的问题-难点-不管多小都可以"><span class="nav-number">3.1.2.</span> <span class="nav-text">遇到的问题/难点 (不管多小都可以)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#主要架构"><span class="nav-number">3.1.3.</span> <span class="nav-text">主要架构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#学到了什么"><span class="nav-number">3.1.4.</span> <span class="nav-text">学到了什么</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#公司项目"><span class="nav-number">3.2.</span> <span class="nav-text">公司项目</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#架构-流程"><span class="nav-number">3.3.</span> <span class="nav-text">架构 流程</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 

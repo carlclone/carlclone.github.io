@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    hostname: new URL('http://yoursite.com').hostname,
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.6.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}
+  };
+</script>
+
+  <meta name="description" content="自我介绍介绍了大四学习 php , 实习 , 毕业后 laravel , 辗转来到了深圳 , 工作到现在(本来报的计算机但是被调剂了) 现在公司的项目 , 负责什么,什么角色, 有什么亮点,难点说了用户申请的基本流程 , 然后我负责 API 这块 有什么能体现你的亮点的地方?说了 dns 缓存优化的 guzzle (下次记得说分表和 平台合并,平台数据单迁移导流) 问 laravel 和 thin">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Log0c">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;drafts_2&#x2F;360_series&#x2F;360_interview_1.html">
+<meta property="og:site_name" content="Log0c">
+<meta property="og:description" content="自我介绍介绍了大四学习 php , 实习 , 毕业后 laravel , 辗转来到了深圳 , 工作到现在(本来报的计算机但是被调剂了) 现在公司的项目 , 负责什么,什么角色, 有什么亮点,难点说了用户申请的基本流程 , 然后我负责 API 这块 有什么能体现你的亮点的地方?说了 dns 缓存优化的 guzzle (下次记得说分表和 平台合并,平台数据单迁移导流) 问 laravel 和 thin">
+<meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2020-10-09T03:01:10.112Z">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://yoursite.com/drafts_2/360_series/360_interview_1">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: false,
+    isPage: true,
+    isArchive: false
+  };
+</script>
+
+  <title> | Log0c
+  </title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Log0c</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-posts">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Posts</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+  
+  
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+    
+    
+    
+    <div class="post-block" lang="en">
+      <header class="post-header">
+
+<h1 class="post-title" itemprop="name headline">
+</h1>
+
+<div class="post-meta">
+  
+  <ul class="breadcrumb">
+          
+            <li><a href="/drafts_2/">DRAFTS_2</a></li>
+            <li><a href="/drafts_2/360_series/">360_SERIES</a></li>
+            <li>360_INTERVIEW_1</li>
+          
+  </ul>
+
+</div>
+
+</header>
+
+      
+      
+      
+      <div class="post-body">
+          <h1 id="自我介绍"><a href="#自我介绍" class="headerlink" title="自我介绍"></a>自我介绍</h1><p>介绍了大四学习 php , 实习 , 毕业后 laravel , 辗转来到了深圳 , 工作到现在<br>(本来报的计算机但是被调剂了)</p>
+<h1 id="现在公司的项目-负责什么-什么角色-有什么亮点-难点"><a href="#现在公司的项目-负责什么-什么角色-有什么亮点-难点" class="headerlink" title="现在公司的项目 , 负责什么,什么角色, 有什么亮点,难点"></a>现在公司的项目 , 负责什么,什么角色, 有什么亮点,难点</h1><p>说了用户申请的基本流程 , 然后我负责 API 这块</p>
+<h2 id="有什么能体现你的亮点的地方"><a href="#有什么能体现你的亮点的地方" class="headerlink" title="有什么能体现你的亮点的地方?"></a>有什么能体现你的亮点的地方?</h2><p>说了 dns 缓存优化的 guzzle (下次记得说分表和 平台合并,平台数据单迁移导流)</p>
+<h1 id="问-laravel-和-thinkphp-异同-没回答出来-换了个问法-laravel-吸引你的地方"><a href="#问-laravel-和-thinkphp-异同-没回答出来-换了个问法-laravel-吸引你的地方" class="headerlink" title="问 laravel 和 thinkphp 异同(没回答出来,换了个问法) , laravel 吸引你的地方"></a>问 laravel 和 thinkphp 异同(没回答出来,换了个问法) , laravel 吸引你的地方</h1><p>回答了优雅的接口,ORM,回答了中间件thinkphp3 没有</p>
+<h1 id="问了-DI"><a href="#问了-DI" class="headerlink" title="问了 DI"></a>问了 DI</h1><p>pimple对延迟实例化的实现 , 用闭包<br>回答了 DI 容器保存实例,通过反射依赖注入, 不依赖具体类,而是依赖接口</p>
+<h1 id="问了-laravel-请求开始到结束"><a href="#问了-laravel-请求开始到结束" class="headerlink" title="问了 laravel 请求开始到结束"></a>问了 laravel 请求开始到结束</h1><p>回答了 composer 实例化, index.php ,初始化容器,启动 http kernel ,封装 request, 初始化中间件,<br>串成闭包,执行,路由找到控制器和方法,执行,封装成 response 返回</p>
+<h1 id="问了-php-生命周期-结构"><a href="#问了-php-生命周期-结构" class="headerlink" title="问了 php 生命周期 , 结构"></a>问了 php 生命周期 , 结构</h1><p>没回答好 , sapi ,zend  什么的,php 的结构</p>
+<h1 id="问了-fpm-和-nginx-的交互"><a href="#问了-fpm-和-nginx-的交互" class="headerlink" title="问了 fpm 和 nginx 的交互"></a>问了 fpm 和 nginx 的交互</h1><p>回答了 fastcgi 协议进行通信, worker 相连, 9000 端口 , 编码成 fastcgi 协议传输</p>
+<h1 id="问了-php-进程阻塞在-mysql-怎么办-什么样的"><a href="#问了-php-进程阻塞在-mysql-怎么办-什么样的" class="headerlink" title="问了 php 进程阻塞在 mysql,怎么办,什么样的"></a>问了 php 进程阻塞在 mysql,怎么办,什么样的</h1><p>php 进程,被 mysql 或其他阻塞了,这时候会怎样<br>这个应该会超时吧? 不清楚没答好<br>直接 kill 掉?</p>
+<h1 id="公司项目提交流程-出问题了怎么回滚"><a href="#公司项目提交流程-出问题了怎么回滚" class="headerlink" title="公司项目提交流程,出问题了怎么回滚"></a>公司项目提交流程,出问题了怎么回滚</h1><h1 id="公司-pv-uv"><a href="#公司-pv-uv" class="headerlink" title="公司 pv uv"></a>公司 pv uv</h1><p>如实回答不知道,让之后可以问</p>
+<h1 id="公司服务器等的结构"><a href="#公司服务器等的结构" class="headerlink" title="公司服务器等的结构"></a>公司服务器等的结构</h1><p>如实回答不知道</p>
+<h1 id="回滚方式"><a href="#回滚方式" class="headerlink" title="回滚方式"></a>回滚方式</h1><p>revert 和 reset</p>
+<h1 id="设计模式-问了吗"><a href="#设计模式-问了吗" class="headerlink" title="设计模式 , 问了吗?"></a>设计模式 , 问了吗?</h1><h1 id="用中间件做什么"><a href="#用中间件做什么" class="headerlink" title="用中间件做什么?"></a>用中间件做什么?</h1><p>验证签名,验证 token</p>
+<h1 id="crontab-写法"><a href="#crontab-写法" class="headerlink" title="crontab 写法"></a>crontab 写法</h1><h1 id="vue-node-modules-很大-怎么处理"><a href="#vue-node-modules-很大-怎么处理" class="headerlink" title="vue node_modules 很大,怎么处理"></a>vue node_modules 很大,怎么处理</h1><p>压缩 , 分块</p>
+<h1 id="然后开始讲go-项目-分布式"><a href="#然后开始讲go-项目-分布式" class="headerlink" title="然后开始讲go 项目,分布式"></a>然后开始讲go 项目,分布式</h1><p>还行吧,毕竟先写了稿子</p>
+<h1 id="mysql-怎么查一条语句是不是慢了"><a href="#mysql-怎么查一条语句是不是慢了" class="headerlink" title="mysql 怎么查一条语句是不是慢了"></a>mysql 怎么查一条语句是不是慢了</h1><p>慢查询<br>explain<br>还有其他的吗</p>
+<h1 id="b-tree"><a href="#b-tree" class="headerlink" title="b+ tree"></a>b+ tree</h1><p>答得还行</p>
+<h1 id="问了-go-channel-和共享内存哪个快"><a href="#问了-go-channel-和共享内存哪个快" class="headerlink" title="问了 go channel 和共享内存哪个快"></a>问了 go channel 和共享内存哪个快</h1><p>回答了共享内存, channel 为了保证线程安全添加了锁机制</p>
+<h1 id="问了现在在学什么"><a href="#问了现在在学什么" class="headerlink" title="问了现在在学什么"></a>问了现在在学什么</h1><p>计算机基础,分布式<br>回答:可惜了</p>
+<h1 id="我问了部门主要是做什么的"><a href="#我问了部门主要是做什么的" class="headerlink" title="我问了部门主要是做什么的"></a>我问了部门主要是做什么的</h1><p>360 安全研究院, 做物联网和周边应用,网页</p>
+<h1 id="tcp-3-4握手"><a href="#tcp-3-4握手" class="headerlink" title="tcp 3,4握手"></a>tcp 3,4握手</h1><p>照本宣科的念了过程<br>下次应该说你之前写的那些, 基于信道不可靠的概念, 双方都无法确定请求是否到达对端,需要确认<br>同步 segement number</p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>总结一下, php 底层的都没回答出来<br>会 mongodb 和 es 加分<br>你个傻逼没录音 , 浪费时间回忆<br>项目亮点也没回答好 (确实也没啥项目亮点)<br>面试官人挺好的,暂时还没遇到让人难堪的面试官(flag ?)</p>
+
+      </div>
+      
+      
+      
+    </div>
+    
+  <ul class="breadcrumb">
+          
+            <li><a href="/drafts_2/">DRAFTS_2</a></li>
+            <li><a href="/drafts_2/360_series/">360_SERIES</a></li>
+            <li>360_INTERVIEW_1</li>
+          
+  </ul>
+
+    
+    
+    
+  </div>
+
+
+          </div>
+          
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#自我介绍"><span class="nav-number">1.</span> <span class="nav-text">自我介绍</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#现在公司的项目-负责什么-什么角色-有什么亮点-难点"><span class="nav-number">2.</span> <span class="nav-text">现在公司的项目 , 负责什么,什么角色, 有什么亮点,难点</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#有什么能体现你的亮点的地方"><span class="nav-number">2.1.</span> <span class="nav-text">有什么能体现你的亮点的地方?</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#问-laravel-和-thinkphp-异同-没回答出来-换了个问法-laravel-吸引你的地方"><span class="nav-number">3.</span> <span class="nav-text">问 laravel 和 thinkphp 异同(没回答出来,换了个问法) , laravel 吸引你的地方</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#问了-DI"><span class="nav-number">4.</span> <span class="nav-text">问了 DI</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#问了-laravel-请求开始到结束"><span class="nav-number">5.</span> <span class="nav-text">问了 laravel 请求开始到结束</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#问了-php-生命周期-结构"><span class="nav-number">6.</span> <span class="nav-text">问了 php 生命周期 , 结构</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#问了-fpm-和-nginx-的交互"><span class="nav-number">7.</span> <span class="nav-text">问了 fpm 和 nginx 的交互</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#问了-php-进程阻塞在-mysql-怎么办-什么样的"><span class="nav-number">8.</span> <span class="nav-text">问了 php 进程阻塞在 mysql,怎么办,什么样的</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#公司项目提交流程-出问题了怎么回滚"><span class="nav-number">9.</span> <span class="nav-text">公司项目提交流程,出问题了怎么回滚</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#公司-pv-uv"><span class="nav-number">10.</span> <span class="nav-text">公司 pv uv</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#公司服务器等的结构"><span class="nav-number">11.</span> <span class="nav-text">公司服务器等的结构</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#回滚方式"><span class="nav-number">12.</span> <span class="nav-text">回滚方式</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#设计模式-问了吗"><span class="nav-number">13.</span> <span class="nav-text">设计模式 , 问了吗?</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#用中间件做什么"><span class="nav-number">14.</span> <span class="nav-text">用中间件做什么?</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#crontab-写法"><span class="nav-number">15.</span> <span class="nav-text">crontab 写法</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#vue-node-modules-很大-怎么处理"><span class="nav-number">16.</span> <span class="nav-text">vue node_modules 很大,怎么处理</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#然后开始讲go-项目-分布式"><span class="nav-number">17.</span> <span class="nav-text">然后开始讲go 项目,分布式</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#mysql-怎么查一条语句是不是慢了"><span class="nav-number">18.</span> <span class="nav-text">mysql 怎么查一条语句是不是慢了</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#b-tree"><span class="nav-number">19.</span> <span class="nav-text">b+ tree</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#问了-go-channel-和共享内存哪个快"><span class="nav-number">20.</span> <span class="nav-text">问了 go channel 和共享内存哪个快</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#问了现在在学什么"><span class="nav-number">21.</span> <span class="nav-text">问了现在在学什么</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#我问了部门主要是做什么的"><span class="nav-number">22.</span> <span class="nav-text">我问了部门主要是做什么的</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#tcp-3-4握手"><span class="nav-number">23.</span> <span class="nav-text">tcp 3,4握手</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#总结"><span class="nav-number">24.</span> <span class="nav-text">总结</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name"></p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+          <span class="site-state-item-count">39</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/carlclone" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;carlclone" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://leetcode.com/carlclone" title="LeetCode → https:&#x2F;&#x2F;leetcode.com&#x2F;carlclone" rel="noopener" target="_blank"><i class="fa fa-fw fa-code"></i>LeetCode</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://learnku.com/blog/carlclone" title="LaravelChina → https:&#x2F;&#x2F;learnku.com&#x2F;blog&#x2F;carlclone" rel="noopener" target="_blank"><i class="fa fa-fw fa-instagram"></i>LaravelChina</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.jianshu.com/u/baea2de7cc1a" title="Jianshu → https:&#x2F;&#x2F;www.jianshu.com&#x2F;u&#x2F;baea2de7cc1a" rel="noopener" target="_blank"><i class="fa fa-fw fa-instagram"></i>Jianshu</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder"></span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.6.0
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

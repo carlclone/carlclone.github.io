@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    hostname: new URL('http://yoursite.com').hostname,
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.6.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}
+  };
+</script>
+
+  <meta name="description" content="之前遗留了许多问题没有解决或者理清楚 , 这次重新回顾一下">
+<meta name="keywords" content="csapp">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Go 分布式 Crontab 平台总结">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;08&#x2F;04&#x2F;go-distributed-crontab&#x2F;index.html">
+<meta property="og:site_name" content="Log0c">
+<meta property="og:description" content="之前遗留了许多问题没有解决或者理清楚 , 这次重新回顾一下">
+<meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2020-10-09T03:11:00.085Z">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://yoursite.com/2020/08/04/go-distributed-crontab/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>Go 分布式 Crontab 平台总结 | Log0c</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Log0c</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-posts">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Posts</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="en">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/08/04/go-distributed-crontab/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Log0c">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Go 分布式 Crontab 平台总结
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2020-08-04 00:00:00" itemprop="dateCreated datePublished" datetime="2020-08-04T00:00:00+08:00">2020-08-04</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>之前遗留了许多问题没有解决或者理清楚 , 这次重新回顾一下</p>
+<a id="more"></a>
+
+
+<p>etcd</p>
+<p>context</p>
+<p>各个组件</p>
+<p>来自慕课网的一门课程, 对分布式系统和并发编程的入门学习</p>
+<!-- more -->
+
+<h1 id="项目解决的痛点"><a href="#项目解决的痛点" class="headerlink" title="项目解决的痛点"></a>项目解决的痛点</h1><p>1.单点故障, 任务停止调度 ,crontab配置丢失</p>
+<p>2.单机耗尽,迁移难 , 横向扩展难</p>
+<p>3.人工ssh配置 , 不方便看状态</p>
+<p>4.支持秒级的计划任务</p>
+<p>调度器要高可用 master有另一个standby服务器 , zookeeper协调<br>执行器要可扩展</p>
+<h1 id="遇到的问题"><a href="#遇到的问题" class="headerlink" title="遇到的问题"></a>遇到的问题</h1><p>1 每次都被一部机器抢到锁 :添加随机睡眠延时</p>
+<p>2 日志少的时候不上传: 超时自动提交机制</p>
+<p>3 循环占满 cpu : 循环监听要加上一定的睡眠时间</p>
+<p>4 任务重复执行:记录正在执行表防止未执行完毕的任务重复执行</p>
+<p>5 日志重复上传: 定时器stop的 时候已经被触发 , 需要在提交的时候判断是不是同一个batch</p>
+<h2 id="日志写入策略"><a href="#日志写入策略" class="headerlink" title="日志写入策略"></a>日志写入策略</h2><p>定量buffer写入 , 很少日志的时候,很久都没有上传 , 增加定时机制 , 但发现有重复上传(未取消定时器) 用channel串行化,要把timer stop掉 要在定时器里判断<br>定时器stop的时候可能已经触发了 , 判断batch是否是同一个batch </p>
+<p>用闭包隔离变量上下文? </p>
+<h1 id="优化"><a href="#优化" class="headerlink" title="优化"></a>优化</h1><p>日志事件放到另一个协程里执行 , 避免阻塞调度协程的主要功能</p>
+<h1 id="整体架构"><a href="#整体架构" class="headerlink" title="整体架构"></a>整体架构</h1><p><code>核心是 worker</code></p>
+<p>监听协程监听etcd变化事件 , 调度协程监听任务变化事件,更新执行计划表,执行协程负责执行</p>
+<p>web console<br>master (存,查任务) (取日志)<br>etcd mongodb<br>workers(同步,取任务) (存日志)<br>同步的目的是避免</p>
+<h1 id="worker设计"><a href="#worker设计" class="headerlink" title="worker设计"></a>worker设计</h1><p>调度,执行,同步任务 </p>
+<p>参考事件循环模型</p>
+<p>/cron/jobs      /cron/killer<br>监听协程负责同步任务变化 (事件分发)<br>调度协程(事件调度)负责分配任务给执行协程(事件执行) , 执行协程抢到锁后 执行完毕返回结果给调度协程<br>调度协程负责杀死执行协程 , 通过command.context cancelfunc</p>
+<h1 id="为什么要用etcd"><a href="#为什么要用etcd" class="headerlink" title="为什么要用etcd"></a>为什么要用etcd</h1><p>高可用的kv存储, 没有单点故障问题, 使用raft实现的强一致性</p>
+<h1 id="为什么用go"><a href="#为什么用go" class="headerlink" title="为什么用go"></a>为什么用go</h1><p>自带并发模型</p>
+<p>协程简化并发编程</p>
+<h1 id="crontab"><a href="#crontab" class="headerlink" title="crontab"></a>crontab</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">分钟 小时 日 月 星期</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line">*     *   *  *  *</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line">*&#x2F;5     *   *  *  * 每隔 5 分钟</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">4</span></pre></td><td class="code"><pre><span class="line">30                  每个 30 分钟的时候</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">5</span></pre></td><td class="code"><pre><span class="line">1-5                 1-5分钟 执行 5 次</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">6</span></pre></td><td class="code"><pre><span class="line">0   10,22           10和 22 时执行</span></pre></td></tr></table></figure>
+
+<p>go 的cronExpr 库支持秒粒度</p>
+<h1 id="go-skills"><a href="#go-skills" class="headerlink" title="go skills"></a>go skills</h1><p>使用上下文控制子协程</p>
+<p>使用 channel 阻塞主协程 , 协程直接通信</p>
+<p>go Timer 时间到了往 channel 里写</p>
+<p>使用 select+超时 实现无阻塞 + 避免立即返回(尝试一段时间)</p>
+<p>#etcd<br> 集群 高可用 kv 存储  , client 可监听 kv 变化 , 没有单点故障, 解决 CAP 的P</p>
+<h2 id="场景"><a href="#场景" class="headerlink" title="场景"></a>场景</h2><p><code>k8s</code>:  服务发现, 集群状态存储 , 配置同步<br><code>cloud foundry</code>:  分布式锁</p>
+<h2 id="抽屉理论-大多数理论-quorum-模型-二阶段协议"><a href="#抽屉理论-大多数理论-quorum-模型-二阶段协议" class="headerlink" title="抽屉理论 (大多数理论)   quorum 模型 二阶段协议"></a>抽屉理论 (大多数理论)   quorum 模型 二阶段协议</h2><p>1需要 2n+1 个节点 , leader复制给 N+1 个节点后 , 可以提交,返回给客户端<br>需要等待多个节点写入,写入比较差, 1000 次每秒<br>2然后再异步通知剩余节点也进行 replication</p>
+<p>raft 强一致性集群日志同步算法<br>用 raft 在集群中同步 kv , 把 kv 放到日志里</p>
+<h2 id="base-cap理论-6-1节"><a href="#base-cap理论-6-1节" class="headerlink" title="base, cap理论 (6-1节)"></a>base, cap理论 (6-1节)</h2><p>确保异常可以被程序自我治愈</p>
+<h2 id="使用watch-监听任务变化"><a href="#使用watch-监听任务变化" class="headerlink" title="使用watch 监听任务变化"></a>使用watch 监听任务变化</h2><h2 id="使用租约实现超时"><a href="#使用租约实现超时" class="headerlink" title="使用租约实现超时"></a>使用租约实现超时</h2><h2 id="使用-etcd-op操作-txn事务-if-else-then-实现分布式锁-lease锁自动过期"><a href="#使用-etcd-op操作-txn事务-if-else-then-实现分布式锁-lease锁自动过期" class="headerlink" title="使用 etcd op操作+txn事务(if else then)实现分布式锁 + lease锁自动过期"></a>使用 etcd op操作+txn事务(if else then)实现分布式锁 + lease锁自动过期</h2><p>租约释放 lease.Revoke<br>事务 if 不存在lock then设置 else 抢锁失败</p>
+<h1 id="项目提供的功能-如何实现的"><a href="#项目提供的功能-如何实现的" class="headerlink" title="项目提供的功能 如何实现的"></a>项目提供的功能 如何实现的</h1><p><code>中断任务执行</code>: 发送一个KILL事件, 调度协程监听并检查ExecutingTable , 使用事先存的context cancelfunc结束</p>
+<h1 id="go-的协程-类比-py"><a href="#go-的协程-类比-py" class="headerlink" title="go 的协程 类比 py"></a>go 的协程 类比 py</h1><p>go 好像是 go 在调度, py 程序员有调度权</p>
+<p>go 的协程是用户态的线程,由go 调度,并且创建的开销比系统线程小</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/csapp/" rel="tag"># csapp</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/06/12/cs144/" rel="prev" title="CS144 Labs总结">
+      <i class="fa fa-chevron-left"></i> CS144 Labs总结
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/10/02/csapp/proxy-lab-summary/" rel="next" title="CSAPP Proxy Lab 总结">
+      CSAPP Proxy Lab 总结 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#项目解决的痛点"><span class="nav-number">1.</span> <span class="nav-text">项目解决的痛点</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#遇到的问题"><span class="nav-number">2.</span> <span class="nav-text">遇到的问题</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#日志写入策略"><span class="nav-number">2.1.</span> <span class="nav-text">日志写入策略</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#优化"><span class="nav-number">3.</span> <span class="nav-text">优化</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#整体架构"><span class="nav-number">4.</span> <span class="nav-text">整体架构</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#worker设计"><span class="nav-number">5.</span> <span class="nav-text">worker设计</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#为什么要用etcd"><span class="nav-number">6.</span> <span class="nav-text">为什么要用etcd</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#为什么用go"><span class="nav-number">7.</span> <span class="nav-text">为什么用go</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#crontab"><span class="nav-number">8.</span> <span class="nav-text">crontab</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#go-skills"><span class="nav-number">9.</span> <span class="nav-text">go skills</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#场景"><span class="nav-number">9.1.</span> <span class="nav-text">场景</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#抽屉理论-大多数理论-quorum-模型-二阶段协议"><span class="nav-number">9.2.</span> <span class="nav-text">抽屉理论 (大多数理论)   quorum 模型 二阶段协议</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#base-cap理论-6-1节"><span class="nav-number">9.3.</span> <span class="nav-text">base, cap理论 (6-1节)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用watch-监听任务变化"><span class="nav-number">9.4.</span> <span class="nav-text">使用watch 监听任务变化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用租约实现超时"><span class="nav-number">9.5.</span> <span class="nav-text">使用租约实现超时</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用-etcd-op操作-txn事务-if-else-then-实现分布式锁-lease锁自动过期"><span class="nav-number">9.6.</span> <span class="nav-text">使用 etcd op操作+txn事务(if else then)实现分布式锁 + lease锁自动过期</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#项目提供的功能-如何实现的"><span class="nav-number">10.</span> <span class="nav-text">项目提供的功能 如何实现的</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#go-的协程-类比-py"><span class="nav-number">11.</span> <span class="nav-text">go 的协程 类比 py</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name"></p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+          <span class="site-state-item-count">39</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/carlclone" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;carlclone" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://leetcode.com/carlclone" title="LeetCode → https:&#x2F;&#x2F;leetcode.com&#x2F;carlclone" rel="noopener" target="_blank"><i class="fa fa-fw fa-code"></i>LeetCode</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://learnku.com/blog/carlclone" title="LaravelChina → https:&#x2F;&#x2F;learnku.com&#x2F;blog&#x2F;carlclone" rel="noopener" target="_blank"><i class="fa fa-fw fa-instagram"></i>LaravelChina</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.jianshu.com/u/baea2de7cc1a" title="Jianshu → https:&#x2F;&#x2F;www.jianshu.com&#x2F;u&#x2F;baea2de7cc1a" rel="noopener" target="_blank"><i class="fa fa-fw fa-instagram"></i>Jianshu</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder"></span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.6.0
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
