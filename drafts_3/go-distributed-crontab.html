@@ -49,14 +49,14 @@
 <meta name="keywords" content="csapp">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Go 分布式 Crontab 平台总结">
-<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;go-distributed-crontab.html">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;drafts_3&#x2F;go-distributed-crontab.html">
 <meta property="og:site_name" content="Log0c">
 <meta property="og:description" content="之前遗留了许多问题没有解决或者理清楚 , 这次重新回顾一下">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2020-10-09T03:11:00.085Z">
+<meta property="og:updated_time" content="2020-10-11T12:23:09.322Z">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="http://yoursite.com/go-distributed-crontab">
+<link rel="canonical" href="http://yoursite.com/drafts_3/go-distributed-crontab">
 
 
 <script id="page-configurations">
@@ -196,7 +196,9 @@
           <p>之前遗留了许多问题没有解决或者理清楚 , 这次重新回顾一下</p>
 <a id="more"></a>
 
-
+<p>使用 etcd 实现的功能有:<br>事务+租约实现分布式锁</p>
+<p>master 存储各类事件的 kv , 如job 列表, worker 列表 , kill 列表<br>worker 使用 watch 同步 , 并判断事件类型</p>
+<p>使用到的一些 go 新特性, context 对完整的子协程树进行操作,类似 C 的信号功能</p>
 <p>etcd</p>
 <p>context</p>
 <p>各个组件</p>
@@ -294,14 +296,14 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
           <a href="/archives">
-          <span class="site-state-item-count">39</span>
+          <span class="site-state-item-count">43</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-count">7</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>

@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    hostname: new URL('http://yoursite.com').hostname,
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.6.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}
+  };
+</script>
+
+  <meta name="description" content="&amp;nbsp;">
+<meta name="keywords" content="PHP">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Composer 是如何自动加载文件的">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;11&#x2F;17&#x2F;how-composer-work&#x2F;index.html">
+<meta property="og:site_name" content="Log0c">
+<meta property="og:description" content="&amp;nbsp;">
+<meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2020-11-17T15:12:07.194Z">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://yoursite.com/2020/11/17/how-composer-work/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>Composer 是如何自动加载文件的 | Log0c</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Log0c</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-posts">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Posts</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="en">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/11/17/how-composer-work/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Log0c">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Composer 是如何自动加载文件的
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2020-11-17 00:00:00 / Modified: 23:12:07" itemprop="dateCreated datePublished" datetime="2020-11-17T00:00:00+08:00">2020-11-17</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>&nbsp;</p>
+<a id="more"></a>
+
+<p>本文翻译自<a href="https://jinoantony.com/blog/how-composer-autoloads-php-files" target="_blank" rel="noopener">How Composer Autoloads PHP Files</a> , 作者写的文章阅读体验很舒适</p>
+<p>Composer 是 PHP 的应用程序级依赖管理器。除了管理依赖项，composer还将自动加载应用程序所需的文件。大多数框架(Laravel，Symfony 等)都使用 composer，默认情况下是自动加载的。</p>
+<h1 id="什么是自动加载"><a href="#什么是自动加载" class="headerlink" title="什么是自动加载"></a>什么是自动加载</h1><p>自动加载意味着自动加载项目/应用程序所需的文件。即包含应用程序所需的文件，而不显式地将其包含在 include ()或 require ()函数中。</p>
+<h1 id="为什么需要自动加载"><a href="#为什么需要自动加载" class="headerlink" title="为什么需要自动加载"></a>为什么需要自动加载</h1><p>如果您的项目包含的文件较少 , 使用 include ()或 require () 引入文件也是没问题的，但是现实世界中的大多数应用程序都包含一个巨大的文件库。因此，使用上述函数引入文件将成为一项乏味的工作。如果我们的项目依赖于大量的外部库/包，那么这将变得更加困难。</p>
+<p>所以我们需要一个简单的方法来加载文件。自动加载可以帮助我们。</p>
+<h1 id="如何运作"><a href="#如何运作" class="headerlink" title="如何运作"></a>如何运作</h1><p>让我们来看一个简单的自动加载程序。</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Autoloader</span></span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line"><span class="class"></span>&#123;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">autoLoad</span><span class="params">($className)</span> </span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">4</span></pre></td><td class="code"><pre><span class="line"><span class="function">    </span>&#123;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">5</span></pre></td><td class="code"><pre><span class="line">        <span class="comment">//logic for finding class path</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">6</span></pre></td><td class="code"><pre><span class="line">        <span class="keyword">include</span> $fullyResolvedPath;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">7</span></pre></td><td class="code"><pre><span class="line">    &#125;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">8</span></pre></td><td class="code"><pre><span class="line">&#125;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">9</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">10</span></pre></td><td class="code"><pre><span class="line">spl_autoload_register([<span class="string">'Autoloader'</span>, <span class="string">'autoLoad'</span>]);</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">11</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">12</span></pre></td><td class="code"><pre><span class="line">$obj = <span class="keyword">new</span> DemoClass;</span></pre></td></tr></table></figure>
+
+<p>这里我们使用内置的 php 函数 <code>spl _ autoload _ register ()</code>来注册我们的 autoload 函数</p>
+<p>“嘿，如果你自己找不到这个 Class，让我帮你找吧。如果我也找不到，就抛出一个错误。”</p>
+<p>在我们提供的 autoloader 中，我们可以找到类的路径，然后使用 include ()函数包含它。</p>
+<h1 id="自动加载的类型"><a href="#自动加载的类型" class="headerlink" title="自动加载的类型"></a>自动加载的类型</h1><p>编写器支持以下类型的自动加载。</p>
+<ul>
+<li>Classmap</li>
+<li>PSR-0</li>
+<li>PSR-4</li>
+<li>Files</li>
+</ul>
+<p>自动加载类型及其规则可以在 composer.json 文件中定义。可以在单个应用程序中配置多种类型的自动加载。其中 PSR-4和 PSR-0是由 PHP-FIG 小组提出的自动加载标准。</p>
+<h2 id="Classmap"><a href="#Classmap" class="headerlink" title="Classmap"></a>Classmap</h2><p>顾名思义，Classmap 创建了指定目录中所有类到单个 key = &gt; value 数组的映射，该数组可以在生成的文件 <code>vendor/composer/autoload _ Classmap.php</code>中找到。在composer安装/更新时自动生成该文件。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">&#123;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line">    &quot;autoload&quot;: &#123;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line">        &quot;classmap&quot;: [&quot;src&#x2F;&quot;, &quot;lib&#x2F;&quot;, &quot;Something.php&quot;]</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">4</span></pre></td><td class="code"><pre><span class="line">    &#125;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">5</span></pre></td><td class="code"><pre><span class="line">&#125;</span></pre></td></tr></table></figure>
+
+<p>映射是通过扫描指定目录内部的所有<code>.php</code> 和<code>.inc</code>类来完成。这是自动加载的最快方法，因为它使用数组查找(哈希表)来查找类。</p>
+<h2 id="PSR-0"><a href="#PSR-0" class="headerlink" title="PSR-0"></a>PSR-0</h2><p>这是 PSR-4之前用于自动加载文件的 PSR 标准，现在已不推荐使用。您可以在配置文件中定义 PSR-0规则，作为从名称空间到路径(相对于包/应用程序根)的映射。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">&#123;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line">    &quot;autoload&quot;: &#123;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line">        &quot;psr-0&quot;: &#123;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">4</span></pre></td><td class="code"><pre><span class="line">            &quot;Acme\\Foo\\&quot;: &quot;src&#x2F;&quot;,</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">5</span></pre></td><td class="code"><pre><span class="line">            &quot;Vendor\\Namespace\\&quot;: &quot;src&#x2F;&quot;,</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">6</span></pre></td><td class="code"><pre><span class="line">            &quot;Vendor_Namespace_&quot;: &quot;src&#x2F;&quot;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">7</span></pre></td><td class="code"><pre><span class="line">        &#125;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">8</span></pre></td><td class="code"><pre><span class="line">    &#125;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">9</span></pre></td><td class="code"><pre><span class="line">&#125;</span></pre></td></tr></table></figure>
+
+<p>所有 PSR-0引用都组合成一个单独的 key = &gt; value 数组，该数组可以在生成的  <code>filevendor/composer/autoload _ namespaces.php</code> 中找到。在自动加载 PSR-0期间，在生成的数组中查找名称空间并从其值中解析路径。</p>
+<p>例如，<code>Acme\Foo\Bar</code> 将解析为 <code>src/Acme/Foo/Bar.php</code>。PSR-0还支持类名中的下划线(_)。类名中的每个 _ 字符都转换为 <code>DIRECTORY _ separator</code>。因此，<code>Acme _ foo _ bar</code> 也将被解析为 <code>src/Acme/foo/bar.php</code>。</p>
+<h2 id="PSR-4"><a href="#PSR-4" class="headerlink" title="PSR-4"></a>PSR-4</h2><p>PSR-4是目前推荐的自动加载方式，因为它提供了更大的易用性。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">&#123;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line">    &quot;autoload&quot;: &#123;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line">        &quot;psr-4&quot;: &#123;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">4</span></pre></td><td class="code"><pre><span class="line">            &quot;Acme\\Foo\\&quot;: &quot;src&#x2F;&quot;,</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">5</span></pre></td><td class="code"><pre><span class="line">            &quot;Vendor\\Namespace\\&quot;: &quot;&quot;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">6</span></pre></td><td class="code"><pre><span class="line">        &#125;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">7</span></pre></td><td class="code"><pre><span class="line">    &#125;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">8</span></pre></td><td class="code"><pre><span class="line">&#125;</span></pre></td></tr></table></figure>
+
+<p>与 PSR-0下划线不同，它不会转换为 <code>DIRECTORY _ separator</code>，并且命名空间前缀不存在于路径中。</p>
+<p>例如，<code>Acme\Foo\Bar</code> 将解析为 <code>src/Bar.php</code>。</p>
+<p>在安装/更新期间，所有 PSR-4引用都被组合成一个单独的 key = &gt; value 数组，该数组可以在 <code>vendor/composer/autoload _ psr4.php</code> 中找到。</p>
+<h2 id="Files"><a href="#Files" class="headerlink" title="Files"></a>Files</h2><p>Classmap、 PSR-0和 PSR-4仅处理类。如果你想自动加载函数，你可以使用文件自动加载。这对于加载辅助函数很有用。每次请求时都会加载这些文件。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">&#123;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line">    &quot;autoload&quot;: &#123;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line">        &quot;files&quot;: [&quot;src&#x2F;helpers.php&quot;]</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">4</span></pre></td><td class="code"><pre><span class="line">    &#125;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">5</span></pre></td><td class="code"><pre><span class="line">&#125;</span></pre></td></tr></table></figure>
+
+<h1 id="关于-Classmap-和-PSR-4的说明"><a href="#关于-Classmap-和-PSR-4的说明" class="headerlink" title="关于 Classmap 和 PSR-4的说明"></a>关于 Classmap 和 PSR-4的说明</h1><p>Classmap 自动加载是自动加载器中最快的，因为它从预构建的数组中加载类。但是 classmap 的问题是，每次创建新的类文件时都需要重新生成 classmap 数组。因此，在开发环境中 PSR-4自动加载将是最适合的一种。</p>
+<p>PSR-4自动加载将比 classmap 慢，因为它需要在决定性地解析一个 classname 之前检查文件系统。但是在生产过程中，你需要尽可能快的速度。</p>
+<p>基于这个原因，composer 提供了从 PSR-4生成 classmap 的方法。Classmap 生成将所有 PSR-4/PSR-0规则转换为 Classmap 规则。所以自动加载会更快。如果在生成的类映射中没有找到 PSR-4类，则自动加载回退到 PSR-4规则。</p>
+<p>可以通过以下任何方式启用 Classmap 生成。</p>
+<ul>
+<li>set “optimize-autoloader”: true inside the config key of composer.json</li>
+<li>call install or 或update with 与-o / –optimize-autoloader</li>
+<li>call dump-autoload with 与-o / –optimize</li>
+</ul>
+<h1 id="组合起来"><a href="#组合起来" class="headerlink" title="组合起来"></a>组合起来</h1><p> 现在我们可以看看composer 是如何自动加载我们的文件的 。首先，我们需要包含 composer 的 <code>autoload.php</code> 文件。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">require __DIR__.&#39;&#x2F;..&#x2F;vendor&#x2F;autoload.php&#39;;</span></pre></td></tr></table></figure>
+
+<p>它需要另一个文件<code>composer/autoload _ real.php</code>，并对生成的编写器 autoloader 类调用 getLoader ()方法。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">require_once __DIR__ . &#39;&#x2F;composer&#x2F;autoload_real.php&#39;;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line">return ComposerAutoloaderInitcac18dc222d8ea1e03bdef8b44290883::getLoader();</span></pre></td></tr></table></figure>
+
+<p>在 getLoader ()方法中，composer 加载在 <code>composer install/update</code> 或 <code>composer dump-autoload</code> 上生成的所有 autoloader 数组，并使用前面提到的 <code>spl _ autoload _ register ()</code>注册 autoload 函数。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; autoload_real.php</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line">public static function getLoader()</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line">&#123;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">4</span></pre></td><td class="code"><pre><span class="line">    &#x2F;&#x2F; ...</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">5</span></pre></td><td class="code"><pre><span class="line">    self::$loader &#x3D; $loader &#x3D; new \Composer\Autoload\ClassLoader();</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">6</span></pre></td><td class="code"><pre><span class="line">    &#x2F;&#x2F; Loads all autoloader arrays</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">7</span></pre></td><td class="code"><pre><span class="line">    $loader-&gt;register(true);</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">8</span></pre></td><td class="code"><pre><span class="line">    &#x2F;&#x2F; ...</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">9</span></pre></td><td class="code"><pre><span class="line">    return $loader;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">10</span></pre></td><td class="code"><pre><span class="line">&#125;</span></pre></td></tr></table></figure>
+
+<p>ClassLoader 类中的 register ()方法注册自动加载函数 loadClass ()。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">class ClassLoader</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line">&#123;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line">    public function register($prepend &#x3D; false)</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">4</span></pre></td><td class="code"><pre><span class="line">    &#123;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">5</span></pre></td><td class="code"><pre><span class="line">        spl_autoload_register(array($this, &#39;loadClass&#39;), true, $prepend);</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">6</span></pre></td><td class="code"><pre><span class="line">    &#125;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">7</span></pre></td><td class="code"><pre><span class="line">&#125;</span></pre></td></tr></table></figure>
+
+<p>loadClass ()方法很简单。它使用类名调用另一个方法 findFile () ，如果该方法返回一个有效的文件路径，那么它使用文件路径为另一个 helper 函数 includeFile()类化，该函数只是在给定的文件路径中包含文件。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">public function loadClass($class)</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line">&#123;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line">    if ($file &#x3D; $this-&gt;findFile($class)) &#123;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">4</span></pre></td><td class="code"><pre><span class="line">        includeFile($file);</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">5</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">6</span></pre></td><td class="code"><pre><span class="line">        return true;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">7</span></pre></td><td class="code"><pre><span class="line">    &#125;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">8</span></pre></td><td class="code"><pre><span class="line">&#125;</span></pre></td></tr></table></figure>
+
+
+
+<p>findFile ()方法负责查找文件路径。由于它的实现有点复杂，我们不在这里讨论它。但是您需要知道的是，它以下面的方式检查文件路径查找。</p>
+<ul>
+<li>检查 classmap 是否包含指定的类，如果发现立即返回文件路径</li>
+<li>如果在 classmap 中没有找到该文件，则执行 psr-4查找，如果找到带有生成的文件路径则返回</li>
+<li>如果 psr-4 查找也不成功，则执行 psr-0查找，如果找到, 则返回生成的文件路径</li>
+</ul>
+<p>以上。composer可以很好地自动加载文件，并为您提供各种配置选项，使开发变得轻而易举。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/PHP/" rel="tag"># PHP</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/10/16/lru-cache-go/" rel="prev" title="LRU 线程安全和高并发 - Go 版本">
+      <i class="fa fa-chevron-left"></i> LRU 线程安全和高并发 - Go 版本
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#什么是自动加载"><span class="nav-number">1.</span> <span class="nav-text">什么是自动加载</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#为什么需要自动加载"><span class="nav-number">2.</span> <span class="nav-text">为什么需要自动加载</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#如何运作"><span class="nav-number">3.</span> <span class="nav-text">如何运作</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#自动加载的类型"><span class="nav-number">4.</span> <span class="nav-text">自动加载的类型</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Classmap"><span class="nav-number">4.1.</span> <span class="nav-text">Classmap</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#PSR-0"><span class="nav-number">4.2.</span> <span class="nav-text">PSR-0</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#PSR-4"><span class="nav-number">4.3.</span> <span class="nav-text">PSR-4</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Files"><span class="nav-number">4.4.</span> <span class="nav-text">Files</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#关于-Classmap-和-PSR-4的说明"><span class="nav-number">5.</span> <span class="nav-text">关于 Classmap 和 PSR-4的说明</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#组合起来"><span class="nav-number">6.</span> <span class="nav-text">组合起来</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name"></p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+          <span class="site-state-item-count">43</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/carlclone" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;carlclone" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://leetcode.com/carlclone" title="LeetCode → https:&#x2F;&#x2F;leetcode.com&#x2F;carlclone" rel="noopener" target="_blank"><i class="fa fa-fw fa-code"></i>LeetCode</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://learnku.com/blog/carlclone" title="LaravelChina → https:&#x2F;&#x2F;learnku.com&#x2F;blog&#x2F;carlclone" rel="noopener" target="_blank"><i class="fa fa-fw fa-instagram"></i>LaravelChina</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.jianshu.com/u/baea2de7cc1a" title="Jianshu → https:&#x2F;&#x2F;www.jianshu.com&#x2F;u&#x2F;baea2de7cc1a" rel="noopener" target="_blank"><i class="fa fa-fw fa-instagram"></i>Jianshu</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder"></span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.6.0
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
