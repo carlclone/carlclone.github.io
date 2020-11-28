@@ -45,14 +45,18 @@
   };
 </script>
 
-  <meta property="og:type" content="website">
-<meta property="og:title" content="Log0c">
-<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;archives&#x2F;2018&#x2F;04&#x2F;index.html">
+  <meta name="description" content="&amp;nbsp;">
+<meta name="keywords" content="算法">
+<meta property="og:type" content="website">
+<meta property="og:title" content="锁的底层实现">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;drafts_3&#x2F;lock.html">
 <meta property="og:site_name" content="Log0c">
+<meta property="og:description" content="&amp;nbsp;">
 <meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2020-11-19T14:15:56.076Z">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="http://yoursite.com/archives/2018/04/">
+<link rel="canonical" href="http://yoursite.com/drafts_3/lock">
 
 
 <script id="page-configurations">
@@ -61,12 +65,13 @@
     sidebar: "",
     isHome: false,
     isPost: false,
-    isPage: false,
-    isArchive: true
+    isPage: true,
+    isArchive: false
   };
 </script>
 
-  <title>Archive | Log0c</title>
+  <title>锁的底层实现 | Log0c
+  </title>
   
 
 
@@ -161,94 +166,85 @@
       <div class="main-inner">
         <div class="content-wrap">
           
+  
+  
 
           <div class="content">
             
 
+  <div class="posts-expand">
+    
+    
+    
+    <div class="post-block" lang="en">
+      <header class="post-header">
+
+<h1 class="post-title" itemprop="name headline">锁的底层实现
+</h1>
+
+<div class="post-meta">
   
-  
-  
-  <div class="post-block">
-    <div class="posts-collapse">
-      <div class="collection-title">
-        
-        <span class="collection-header">OK! 42 posts in total. Keep on posting.</span>
-      </div>
+
+</div>
+
+</header>
 
       
-    <div class="collection-year">
-      <h1 class="collection-header">2018</h1>
+      
+      
+      <div class="post-body">
+          <p>&nbsp;</p>
+<a id="more"></a>
+
+
+
+<p>锁</p>
+<p>引出锁竞争带来的 10 倍 latency , go 的 sync.mutex </p>
+<p>尝试实现一个锁 build a lock</p>
+<p>mutual exculsion 互斥</p>
+<p>only one thread has access to shared data at any given time</p>
+<p>使用一个 flag 标记   0 可以访问 1 不能访问 </p>
+<p>问题: 判断和设置变量不是原子操作</p>
+<p>问题 2: 编译器会改变代码执行顺序 </p>
+<p>没有保障原子性和顺序保证</p>
+<p>硬件指令保证</p>
+<p>XCHG  保证原子性</p>
+<p>memory barrier 保证顺序性</p>
+<p>LOCK指令 保证了两个性质</p>
+<p>LOCK ADD -&gt; go 里的原子操作 atmoic.add </p>
+<p>LOCK CMPEXCG -&gt; atmoic.compareandswap</p>
+<p>除了锁还可以用于计数器</p>
+<p>自旋锁广泛用于 linux 内核 , 自旋锁的实现</p>
+<p><a href="https://qconnewyork.com/system/files/presentation-slides/kavya_joshi_-_qconnyc.vsubmitted.pdf" target="_blank" rel="noopener">https://qconnewyork.com/system/files/presentation-slides/kavya_joshi_-_qconnyc.vsubmitted.pdf</a></p>
+<p>自旋锁随着线程数的增加 , 耗时也呈线性增长</p>
+<p>由linux 内核提供的机制(内核管理的队列)和接口(futex) 来暂停和唤醒线程</p>
+<p>新增一个 flag=2 来标志有一个 waiter</p>
+<p>把 waiter 放入队列</p>
+<p>T1 释放锁之前 , 发现 flag 被设为了 2 , 调用内核接口调度之前的 waiter 们 , 然后 set falg=0</p>
+<p>结果更久了… </p>
+<p>自旋 vs 睡眠 </p>
+<p>自旋适合锁定间隔短的 </p>
+<p>睡眠适合长的, 因为这时候上下文切换的占用的 cpu 时间就比自旋要小了</p>
+<p>go 的锁更进一步, 由于是用户态的线程, 上下文切换的时间更短了</p>
+<p>饥饿问题 : go mutex 的优化, 如果</p>
+<p>优化 1 不使用锁 , 使用原子操作</p>
+<p>优化 2 使用读写锁 , 分段锁</p>
+<p>优化 3 让临界资阳区更小</p>
+<p>1.编译器原来是会调整代码的执行顺序来优化性能的 , 所以如果要保证严格顺序执行的逻辑要小心 , 会议里演示了用一个变量来实现锁会遇到的问题</p>
+<p>2.自旋锁,不停地轮询,消耗 cpu , 适合在竞争少 , 获取速度快的场景</p>
+<p><a href="https://www.youtube.com/watch?v=tjpncm3xTTc&amp;list=PLLchAlP_W0GfYWjv6Off6lfk4xNe_l-QB&amp;index=53&amp;t=1522s" target="_blank" rel="noopener">https://www.youtube.com/watch?v=tjpncm3xTTc&amp;list=PLLchAlP_W0GfYWjv6Off6lfk4xNe_l-QB&amp;index=53&amp;t=1522s</a></p>
+
+      </div>
+      
+      
+      
     </div>
+    
 
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2018-04-29T14:57:31+08:00"
-              content="2018-04-29">
-          04-29
-        </time>
-      </div>
-
-      <h2 class="post-title">
-          <a class="post-title-link" href="/2018/04/29/archives/taylor_otwell_interview/" itemprop="url">
-            <span itemprop="name">转载一篇Taylor otwell的采访</span>
-          </a>
-      </h2>
-
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2018-04-12T14:57:31+08:00"
-              content="2018-04-12">
-          04-12
-        </time>
-      </div>
-
-      <h2 class="post-title">
-          <a class="post-title-link" href="/2018/04/12/archives/second_job/" itemprop="url">
-            <span itemprop="name">工作总结</span>
-          </a>
-      </h2>
-
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2018-04-08T14:57:31+08:00"
-              content="2018-04-08">
-          04-08
-        </time>
-      </div>
-
-      <h2 class="post-title">
-          <a class="post-title-link" href="/2018/04/08/archives/laravel_marcoable/" itemprop="url">
-            <span itemprop="name">Laravel中的Marcoable</span>
-          </a>
-      </h2>
-
-    </header>
-  </article>
-
-
-    </div>
+    
+    
+    
   </div>
-  
-  
-  
-
-  
-
 
 
           </div>

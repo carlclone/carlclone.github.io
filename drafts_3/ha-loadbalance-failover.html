@@ -45,14 +45,18 @@
   };
 </script>
 
-  <meta property="og:type" content="website">
-<meta property="og:title" content="Log0c">
-<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;archives&#x2F;2018&#x2F;04&#x2F;index.html">
+  <meta name="description" content="&amp;nbsp;">
+<meta name="keywords" content="算法">
+<meta property="og:type" content="website">
+<meta property="og:title" content="HA-LB-FAILOVER">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;drafts_3&#x2F;ha-loadbalance-failover.html">
 <meta property="og:site_name" content="Log0c">
+<meta property="og:description" content="&amp;nbsp;">
 <meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2020-11-21T08:18:08.173Z">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="http://yoursite.com/archives/2018/04/">
+<link rel="canonical" href="http://yoursite.com/drafts_3/ha-loadbalance-failover">
 
 
 <script id="page-configurations">
@@ -61,12 +65,13 @@
     sidebar: "",
     isHome: false,
     isPost: false,
-    isPage: false,
-    isArchive: true
+    isPage: true,
+    isArchive: false
   };
 </script>
 
-  <title>Archive | Log0c</title>
+  <title>HA-LB-FAILOVER | Log0c
+  </title>
   
 
 
@@ -161,94 +166,64 @@
       <div class="main-inner">
         <div class="content-wrap">
           
+  
+  
 
           <div class="content">
             
 
+  <div class="posts-expand">
+    
+    
+    
+    <div class="post-block" lang="en">
+      <header class="post-header">
+
+<h1 class="post-title" itemprop="name headline">HA-LB-FAILOVER
+</h1>
+
+<div class="post-meta">
   
-  
-  
-  <div class="post-block">
-    <div class="posts-collapse">
-      <div class="collection-title">
-        
-        <span class="collection-header">OK! 42 posts in total. Keep on posting.</span>
-      </div>
+
+</div>
+
+</header>
 
       
-    <div class="collection-year">
-      <h1 class="collection-header">2018</h1>
+      
+      
+      <div class="post-body">
+          <p>&nbsp;</p>
+<a id="more"></a>
+
+<p>实现高可用/提升性能的工具:负载均衡,复制,故障检测,故障转移,分片 , 监控/告警</p>
+<h1 id="mysql"><a href="#mysql" class="headerlink" title="mysql"></a>mysql</h1><p>pxc(percona-xtradb-cluster) , 强一致性,支持故障转移</p>
+<p>主主复制 (主备模式) + keepalived vip , 支持故障转移  </p>
+<p>MHA ? 不记得了</p>
+<h1 id="redis"><a href="#redis" class="headerlink" title="redis"></a>redis</h1><p>sentinel 相当于主备模式 支持故障转移   , 客户端轮询 sentinel 节点来找到可用 redis master节点</p>
+<p>sentinel 也需要选举的原因是可靠地选出一个负责人 (有一个审查的过程) , 是轮流负责(没有审查过程,或者需要另外加审查人,又是单点问题)的话 , 如果轮到某一个人负责这一次,但是生病了,那服务就不可用了</p>
+<h2 id="cluster-主备模式-分片"><a href="#cluster-主备模式-分片" class="headerlink" title="cluster 主备模式+分片"></a>cluster 主备模式+分片</h2><p>底层, 选举模式是什么样的 , 和 raft 的区别 , 有 leader 和 follower 吗</p>
+<h1 id="nginx"><a href="#nginx" class="headerlink" title="nginx"></a>nginx</h1><p>keepalived +vip , 使用 arp 协议抢占虚拟 ip , 当请求到达虚拟网卡的时候, 虚拟网卡向局域网询问虚拟 ip 的 mac 地址,</p>
+<p>nginx之间 抢占设置ip -&gt; mac 表的映射  , 这个方案能不能跨机房? 是不是要组成跨机房的局域网</p>
+<h1 id="跨机房的容灾是怎么做的-我猜一个机房挂了之后-DNS-会把地址解析到另一个机房"><a href="#跨机房的容灾是怎么做的-我猜一个机房挂了之后-DNS-会把地址解析到另一个机房" class="headerlink" title="跨机房的容灾是怎么做的? 我猜一个机房挂了之后,DNS 会把地址解析到另一个机房"></a>跨机房的容灾是怎么做的? 我猜一个机房挂了之后,DNS 会把地址解析到另一个机房</h1><h1 id="后端应用-java-php"><a href="#后端应用-java-php" class="headerlink" title="后端应用 (java php)"></a>后端应用 (java php)</h1><p>多机部署 负载均衡</p>
+<h1 id="前端应用"><a href="#前端应用" class="headerlink" title="前端应用"></a>前端应用</h1><p>多机部署 负载均衡</p>
+<h1 id="多机部署"><a href="#多机部署" class="headerlink" title="多机部署"></a>多机部署</h1><p>docker swarm + overlay 网络</p>
+<h1 id="云平台部署"><a href="#云平台部署" class="headerlink" title="云平台部署"></a>云平台部署</h1><p>同多机部署</p>
+<h1 id="虚拟机和宿主机-容器的网络关系"><a href="#虚拟机和宿主机-容器的网络关系" class="headerlink" title="虚拟机和宿主机,容器的网络关系"></a>虚拟机和宿主机,容器的网络关系</h1><p>ARP 表  路由表  NAT 转发表 , DHCP , 缓存 , iptable , 防火墙, selinux(ACL)</p>
+<p>host-only 模式 , 相当于宿主机的局域网上新加了一台机器 , </p>
+<p>NAT 模式, 相当于一个新的局域网,和宿主机的局域网相连,因此可以 ping 通</p>
+
+      </div>
+      
+      
+      
     </div>
+    
 
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2018-04-29T14:57:31+08:00"
-              content="2018-04-29">
-          04-29
-        </time>
-      </div>
-
-      <h2 class="post-title">
-          <a class="post-title-link" href="/2018/04/29/archives/taylor_otwell_interview/" itemprop="url">
-            <span itemprop="name">转载一篇Taylor otwell的采访</span>
-          </a>
-      </h2>
-
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2018-04-12T14:57:31+08:00"
-              content="2018-04-12">
-          04-12
-        </time>
-      </div>
-
-      <h2 class="post-title">
-          <a class="post-title-link" href="/2018/04/12/archives/second_job/" itemprop="url">
-            <span itemprop="name">工作总结</span>
-          </a>
-      </h2>
-
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2018-04-08T14:57:31+08:00"
-              content="2018-04-08">
-          04-08
-        </time>
-      </div>
-
-      <h2 class="post-title">
-          <a class="post-title-link" href="/2018/04/08/archives/laravel_marcoable/" itemprop="url">
-            <span itemprop="name">Laravel中的Marcoable</span>
-          </a>
-      </h2>
-
-    </header>
-  </article>
-
-
-    </div>
+    
+    
+    
   </div>
-  
-  
-  
-
-  
-
 
 
           </div>
@@ -277,6 +252,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#mysql"><span class="nav-number">1.</span> <span class="nav-text">mysql</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#redis"><span class="nav-number">2.</span> <span class="nav-text">redis</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#cluster-主备模式-分片"><span class="nav-number">2.1.</span> <span class="nav-text">cluster 主备模式+分片</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#nginx"><span class="nav-number">3.</span> <span class="nav-text">nginx</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#跨机房的容灾是怎么做的-我猜一个机房挂了之后-DNS-会把地址解析到另一个机房"><span class="nav-number">4.</span> <span class="nav-text">跨机房的容灾是怎么做的? 我猜一个机房挂了之后,DNS 会把地址解析到另一个机房</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#后端应用-java-php"><span class="nav-number">5.</span> <span class="nav-text">后端应用 (java php)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#前端应用"><span class="nav-number">6.</span> <span class="nav-text">前端应用</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#多机部署"><span class="nav-number">7.</span> <span class="nav-text">多机部署</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#云平台部署"><span class="nav-number">8.</span> <span class="nav-text">云平台部署</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#虚拟机和宿主机-容器的网络关系"><span class="nav-number">9.</span> <span class="nav-text">虚拟机和宿主机,容器的网络关系</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 

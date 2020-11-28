@@ -45,14 +45,18 @@
   };
 </script>
 
-  <meta property="og:type" content="website">
-<meta property="og:title" content="Log0c">
-<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;archives&#x2F;2018&#x2F;04&#x2F;index.html">
+  <meta name="description" content="&amp;nbsp;">
+<meta name="keywords" content="算法">
+<meta property="og:type" content="website">
+<meta property="og:title" content="接口安全和 WEB 安全">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;drafts_3&#x2F;api-security.html">
 <meta property="og:site_name" content="Log0c">
+<meta property="og:description" content="&amp;nbsp;">
 <meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2020-11-28T06:19:59.336Z">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="http://yoursite.com/archives/2018/04/">
+<link rel="canonical" href="http://yoursite.com/drafts_3/api-security">
 
 
 <script id="page-configurations">
@@ -61,12 +65,13 @@
     sidebar: "",
     isHome: false,
     isPost: false,
-    isPage: false,
-    isArchive: true
+    isPage: true,
+    isArchive: false
   };
 </script>
 
-  <title>Archive | Log0c</title>
+  <title>接口安全和 WEB 安全 | Log0c
+  </title>
   
 
 
@@ -161,94 +166,78 @@
       <div class="main-inner">
         <div class="content-wrap">
           
+  
+  
 
           <div class="content">
             
 
+  <div class="posts-expand">
+    
+    
+    
+    <div class="post-block" lang="en">
+      <header class="post-header">
+
+<h1 class="post-title" itemprop="name headline">接口安全和 WEB 安全
+</h1>
+
+<div class="post-meta">
   
-  
-  
-  <div class="post-block">
-    <div class="posts-collapse">
-      <div class="collection-title">
-        
-        <span class="collection-header">OK! 42 posts in total. Keep on posting.</span>
-      </div>
+
+</div>
+
+</header>
 
       
-    <div class="collection-year">
-      <h1 class="collection-header">2018</h1>
+      
+      
+      <div class="post-body">
+          <p>&nbsp;</p>
+<a id="more"></a>
+
+<p>收集自工作经历 , OWASP TOP10 和 Pitfall , 更多可参考 CWE Software Development Security 列表</p>
+<p>1 使用 HTTPS<br>有免费证书<br>性能也不再是问题</p>
+<p>2 可预测的 ID 枚举<br>如果没有严格的认证检查 , 危险<br>没有验证用户数据权限</p>
+<p>检查用户是否该数据的拥有者</p>
+<p>使用不可预测的 UUID 但不要用作数据库主键</p>
+<p>3 session 攻击主要在猜和偷 session id</p>
+<p>4 client 端实现 session 被认为是不安全的, 很容易获取到<br>需要进行完整性校验<br>可选的加密机制来防止信息暴露<br>机密性和完整性</p>
+<p>5 JWT RFC7519</p>
+<p>JWT 是 base64 编码的, 没有提供任何保护<br>完整性由签名保证, 机密性confidentiality 由加密保证</p>
+<p>6 如果安全域过大 , 请用非对称加密 , 在自己的安全域里可以使用对称加密 (指签名)</p>
+<p>7 cookie</p>
+<h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><p><a href="https://owasp.org/www-project-top-ten/" target="_blank" rel="noopener">OWASP TOP10</a> (Open Web Application Security Project)</p>
+<p><a href="https://cwe.mitre.org/data/definitions/699.html" target="_blank" rel="noopener">CWE Software Development List</a> (Common Weakness Enumeration)</p>
+<p>PHP UK Conf OWASP</p>
+<p>API Security pitfall Youtube</p>
+<p><a href="https://pragmaticwebsecurity.com/files/talks/commonAPIsecuritypitfalls.pdf" target="_blank" rel="noopener">API Security pitfall Slide</a></p>
+<p>S 接口安全的危害 , 用户信息泄露 , 脱库 , 服务不可用 , 业务逻辑安全缺陷造成实际金额损失<br>T 解决安全的几个主要性质 ,  机密性 ,  完整性 ,  可用性<br>机密性,完整性,身份认证,不可否认</p>
+<p>常见的安全问题</p>
+<p>注入攻击 XSS / SQL Injection</p>
+<p>CSRF 攻击 ,重放攻击  , 两者有相似性</p>
+<p>水平越权 , 或理解为数据越权</p>
+<p>垂直越权 , 功能越权</p>
+<p>中间人攻击 , 包括篡改 , 窃听 , 重放 </p>
+<p>拒绝服务攻击  DDOS</p>
+<p>未验证用户输入<br>接口一次返回全部数据<br>ID 可预测 , 如递增 ID</p>
+<p>幂等性 (加锁 , 业务逻辑保证幂等如唯一索引,判重,etc)</p>
+<p>HTTPS 也有防重放攻击的一个策略<br>很多策略可以在 HTTPS 里找到影子</p>
+<p>解决方案</p>
+<p>负责过的安全问题</p>
+<p>YII2 的反序列化问题<br>历史代码的日志敏感数据脱敏<br>入库加密 , 信封加密</p>
+
+      </div>
+      
+      
+      
     </div>
+    
 
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2018-04-29T14:57:31+08:00"
-              content="2018-04-29">
-          04-29
-        </time>
-      </div>
-
-      <h2 class="post-title">
-          <a class="post-title-link" href="/2018/04/29/archives/taylor_otwell_interview/" itemprop="url">
-            <span itemprop="name">转载一篇Taylor otwell的采访</span>
-          </a>
-      </h2>
-
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2018-04-12T14:57:31+08:00"
-              content="2018-04-12">
-          04-12
-        </time>
-      </div>
-
-      <h2 class="post-title">
-          <a class="post-title-link" href="/2018/04/12/archives/second_job/" itemprop="url">
-            <span itemprop="name">工作总结</span>
-          </a>
-      </h2>
-
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2018-04-08T14:57:31+08:00"
-              content="2018-04-08">
-          04-08
-        </time>
-      </div>
-
-      <h2 class="post-title">
-          <a class="post-title-link" href="/2018/04/08/archives/laravel_marcoable/" itemprop="url">
-            <span itemprop="name">Laravel中的Marcoable</span>
-          </a>
-      </h2>
-
-    </header>
-  </article>
-
-
-    </div>
+    
+    
+    
   </div>
-  
-  
-  
-
-  
-
 
 
           </div>
@@ -277,6 +266,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#参考资料"><span class="nav-number">1.</span> <span class="nav-text">参考资料</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
