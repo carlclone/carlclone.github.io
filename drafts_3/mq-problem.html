@@ -53,7 +53,7 @@
 <meta property="og:site_name" content="Log0c">
 <meta property="og:description" content="&amp;nbsp;">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2020-11-21T11:02:53.045Z">
+<meta property="og:updated_time" content="2020-11-30T05:12:07.626Z">
 <meta name="twitter:card" content="summary">
 
 <link rel="canonical" href="http://yoursite.com/drafts_3/mq-problem">
@@ -197,7 +197,22 @@
 <a id="more"></a>
 
 <p>异步 解耦 削峰</p>
-<p>消息重复 消息丢失 消息乱序 </p>
+<p>消息重复 消息丢失 消息乱序 dsadssdadsad  dsad</p>
+<p>面试中讲到消息队列, 回答的都很一般,在这方面确实严重欠缺</p>
+<p>开始恶补</p>
+<p>主要的学习资料是极客时间的分布式系统案例课和消息队列高手课<br>然后阅读了 Laravel 的数据库队列源码和 redis 队列源码实现</p>
+<p>Laravel 数据库队列源码有个问题,容易产生死锁</p>
+<p>之前一直主观地以为数据库队列性能应该是不太好的,但拍拍贷的架构负责人实现的 PMQ 就是基于数据库存储的 , Kafka 还是基于文件存储的 , 然后性能都还行</p>
+<p>但消息队列除了性能,吞吐量之外还有更关键的问题要解决</p>
+<p>一是消息的可靠性 , 不能说 broker 挂了消息就丢失了 , 意味着要持久化存储 , 并且还有同步和异步投递两种方式 , 异步投递还是可能丢失的</p>
+<p>分区(或者叫子队列) 是一种提高吞吐量和可用性的手段 , 再将子队列分配到不同的机器节点上进一步提高可用性</p>
+<p>重复消费的问题业界有三个语义 , 一个是 Exactly Once , 一个是 At least Once , 一个是 At most once ,<br>要实现 Exactly once 引入的复杂度很高 , 并且性能也有下降 (事务消息)  ,<br>大多数都是采用 at least once , 也就是有可能重复消费 , 这就要求消费方(业务方)对消息的处理要幂等</p>
+<p>消息的顺序性问题 , 是由消费方自己保证只有一个线程在消费</p>
+<p>关于 kafka 的一些难懂的术语, 翻译成人话:<br>Topic 语义 : 就是一个队列支持多个消费者 , 消费者之间互不相关<br>Queue 语义: 一个队列只有一个消费者</p>
+<p>分区 : 把一条队列拆分成多条子队列 , 每个子队列就是一个分区 , 分区的好处是提高可用性和吞吐量 ,<br>假设某条子队列”挂了”,其他子队列还能继续服务 ,<br>可用性问题就是想象机器各种时刻挂掉可能出现的问题 , 比如重复消费的场景 : </p>
+<p>关于补偿机制</p>
+<p>如分布式事务里的 try catch 补偿</p>
+<h1 id="后续"><a href="#后续" class="headerlink" title="后续"></a>后续</h1><p>Java 语言要好好学 , 有很多优秀的项目和高质量的代码<br>看极客时间上各种大佬都是用 Java 做演示就知道了,Web 开发者必学</p>
 
       </div>
       
@@ -238,6 +253,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#后续"><span class="nav-number">1.</span> <span class="nav-text">后续</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -250,7 +266,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
           <a href="/archives">
-          <span class="site-state-item-count">42</span>
+          <span class="site-state-item-count">43</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>

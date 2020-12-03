@@ -45,15 +45,15 @@
   };
 </script>
 
-  <meta name="description" content="行动不便躺在床上…总结一下限流 in real world">
+  <meta name="description" content="固定窗口 &#x2F; 计数器定期重置 &#x2F; redis expire , 最简单的一种方式, 但会有两个窗口边界请求量爆发的问题 滑动窗口grokking the system design 限流设计底下评论的作者回复uber 的开源项目 , 在分布式系统案例课看到 漏桶uber-go  令牌桶go 自带的 rateLimiter lazy calculation  1type TokenBucket">
 <meta name="keywords" content="mac">
 <meta property="og:type" content="website">
 <meta property="og:title" content="go 限流算法的最佳实现 &#x2F; 使用 redis 实现多种限流算法">
 <meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;drafts_3&#x2F;rate-limiting-algorithm-best-practice.html">
 <meta property="og:site_name" content="Log0c">
-<meta property="og:description" content="行动不便躺在床上…总结一下限流 in real world">
+<meta property="og:description" content="固定窗口 &#x2F; 计数器定期重置 &#x2F; redis expire , 最简单的一种方式, 但会有两个窗口边界请求量爆发的问题 滑动窗口grokking the system design 限流设计底下评论的作者回复uber 的开源项目 , 在分布式系统案例课看到 漏桶uber-go  令牌桶go 自带的 rateLimiter lazy calculation  1type TokenBucket">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2020-11-16T16:19:28.159Z">
+<meta property="og:updated_time" content="2020-12-02T01:49:04.047Z">
 <meta name="twitter:card" content="summary">
 
 <link rel="canonical" href="http://yoursite.com/drafts_3/rate-limiting-algorithm-best-practice">
@@ -193,19 +193,16 @@
       
       
       <div class="post-body">
-          <p>行动不便躺在床上…总结一下限流 in real world</p>
-<a id="more"></a>
+          <a id="more"></a>
 
-<p>固定窗口 / 计数器</p>
-<p>定期重置 / redis expire</p>
-<p>滑动窗口<br>grokking the system design 限流设计底下评论的作者回复</p>
-<p>漏桶<br>uber-go </p>
-<p>令牌桶<br>go 自带的 rateLimiter</p>
+<h1 id="固定窗口-计数器"><a href="#固定窗口-计数器" class="headerlink" title="固定窗口 / 计数器"></a>固定窗口 / 计数器</h1><p>定期重置 / redis expire , 最简单的一种方式, 但会有两个窗口边界请求量爆发的问题</p>
+<h1 id="滑动窗口"><a href="#滑动窗口" class="headerlink" title="滑动窗口"></a>滑动窗口</h1><p>grokking the system design 限流设计底下评论的作者回复<br>uber 的开源项目 , 在分布式系统案例课看到</p>
+<h1 id="漏桶"><a href="#漏桶" class="headerlink" title="漏桶"></a>漏桶</h1><p>uber-go </p>
+<h1 id="令牌桶"><a href="#令牌桶" class="headerlink" title="令牌桶"></a>令牌桶</h1><p>go 自带的 rateLimiter</p>
 <p>lazy calculation </p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">type TokenBucket struct &#123;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line">    calculated_at </span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line">    token_total</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">4</span></pre></td><td class="code"><pre><span class="line">    token_remain</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">5</span></pre></td><td class="code"><pre><span class="line">    rate</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">6</span></pre></td><td class="code"><pre><span class="line">&#125;</span></pre></td></tr></table></figure>
 
-<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p>redis lab<br>system design</p>
-<p>Redis is Dead Long live Redis!  Box 公司CTO 的 redis 实际应用分享</p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p>redis lab<br>system design<br>Redis is Dead Long live Redis!  Box 公司CTO 的 redis 实际应用分享<br>分布式系统案例课<br>微服务网关课</p>
 
       </div>
       
@@ -246,7 +243,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#参考资料"><span class="nav-number">1.</span> <span class="nav-text">参考资料</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#固定窗口-计数器"><span class="nav-number">1.</span> <span class="nav-text">固定窗口 / 计数器</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#滑动窗口"><span class="nav-number">2.</span> <span class="nav-text">滑动窗口</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#漏桶"><span class="nav-number">3.</span> <span class="nav-text">漏桶</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#令牌桶"><span class="nav-number">4.</span> <span class="nav-text">令牌桶</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#参考资料"><span class="nav-number">4.1.</span> <span class="nav-text">参考资料</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -259,7 +256,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
           <a href="/archives">
-          <span class="site-state-item-count">42</span>
+          <span class="site-state-item-count">43</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>

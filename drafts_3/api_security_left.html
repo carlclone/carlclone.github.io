@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    hostname: new URL('http://yoursite.com').hostname,
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.6.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}
+  };
+</script>
+
+  <meta name="description" content="TODO 浏览器安全策略 openid + jwt 机制 在内部系统的各个 service 之间传播用户identity information cookie , header 的优点和缺点 CORS, 浏览器的跨域安全机制 , cross-origin XHR Request 才会触发CORS , 点击页面打开不会 , 有的网站好像会有提示 , 像知乎, csrf 使用 cookie 的使用才有">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Log0c">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;drafts_3&#x2F;api_security_left.html">
+<meta property="og:site_name" content="Log0c">
+<meta property="og:description" content="TODO 浏览器安全策略 openid + jwt 机制 在内部系统的各个 service 之间传播用户identity information cookie , header 的优点和缺点 CORS, 浏览器的跨域安全机制 , cross-origin XHR Request 才会触发CORS , 点击页面打开不会 , 有的网站好像会有提示 , 像知乎, csrf 使用 cookie 的使用才有">
+<meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2020-12-03T09:38:44.222Z">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://yoursite.com/drafts_3/api_security_left">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: false,
+    isPage: true,
+    isArchive: false
+  };
+</script>
+
+  <title> | Log0c
+  </title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Log0c</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-posts">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Posts</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+  
+  
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+    
+    
+    
+    <div class="post-block" lang="en">
+      <header class="post-header">
+
+<h1 class="post-title" itemprop="name headline">
+</h1>
+
+<div class="post-meta">
+  
+
+</div>
+
+</header>
+
+      
+      
+      
+      <div class="post-body">
+          <p>TODO</p>
+<p>浏览器安全策略</p>
+<p>openid + jwt 机制</p>
+<p>在内部系统的各个 service 之间传播用户identity information</p>
+<p>cookie , header 的优点和缺点</p>
+<p>CORS, 浏览器的跨域安全机制 , cross-origin XHR Request 才会触发CORS , 点击页面打开不会 , 有的网站好像会有提示 , 像知乎,</p>
+<p>csrf 使用 cookie 的使用才有</p>
+<p>安全的本质</p>
+<p>机密性<br>完整性<br>不可否认<br>身份认证</p>
+<p>问题</p>
+<p>S 接口安全的危害 , 用户信息泄露 , 脱库 , 服务不可用 , 业务逻辑安全缺陷造成实际金额损失<br>T 解决安全的几个主要性质 ,  机密性 ,  完整性 ,  可用性<br>机密性,完整性,身份认证,不可否认</p>
+<p>常见的安全问题</p>
+<p>注入攻击 XSS / SQL Injection</p>
+<p>CSRF 攻击 ,重放攻击  , 两者有相似性</p>
+<p>水平越权 , 或理解为数据越权</p>
+<p>垂直越权 , 功能越权</p>
+<p>中间人攻击 , 包括篡改 , 窃听 , 重放 </p>
+<p>拒绝服务攻击  DDOS</p>
+<p>未验证用户输入<br>接口一次返回全部数据<br>ID 可预测 , 如递增 ID</p>
+<p>幂等性 (加锁 , 业务逻辑保证幂等如唯一索引,判重,etc)</p>
+<p>HTTPS 也有防重放攻击的一个策略<br>很多策略可以在 HTTPS 里找到影子</p>
+<p>解决方案</p>
+<p>负责过的安全问题</p>
+<p>YII2 的反序列化问题<br>历史代码的日志敏感数据脱敏<br>入库加密 , 信封加密</p>
+<p>XSS</p>
+<p>极客时间安全课<br>浏览器课</p>
+<p>不在输入的时候做限制, 在输出的时候做编码 , 减少对用户的限制 , 还可以在后端查询到有问题的输入</p>
+<p>注入恶意代码到打开的页面中</p>
+<p>案例:<br>窃取cookie,登录后台查看机密信息<br>xss获取cookie 登入后台的案例<a href="https://mp.weixin.qq.com/s/CXn8BP3BFLD5KK5xzDpc1A" target="_blank" rel="noopener">https://mp.weixin.qq.com/s/CXn8BP3BFLD5KK5xzDpc1A</a></p>
+<p>类型<br>存储型 , 持久化到数据库 , 所有打开页面的都会执行脚本<br>反射型 , 常见于诱导链接, 恶意脚本在get的query参数中<br>DOM型 , 网页劫持 , 比如臭名昭著的长城宽带,劫持了路由器, 在传输过程中修改了http数据</p>
+<p>方案<br>过滤, 转码<br>CSP : Content Security Policy , 浏览器自带策略 , 限制域名加载js , 限制提交数据到第三方 , 禁止未授权脚本,提供上报机制,尽快发现XSS攻击<br>HttpOnly: 用在Cookie上, 使得js脚本无法获取Cookie<br>验证码, 防止脚本冒充用户提交数据</p>
+<p>CSRF</p>
+<p>利用用户的登录状态, 调取第三方网站的接口</p>
+<p>和xss的区别, 不需要注入恶意代码到页面 , 利用服务器漏洞和用户登录状态</p>
+<p>get请求,伪装成图片,打开页面自动请求</p>
+<pre><code>&lt;img src=&quot;https://time.geekbang.org/sendcoin?user=hacker&amp;number=100&quot;&gt;</code></pre><p>post请求,隐藏的,自动提交的表单</p>
+<pre><code>&lt;form id=&apos;hacker&apos;&gt;
+&lt;input type=hidden&gt;
+&lt;/form&gt;
+
+&lt;script&gt;document.getElementById(&apos;hacker&apos;).submit();&lt;/script&gt;</code></pre><p>诱导链接</p>
+<pre><code>&lt;img src=&quot;美女图片&quot;&gt;
+    &lt;a href=&quot;攻击地址&quot; target=&quot;_blank&quot;&gt;下载美女图片&lt;/a&gt;
+&lt;/img&gt;</code></pre><p>方案</p>
+<p>Cookie Samesite属性, 禁止从第三方网站请求后发送cookie</p>
+<p>验证Origin , Referrer属性的站点 (Referrer不是可以修改吗)</p>
+<p>CSRF Token</p>
+
+      </div>
+      
+      
+      
+    </div>
+    
+
+    
+    
+    
+  </div>
+
+
+          </div>
+          
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name"></p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+          <span class="site-state-item-count">43</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/carlclone" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;carlclone" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://leetcode.com/carlclone" title="LeetCode → https:&#x2F;&#x2F;leetcode.com&#x2F;carlclone" rel="noopener" target="_blank"><i class="fa fa-fw fa-code"></i>LeetCode</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://learnku.com/blog/carlclone" title="LaravelChina → https:&#x2F;&#x2F;learnku.com&#x2F;blog&#x2F;carlclone" rel="noopener" target="_blank"><i class="fa fa-fw fa-instagram"></i>LaravelChina</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.jianshu.com/u/baea2de7cc1a" title="Jianshu → https:&#x2F;&#x2F;www.jianshu.com&#x2F;u&#x2F;baea2de7cc1a" rel="noopener" target="_blank"><i class="fa fa-fw fa-instagram"></i>Jianshu</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder"></span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.6.0
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

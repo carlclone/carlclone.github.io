@@ -45,17 +45,18 @@
   };
 </script>
 
-  <meta name="description" content="XSS极客时间安全课浏览器课 不在输入的时候做限制, 在输出的时候做编码 , 减少对用户的限制 , 还可以在后端查询到有问题的输入 注入恶意代码到打开的页面中 案例:窃取cookie,登录后台查看机密信息xss获取cookie 登入后台的案例https:&#x2F;&#x2F;mp.weixin.qq.com&#x2F;s&#x2F;CXn8BP3BFLD5KK5xzDpc1A 类型存储型 , 持久化到数据库 , 所有打开页面的都会执行">
+  <meta name="description" content="&amp;nbsp;">
+<meta name="keywords" content="算法">
 <meta property="og:type" content="website">
-<meta property="og:title" content="Log0c">
-<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;drafts_3&#x2F;security.html">
+<meta property="og:title" content="Youtube 学习资料分享">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;drafts_3&#x2F;youtube-share.html">
 <meta property="og:site_name" content="Log0c">
-<meta property="og:description" content="XSS极客时间安全课浏览器课 不在输入的时候做限制, 在输出的时候做编码 , 减少对用户的限制 , 还可以在后端查询到有问题的输入 注入恶意代码到打开的页面中 案例:窃取cookie,登录后台查看机密信息xss获取cookie 登入后台的案例https:&#x2F;&#x2F;mp.weixin.qq.com&#x2F;s&#x2F;CXn8BP3BFLD5KK5xzDpc1A 类型存储型 , 持久化到数据库 , 所有打开页面的都会执行">
+<meta property="og:description" content="&amp;nbsp;">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2020-10-09T03:01:10.117Z">
+<meta property="og:updated_time" content="2020-12-01T13:45:33.997Z">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="http://yoursite.com/drafts_3/security">
+<link rel="canonical" href="http://yoursite.com/drafts_3/youtube-share">
 
 
 <script id="page-configurations">
@@ -69,7 +70,7 @@
   };
 </script>
 
-  <title> | Log0c
+  <title>Youtube 学习资料分享 | Log0c
   </title>
   
 
@@ -178,7 +179,7 @@
     <div class="post-block" lang="en">
       <header class="post-header">
 
-<h1 class="post-title" itemprop="name headline">
+<h1 class="post-title" itemprop="name headline">Youtube 学习资料分享
 </h1>
 
 <div class="post-meta">
@@ -192,30 +193,20 @@
       
       
       <div class="post-body">
-          <h1 id="XSS"><a href="#XSS" class="headerlink" title="XSS"></a>XSS</h1><p>极客时间安全课<br>浏览器课</p>
-<p>不在输入的时候做限制, 在输出的时候做编码 , 减少对用户的限制 , 还可以在后端查询到有问题的输入</p>
-<p>注入恶意代码到打开的页面中</p>
-<p>案例:<br>窃取cookie,登录后台查看机密信息<br>xss获取cookie 登入后台的案例<a href="https://mp.weixin.qq.com/s/CXn8BP3BFLD5KK5xzDpc1A" target="_blank" rel="noopener">https://mp.weixin.qq.com/s/CXn8BP3BFLD5KK5xzDpc1A</a></p>
-<p>类型<br>存储型 , 持久化到数据库 , 所有打开页面的都会执行脚本<br>反射型 , 常见于诱导链接, 恶意脚本在get的query参数中<br>DOM型 , 网页劫持 , 比如臭名昭著的长城宽带,劫持了路由器, 在传输过程中修改了http数据</p>
-<p>方案<br>过滤, 转码<br>CSP : Content Security Policy , 浏览器自带策略 , 限制域名加载js , 限制提交数据到第三方 , 禁止未授权脚本,提供上报机制,尽快发现XSS攻击<br>HttpOnly: 用在Cookie上, 使得js脚本无法获取Cookie<br>验证码, 防止脚本冒充用户提交数据</p>
-<h1 id="CSRF"><a href="#CSRF" class="headerlink" title="CSRF"></a>CSRF</h1><p>利用用户的登录状态, 调取第三方网站的接口</p>
-<p>和xss的区别, 不需要注入恶意代码到页面 , 利用服务器漏洞和用户登录状态</p>
-<p>get请求,伪装成图片,打开页面自动请求</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">&lt;img src&#x3D;&quot;https:&#x2F;&#x2F;time.geekbang.org&#x2F;sendcoin?user&#x3D;hacker&amp;number&#x3D;100&quot;&gt;</span></pre></td></tr></table></figure>
+          <p>&nbsp;</p>
+<a id="more"></a>
 
-<p>post请求,隐藏的,自动提交的表单</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">&lt;form id&#x3D;&#39;hacker&#39;&gt;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line">&lt;input type&#x3D;hidden&gt;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line">&lt;&#x2F;form&gt;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">4</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">5</span></pre></td><td class="code"><pre><span class="line">&lt;script&gt;document.getElementById(&#39;hacker&#39;).submit();&lt;&#x2F;script&gt;</span></pre></td></tr></table></figure>
 
-<p>诱导链接</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">&lt;img src&#x3D;&quot;美女图片&quot;&gt;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line">    &lt;a href&#x3D;&quot;攻击地址&quot; target&#x3D;&quot;_blank&quot;&gt;下载美女图片&lt;&#x2F;a&gt;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line">&lt;&#x2F;img&gt;</span></pre></td></tr></table></figure>
-
-<p>方案<br>Cookie Samesite属性, 禁止从第三方网站请求后发送cookie</p>
-<p>验证Origin , Referrer属性的站点 (Referrer不是可以修改吗)</p>
-<p>CSRF Token</p>
-<h1 id="经常见到的nonce属性是什么"><a href="#经常见到的nonce属性是什么" class="headerlink" title="经常见到的nonce属性是什么?"></a>经常见到的nonce属性是什么?</h1><p>参考<br><a href="https://www.cnblogs.com/jayinnn/p/9560888.html" target="_blank" rel="noopener">https://www.cnblogs.com/jayinnn/p/9560888.html</a><br><a href="https://www.cnblogs.com/bestzrz/archive/2011/09/03/2164620.html" target="_blank" rel="noopener">https://www.cnblogs.com/bestzrz/archive/2011/09/03/2164620.html</a></p>
-<p>nonce = number once = 仅使用一次的数值</p>
-<p>常用于防止Replay-attack , 由服务端生成的一个随机值 , 在此基础上加上时间戳,避免生成相同随机值的问题 ,<br>存储于数据库中, 并使用过期时间减小数据库压力 , 定期删除 , 避免使用过期nonce进行攻击, 还需要验证nonce的时间再查库</p>
-<p>https<br>微信支付sdk</p>
+<p>Youtube 上有许多质量不错的教学视频,开发者会议视频(如 RedisLab,GopherCon) , 在这里分享一些自己的收藏</p>
+<p>关于单点登录 Single Sign On</p>
+<ul>
+<li>MicrosoftAzure 的官方讲解视频 <a href="https://www.youtube.com/watch?v=51B-jSOBF8U&list=PLLchAlP_W0GfYWjv6Off6lfk4xNe_l-QB&index=52&t=5s" target="_blank" rel="noopener">Authentication fundamentals: Web single sign-on | Azure Active Directory</a> </li>
+<li>SSO 里的主要模型和之间的关系 <a href="https://www.youtube.com/watch?v=t2Cnn1o2DG4&list=PLLchAlP_W0GfYWjv6Off6lfk4xNe_l-QB&index=51&t=2s" target="_blank" rel="noopener">What is SSO</a></li>
+</ul>
+<p><a href="https://www.youtube.com/watch?v=NymIgA7Wa78&list=PLLchAlP_W0GfYWjv6Off6lfk4xNe_l-QB&index=75&t=604s" target="_blank" rel="noopener">Redis is Dead Long live Redis!</a></p>
+<p>这个是 Box 公司架构师对内部 Redis 使用的分享 , 有从 memcached 的会话服务器 切换到 redis 集群 , 实现限流器,实现用户最近使用文件列表等等</p>
+<p>关于锁(Lock) 和 Golang mutex的底层实现 , </p>
+<p>关于 Golang 调度过程</p>
 
       </div>
       
@@ -256,7 +247,6 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#XSS"><span class="nav-number">1.</span> <span class="nav-text">XSS</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#CSRF"><span class="nav-number">2.</span> <span class="nav-text">CSRF</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#经常见到的nonce属性是什么"><span class="nav-number">3.</span> <span class="nav-text">经常见到的nonce属性是什么?</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -269,7 +259,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
           <a href="/archives">
-          <span class="site-state-item-count">42</span>
+          <span class="site-state-item-count">43</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
