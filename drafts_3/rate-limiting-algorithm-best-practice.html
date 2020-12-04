@@ -53,7 +53,7 @@
 <meta property="og:site_name" content="Log0c">
 <meta property="og:description" content="固定窗口 &#x2F; 计数器定期重置 &#x2F; redis expire , 最简单的一种方式, 但会有两个窗口边界请求量爆发的问题 滑动窗口grokking the system design 限流设计底下评论的作者回复uber 的开源项目 , 在分布式系统案例课看到 漏桶uber-go  令牌桶go 自带的 rateLimiter lazy calculation  1type TokenBucket">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2020-12-02T01:49:04.047Z">
+<meta property="og:updated_time" content="2020-12-03T14:17:19.649Z">
 <meta name="twitter:card" content="summary">
 
 <link rel="canonical" href="http://yoursite.com/drafts_3/rate-limiting-algorithm-best-practice">
@@ -202,7 +202,10 @@
 <p>lazy calculation </p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">type TokenBucket struct &#123;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line">    calculated_at </span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line">    token_total</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">4</span></pre></td><td class="code"><pre><span class="line">    token_remain</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">5</span></pre></td><td class="code"><pre><span class="line">    rate</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">6</span></pre></td><td class="code"><pre><span class="line">&#125;</span></pre></td></tr></table></figure>
 
-<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p>redis lab<br>system design<br>Redis is Dead Long live Redis!  Box 公司CTO 的 redis 实际应用分享<br>分布式系统案例课<br>微服务网关课</p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p><a href="https://www.youtube.com/watch?v=CRGPbCbRTHA&list=PLLchAlP_W0GfYWjv6Off6lfk4xNe_l-QB&index=200" target="_blank" rel="noopener">RedisLab - Rate Limiting with Redis</a><br><a href="https://www.youtube.com/watch?v=a10j6P3DqdY&list=PLLchAlP_W0GfYWjv6Off6lfk4xNe_l-QB&index=202" target="_blank" rel="noopener">Grokking the System Design Interview: How to Design an API Rate Limiter</a><br>Box 公司CTO 的 redis 实际应用分享 <a href="https://www.youtube.com/watch?v=NymIgA7Wa78&list=PLLchAlP_W0GfYWjv6Off6lfk4xNe_l-QB&index=106&t=604s" target="_blank" rel="noopener">Redis is Dead Long live Redis!</a>  </p>
+<p>分布式系统案例课</p>
+<p>微服务网关课</p>
+<p>开源项目参考<br>uber<br>hystrix<br>…</p>
 
       </div>
       
@@ -256,7 +259,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
           <a href="/archives">
-          <span class="site-state-item-count">44</span>
+          <span class="site-state-item-count">42</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
