@@ -53,7 +53,7 @@
 <meta property="og:site_name" content="Log0c">
 <meta property="og:description" content="收集自工作经历 , OWASP TOP10 , Pitfall 和极客时间课程 , 更多可参考 CWE Software Development Security 列表 , 持续更新…">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2020-12-03T13:55:49.206Z">
+<meta property="og:updated_time" content="2020-12-05T08:35:26.027Z">
 <meta name="twitter:card" content="summary">
 
 <link rel="canonical" href="http://yoursite.com/drafts_3/api-security">
@@ -199,7 +199,7 @@
 
 
 <h1 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h1><p><strong>1 使用 HTTPS</strong></p>
-<p><code>理由:</code> 已经有免费证书 ,性能也不再是问题</p>
+<p><code>理由:</code> 已经有免费证书 ,性能也不再是问题<br><code>HTTPS 的问题</code>: NSA 把数据表保存起来等到 HTTPS 破解后解密<br>HTTPS 是防重放攻击的 , 因为中间人攻击需要重新发送数据表,相当于重新建立连接,因此三个随机数都不一样,服务端没办法正确解开数据包<br>即使在同一个连接中重放也是相当困难的, 因为有 sequence number, 已经接收过的seqno 数据包会直接丢弃</p>
 <p><strong>2 使用不可预测的 UUID 但不要用作数据库主键</strong></p>
 <p><code>理由:</code> 可预测(如单调递增)的 ID 有被穷举和泄露信息的可能,如 order/123 , order/124</p>
 <p><strong>3 检查用户是否该数据的拥有者</strong></p>
@@ -286,13 +286,13 @@
       <div class="site-overview-wrap sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
   <p class="site-author-name" itemprop="name"></p>
-  <div class="site-description" itemprop="description"></div>
+  <div class="site-description" itemprop="description">i hear and i forget, i see and i remember, i do and i understand.</div>
 </div>
 <div class="site-state-wrap motion-element">
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
           <a href="/archives">
-          <span class="site-state-item-count">42</span>
+          <span class="site-state-item-count">44</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -338,7 +338,7 @@
 <div class="copyright">
   
   &copy; 
-  <span itemprop="copyrightYear">2020</span>
+  <span itemprop="copyrightYear">2021</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>
