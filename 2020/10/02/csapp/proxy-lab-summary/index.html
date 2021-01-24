@@ -249,7 +249,27 @@
 <h1 id="资料"><a href="#资料" class="headerlink" title="资料"></a>资料</h1><p><a href="https://www.youtube.com/watch?v=eQNhD7w7XrY&t=3s" target="_blank" rel="noopener">15-213 recitation</a><br>csapp 第三版最后三章<br>[参考 tiny 目录的 tiny httpserver]<br><a href="http://csapp.cs.cmu.edu/3e/labs.html" target="_blank" rel="noopener">csapp labs</a></p>
 <h1 id="后续"><a href="#后续" class="headerlink" title="后续"></a>后续</h1><p>在 proxy 这一层还可以加功能,如缓存,使用 LRU Cache 对每个 GET uri 缓存</p>
 <h1 id="梳理的流程"><a href="#梳理的流程" class="headerlink" title="梳理的流程"></a>梳理的流程</h1><p><img src="/images/image-20201004095437662.png" alt="image-20201004095437662"></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">sequenceDiagram</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line">	  participant client</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line">    participant mainThread</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">4</span></pre></td><td class="code"><pre><span class="line">    participant newThread</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">5</span></pre></td><td class="code"><pre><span class="line">    participant lruCache</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">6</span></pre></td><td class="code"><pre><span class="line">    participant realServer</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">7</span></pre></td><td class="code"><pre><span class="line">    mainThread-&gt;&gt;mainThread: continue listen</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">8</span></pre></td><td class="code"><pre><span class="line">    client-&gt;&gt;mainThread:send request</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">9</span></pre></td><td class="code"><pre><span class="line">    mainThread-&gt;&gt;newThread: accept , pass connfd to newThread</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">10</span></pre></td><td class="code"><pre><span class="line">    newThread-&gt;&gt;newThread: detach with main thread</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">11</span></pre></td><td class="code"><pre><span class="line">    Note right of newThread : because ?</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">12</span></pre></td><td class="code"><pre><span class="line">    newThread-&gt;&gt;lruCache:ask if request cache exist ?</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">13</span></pre></td><td class="code"><pre><span class="line">    newThread-&gt;&gt;client:cache exist,directly back to client</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">14</span></pre></td><td class="code"><pre><span class="line">    client-&gt;&gt;newThread: read request header from connfd</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">15</span></pre></td><td class="code"><pre><span class="line">    newThread-&gt;&gt;newThread: build  request header ready for real server</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">16</span></pre></td><td class="code"><pre><span class="line">    newThread-&gt;&gt;realServer:connect with real server</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">17</span></pre></td><td class="code"><pre><span class="line">    newThread-&gt;&gt;realServer:send request</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">18</span></pre></td><td class="code"><pre><span class="line">    realServer-&gt;&gt;newThread:read response</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">19</span></pre></td><td class="code"><pre><span class="line">    newThread-&gt;&gt;lruCache:save response to lru</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">20</span></pre></td><td class="code"><pre><span class="line">    newThread-&gt;&gt;client:send response to connfd</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">21</span></pre></td><td class="code"><pre><span class="line">    newThread-&gt;&gt;newThread:close</span></pre></td></tr></table></figure>
+<pre class="mermaid">sequenceDiagram
+      participant client
+    participant mainThread
+    participant newThread
+    participant lruCache
+    participant realServer
+    mainThread->>mainThread: continue listen
+    client->>mainThread:send request
+    mainThread->>newThread: accept , pass connfd to newThread
+    newThread->>newThread: detach with main thread
+    Note right of newThread : because ?
+    newThread->>lruCache:ask if request cache exist ?
+    newThread->>client:cache exist,directly back to client
+    client->>newThread: read request header from connfd
+    newThread->>newThread: build  request header ready for real server
+    newThread->>realServer:connect with real server
+    newThread->>realServer:send request
+    realServer->>newThread:read response
+    newThread->>lruCache:save response to lru
+    newThread->>client:send response to connfd
+    newThread->>newThread:close</pre>
 
     </div>
 
@@ -420,6 +440,19 @@
 
 
 
+<script>
+if (document.querySelectorAll('pre.mermaid').length) {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mermaid@8/dist/mermaid.min.js', () => {
+    mermaid.initialize({
+      theme: 'forest',
+      logLevel: 3,
+      flowchart: { curve: 'linear' },
+      gantt: { axisFormat: '%m/%d/%Y' },
+      sequence: { actorMargin: 50 }
+    });
+  }, window.mermaid);
+}
+</script>
 
 
   

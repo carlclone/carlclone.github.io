@@ -53,7 +53,7 @@
 <meta property="og:site_name" content="Log0c">
 <meta property="og:description" content="&amp;nbsp;">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2021-01-23T10:54:19.413Z">
+<meta property="og:updated_time" content="2021-01-24T03:02:22.320Z">
 <meta name="twitter:card" content="summary">
 
 <link rel="canonical" href="http://yoursite.com/drafts_3/build-your-own-x/build-your-own-vue">
@@ -206,11 +206,11 @@
 
 
 <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>这些项目的启发来自 github.com/build-your-own-x 项目, 500 lines / aosabook.org , 还有杨波老师分布式案例课上讲到的一种学习方式 , 如果要学习消息队列 , 那就自己构建一个迷你版的消息队列 , 我个人是完全被这种学习方法迷住了 , 学习好像更有趣了 , 一点也不累了</p>
-<p>费曼先生说过 </p>
+<p>费曼先生说过  , 费曼说过,不亲手构建一个,就不算真正的学会 </p>
 <p>孔子也说过</p>
 <p>这会是我今后学习计算机领域知识的一个主要方式</p>
 <h3 id="前言-1"><a href="#前言-1" class="headerlink" title="前言"></a>前言</h3><p>这是 build your own x 的 vue 版,想做一个mini 版 vue 的主要原因是最近需要修改老项目的前端,被以前的 jquery 各种 DOM 操作,HTML 拼接折磨地心力交瘁,新模块新页面不需要 build,直接引入 vue就可以写,感受到了数据驱动对程序员生活的改善</p>
-<h3 id="数据驱动-也叫做响应式-Reactivity"><a href="#数据驱动-也叫做响应式-Reactivity" class="headerlink" title="数据驱动 (也叫做响应式 Reactivity)"></a>数据驱动 (也叫做响应式 Reactivity)</h3><p>以前如果数据发生了变化,每次都需要在 DOM 树上先找到对应的 DOM 对象, 然后每次都写代码对其进行修改 , 这就造成了业务代码上视图(View)和数据(Model)的强耦合</p>
+<h3 id="数据驱动-也叫做响应式-Reactivity"><a href="#数据驱动-也叫做响应式-Reactivity" class="headerlink" title="数据驱动 (也叫做响应式 Reactivity)"></a>数据驱动 (也叫做响应式 Reactivity)</h3><p>以前如果数据发生了变化,每次都需要在 DOM 树上先找到对应的 DOM 对象, 然后写代码对其进行修改 , 这就造成了业务代码上视图(View)和数据(Model)的强耦合</p>
 <p>MVVM 的模型出现后, Model 和 View 之间出现了一层 ViewModel , 将他们解耦开来</p>
 <p>VM 层负责的工作就是,如果数据发生变化了, 触发与该数据绑定的 DOM 监听程序, 该程序会负责修改视图<br>如果 DOM 发生变化了, 触发与该 DOM 相关的数据监听器, 修改对应数据</p>
 <p>实现数据监听的工具是 JS 引擎提供的 definedProperty</p>
@@ -389,6 +389,19 @@
 
 
 
+<script>
+if (document.querySelectorAll('pre.mermaid').length) {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mermaid@8/dist/mermaid.min.js', () => {
+    mermaid.initialize({
+      theme: 'forest',
+      logLevel: 3,
+      flowchart: { curve: 'linear' },
+      gantt: { axisFormat: '%m/%d/%Y' },
+      sequence: { actorMargin: 50 }
+    });
+  }, window.mermaid);
+}
+</script>
 
 
   

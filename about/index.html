@@ -45,18 +45,17 @@
   };
 </script>
 
-  <meta name="description" content="&amp;nbsp;">
-<meta name="keywords" content="算法">
+  <meta name="description" content="i hear and i forget, i see and i remember, i do and i understand.">
 <meta property="og:type" content="website">
-<meta property="og:title" content="编译器入门">
-<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;drafts_3&#x2F;tiny-compiler-written-in-go.html">
+<meta property="og:title" content="About">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;about&#x2F;index.html">
 <meta property="og:site_name" content="Log0c">
-<meta property="og:description" content="&amp;nbsp;">
+<meta property="og:description" content="i hear and i forget, i see and i remember, i do and i understand.">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2020-12-23T15:53:44.811Z">
+<meta property="og:updated_time" content="2021-01-24T03:50:22.576Z">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="http://yoursite.com/drafts_3/tiny-compiler-written-in-go">
+<link rel="canonical" href="http://yoursite.com/about/">
 
 
 <script id="page-configurations">
@@ -70,7 +69,7 @@
   };
 </script>
 
-  <title>编译器入门 | Log0c
+  <title>About | Log0c
   </title>
   
 
@@ -179,7 +178,7 @@
     <div class="post-block" lang="en">
       <header class="post-header">
 
-<h1 class="post-title" itemprop="name headline">编译器入门
+<h1 class="post-title" itemprop="name headline">About
 </h1>
 
 <div class="post-meta">
@@ -193,18 +192,7 @@
       
       
       <div class="post-body">
-          <p>&nbsp;</p>
-<a id="more"></a>
-
-<p>最近在做 pingcap 的 tinysql 项目,无奈第二个作业涉及到了编译原理,不太好看懂,为了补足这部分知识,先开始了编译部分的学习</p>
-<p>入门学习的材料有 斯坦福的 CS143 课程,极客时间的两门编译原理课, Github 上 build your own x 项目里的各种 compiler 实现</p>
-<p>CS143 卡在了词法分析部分, 理论的部分太多了, 要求自己实现词法分析的字符串匹配工具, 好在编译原理之美这门课讲的比较简单易懂, 对正则的 DFA 和 NFA 两个状态机实现有了基本的了解 , DFA 还是相对容易实现的,但是 NFA 支持的功能会更多</p>
-<p>推荐入门者学习 the super tiny compiler 这门课, 作者用 JS 写了个编译器, 支持了 LISP 风格的加法表达式实现 , 代码算下来只有 250 行, 作者做了上千行的注释,非常好懂, 对编译器有了一个 big picture , 后面深入的话也能知道属于哪一部分</p>
-<p>这个编译器只包含了词法分析,语法分析和代码生成三个部分, 真正的编译器会涉及更多(甚至分成了前端和后端), 但大部分属于优化的过程 , 后面感兴趣可以再学吧</p>
-<p>我用自己比较喜欢的 Go 语言照着思路写了一遍 , 代码如下</p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line"><span class="comment">//词法分析 , 从输入的string 中拆出 token , 用了正则</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">4</span></pre></td><td class="code"><pre><span class="line"><span class="comment">//语法分析 , 构建一颗树 , 每个token 都是一个节点</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">5</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">6</span></pre></td><td class="code"><pre><span class="line"><span class="comment">//代码生成, 树的遍历</span></span></pre></td></tr></table></figure>
-
-
+          
       </div>
       
       
@@ -351,6 +339,19 @@
 
 
 
+<script>
+if (document.querySelectorAll('pre.mermaid').length) {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mermaid@8/dist/mermaid.min.js', () => {
+    mermaid.initialize({
+      theme: 'forest',
+      logLevel: 3,
+      flowchart: { curve: 'linear' },
+      gantt: { axisFormat: '%m/%d/%Y' },
+      sequence: { actorMargin: 50 }
+    });
+  }, window.mermaid);
+}
+</script>
 
 
   

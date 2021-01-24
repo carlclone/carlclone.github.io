@@ -55,13 +55,10 @@
 <meta property="og:locale" content="en">
 <meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;images&#x2F;image-20201003114320000.png">
 <meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;images&#x2F;image-20201003114446424.png">
-<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;images&#x2F;image-20201003174855077.png">
-<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;images&#x2F;image-20201003174910566.png">
-<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;images&#x2F;image-20201009085919491.png">
 <meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;images&#x2F;image-20201003131138951.png">
 <meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;images&#x2F;image-20201003131230478.png">
 <meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;images&#x2F;image-20201003132247872.png">
-<meta property="og:updated_time" content="2020-10-09T03:01:09.878Z">
+<meta property="og:updated_time" content="2021-01-23T12:37:14.929Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;images&#x2F;image-20201003114320000.png">
 
@@ -261,16 +258,65 @@
 </li>
 </ul>
 <h2 id="流程"><a href="#流程" class="headerlink" title="流程"></a>流程</h2><p>用 mermaid 画了一下图</p>
-<h3 id="执行命令的主流程"><a href="#执行命令的主流程" class="headerlink" title="执行命令的主流程"></a>执行命令的主流程</h3><p><img src="/images/image-20201003174855077.png" alt="image-20201003174855077"></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">sequenceDiagram</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line">participant client</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line">participant proc</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">4</span></pre></td><td class="code"><pre><span class="line">    participant subProc</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">5</span></pre></td><td class="code"><pre><span class="line">    proc-&gt;&gt;proc:blocked at stdin</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">6</span></pre></td><td class="code"><pre><span class="line">client-&gt;&gt;proc:sent &#39;ls&#39;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">7</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">8</span></pre></td><td class="code"><pre><span class="line">    proc-&gt;&gt;subProc:fork</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">9</span></pre></td><td class="code"><pre><span class="line">    subProc-&gt;&gt;subProc:execve</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">10</span></pre></td><td class="code"><pre><span class="line">    note right of subProc:replace code address space with new code</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">11</span></pre></td><td class="code"><pre><span class="line">    note right of subProc:extend subProc some env , like signal set</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">12</span></pre></td><td class="code"><pre><span class="line">    proc-&gt;&gt;subProc:if is fg , wait</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">13</span></pre></td><td class="code"><pre><span class="line">    proc-&gt;&gt;proc:else block at stdin</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">14</span></pre></td><td class="code"><pre><span class="line">    subProc-&gt;&gt;proc:exit</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">15</span></pre></td><td class="code"><pre><span class="line">    proc-&gt;&gt;proc:run sigchld handler</span></pre></td></tr></table></figure>
+<h3 id="执行命令的主流程"><a href="#执行命令的主流程" class="headerlink" title="执行命令的主流程"></a>执行命令的主流程</h3><pre class="mermaid">sequenceDiagram
+participant client
+participant proc
+    participant subProc
+    proc->>proc:blocked at stdin
+client->>proc:sent 'ls'
 
-<h3 id="暂停-前后台切换流程"><a href="#暂停-前后台切换流程" class="headerlink" title="暂停,前后台切换流程"></a>暂停,前后台切换流程</h3><p><img src="/images/image-20201003174910566.png" alt="image-20201003174910566"></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">sequenceDiagram</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line">participant client</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line">participant proc</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">4</span></pre></td><td class="code"><pre><span class="line"> participant jobList</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">5</span></pre></td><td class="code"><pre><span class="line">    participant subProc</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">6</span></pre></td><td class="code"><pre><span class="line">       </span></pre></td></tr><tr><td class="gutter"><pre><span class="line">7</span></pre></td><td class="code"><pre><span class="line">    </span></pre></td></tr><tr><td class="gutter"><pre><span class="line">8</span></pre></td><td class="code"><pre><span class="line">client-&gt;&gt;proc:sent &#39;ctrl+z&#39;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">9</span></pre></td><td class="code"><pre><span class="line">proc-&gt;&gt;subProc:sent SIGSTP </span></pre></td></tr><tr><td class="gutter"><pre><span class="line">10</span></pre></td><td class="code"><pre><span class="line">subProc-&gt;&gt;subProc:stopped</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">11</span></pre></td><td class="code"><pre><span class="line">subProc-&gt;&gt;proc:sent SIGCHLD</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">12</span></pre></td><td class="code"><pre><span class="line">proc-&gt;&gt;jobList:set state&#x3D;ST</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">13</span></pre></td><td class="code"><pre><span class="line">jobList-&gt;&gt;proc:there has no state&#x3D;FG job , stop waiting</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">14</span></pre></td><td class="code"><pre><span class="line">client-&gt;&gt;proc:bg &#x2F;fg jobid</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">15</span></pre></td><td class="code"><pre><span class="line">proc-&gt;&gt;subProc:sent SIGCONT</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">16</span></pre></td><td class="code"><pre><span class="line">subProc-&gt;&gt;subProc:start running</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">17</span></pre></td><td class="code"><pre><span class="line">    jobList-&gt;&gt;proc:if bg ,there has no state&#x3D;FG job , stop waiting</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">18</span></pre></td><td class="code"><pre><span class="line">        jobList-&gt;&gt;proc:if fg ,there has  state&#x3D;FG job , wait</span></pre></td></tr></table></figure>
+    proc->>subProc:fork
+    subProc->>subProc:execve
+    note right of subProc:replace code address space with new code
+    note right of subProc:extend subProc some env , like signal set
+    proc->>subProc:if is fg , wait
+    proc->>proc:else block at stdin
+    subProc->>proc:exit
+    proc->>proc:run sigchld handler</pre>
+
+<h3 id="暂停-前后台切换流程"><a href="#暂停-前后台切换流程" class="headerlink" title="暂停,前后台切换流程"></a>暂停,前后台切换流程</h3><pre class="mermaid">sequenceDiagram
+participant client
+participant proc
+ participant jobList
+    participant subProc
+
+
+client->>proc:sent 'ctrl+z'
+proc->>subProc:sent SIGSTP 
+subProc->>subProc:stopped
+subProc->>proc:sent SIGCHLD
+proc->>jobList:set state=ST
+jobList->>proc:there has no state=FG job , stop waiting
+client->>proc:bg /fg jobid
+proc->>subProc:sent SIGCONT
+subProc->>subProc:start running
+    jobList->>proc:if bg ,there has no state=FG job , stop waiting
+        jobList->>proc:if fg ,there has  state=FG job , wait</pre>
 
 
 
-<h3 id="信号处理流程-信号进程的并发竞争问题-信号没有排队机制"><a href="#信号处理流程-信号进程的并发竞争问题-信号没有排队机制" class="headerlink" title="信号处理流程 , 信号进程的并发竞争问题, 信号没有排队机制"></a>信号处理流程 , 信号进程的并发竞争问题, 信号没有排队机制</h3><p><img src="/images/image-20201009085919491.png" alt="image-20201009085919491"></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">sequenceDiagram</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line">    participant sysEvent</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line">    participant kernel</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">4</span></pre></td><td class="code"><pre><span class="line">    participant pendingSet</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">5</span></pre></td><td class="code"><pre><span class="line">    participant sigchldHandler</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">6</span></pre></td><td class="code"><pre><span class="line">    participant blockedSet</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">7</span></pre></td><td class="code"><pre><span class="line">    participant proc</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">8</span></pre></td><td class="code"><pre><span class="line">    </span></pre></td></tr><tr><td class="gutter"><pre><span class="line">9</span></pre></td><td class="code"><pre><span class="line">    proc-&gt;&gt;blockedSet:set SIGCHLD blocked  </span></pre></td></tr><tr><td class="gutter"><pre><span class="line">10</span></pre></td><td class="code"><pre><span class="line">        note right of proc:set SIGCHLD blocked to  prevent deleteJobs before addJob</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">11</span></pre></td><td class="code"><pre><span class="line">    sysEvent-&gt;&gt;kernel:chld exit(0)</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">12</span></pre></td><td class="code"><pre><span class="line">        kernel-&gt;&gt;pendingSet:set SIGCHLD pending</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">13</span></pre></td><td class="code"><pre><span class="line">    sysEvent-&gt;&gt;kernel:another chld exit(0)</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">14</span></pre></td><td class="code"><pre><span class="line">    kernel-&gt;&gt;pendingSet:set SIGCHLD pending </span></pre></td></tr><tr><td class="gutter"><pre><span class="line">15</span></pre></td><td class="code"><pre><span class="line">    note right of kernel:(only one signal is set , signal dont queue)</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">16</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">17</span></pre></td><td class="code"><pre><span class="line">proc-&gt;&gt;proc:addJob</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">18</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">19</span></pre></td><td class="code"><pre><span class="line">    proc-&gt;&gt;blockedSet:set SIGCHLD unblocked</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">20</span></pre></td><td class="code"><pre><span class="line">    pendingSet-&gt;&gt;sigchldHandler:pending!</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">21</span></pre></td><td class="code"><pre><span class="line">    blockedSet-&gt;&gt;sigchldHandler:unblocked!</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">22</span></pre></td><td class="code"><pre><span class="line">    sigchldHandler-&gt;&gt;sigchldHandler:deleteJobs</span></pre></td></tr></table></figure>
+<h3 id="信号处理流程-信号进程的并发竞争问题-信号没有排队机制"><a href="#信号处理流程-信号进程的并发竞争问题-信号没有排队机制" class="headerlink" title="信号处理流程 , 信号进程的并发竞争问题, 信号没有排队机制"></a>信号处理流程 , 信号进程的并发竞争问题, 信号没有排队机制</h3><pre class="mermaid">sequenceDiagram
+    participant sysEvent
+    participant kernel
+    participant pendingSet
+    participant sigchldHandler
+    participant blockedSet
+    participant proc
+
+    proc->>blockedSet:set SIGCHLD blocked  
+        note right of proc:set SIGCHLD blocked to  prevent deleteJobs before addJob
+    sysEvent->>kernel:chld exit(0)
+        kernel->>pendingSet:set SIGCHLD pending
+    sysEvent->>kernel:another chld exit(0)
+    kernel->>pendingSet:set SIGCHLD pending 
+    note right of kernel:(only one signal is set , signal dont queue)
+
+proc->>proc:addJob
+
+    proc->>blockedSet:set SIGCHLD unblocked
+    pendingSet->>sigchldHandler:pending!
+    blockedSet->>sigchldHandler:unblocked!
+    sigchldHandler->>sigchldHandler:deleteJobs</pre>
 
 <h2 id="资料"><a href="#资料" class="headerlink" title="资料"></a>资料</h2><p><code>shell lab</code>的 <code>README.pdf</code> 和 <code>CSAPP 第八章</code></p>
 <p><a href="https://www.youtube.com/watch?v=kC8uW4bS_MM&list=PLLchAlP_W0GfYWjv6Off6lfk4xNe_l-QB&index=13&t=6s" target="_blank" rel="noopener">recitation shell lab</a></p>
@@ -485,6 +531,19 @@
 
 
 
+<script>
+if (document.querySelectorAll('pre.mermaid').length) {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mermaid@8/dist/mermaid.min.js', () => {
+    mermaid.initialize({
+      theme: 'forest',
+      logLevel: 3,
+      flowchart: { curve: 'linear' },
+      gantt: { axisFormat: '%m/%d/%Y' },
+      sequence: { actorMargin: 50 }
+    });
+  }, window.mermaid);
+}
+</script>
 
 
   

@@ -46,17 +46,17 @@
 </script>
 
   <meta name="description" content="&amp;nbsp;">
-<meta name="keywords" content="算法">
+<meta name="keywords" content="build-your-own-x">
 <meta property="og:type" content="website">
-<meta property="og:title" content="图灵机模拟">
-<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;drafts_3&#x2F;tiny-emulator-in-c.html">
+<meta property="og:title" content="构建一个自己的 jQuery">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;drafts_3&#x2F;build-your-own-x&#x2F;build-your-own-jquery.html">
 <meta property="og:site_name" content="Log0c">
 <meta property="og:description" content="&amp;nbsp;">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2020-12-23T16:14:59.051Z">
+<meta property="og:updated_time" content="2021-01-24T02:59:24.592Z">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="http://yoursite.com/drafts_3/tiny-emulator-in-c">
+<link rel="canonical" href="http://yoursite.com/drafts_3/build-your-own-x/build-your-own-jquery">
 
 
 <script id="page-configurations">
@@ -70,7 +70,7 @@
   };
 </script>
 
-  <title>图灵机模拟 | Log0c
+  <title>构建一个自己的 jQuery | Log0c
   </title>
   
 
@@ -179,11 +179,18 @@
     <div class="post-block" lang="en">
       <header class="post-header">
 
-<h1 class="post-title" itemprop="name headline">图灵机模拟
+<h1 class="post-title" itemprop="name headline">构建一个自己的 jQuery
 </h1>
 
 <div class="post-meta">
   
+  <ul class="breadcrumb">
+          
+            <li><a href="/drafts_3/">DRAFTS_3</a></li>
+            <li><a href="/drafts_3/build-your-own-x/">BUILD-YOUR-OWN-X</a></li>
+            <li>BUILD-YOUR-OWN-JQUERY</li>
+          
+  </ul>
 
 </div>
 
@@ -196,20 +203,27 @@
           <p>&nbsp;</p>
 <a id="more"></a>
 
-<p>在 build your own x 里看到了小时候玩的 gameboy emulator , 哇,居然可以亲手写一个 gameboy 模拟器,酷毙了</p>
-<p>然而现实是残忍的,打开一看,GPU Timing? GPU XXXX ? 都是些啥, 黑人问号,超出我的认知边界,跪到了地板上</p>
-<p>既然现在还做不出来,那就一步一步来,做个更简单的 chip8 emulator , </p>
-<p>再简单一点, 实现一个只支持加法运行的 CPU+内存的图灵机模拟器</p>
-<p>CPU 的运行就是 获取指令,解析指令,执行指令的无限循环</p>
-<p>内存中会有一个区域存放程序的指令</p>
-<p>还会有一个区域用于存放当前的执行栈(参数,局部变量,返回值,寄存器暂存….)</p>
-<p>嗯嗯,这就很简单了,至少知道了 CPU 的基本运转方式, 更好的理解循环了加 sleep 和不加 sleep , cpu 的执行情况了 </p>
-<p>还是用 Go 照着思路写一遍,加深印象</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">blah blah</span></pre></td></tr></table></figure>
+<p>想对这个最近接触较多的库做一下了解,于是有了这篇东西</p>
+<h3 id="题外话"><a href="#题外话" class="headerlink" title="题外话"></a>题外话</h3><p>JS 这门语言有许多容易产生歧义和反直觉的语法,个人感觉头晕脑胀的</p>
+<p>比如</p>
+<p>加 new 会把这个函数当作是一个构造器，返回一个对象。<br>不加的话，就是调用一个普通的函数，结果视函数返回值而定。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr></table></figure>
 
-
-
-<p>下一步是不是要考虑学着写一个 tiny-os , 方便入门 xv6 ,奸笑~</p>
+<p>再比如, 在大多数其他语言里,如果想要实例化一个对象,这个对象有一些参数,<br>我们直接在当前作用域定义这些参数变量,然后传入对象就好了,</p>
+<p>但是由于 JS 有作用域链的存在,你不能直接在当前作用域定义参数变量,<br>得再用一个匿名函数包裹起来形成另一个分支作用域,避免在主干作用域链中造成污染</p>
+<p>prototype : 通过这个定义的方法可以访问实例 this里的属性</p>
+<p>这个网站收罗了 JS 这门语言各种糟糕的设计, 我没有在胡说</p>
+<h3 id="回到正题"><a href="#回到正题" class="headerlink" title="回到正题"></a>回到正题</h3><p>$() 语法按PHP语言理解的话,等价于 new Jquery()</p>
+<p>调用则相当于 (new Jquery(‘selector’) )-&gt;each(func())</p>
+<p>所以实际操作的是一个 Jquery 对象,这个对象中包含了 selector 对应的 DOM 对象</p>
+<h3 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h3><p><a href="https://gomakethings.com/how-to-create-your-own-vanilla-js-dom-manipulation-library-like-jquery/" target="_blank" rel="noopener">How to create your own vanilla JS DOM manipulation library like jQuery
+</a></p>
+<p><a href="https://gomakethings.com/creating-your-own-vanilla-js-helper-library-like-lodash-and-underscore.js/" target="_blank" rel="noopener">Creating your own vanilla JS helper library like Lodash and Underscore.js</a></p>
+<p><a href="https://vanillajstoolkit.com/boilerplates/#Revealing-Module-Pattern" target="_blank" rel="noopener">Revealing-Module-Pattern</a></p>
+<p><a href="https://gomakethings.com/" target="_blank" rel="noopener">gomakethings.com</a> - I help people learn vanilla JavaScript. I believe there’s a simpler, more resilient way to make things for the web.</p>
+<p><a href="https://blog.csdn.net/WuLex/article/details/99314980" target="_blank" rel="noopener">https://blog.csdn.net/WuLex/article/details/99314980</a></p>
+<p>jquery 源码阅读</p>
+<p>build your own jquery</p>
 
       </div>
       
@@ -217,6 +231,13 @@
       
     </div>
     
+  <ul class="breadcrumb">
+          
+            <li><a href="/drafts_3/">DRAFTS_3</a></li>
+            <li><a href="/drafts_3/build-your-own-x/">BUILD-YOUR-OWN-X</a></li>
+            <li>BUILD-YOUR-OWN-JQUERY</li>
+          
+  </ul>
 
     
     
@@ -250,6 +271,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#题外话"><span class="nav-number">1.</span> <span class="nav-text">题外话</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#回到正题"><span class="nav-number">2.</span> <span class="nav-text">回到正题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参考资料"><span class="nav-number">3.</span> <span class="nav-text">参考资料</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -357,6 +379,19 @@
 
 
 
+<script>
+if (document.querySelectorAll('pre.mermaid').length) {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mermaid@8/dist/mermaid.min.js', () => {
+    mermaid.initialize({
+      theme: 'forest',
+      logLevel: 3,
+      flowchart: { curve: 'linear' },
+      gantt: { axisFormat: '%m/%d/%Y' },
+      sequence: { actorMargin: 50 }
+    });
+  }, window.mermaid);
+}
+</script>
 
 
   

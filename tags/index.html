@@ -197,7 +197,7 @@
               7 tags in total
             </div>
             <div class="tag-cloud-tags">
-              <a href="/tags/CSAPP/" style="font-size: 16.5px; color: #9d9d9d">CSAPP</a> <a href="/tags/PHP/" style="font-size: 12px; color: #ccc">PHP</a> <a href="/tags/mac/" style="font-size: 16.5px; color: #9d9d9d">mac</a> <a href="/tags/%E5%9F%BA%E7%A1%80%E8%A1%A5%E8%B6%B3/" style="font-size: 25.5px; color: #404040">基础补足</a> <a href="/tags/%E5%B7%A5%E5%85%B7/" style="font-size: 21px; color: #6f6f6f">工具</a> <a href="/tags/%E5%BD%92%E6%A1%A3/" style="font-size: 30px; color: #111">归档</a> <a href="/tags/%E7%AE%97%E6%B3%95/" style="font-size: 16.5px; color: #9d9d9d">算法</a>
+              <a href="/tags/CSAPP/" style="font-size: 16.5px; color: #9d9d9d">CSAPP</a> <a href="/tags/PHP/" style="font-size: 12px; color: #ccc">PHP</a> <a href="/tags/mac/" style="font-size: 16.5px; color: #9d9d9d">mac</a> <a href="/tags/%E5%B7%A5%E5%85%B7/" style="font-size: 21px; color: #6f6f6f">工具</a> <a href="/tags/%E5%BD%92%E6%A1%A3/" style="font-size: 30px; color: #111">归档</a> <a href="/tags/%E7%AE%97%E6%B3%95/" style="font-size: 16.5px; color: #9d9d9d">算法</a> <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/" style="font-size: 25.5px; color: #404040">计算机基础</a>
             </div>
           </div>
         
@@ -347,6 +347,19 @@
 
 
 
+<script>
+if (document.querySelectorAll('pre.mermaid').length) {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mermaid@8/dist/mermaid.min.js', () => {
+    mermaid.initialize({
+      theme: 'forest',
+      logLevel: 3,
+      flowchart: { curve: 'linear' },
+      gantt: { axisFormat: '%m/%d/%Y' },
+      sequence: { actorMargin: 50 }
+    });
+  }, window.mermaid);
+}
+</script>
 
 
   
