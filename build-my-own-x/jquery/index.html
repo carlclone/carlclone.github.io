@@ -1,183 +1,337 @@
 <!DOCTYPE html>
-<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
-<head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
-  
-  
-  <link rel="shortcut icon" href="../../img/favicon.ico">
-  <title>构建自己的 jQuery - Log0C</title>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" />
 
-  <link rel="stylesheet" href="../../css/theme.css" />
-  <link rel="stylesheet" href="../../css/theme_extra.css" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" />
-  
-  <script>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
+<head>
+<meta charset="utf-8"/>
+<meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="../../img/favicon.ico" rel="shortcut icon"/>
+<title>构建自己的 jQuery - Log0c</title>
+<link href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" rel="stylesheet">
+<link href="../../css/theme.css" rel="stylesheet"/>
+<link href="../../css/theme_extra.css" rel="stylesheet"/>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet"/>
+<script>
     // Current page data
     var mkdocs_page_name = "\u6784\u5efa\u81ea\u5df1\u7684 jQuery";
     var mkdocs_page_input_path = "build-my-own-x/jquery.md";
     var mkdocs_page_url = null;
   </script>
-  
-  <script src="../../js/jquery-2.1.1.min.js" defer></script>
-  <script src="../../js/modernizr-2.8.3.min.js" defer></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
-  <script>hljs.initHighlightingOnLoad();</script> 
-  
-</head>
-
+<script defer="" src="../../js/jquery-2.1.1.min.js"></script>
+<script defer="" src="../../js/modernizr-2.8.3.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+</link></head>
 <body class="wy-body-for-nav" role="document">
-
-  <div class="wy-grid-for-nav">
-
-    
-    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
-    <div class="wy-side-scroll">
-      <div class="wy-side-nav-search">
-        <a href="../.." class="icon icon-home"> Log0C</a>
-        <div role="search">
-  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
-  </form>
+<div class="wy-grid-for-nav">
+<nav class="wy-nav-side stickynav" data-toggle="wy-nav-shift">
+<div class="wy-side-scroll">
+<div class="wy-side-nav-search">
+<a class="icon icon-home" href="../.."> Log0c</a>
 </div>
-      </div>
-
-      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-                <ul>
-                    <li class="toctree-l1"><a class="reference internal" href="../..">主页</a>
-                    </li>
-                </ul>
-                <p class="caption"><span class="caption-text">工具</span></p>
-                <ul>
-                    <li class="toctree-l1"><a class="reference internal" href="../../tools/xdebug/">Xdebug</a>
-                    </li>
-                    <li class="toctree-l1"><a class="reference internal" href="../../tools/chrome-dev-tools/">Chrome Dev Tools</a>
-                    </li>
-                    <li class="toctree-l1"><a class="reference internal" href="../../tools/markdown-diagram/">Markdown 画图</a>
-                    </li>
-                </ul>
-                <p class="caption"><span class="caption-text">算法</span></p>
-                <ul>
-                    <li class="toctree-l1"><a class="reference internal" href="../../algos/int-to-binary-str/">整数转二进制字符串</a>
-                    </li>
-                    <li class="toctree-l1"><a class="reference internal" href="../../algos/multiple-field-sort/">多字段排序</a>
-                    </li>
-                    <li class="toctree-l1"><a class="reference internal" href="../../algos/lru-cache-go/">LRU 线程安全和高并发</a>
-                    </li>
-                </ul>
-                <p class="caption"><span class="caption-text">构建自己的 X 项目</span></p>
-                <ul class="current">
-                    <li class="toctree-l1 current"><a class="reference internal current" href="./">构建自己的 jQuery</a>
-                    </li>
-                    <li class="toctree-l1"><a class="reference internal" href="../php-framework/">构建自己的 PHP 框架</a>
-                    </li>
-                    <li class="toctree-l1"><a class="reference internal" href="../vue/">构建自己的 Vue 框架</a>
-                    </li>
-                </ul>
-                <p class="caption"><span class="caption-text">Mac</span></p>
-                <ul>
-                    <li class="toctree-l1"><a class="reference internal" href="../../mac/mac-note-stalled/">Notes.app 卡死问题</a>
-                    </li>
-                    <li class="toctree-l1"><a class="reference internal" href="../../mac/osx86_external_ssd_swap_problem/">外部 SSD Swap 分区开启问题</a>
-                    </li>
-                </ul>
-                <p class="caption"><span class="caption-text">PHP</span></p>
-                <ul>
-                    <li class="toctree-l1"><a class="reference internal" href="../../php/how-composer-work/">Composer 是如何工作的</a>
-                    </li>
-                </ul>
-      </div>
-    </div>
-    </nav>
-
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
-        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-        <a href="../..">Log0C</a>
-      </nav>
-
-      
-      <div class="wy-nav-content">
-        <div class="rst-content">
-          <div role="navigation" aria-label="breadcrumbs navigation">
-  <ul class="wy-breadcrumbs">
-    <li><a href="../..">Docs</a> &raquo;</li>
-    
-      
-        
-          <li>构建自己的 X 项目 &raquo;</li>
-        
-      
-    
-    <li>构建自己的 jQuery</li>
-    <li class="wy-breadcrumbs-aside">
-      
-    </li>
-  </ul>
-  
-  <hr/>
+<div aria-label="main navigation" class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../..">主页</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">工具</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../tools/xdebug/">Xdebug 深入学习</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../tools/chrome-dev-tools/">Chrome Dev Tools 深入学习</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../tools/markdown-diagram/">Markdown Diagram 功能</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">算法</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../algos/int-to-binary-str/">整数转二进制字符串</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../algos/multiple-field-sort/">多字段排序</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../algos/lru-cache-go/">LRU 线程安全和高并发</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">构建自己的 X 项目</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal current" href="./">构建自己的 jQuery</a>
+<ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="#_1">前言</a>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#_2">作用域链问题</a>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#_3">原型链问题</a>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#_4">结束</a>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#_5">参考资料</a>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../php-framework/">构建自己的 PHP 框架</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">课程 Labs</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../labs/csapp-proxy/">CSAPP - Proxy 总结</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../labs/csapp-shell/">CSAPP - Shell 总结</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../labs/cs144/">CS144 总结</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">Mac</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../mac/mac-note-stalled/">Notes.app 卡死问题</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../mac/osx86_external_ssd_swap_problem/">外部 SSD Swap 分区开启问题</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">PHP</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../php/how-composer-work/">Composer 是如何工作的</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../php/taylor-otwell-interview/">Taylor otwell 采访文章</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">杂项</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../others/mac_py_env_deploy/">Mac Python环境 miniConda +scrapy 搭建</a>
+</li>
+</ul>
 </div>
-          <div role="main">
-            <div class="section">
-              
-                
-              
-            </div>
-          </div>
-          <footer>
-  
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="../php-framework/" class="btn btn-neutral float-right" title="构建自己的 PHP 框架">Next <span class="icon icon-circle-arrow-right"></span></a>
-      
-      
-        <a href="../../algos/lru-cache-go/" class="btn btn-neutral" title="LRU 线程安全和高并发"><span class="icon icon-circle-arrow-left"></span> Previous</a>
-      
-    </div>
-  
+</div>
+</nav>
+<section class="wy-nav-content-wrap" data-toggle="wy-nav-shift">
+<nav aria-label="top navigation" class="wy-nav-top" role="navigation">
+<i class="fa fa-bars" data-toggle="wy-nav-top"></i>
+<a href="../..">Log0c</a>
+</nav>
+<div class="wy-nav-content">
+<div class="rst-content">
+<div aria-label="breadcrumbs navigation" role="navigation">
+<ul class="wy-breadcrumbs">
+<li><a href="../..">Docs</a> »</li>
+<li>构建自己的 X 项目 »</li>
+<li>构建自己的 jQuery</li>
+<li class="wy-breadcrumbs-aside">
+</li>
+</ul>
+<hr/>
+</div>
+<div role="main">
+<div class="section">
+<h1 id="jquery">构建自己的 jQuery</h1>
+<h2 id="_1">前言</h2>
+<p>一直很好奇jQuery 的$("#id") 的内部到底是一个什么东西, 于是有了这次构建之旅</p>
+<p>首先说结论, $("#id") 等价于 PHP 中的</p>
+<pre><code class="language-php">// dollar == $
+function dollar($selector) {
+    return new jQuery($selector);
+} 
 
-  <hr/>
+dollar("#id");
 
-  <div role="contentinfo">
-    <!-- Copyright etc -->
-    
-  </div>
+</code></pre>
+<p>也就是说<code>$("#id")</code> 其实就是 jQuery 实例的工厂方法, 执行后得到的是一个 jQuery 的实例, 然后会根据 selector 在 DOM 树中找到目标 DOM 元素, 作为 jQuery 实例的一个属性, 作为后续方法调用的实际操作对象, 各种方法其实就是原生 DOM 操作的封装</p>
+<p>看到这里本来是可以结束了的, 但我没想到 JS 的面向对象居然如此与众不同</p>
+<h2 id="_2">作用域链问题</h2>
+<p>第一个让我困惑的是这个语法</p>
+<pre><code>var $ = (function () {        // &lt;-- 为啥又包了一层
+
+    'use strict';
+
+    /**
+     * Create the constructor
+     * @param {String} selector The selector to use
+     */
+    var Constructor = function (selector) {
+        this.elems = document.querySelectorAll(selector);  
+    };
+
+    /**
+     * Return the constructor
+     */
+    return Constructor;
+
+})();
+</code></pre>
+<p>为什么不直接 <code>var Constructor = function ....</code> , 要再在外面包一个函数呢? 查找学习之后发现这个东西在 JS 里叫 <a href="https://vanillajstoolkit.com/boilerplates/#Revealing-Module-Pattern">revealing module pattern</a> , 理解这个东西需要知道 JS 有作用域链这个设计, 当一个变量在当前作用域找不到的时候, 它会一直向上级作用域查找同名变量. 这就造成了如果直接在当前作用域定义临时变量用于生成实例, 很有可能这些临时变量会影响到后面作用域, 造成污染, 使用这么一个函数包起来定义临时变量, 就相当于在作用域链上开了一个分支链, 反正不会有人继续继承这一条链, 也就不会造成污染问题</p>
+<p>另外他的名字叫做 module pattern 的原因,我的理解是类似 ES6 的 export 语法, 只暴露这个模块的一部分内容到外界, 使外界不需要关注更多细节, 对应到 PHP 里就是 public / private 的应用</p>
+<p>但是这个时候, 实例化 jQuery 需要使用关键字 new , <code>var sandwiches = new $('.sandwiches');</code> , 只有使用 new 关键词, JS 才会把 <code>function (selector) {...</code>作为构造函数, 返回一个对象, 否则得到的是函数的返回值</p>
+<p>为了减少一个 new 的敲键盘消耗, jQuery 做的是把 new XXX 的操作封装到一个函数里</p>
+<pre><code>var $ = (function () {
+
+    'use strict';
+
+    /**
+     * Create the constructor
+     * @param {String} selector The selector to use
+     */
+    var Constructor = function (selector) {
+        if (selector === 'document') {
+            this.elems = [document];
+        } else if (selector === 'window') {
+            this.elems = [window];
+        } else {
+            this.elems = document.querySelectorAll(selector);
+        }
+    };
+
+    /**
+     * Instantiate a new constructor
+     */
+    var instantiate = function (selector) {     // &lt;-- 这里
+        return new Constructor(selector);
+    };
+
+    /**
+     * Return the constructor instantiation
+     */
+    return instantiate;
+
+})();
+</code></pre>
+<h2 id="_3">原型链问题</h2>
+<p>在我的理解里, 方法直接定义在 Constructor 里就可以了</p>
+<pre><code>var Constructor = function (selector) {
+        if (selector === 'document') {
+            this.elems = [document];
+        } else if (selector === 'window') {
+            this.elems = [window];
+        } else {
+            this.elems = document.querySelectorAll(selector);
+        }
+
+        this.func = function() {console.log("this is func")}
+    };
+</code></pre>
+<p>但是看到的文章里使用了 prototype 的形式定义, 查资料得知在原型上定义的话,相当于PHP 里"继承"的功能, 并且在内存里只会占用一份空间, 而在 Constructor 里定义的话每个实例都会需要额外的内存来保存这个方法 </p>
+<p>定义在函数的原型上的方法就可以顺利访问当前实例的<code>this.xxx</code>属性</p>
+<pre><code>/**
+ * Run a callback on each item
+ * @param  {Function} callback The callback function to run
+ */
+Constructor.prototype.each = function (callback) {
+    if (!callback || typeof callback !== 'function') return;
+};
+</code></pre>
+<p>完整代码</p>
+<pre><code>var $ = (function () {
+
+    'use strict';
+
+    /**
+     * Create the constructor
+     * @param {String} selector The selector to use
+     */
+    var Constructor = function (selector) {
+        if (!selector) return;
+        if (selector === 'document') {
+            this.elems = [document];
+        } else if (selector === 'window') {
+            this.elems = [window];
+        } else {
+            this.elems = document.querySelectorAll(selector);
+        }
+    };
+
+    /**
+     * Do ajax stuff
+     * @param  {String} url The URL to get
+     */
+    Constructor.prototype.ajax = function (url) {
+        // Do some XHR/Fetch thing here
+        console.log(url);
+    };
+
+    /**
+     * Run a callback on each item
+     * @param  {Function} callback The callback function to run
+     */
+    Constructor.prototype.each = function (callback) {
+        if (!callback || typeof callback !== 'function') return;
+        for (var i = 0; i &lt; this.elems.length; i++) {
+            callback(this.elems[i], i);
+        }
+        return this;
+    };
+
+    /**
+     * Add a class to elements
+     * @param {String} className The class name
+     */
+    Constructor.prototype.addClass = function (className) {
+        this.each(function (item) {
+            item.classList.add(className);
+        });
+        return this;
+    };
+
+    /**
+     * Remove a class to elements
+     * @param {String} className The class name
+     */
+    Constructor.prototype.removeClass = function (className) {
+        this.each(function (item) {
+            item.classList.remove(className);
+        });
+        return this;
+    };
+
+    /**
+     * Instantiate a new constructor
+     */
+    var instantiate = function (selector) {
+        return new Constructor(selector);
+    };
+
+    /**
+     * Return the constructor instantiation
+     */
+    return instantiate;
+
+})();
+</code></pre>
+<h2 id="_4">结束</h2>
+<p>构建的过程其实是一个 JavaScript 面向对象编程的尝试, 整个面向对象的模型和其他语言完全不一样, 由于作用域链,原型链这两个 JS 独有的设计, 也会有些坑容易踩到</p>
+<h2 id="_5">参考资料</h2>
+<p><a href="https://gomakethings.com/how-to-create-your-own-vanilla-js-dom-manipulation-library-like-jquery/">How to create your own vanilla JS DOM manipulation library like jQuery
+</a></p>
+<p><a href="https://www.thecodeship.com/web-development/methods-within-constructor-vs-prototype-in-javascript/#:~:text=Prototype%20will%20enable%20us%20to,to%20one%20common%20prototype%20object.">Methods Within Constructor vs Prototype in Javascript</a></p>
+</div>
+</div>
+<footer>
+<div aria-label="footer navigation" class="rst-footer-buttons" role="navigation">
+<a class="btn btn-neutral float-right" href="../php-framework/" title="构建自己的 PHP 框架">Next <span class="icon icon-circle-arrow-right"></span></a>
+<a class="btn btn-neutral" href="../../algos/lru-cache-go/" title="LRU 线程安全和高并发"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+</div>
+<hr/>
+<div role="contentinfo">
+<!-- Copyright etc -->
+</div>
 
   Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
 </footer>
-      
-        </div>
-      </div>
-
-    </section>
-
-  </div>
-
-  <div class="rst-versions" role="note" aria-label="versions">
-    <span class="rst-current-version" data-toggle="rst-current-version">
-      
-      
-        <span><a href="../../algos/lru-cache-go/" style="color: #fcfcfc;">&laquo; Previous</a></span>
-      
-      
-        <span style="margin-left: 15px"><a href="../php-framework/" style="color: #fcfcfc">Next &raquo;</a></span>
-      
-    </span>
 </div>
-    <script>var base_url = '../..';</script>
-    <script src="../../js/theme.js" defer></script>
-      <script src="../../search/main.js" defer></script>
-    <script defer>
+</div>
+</section>
+</div>
+<div aria-label="versions" class="rst-versions" role="note">
+<span class="rst-current-version" data-toggle="rst-current-version">
+<span><a href="../../algos/lru-cache-go/" style="color: #fcfcfc;">« Previous</a></span>
+<span style="margin-left: 15px"><a href="../php-framework/" style="color: #fcfcfc">Next »</a></span>
+</span>
+</div>
+<script>var base_url = '../..';</script>
+<script defer="" src="../../js/theme.js"></script>
+<script defer="" src="../../js/mermaid.min.js"></script>
+<script defer="" src="../../js/highlight.min.js"></script>
+<script defer="">
         window.onload = function () {
             SphinxRtdTheme.Navigation.enable(true);
         };
     </script>
-
 </body>
 </html>

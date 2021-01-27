@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
+<head>
+<meta charset="utf-8"/>
+<meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="../../img/favicon.ico" rel="shortcut icon"/>
+<title>CSAPP - Shell 总结 - Log0c</title>
+<link href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" rel="stylesheet">
+<link href="../../css/theme.css" rel="stylesheet"/>
+<link href="../../css/theme_extra.css" rel="stylesheet"/>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet"/>
+<script>
+    // Current page data
+    var mkdocs_page_name = "CSAPP - Shell \u603b\u7ed3";
+    var mkdocs_page_input_path = "labs/csapp-shell.md";
+    var mkdocs_page_url = null;
+  </script>
+<script defer="" src="../../js/jquery-2.1.1.min.js"></script>
+<script defer="" src="../../js/modernizr-2.8.3.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+</link></head>
+<body class="wy-body-for-nav" role="document">
+<div class="wy-grid-for-nav">
+<nav class="wy-nav-side stickynav" data-toggle="wy-nav-shift">
+<div class="wy-side-scroll">
+<div class="wy-side-nav-search">
+<a class="icon icon-home" href="../.."> Log0c</a>
+</div>
+<div aria-label="main navigation" class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../..">主页</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">工具</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../tools/xdebug/">Xdebug 深入学习</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../tools/chrome-dev-tools/">Chrome Dev Tools 深入学习</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../tools/markdown-diagram/">Markdown Diagram 功能</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">算法</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../algos/int-to-binary-str/">整数转二进制字符串</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../algos/multiple-field-sort/">多字段排序</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../algos/lru-cache-go/">LRU 线程安全和高并发</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">构建自己的 X 项目</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../build-my-own-x/jquery/">构建自己的 jQuery</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../build-my-own-x/php-framework/">构建自己的 PHP 框架</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">课程 Labs</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../csapp-proxy/">CSAPP - Proxy 总结</a>
+</li>
+<li class="toctree-l1 current"><a class="reference internal current" href="./">CSAPP - Shell 总结</a>
+<ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="#_1">流程</a>
+<ul>
+<li class="toctree-l3"><a class="reference internal" href="#_2">执行命令的主流程</a>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#_3">暂停,前后台切换流程</a>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#_4">信号处理流程 , 信号进程的并发竞争问题, 信号没有排队机制</a>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#_5">资料</a>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#_6">常用命令</a>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#_7">工具</a>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#_8">调试</a>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../cs144/">CS144 总结</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">Mac</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../mac/mac-note-stalled/">Notes.app 卡死问题</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../mac/osx86_external_ssd_swap_problem/">外部 SSD Swap 分区开启问题</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">PHP</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../php/how-composer-work/">Composer 是如何工作的</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../php/taylor-otwell-interview/">Taylor otwell 采访文章</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">杂项</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../others/mac_py_env_deploy/">Mac Python环境 miniConda +scrapy 搭建</a>
+</li>
+</ul>
+</div>
+</div>
+</nav>
+<section class="wy-nav-content-wrap" data-toggle="wy-nav-shift">
+<nav aria-label="top navigation" class="wy-nav-top" role="navigation">
+<i class="fa fa-bars" data-toggle="wy-nav-top"></i>
+<a href="../..">Log0c</a>
+</nav>
+<div class="wy-nav-content">
+<div class="rst-content">
+<div aria-label="breadcrumbs navigation" role="navigation">
+<ul class="wy-breadcrumbs">
+<li><a href="../..">Docs</a> »</li>
+<li>课程 Labs »</li>
+<li>CSAPP - Shell 总结</li>
+<li class="wy-breadcrumbs-aside">
+</li>
+</ul>
+<hr/>
+</div>
+<div role="main">
+<div class="section">
+<p>断断续续地做完了 shell lab,做一下回顾</p>
+<h1 id="csapp-shell-lab">CSAPP Shell Lab 总结</h1>
+<p>还是花了不少时间,尤其是信号那部分,看了不少资料,才知道了linux 是用一个二进制位集合存储的各个信号的状态,因此信号是不能排队的,所以在收到 SIGCHLD 的时候要尝试 waitpid 收割多个子进程</p>
+<p>命令解析部分,老师已经给写好了~~ 我们需要实现的是</p>
+<ul>
+<li>
+<p>几个内建命令 (bg,fg,quit,&amp;,jobs)</p>
+</li>
+<li>
+<p>外部命令的执行 (fork 子进程后 execve 执行)</p>
+</li>
+<li>
+<p>Job 和子进程 的管理</p>
+</li>
+<li>信号处理 (子进程发的, 使用者发的 ctrl+c , SIGSTP ...)</li>
+</ul>
+<p>一些要注意的点</p>
+<ul>
+<li>
+<p>前台运行和后台运行的区别 : 主进程是否 waitpid</p>
+</li>
+<li>
+<p>父进程 blocked 了SIGCHLD 后,子进程 fork 后要立即取消 blocked (继承了父进程的 blocked 集合) , 这样子进程才能收到子进程的子进程发出的 SIGCHLD 信号</p>
+</li>
+<li>
+<p>前后台运行的进程输出流都继承了父进程的 stdout fd</p>
+</li>
+<li>
+<p>执行 ls 后执行 ps , ls 变成 defunct (僵尸进程) , 因为父进程没有回收 , 此时只能等父进程退出后由init 进程来回收了,没有退出之前一直会占用着资源</p>
+</li>
+<li>
+<p>信号是不排队的 , sigchld只回收了一个进程 , 也产生僵尸进程</p>
+</li>
+<li>
+<p>没有对 execve 不存在的进行判断 ,子进程跳过 execve 继续执行 tsh 剩余代码, 成了 tsh 套娃</p>
+</li>
+</ul>
+<p><img alt="image-20201003114320000" src="/img/images/image-20201003114320000.png"/></p>
+<p><img alt="image-20201003114446424" src="/img/images/image-20201003114446424.png"/></p>
+<ul>
+<li>
+<p>未修改子进程的 pgid , 导致后台进程也收到信号被杀掉了 (trace07 子进程需要脱离进程组, 否则所有子进程都会被杀掉)</p>
+</li>
+<li>
+<p>Sigchld handler 和主进程之间是异步的(并发问题) , 如果 deleteJob 在 addjob 之前执行会出问题</p>
+</li>
+</ul>
+<h2 id="_1">流程</h2>
+<p>用 mermaid 画了一下图</p>
+<h3 id="_2">执行命令的主流程</h3>
+<div class="mermaid">sequenceDiagram
+participant client
+participant proc
+    participant subProc
+    proc-&gt;&gt;proc:blocked at stdin
+client-&gt;&gt;proc:sent 'ls'
+
+    proc-&gt;&gt;subProc:fork
+    subProc-&gt;&gt;subProc:execve
+    note right of subProc:replace code address space with new code
+    note right of subProc:extend subProc some env , like signal set
+    proc-&gt;&gt;subProc:if is fg , wait
+    proc-&gt;&gt;proc:else block at stdin
+    subProc-&gt;&gt;proc:exit
+    proc-&gt;&gt;proc:run sigchld handler
+
+
+</div>
+<h3 id="_3">暂停,前后台切换流程</h3>
+<div class="mermaid">sequenceDiagram
+participant client
+participant proc
+ participant jobList
+    participant subProc
+
+
+client-&gt;&gt;proc:sent 'ctrl+z'
+proc-&gt;&gt;subProc:sent SIGSTP 
+subProc-&gt;&gt;subProc:stopped
+subProc-&gt;&gt;proc:sent SIGCHLD
+proc-&gt;&gt;jobList:set state=ST
+jobList-&gt;&gt;proc:there has no state=FG job , stop waiting
+client-&gt;&gt;proc:bg /fg jobid
+proc-&gt;&gt;subProc:sent SIGCONT
+subProc-&gt;&gt;subProc:start running
+    jobList-&gt;&gt;proc:if bg ,there has no state=FG job , stop waiting
+        jobList-&gt;&gt;proc:if fg ,there has  state=FG job , wait
+
+</div>
+<h3 id="_4">信号处理流程 , 信号进程的并发竞争问题, 信号没有排队机制</h3>
+<div class="mermaid">sequenceDiagram
+    participant sysEvent
+    participant kernel
+    participant pendingSet
+    participant sigchldHandler
+    participant blockedSet
+    participant proc
+
+    proc-&gt;&gt;blockedSet:set SIGCHLD blocked  
+        note right of proc:set SIGCHLD blocked to  prevent deleteJobs before addJob
+    sysEvent-&gt;&gt;kernel:chld exit(0)
+        kernel-&gt;&gt;pendingSet:set SIGCHLD pending
+    sysEvent-&gt;&gt;kernel:another chld exit(0)
+    kernel-&gt;&gt;pendingSet:set SIGCHLD pending 
+    note right of kernel:(only one signal is set , signal dont queue)
+
+proc-&gt;&gt;proc:addJob
+
+    proc-&gt;&gt;blockedSet:set SIGCHLD unblocked
+    pendingSet-&gt;&gt;sigchldHandler:pending!
+    blockedSet-&gt;&gt;sigchldHandler:unblocked!
+    sigchldHandler-&gt;&gt;sigchldHandler:deleteJobs
+
+</div>
+<h2 id="_5">资料</h2>
+<p><code>shell lab</code>的 <code>README.pdf</code> 和 <code>CSAPP 第八章</code></p>
+<p><a href="https://www.youtube.com/watch?v=kC8uW4bS_MM&amp;list=PLLchAlP_W0GfYWjv6Off6lfk4xNe_l-QB&amp;index=13&amp;t=6s">recitation shell lab</a></p>
+<p><a href="https://www.youtube.com/watch?v=OMhhyGUQ5BI&amp;list=PLLchAlP_W0GfYWjv6Off6lfk4xNe_l-QB&amp;index=10&amp;t=4s">cs35实验环境配置 test1-3</a></p>
+<p><a href="https://www.youtube.com/watch?v=xAW_pNBlfnI&amp;t=1266s">shell lab debug -gdb</a></p>
+<p><a href="https://www.youtube.com/watch?v=CJDKTaXLK6s&amp;t=2400s">shell lab hd</a></p>
+<p><a href="https://www.youtube.com/watch?v=jUcqT37FdUI&amp;list=PLLchAlP_W0GfYWjv6Off6lfk4xNe_l-QB&amp;index=42&amp;t=460s">what are double pointer in c</a> </p>
+<h2 id="_6">常用命令</h2>
+<p><code>make clean ; make</code></p>
+<p><code>quit ,bg,fg,&amp;,jobs :built-in command</code></p>
+<p><code>myspin 3 : sleep for n second</code></p>
+<p>use tshref as a reference shell </p>
+<p><code>make test01 02 .... : tsh</code></p>
+<p><code>make rtest01 02  : tshref</code></p>
+<h2 id="_7">工具</h2>
+<p>gdb /clion /cgdb</p>
+<p>strace</p>
+<p>man page (查阅系统调用函数, 查阅命令使用)</p>
+<h2 id="_8">调试</h2>
+<p>调试方法看了 <a href="https://www.youtube.com/watch?v=xAW_pNBlfnI&amp;t=1266s">youtube 这个作者</a>的方法,总结了一些功能</p>
+<p><code>gdb ./tsh</code> </p>
+<p><code>/bin/ls</code></p>
+<p><code>run</code></p>
+<p><code>n</code>  next 的缩写</p>
+<p><code>s</code>  step into</p>
+<p><code>ctrl+c</code> 回到 gdb (SIGINT 会被 gdb 拦截, tsh 不会收到)</p>
+<p><code>layout</code> 展示代码界面</p>
+<p><code>list sigint_handler</code></p>
+<p><code>signal SIGINT</code> , 发信号到 tsh</p>
+<p><code>break eval</code> 在 eval 函数下断点 , 执行到断点处, 那一行不会被执行</p>
+<p><code>c</code>  continue (back to tsh)</p>
+<p><code>p</code> cmdline 打印 cmdline 变量</p>
+<p><code>break sigchld_handler</code></p>
+<p><code>bt</code> 打印 backtrace</p>
+<p><img alt="image-20201003131138951" src="/img/images/image-20201003131138951.png"/></p>
+<p><code>frame</code></p>
+<p><img alt="image-20201003131230478" src="/img/images/image-20201003131230478.png"/></p>
+<p><code>call fgpid(jobs)</code> 可以实时调用函数!  (clion 的 evaluate expression 好像也可以)</p>
+<p><code>set detach-on-fork off</code> ,  (gdb进入子进程 并暂停子进程)</p>
+<p><code>info inferiors</code>  (list of current being controled process by gdb)</p>
+<p><code>Inferior 3</code> 进入某个process</p>
+<p><code>finish</code> 跑到结束 or breakpoint</p>
+<p><code>info proc</code> 查看当前进程信息</p>
+<p><code>detach inferior 3</code> 放弃控制该进程</p>
+<p><img alt="image-20201003132247872" src="/img/images/image-20201003132247872.png"/></p>
+<p><code>info break</code>  断点列表</p>
+<p><code>delete 1</code>  delete breakpoint</p>
+</div>
+</div>
+<footer>
+<div aria-label="footer navigation" class="rst-footer-buttons" role="navigation">
+<a class="btn btn-neutral float-right" href="../cs144/" title="CS144 总结">Next <span class="icon icon-circle-arrow-right"></span></a>
+<a class="btn btn-neutral" href="../csapp-proxy/" title="CSAPP - Proxy 总结"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+</div>
+<hr/>
+<div role="contentinfo">
+<!-- Copyright etc -->
+</div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+</div>
+</div>
+</section>
+</div>
+<div aria-label="versions" class="rst-versions" role="note">
+<span class="rst-current-version" data-toggle="rst-current-version">
+<span><a href="../csapp-proxy/" style="color: #fcfcfc;">« Previous</a></span>
+<span style="margin-left: 15px"><a href="../cs144/" style="color: #fcfcfc">Next »</a></span>
+</span>
+</div>
+<script>var base_url = '../..';</script>
+<script defer="" src="../../js/theme.js"></script>
+<script defer="" src="../../js/mermaid.min.js"></script>
+<script defer="" src="../../js/highlight.min.js"></script>
+<script defer="">
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        };
+    </script>
+<script>mermaid.initialize({});</script></body>
+</html>

@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
+<head>
+<meta charset="utf-8"/>
+<meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="../../img/favicon.ico" rel="shortcut icon"/>
+<title>CSAPP - Proxy 总结 - Log0c</title>
+<link href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" rel="stylesheet">
+<link href="../../css/theme.css" rel="stylesheet"/>
+<link href="../../css/theme_extra.css" rel="stylesheet"/>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet"/>
+<script>
+    // Current page data
+    var mkdocs_page_name = "CSAPP - Proxy \u603b\u7ed3";
+    var mkdocs_page_input_path = "labs/csapp-proxy.md";
+    var mkdocs_page_url = null;
+  </script>
+<script defer="" src="../../js/jquery-2.1.1.min.js"></script>
+<script defer="" src="../../js/modernizr-2.8.3.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+</link></head>
+<body class="wy-body-for-nav" role="document">
+<div class="wy-grid-for-nav">
+<nav class="wy-nav-side stickynav" data-toggle="wy-nav-shift">
+<div class="wy-side-scroll">
+<div class="wy-side-nav-search">
+<a class="icon icon-home" href="../.."> Log0c</a>
+</div>
+<div aria-label="main navigation" class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../..">主页</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">工具</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../tools/xdebug/">Xdebug 深入学习</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../tools/chrome-dev-tools/">Chrome Dev Tools 深入学习</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../tools/markdown-diagram/">Markdown Diagram 功能</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">算法</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../algos/int-to-binary-str/">整数转二进制字符串</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../algos/multiple-field-sort/">多字段排序</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../algos/lru-cache-go/">LRU 线程安全和高并发</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">构建自己的 X 项目</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../build-my-own-x/jquery/">构建自己的 jQuery</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../build-my-own-x/php-framework/">构建自己的 PHP 框架</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">课程 Labs</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal current" href="./">CSAPP - Proxy 总结</a>
+<ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="#_1">大体功能</a>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#_2">实现细节</a>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#_3">并发模型</a>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#_4">资料</a>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#_5">后续</a>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#_6">梳理的流程</a>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../csapp-shell/">CSAPP - Shell 总结</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../cs144/">CS144 总结</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">Mac</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../mac/mac-note-stalled/">Notes.app 卡死问题</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../mac/osx86_external_ssd_swap_problem/">外部 SSD Swap 分区开启问题</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">PHP</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../php/how-composer-work/">Composer 是如何工作的</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../php/taylor-otwell-interview/">Taylor otwell 采访文章</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">杂项</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../others/mac_py_env_deploy/">Mac Python环境 miniConda +scrapy 搭建</a>
+</li>
+</ul>
+</div>
+</div>
+</nav>
+<section class="wy-nav-content-wrap" data-toggle="wy-nav-shift">
+<nav aria-label="top navigation" class="wy-nav-top" role="navigation">
+<i class="fa fa-bars" data-toggle="wy-nav-top"></i>
+<a href="../..">Log0c</a>
+</nav>
+<div class="wy-nav-content">
+<div class="rst-content">
+<div aria-label="breadcrumbs navigation" role="navigation">
+<ul class="wy-breadcrumbs">
+<li><a href="../..">Docs</a> »</li>
+<li>课程 Labs »</li>
+<li>CSAPP - Proxy 总结</li>
+<li class="wy-breadcrumbs-aside">
+</li>
+</ul>
+<hr/>
+</div>
+<div role="main">
+<div class="section">
+<p>断断续续地做完了 proxy lab,做一下回顾</p>
+<h1 id="csapp-proxy-lab">CSAPP Proxy Lab 总结</h1>
+<p>proxy lab 比起 shell lab 要简单一些,没有太多繁琐的细节问题,如果用 Go 的网络库来写的话估计更轻量,抽象程度更高</p>
+<p>HTTP 格式的解析在书本的 tiny server 有参考代码, 用 C 写减少了很多拷贝动作</p>
+<h2 id="_1">大体功能</h2>
+<p>主要实现的功能是将 client 发来的 HTTP 请求解析, 从请求行<code>GET www.baidu.com HTTP/1.1</code> 
+获取目标 server , 然后与 server 建立连接 ,获得响应后发回给 client</p>
+<h2 id="_2">实现细节</h2>
+<p>CSAPP 书中描述了三种并发模型 , 多进程,多线程和事件循环</p>
+<p>这里使用了线程模型,并且预生成固定线程, 从 sbuf (一个类似 golang channel 的实现) 里互斥取已连接的 client fd 进行处理</p>
+<p>P / V 信号量 , 可以等待! 不需要自己去轮询获取锁和查询是否有 item</p>
+<p>连接部分和 uri 解析ip:port部分参考 tiny server 对 linux 库函数的进一步封装</p>
+<p>描述符数据结构部分,太乱了,感觉是历史遗留问题,直接用封装好的</p>
+<h2 id="_3">并发模型</h2>
+<p>三个并发模型的优劣</p>
+<p>多进程: </p>
+<ul>
+<li>缺点:各种开销大,如创建进程,进程控制,IPC</li>
+<li>共享文件表,要注意各自关闭描述符,避免内存泄漏</li>
+<li>有独立的地址空间 , 减少互相覆盖的风险</li>
+</ul>
+<p>IO 多路复用(事件驱动):</p>
+<ul>
+<li>性能比其他两个有明显的优势</li>
+<li>可控性更高, 调度权在自己手里</li>
+<li>单一进程,方便调试</li>
+<li>缺点:编码比其他的复杂 </li>
+<li>缺点:无法充分利用多核 (参考 nginx等中间件, 将事件分派到各个进程 多进程/多线程+IO 多路复用)</li>
+</ul>
+<p>多线程:</p>
+<ul>
+<li>共享地址空间,包括代码,数据,堆,共享库,打开的文件,通信成本低</li>
+<li>上下文切换比多进程快</li>
+<li>共享变量并发问题较多 (使用信号量同步/互斥)</li>
+<li>可重入问题 , 可重入函数(不引入任何共享变量)</li>
+</ul>
+<h2 id="_4">资料</h2>
+<p><a href="https://www.youtube.com/watch?v=eQNhD7w7XrY&amp;t=3s">15-213 recitation</a></p>
+<p>csapp 第三版最后三章</p>
+<p>参考 tiny 目录的 tiny httpserver</p>
+<p><a href="http://csapp.cs.cmu.edu/3e/labs.html">csapp labs</a></p>
+<h2 id="_5">后续</h2>
+<p>在 proxy 这一层还可以加功能,如缓存,使用 LRU Cache 对每个 GET uri 缓存</p>
+<h2 id="_6">梳理的流程</h2>
+<div class="mermaid">sequenceDiagram
+      participant client
+    participant mainThread
+    participant newThread
+    participant lruCache
+    participant realServer
+    mainThread-&gt;&gt;mainThread: continue listen
+    client-&gt;&gt;mainThread:send request
+    mainThread-&gt;&gt;newThread: accept , pass connfd to newThread
+    newThread-&gt;&gt;newThread: detach with main thread
+    Note right of newThread : because ?
+    newThread-&gt;&gt;lruCache:ask if request cache exist ?
+    newThread-&gt;&gt;client:cache exist,directly back to client
+    client-&gt;&gt;newThread: read request header from connfd
+    newThread-&gt;&gt;newThread: build  request header ready for real server
+    newThread-&gt;&gt;realServer:connect with real server
+    newThread-&gt;&gt;realServer:send request
+    realServer-&gt;&gt;newThread:read response
+    newThread-&gt;&gt;lruCache:save response to lru
+    newThread-&gt;&gt;client:send response to connfd
+    newThread-&gt;&gt;newThread:close
+
+
+</div>
+</div>
+</div>
+<footer>
+<div aria-label="footer navigation" class="rst-footer-buttons" role="navigation">
+<a class="btn btn-neutral float-right" href="../csapp-shell/" title="CSAPP - Shell 总结">Next <span class="icon icon-circle-arrow-right"></span></a>
+<a class="btn btn-neutral" href="../../build-my-own-x/php-framework/" title="构建自己的 PHP 框架"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+</div>
+<hr/>
+<div role="contentinfo">
+<!-- Copyright etc -->
+</div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+</div>
+</div>
+</section>
+</div>
+<div aria-label="versions" class="rst-versions" role="note">
+<span class="rst-current-version" data-toggle="rst-current-version">
+<span><a href="../../build-my-own-x/php-framework/" style="color: #fcfcfc;">« Previous</a></span>
+<span style="margin-left: 15px"><a href="../csapp-shell/" style="color: #fcfcfc">Next »</a></span>
+</span>
+</div>
+<script>var base_url = '../..';</script>
+<script defer="" src="../../js/theme.js"></script>
+<script defer="" src="../../js/mermaid.min.js"></script>
+<script defer="" src="../../js/highlight.min.js"></script>
+<script defer="">
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        };
+    </script>
+<script>mermaid.initialize({});</script></body>
+</html>

@@ -7,15 +7,15 @@
 <meta content="IE=edge" http-equiv="X-UA-Compatible"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <link href="../../img/favicon.ico" rel="shortcut icon"/>
-<title>Notes.app 卡死问题 - Log0c</title>
+<title>Service repository - Log0c</title>
 <link href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" rel="stylesheet">
 <link href="../../css/theme.css" rel="stylesheet"/>
 <link href="../../css/theme_extra.css" rel="stylesheet"/>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet"/>
 <script>
     // Current page data
-    var mkdocs_page_name = "Notes.app \u5361\u6b7b\u95ee\u9898";
-    var mkdocs_page_input_path = "mac/mac-note-stalled.md";
+    var mkdocs_page_name = "Service repository";
+    var mkdocs_page_input_path = "unfinish/service-repository.md";
     var mkdocs_page_url = null;
   </script>
 <script defer="" src="../../js/jquery-2.1.1.min.js"></script>
@@ -70,12 +70,10 @@
 </li>
 </ul>
 <p class="caption"><span class="caption-text">Mac</span></p>
-<ul class="current">
-<li class="toctree-l1 current"><a class="reference internal current" href="./">Notes.app 卡死问题</a>
-<ul class="current">
-</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../mac/mac-note-stalled/">Notes.app 卡死问题</a>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../osx86_external_ssd_swap_problem/">外部 SSD Swap 分区开启问题</a>
+<li class="toctree-l1"><a class="reference internal" href="../../mac/osx86_external_ssd_swap_problem/">外部 SSD Swap 分区开启问题</a>
 </li>
 </ul>
 <p class="caption"><span class="caption-text">PHP</span></p>
@@ -103,8 +101,7 @@
 <div aria-label="breadcrumbs navigation" role="navigation">
 <ul class="wy-breadcrumbs">
 <li><a href="../..">Docs</a> »</li>
-<li>Mac »</li>
-<li>Notes.app 卡死问题</li>
+<li>Service repository</li>
 <li class="wy-breadcrumbs-aside">
 </li>
 </ul>
@@ -112,18 +109,19 @@
 </div>
 <div role="main">
 <div class="section">
-<h1 id="mac-notesapp">mac Notes.app 卡死问题</h1>
-<p>通过 Console.app 查 mac 全局日志的方式解决问题</p>
-<p>用了 3 年多的 10.13.6 系统 , notes.app 软件时长会出现卡住几秒不动的情况 , 打开console.app 搜索日志 note 关键词 , 发现是 sqlite 数据库文件 malformed 了 , 删除后重新生成问题解决 , 文件路径<code>/Users/lin/Library/Group Containers/group.com.apple.notes</code></p>
-<p><img alt="image-20191120140931373" src="/img/a.jpg"/>
-<img alt="image-20191120140931373" src="/img/b.jpg"/></p>
+<p>这里我有个问题, 平时业务开发中的 Service , Repository 这些类, 需要放到容器中吗 , 不需要的话, 在哪里 new 呢</p>
+<p>因为业务代码是不需要关注框架部分的东西的 , 所以控制器的上一层就相当于业务逻辑的""最外层" , 注入的话注入控制器就好了 , new 的操作交给控制器的上层负责</p>
+<p>但是这样上层不就和 service 和 repository 形成依赖了吗 , 所以在 JAVA 的 spring boot 框架中这些类是通过注解的形式注入的 (在微服务那门课程看到的)  , 而 PHP 中也有好的实现方式 , 通过反射注入, 这样就顺利解开了依赖, 可测试, 易于修改两个痛点都解决了</p>
+<p>另一个问题是, 通常一个 service 可能依赖多个 repository , 这样在启动的时候实例化如此多的类可能会造成性能问题? 并且可能在这次运行中大部分都用不到, 想到的一个解决方案是也把 repository 放到容器里, 但这样容器会非常肿大, 第二个解决方案是注入一个repository 的 factory 到 service 里, 使用的时候 <code>$this-&gt;repositoryFactory-&gt;create('xxxRepository')</code> , 目前可能第二个方案比较能接受, 后面看看 Doctrine 官方的解决方案, 似乎有个 EntityManager 和 EntityRepository 的设计 , 或者考虑 repository 到底需不需要注入</p>
+<p>还有第三方库的依赖问题, 这个在 Laravel 里已经见过许多了, 都是通过 ServiceProvider 定义, 注入到容器中</p>
+<p>两个 service 循环依赖, 导致反射注入失败的问题 , 首先这样的 service 职责设计是否合理, 也许不应该出现循环依赖,   </p>
+<p>其次解决方案是用容器将实例化过程描述好</p>
+<p>这都够另开一篇讲了, 几乎就要做成单体里的微服务了</p>
+<p>整一个做下来全是面向对象的东西, 和一些基础学习相比, 可以说是非常实用 (工作上) 的一次实践了, 并且之前有接触到 Spring boot 开发微服务的一套东西, 相互之间一对比, 很多东西就贯通了, 在面向对象这方面, Java 还是大哥大</p>
+<p>微服务的角度 ,  service 从注册中心里获取 , repository 有 repository manager / factory</p>
 </div>
 </div>
 <footer>
-<div aria-label="footer navigation" class="rst-footer-buttons" role="navigation">
-<a class="btn btn-neutral float-right" href="../osx86_external_ssd_swap_problem/" title="外部 SSD Swap 分区开启问题">Next <span class="icon icon-circle-arrow-right"></span></a>
-<a class="btn btn-neutral" href="../../labs/cs144/" title="CS144 总结"><span class="icon icon-circle-arrow-left"></span> Previous</a>
-</div>
 <hr/>
 <div role="contentinfo">
 <!-- Copyright etc -->
@@ -137,8 +135,6 @@
 </div>
 <div aria-label="versions" class="rst-versions" role="note">
 <span class="rst-current-version" data-toggle="rst-current-version">
-<span><a href="../../labs/cs144/" style="color: #fcfcfc;">« Previous</a></span>
-<span style="margin-left: 15px"><a href="../osx86_external_ssd_swap_problem/" style="color: #fcfcfc">Next »</a></span>
 </span>
 </div>
 <script>var base_url = '../..';</script>
