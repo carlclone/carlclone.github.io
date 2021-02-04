@@ -7,14 +7,14 @@
 <meta content="IE=edge" http-equiv="X-UA-Compatible"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <link href="../../img/favicon.ico" rel="shortcut icon"/>
-<title>CS144 总结 - Log0c</title>
+<title>CS144 - Log0c</title>
 <link href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" rel="stylesheet">
 <link href="../../css/theme.css" rel="stylesheet"/>
 <link href="../../css/theme_extra.css" rel="stylesheet"/>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet"/>
 <script>
     // Current page data
-    var mkdocs_page_name = "CS144 \u603b\u7ed3";
+    var mkdocs_page_name = "CS144";
     var mkdocs_page_input_path = "labs/cs144.md";
     var mkdocs_page_url = null;
   </script>
@@ -35,6 +35,13 @@
 <li class="toctree-l1"><a class="reference internal" href="../..">主页</a>
 </li>
 </ul>
+<p class="caption"><span class="caption-text">构建自己的 X 项目</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../build-my-own-x/jquery/">构建自己的 jQuery</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../build-my-own-x/php-framework/">构建自己的 PHP 框架</a>
+</li>
+</ul>
 <p class="caption"><span class="caption-text">工具</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../tools/xdebug/">Xdebug 深入学习</a>
@@ -53,20 +60,33 @@
 <li class="toctree-l1"><a class="reference internal" href="../../algos/lru-cache-go/">LRU 线程安全和高并发</a>
 </li>
 </ul>
-<p class="caption"><span class="caption-text">构建自己的 X 项目</span></p>
+<p class="caption"><span class="caption-text">Mac</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../build-my-own-x/jquery/">构建自己的 jQuery</a>
+<li class="toctree-l1"><a class="reference internal" href="../../mac/mac-note-stalled/">Notes.app 卡死问题</a>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../../build-my-own-x/php-framework/">构建自己的 PHP 框架</a>
+<li class="toctree-l1"><a class="reference internal" href="../../mac/osx86_external_ssd_swap_problem/">外部 SSD Swap 分区开启问题</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">PHP</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../php/how-composer-work/">Composer 是如何工作的</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../php/business-logic-framework/">关于业务代码的框架</a>
 </li>
 </ul>
 <p class="caption"><span class="caption-text">课程 Labs</span></p>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="../csapp-proxy/">CSAPP - Proxy 总结</a>
+<li class="toctree-l1"><a class="reference internal" href="../csapp-proxy/">CSAPP - Proxy</a>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../csapp-shell/">CSAPP - Shell 总结</a>
+<li class="toctree-l1"><a class="reference internal" href="../csapp-shell/">CSAPP - Shell</a>
 </li>
-<li class="toctree-l1 current"><a class="reference internal current" href="./">CS144 总结</a>
+<li class="toctree-l1"><a class="reference internal" href="../6824-mapreduce/">MIT 6.824 - MapReduce</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../6824-raft/">MIT 6.824 - Raft</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../6824-kv/">MIT 6.824 - KV</a>
+</li>
+<li class="toctree-l1 current"><a class="reference internal current" href="./">CS144</a>
 <ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="#_1">前言</a>
 </li>
@@ -85,23 +105,57 @@
 </ul>
 </li>
 </ul>
-<p class="caption"><span class="caption-text">Mac</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../../mac/mac-note-stalled/">Notes.app 卡死问题</a>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="../../mac/osx86_external_ssd_swap_problem/">外部 SSD Swap 分区开启问题</a>
-</li>
-</ul>
-<p class="caption"><span class="caption-text">PHP</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../../php/how-composer-work/">Composer 是如何工作的</a>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="../../php/taylor-otwell-interview/">Taylor otwell 采访文章</a>
-</li>
-</ul>
 <p class="caption"><span class="caption-text">杂项</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../others/mac_py_env_deploy/">Mac Python环境 miniConda +scrapy 搭建</a>
+<li class="toctree-l1"><a class="reference internal" href="../../others/mac_py_env_deploy/">Mac Python环境 miniConda 搭建</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../others/taylor-otwell-interview/">Taylor otwell 采访文章</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">零碎知识点</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../knowledge-reduce/tricks/">编程技巧/方法</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../knowledge-reduce/network_programming/">网络编程</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../knowledge-reduce/problem_trace/">问题排查</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../knowledge-reduce/network-course/">计算机网络课程分享</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../knowledge-reduce/mysql/">MYSQL</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../knowledge-reduce/language_trait_and_implementation/">语言特性/底层实现</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../knowledge-reduce/computer_composition/">计算机组成原理</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">归档</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/blog_deploy_log/">博客服务器环境搭建记录</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../redis/redis_code_book_reading/">Redis 设计与实现笔记</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/laracasts_learning_path/">Laracasts学习记录</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/black_sierra/">K480N 黑苹果安装记录</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/php_career_guide_line/">从框架看PHP的五种境界[转]</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/laravel_marcoable/">Laravel中的Marcoable</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/laravel_code_book_reading/">Laravel框架关键技术-阅读总结</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/laravel_admin_code_reading/">Laravel-Admin源码阅读</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/first_internship/">实习</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../summary/2017/">2017 总结</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/second_job/">2018 总结</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../summary/2019/">2019 总结</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../summary/2020/">2020 总结</a>
 </li>
 </ul>
 </div>
@@ -118,7 +172,7 @@
 <ul class="wy-breadcrumbs">
 <li><a href="../..">Docs</a> »</li>
 <li>课程 Labs »</li>
-<li>CS144 总结</li>
+<li>CS144</li>
 <li class="wy-breadcrumbs-aside">
 </li>
 </ul>
@@ -220,8 +274,8 @@ receiver 会存储一个"最后的 int64 的 seqno"作为 checkpoint, 我们所�
 </div>
 <footer>
 <div aria-label="footer navigation" class="rst-footer-buttons" role="navigation">
-<a class="btn btn-neutral float-right" href="../../mac/mac-note-stalled/" title="Notes.app 卡死问题">Next <span class="icon icon-circle-arrow-right"></span></a>
-<a class="btn btn-neutral" href="../csapp-shell/" title="CSAPP - Shell 总结"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+<a class="btn btn-neutral float-right" href="../../others/mac_py_env_deploy/" title="Mac Python环境 miniConda 搭建">Next <span class="icon icon-circle-arrow-right"></span></a>
+<a class="btn btn-neutral" href="../6824-kv/" title="MIT 6.824 - KV"><span class="icon icon-circle-arrow-left"></span> Previous</a>
 </div>
 <hr/>
 <div role="contentinfo">
@@ -236,17 +290,17 @@ receiver 会存储一个"最后的 int64 的 seqno"作为 checkpoint, 我们所�
 </div>
 <div aria-label="versions" class="rst-versions" role="note">
 <span class="rst-current-version" data-toggle="rst-current-version">
-<span><a href="../csapp-shell/" style="color: #fcfcfc;">« Previous</a></span>
-<span style="margin-left: 15px"><a href="../../mac/mac-note-stalled/" style="color: #fcfcfc">Next »</a></span>
+<span><a href="../6824-kv/" style="color: #fcfcfc;">« Previous</a></span>
+<span style="margin-left: 15px"><a href="../../others/mac_py_env_deploy/" style="color: #fcfcfc">Next »</a></span>
 </span>
 </div>
 <script>var base_url = '../..';</script>
 <script defer="" src="../../js/theme.js"></script>
 <script defer="" src="../../js/mermaid.min.js"></script>
-<script defer="" src="../../js/highlight.min.js"></script>
+<script defer="" src="../../js/custom.js"></script>
 <script defer="">
         window.onload = function () {
-            SphinxRtdTheme.Navigation.enable(true);
+            SphinxRtdTheme.Navigation.enable(false);
         };
     </script>
 </body>
