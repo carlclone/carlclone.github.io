@@ -7,14 +7,14 @@
 <meta content="IE=edge" http-equiv="X-UA-Compatible"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <link href="../../img/favicon.ico" rel="shortcut icon"/>
-<title>构建简单的 lisp compiler - Log0c</title>
+<title>构建自己的 Lisp Compiler - Log0c</title>
 <link href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" rel="stylesheet">
 <link href="../../css/theme.css" rel="stylesheet"/>
 <link href="../../css/theme_extra.css" rel="stylesheet"/>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet"/>
 <script>
     // Current page data
-    var mkdocs_page_name = "\u6784\u5efa\u7b80\u5355\u7684 lisp compiler";
+    var mkdocs_page_name = "\u6784\u5efa\u81ea\u5df1\u7684 Lisp Compiler";
     var mkdocs_page_input_path = "build-my-own-x/lisp-compiler.md";
     var mkdocs_page_url = null;
   </script>
@@ -69,10 +69,14 @@
 </li>
 </ul>
 <p class="caption"><span class="caption-text">构建自己的 X 项目</span></p>
-<ul>
+<ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../jquery/">构建自己的 jQuery</a>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../php-framework/">构建自己的 PHP 框架</a>
+</li>
+<li class="toctree-l1 current"><a class="reference internal current" href="./">构建自己的 Lisp Compiler</a>
+<ul class="current">
+</ul>
 </li>
 </ul>
 <p class="caption"><span class="caption-text">Mac</span></p>
@@ -157,7 +161,8 @@
 <div aria-label="breadcrumbs navigation" role="navigation">
 <ul class="wy-breadcrumbs">
 <li><a href="../..">Docs</a> »</li>
-<li>构建简单的 lisp compiler</li>
+<li>构建自己的 X 项目 »</li>
+<li>构建自己的 Lisp Compiler</li>
 <li class="wy-breadcrumbs-aside">
 </li>
 </ul>
@@ -166,21 +171,41 @@
 <div role="main">
 <div class="section">
 <h1 id="lisp-compiler">构建简单的 lisp compiler</h1>
-<p>我们要实现的仅仅是 add(2,3) 语法 , 并且不考虑错误语法检查</p>
-<p>第一步,词法分析, 作一下弊 , 使用正则库实现</p>
-<p>这里的 token 类型有 函数名,左括号,字面量,逗号,右括号</p>
-<p>如何区分是函数名还是字面量呢? </p>
-<p>得到一个token 的数组, 每个元素是一个 object , {type:"" , value:""}</p>
-<p>第二步,语法分析,生成 AST</p>
-<p>生成的结果是一个嵌套结果, 所以会用到递归</p>
-<p>嵌套结果是 { program { function {param,param} } }</p>
-<p>由于 function 的参数可能也是 function, 因此这里会产生递归</p>
-<p>program 则是默认生成的一层,  </p>
-<p>第三步,AST 转换成另一种 AST,这步的意义是什么</p>
-<p>第四步, 中序遍历 AST, 产生"机器码" , 在这里产生的是 js 代码...</p>
+<p>参照着<a href="https://github.com/jamiebuilds/the-super-tiny-compiler/blob/master/the-super-tiny-compiler.js">the-super-tiny-compiler</a> , 写了一个 <a href="https://github.com/carlclone/lisp-compiler/blob/master/compiler.go">go 语言的版本</a></p>
+<pre><code>//嵌套function
+(add 10 (subtract 10 6))
+
+//输出
+add(10, subtract(10, 6));
+
+//program 下多条 function call
+(add 2 2)
+(subtract 4 2)
+
+add(2,2);
+subtract(4,2);
+</code></pre>
+<p>写完整个 compiler 会发现用到了许多树的遍历模板, 是一个练习树/递归结构的不错的小作业, 并且不会像算法题一样枯燥</p>
+<p>并且这里的子树只有在 function call 的时候才会出现, 通常做这类题, 子树的细节是屏蔽掉的, 如下图, 这是我做树形题目的主要思路</p>
+<p><img alt="" src="/img/tree.png"/></p>
+<pre><code>//树遍历主要框架
+traverse(root Node) {
+    //进入节点
+    enter()
+    for child:=range root.children {
+        traverse(child)
+    }
+    //退出节点
+    exit()
+}
+</code></pre>
 </div>
 </div>
 <footer>
+<div aria-label="footer navigation" class="rst-footer-buttons" role="navigation">
+<a class="btn btn-neutral float-right" href="../../mac/mac-note-stalled/" title="Notes.app 卡死问题">Next <span class="icon icon-circle-arrow-right"></span></a>
+<a class="btn btn-neutral" href="../php-framework/" title="构建自己的 PHP 框架"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+</div>
 <hr/>
 <div role="contentinfo">
 <!-- Copyright etc -->
@@ -194,6 +219,8 @@
 </div>
 <div aria-label="versions" class="rst-versions" role="note">
 <span class="rst-current-version" data-toggle="rst-current-version">
+<span><a href="../php-framework/" style="color: #fcfcfc;">« Previous</a></span>
+<span style="margin-left: 15px"><a href="../../mac/mac-note-stalled/" style="color: #fcfcfc">Next »</a></span>
 </span>
 </div>
 <script>var base_url = '../..';</script>
