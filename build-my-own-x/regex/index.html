@@ -7,14 +7,14 @@
 <meta content="IE=edge" http-equiv="X-UA-Compatible"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <link href="../../img/favicon.ico" rel="shortcut icon"/>
-<title>正则表达式引擎 - Log0c</title>
+<title>Regex Engine 学习 - Log0c</title>
 <link href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" rel="stylesheet">
 <link href="../../css/theme.css" rel="stylesheet"/>
 <link href="../../css/theme_extra.css" rel="stylesheet"/>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet"/>
 <script>
     // Current page data
-    var mkdocs_page_name = "\u6b63\u5219\u8868\u8fbe\u5f0f\u5f15\u64ce";
+    var mkdocs_page_name = "Regex Engine \u5b66\u4e60";
     var mkdocs_page_input_path = "build-my-own-x/regex.md";
     var mkdocs_page_url = null;
   </script>
@@ -69,12 +69,24 @@
 </li>
 </ul>
 <p class="caption"><span class="caption-text">构建自己的 X 项目</span></p>
-<ul>
+<ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../jquery/">构建自己的 jQuery</a>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../php-framework/">构建自己的 PHP 框架</a>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../lisp-compiler/">构建自己的 Lisp Compiler</a>
+<li class="toctree-l1"><a class="reference internal" href="../lisp-compiler/">构建 Lisp Compiler</a>
+</li>
+<li class="toctree-l1 current"><a class="reference internal current" href="./">Regex Engine 学习</a>
+<ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="#_2">递归+记忆化的做法</a>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#_3">动态规划的做法</a>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#_4">结尾</a>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#_5">参考资料</a>
+</li>
+</ul>
 </li>
 </ul>
 <p class="caption"><span class="caption-text">Mac</span></p>
@@ -159,7 +171,8 @@
 <div aria-label="breadcrumbs navigation" role="navigation">
 <ul class="wy-breadcrumbs">
 <li><a href="../..">Docs</a> »</li>
-<li>正则表达式引擎</li>
+<li>构建自己的 X 项目 »</li>
+<li>Regex Engine 学习</li>
 <li class="wy-breadcrumbs-aside">
 </li>
 </ul>
@@ -167,29 +180,40 @@
 </div>
 <div role="main">
 <div class="section">
-<h1 id="_1">正则表达式引擎</h1>
-<p>这里只实现了递归和动态规划的写法, NFA 和 DFA 的写法后续加上</p>
+<h1 id="_1">正则表达式引擎学习</h1>
 <p>要实现的是支持普通字符串匹配, 支持 . 和 * 符号匹配的正则引擎</p>
 <p>. 很好理解, 匹配任意一个字符, 和普通字符串一样 matchOne 函数处理 就可以了</p>
 <p><em>表示匹配上一个字符的 0 次或 n 次 , 所以需要额外的 matchStar 函数 对</em>进行特殊处理</p>
 <p>子问题已经找到了 , 接下来寻找子问题重叠的部分, 用记忆化来降低复杂度</p>
 <p>用一个例子来找重复子问题</p>
-<p>p = a*ab</p>
-<p>s = aaab</p>
-<p>第一条路径匹配 a , 0 次 , 最后匹配失败, (匹配 0 次的结果不记忆也可以)
-第二条匹配 a 1 次, 那么p[1]和 s[0] 就成功匹配了 , 虽然最后也匹配失败了, 但是 p[1] , s[0] 成功匹配这个结果可以在后面的路径用上
-第三条路径,匹配 a 2 次, 因为 p[1]和 s[1]已经匹配过了, 所以这次可以直接从 p[1]和 s[1] 开始匹配 , 也成功匹配, 并且最后完全匹配成功</p>
+<pre><code>p = a*ab
+
+s = aaab
+</code></pre>
+<p>第一条路径匹配 a , 0 次 , 最后匹配失败, (匹配 0 次的结果不记忆也可以)</p>
+<p>第二条匹配 a 1 次, 那么p[1]和 s[0] 就成功匹配了 , 虽然最后也匹配失败了, 但是 p[1] , s[0] 成功匹配这个结果可以在后面的路径用上</p>
+<p>第三条路径,匹配 a 2 次, 因为 p[1]和 s[1]已经匹配过了, 所以这次可以直接从 p[1]和 s[1] 开始匹配 , 也成功匹配, 并且最后完全匹配成功</p>
 <p>至此就找到了重复子问题</p>
 <h2 id="_2">递归+记忆化的做法</h2>
+<p>TODO;</p>
 <h2 id="_3">动态规划的做法</h2>
+<p>TODO;</p>
 <p>有了上面递归过程对重复子问题的定义, 动态规划的状态和状态转移就一目了然了 , 状态就是 p[x]和 s[y]的匹配结果 , 用二维数组 dp[x][y]保存
 状态转移就是(画一个状态机) , 从之前的 dp[x][y] 是否可以转换到 dp[x+1][y] 或 dp[x][y+1]或 dp[x+1][y+1] , </p>
 <h2 id="_4">结尾</h2>
 <p>经过在 build-your-own-x 的正则引擎项目和极客时间的编译原理中词法分析中的状态机学习后, 对动态规划所描述的"状态"和"状态转移"有了新的认识
 动态规划题目也变得不这么难懂了</p>
+<p>这里是递归和动态规划的写法, NFA 和 DFA 的还需要深入学习</p>
+<h2 id="_5">参考资料</h2>
+<p><a href="https://www.cs.princeton.edu/courses/archive/spr09/cos333/beautiful.html">A Regular Expression Matcher</a></p>
+<p><a href="https://nickdrane.com/build-your-own-regex/">Build a Regex Engine in Less than 40 Lines of Code</a></p>
 </div>
 </div>
 <footer>
+<div aria-label="footer navigation" class="rst-footer-buttons" role="navigation">
+<a class="btn btn-neutral float-right" href="../../mac/mac-note-stalled/" title="Notes.app 卡死问题">Next <span class="icon icon-circle-arrow-right"></span></a>
+<a class="btn btn-neutral" href="../lisp-compiler/" title="构建 Lisp Compiler"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+</div>
 <hr/>
 <div role="contentinfo">
 <!-- Copyright etc -->
@@ -203,6 +227,8 @@
 </div>
 <div aria-label="versions" class="rst-versions" role="note">
 <span class="rst-current-version" data-toggle="rst-current-version">
+<span><a href="../lisp-compiler/" style="color: #fcfcfc;">« Previous</a></span>
+<span style="margin-left: 15px"><a href="../../mac/mac-note-stalled/" style="color: #fcfcfc">Next »</a></span>
 </span>
 </div>
 <script>var base_url = '../..';</script>
