@@ -7,14 +7,14 @@
 <meta content="IE=edge" http-equiv="X-UA-Compatible"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <link href="../../img/favicon.ico" rel="shortcut icon"/>
-<title>构建自己的 Vue 框架 - Log0c</title>
+<title>构建自己的响应式前端框架 - Log0c</title>
 <link href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" rel="stylesheet">
 <link href="../../css/theme.css" rel="stylesheet"/>
 <link href="../../css/theme_extra.css" rel="stylesheet"/>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet"/>
 <script>
     // Current page data
-    var mkdocs_page_name = "\u6784\u5efa\u81ea\u5df1\u7684 Vue \u6846\u67b6";
+    var mkdocs_page_name = "\u6784\u5efa\u81ea\u5df1\u7684\u54cd\u5e94\u5f0f\u524d\u7aef\u6846\u67b6";
     var mkdocs_page_input_path = "build-my-own-x/vue.md";
     var mkdocs_page_url = null;
   </script>
@@ -66,6 +66,15 @@
 <li class="toctree-l1"><a class="reference internal" href="../../algos/multiple-field-sort/">多字段排序</a>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../algos/lru-cache-go/">LRU 线程安全和高并发</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">数学/逻辑</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../problem-solve/learn-problem-solve-with-polya/">和波利亚学解题</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../problem-solve/probability/">计数和概率</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../problem-solve/%E9%80%BB%E8%BE%91%E6%99%BA%E5%8A%9B%E9%A2%98/">逻辑</a>
 </li>
 </ul>
 <p class="caption"><span class="caption-text">构建自己的 X 项目</span></p>
@@ -161,7 +170,7 @@
 <div aria-label="breadcrumbs navigation" role="navigation">
 <ul class="wy-breadcrumbs">
 <li><a href="../..">Docs</a> »</li>
-<li>构建自己的 Vue 框架</li>
+<li>构建自己的响应式前端框架</li>
 <li class="wy-breadcrumbs-aside">
 </li>
 </ul>
@@ -169,8 +178,11 @@
 </div>
 <div role="main">
 <div class="section">
-<h1 id="vue">构建自己的 Vue 框架</h1>
+<h1 id="_1">构建自己的响应式前端框架</h1>
 <p>前端的 MVVM 框架是 DOM 操作恐惧者的救星, 想看看是怎么设计的</p>
+<p>首先定一下要实现的目标, 一是数据双向绑定,DOM 修改后反映到 value,反之亦然</p>
+<p>如果只是实现第一个目标, 那没有 VDOM 也是可以实现的</p>
+<p>那 VDOM 的主要作用是什么呢? </p>
 </div>
 </div>
 <footer>

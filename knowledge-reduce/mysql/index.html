@@ -68,6 +68,15 @@
 <li class="toctree-l1"><a class="reference internal" href="../../algos/lru-cache-go/">LRU 线程安全和高并发</a>
 </li>
 </ul>
+<p class="caption"><span class="caption-text">数学/逻辑</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../problem-solve/learn-problem-solve-with-polya/">和波利亚学解题</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../problem-solve/probability/">计数和概率</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../problem-solve/%E9%80%BB%E8%BE%91%E6%99%BA%E5%8A%9B%E9%A2%98/">逻辑</a>
+</li>
+</ul>
 <p class="caption"><span class="caption-text">构建自己的 X 项目</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../build-my-own-x/jquery/">构建自己的 jQuery</a>
@@ -174,6 +183,18 @@
 <div class="section">
 <p> </p>
 <!-- more -->
+<h1 id="hasonesql-entity">关联查询 hasone底层是什么sql。配置表之间的关联关系 创建表entity</h1>
+<p>有拆分的也有 join 的</p>
+<p>https://gin-gonic.com/zh-cn/docs/introduction/
+https://gorm.io/zh_CN/docs/performance.html</p>
+<p>https://blog.csdn.net/qq_28053177/article/details/82187821</p>
+<p>https://solutionsreview.com/business-intelligence/the-best-apache-kafka-books-and-upcoming-titles-to-consider/</p>
+<h1 id="join-where">join 和 where 哪个先执行, 和分成两条查哪个更好</h1>
+<p>取决于数据库的抽样统计结果和优化器的判断, 两者都差不多, 拆分查询对后期拆分业务, 扩展有好处 , join 减少一次网络请求</p>
+<p>https://stackoverflow.com/questions/3960561/where-and-join-order-of-operation
+高性能 mysql</p>
+<h1 id="_1">为什么很少看到子查询</h1>
+<p>因为在 5.5 之前的版本, mysql 对子查询的执行计划优化是很差的(参考高性能 MySQL), 因此很多人都养成了习惯 , 使用 join 和拆分查询的方式,而不是子查询</p>
 <h1 id="b-tree-b-more-tree-4b">B-Tree 和B more Tree (4、b+树特性)</h1>
 <p>B more Tree产生的原因: 常规的树结构不能很好地支持"区间查询" (需要进行一次从根节点开始的中序遍历,时间复杂度O(n) , 因为树结构不支持从某个节点开始有序遍历)</p>
 <p>和跳跃表(多级链表索引,每一级都定位到更小的范围,最后找到元素)很相似 , 但却是两个不一样的演化分支 </p>
@@ -199,7 +220,7 @@
 <p>(依据官方文档的实现:doublewrite buffer和crash recovery)
 保证事务提交后,未来的事务一定能看到影响 (崩溃后重启,会从redolog中读取写入正确位置后再执行其他事务)
 保证事务中的操作能正确,有效地执行</p>
-<h2 id="_1">资料</h2>
+<h2 id="_2">资料</h2>
 <p>https://dev.mysql.com/doc/refman/5.6/en/mysql-acid.html
 https://en.wikipedia.org/wiki/ACID#Consistency
 https://developpaper.com/question/how-to-understand-consistency-in-mysql/</p>
@@ -209,11 +230,11 @@ https://developpaper.com/question/how-to-understand-consistency-in-mysql/</p>
 <h1 id="unique-index-vs-normal-index">Unique Index vs Normal Index</h1>
 <p>UI每次维护的时候还需要检查唯一性 , 写性能损耗比NI的高
 查性能的差异可以忽略不计,因此能用NI的时候用NI</p>
-<h1 id="_2">不适合建立索引的场景</h1>
+<h1 id="_3">不适合建立索引的场景</h1>
 <p>频繁写 , 频繁维护索引, 在非递增的情况下还容易产生页分裂
 重复值过多 , 用"二分查找"的思维去理解, 例子:性别字段, 过滤掉一半之后依然需要遍历表一半的数据 (时间复杂度退化成O(n/2))
 varchar字段建索引更容易产生页分裂 (未查证)</p>
-<h1 id="_3">联合索引</h1>
+<h1 id="_4">联合索引</h1>
 <p>可以理解为多维有序数组多层遍历,取符合的数据</p>
 <p>当然实际上是Bmore Tree的区间查询过程, 先搜索树找到第一个符合条件的叶子节点,再从叶子节点链表向后遍历</p>
 <p>5.5 之前只能匹配第一列,然后依个回主键索引再判断第二个条件</p>

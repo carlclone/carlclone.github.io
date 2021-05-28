@@ -7,15 +7,15 @@
 <meta content="IE=edge" http-equiv="X-UA-Compatible"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <link href="../../img/favicon.ico" rel="shortcut icon"/>
-<title>一维数组构造树结构 - Log0c</title>
+<title>Elastic search dig deep - Log0c</title>
 <link href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" rel="stylesheet">
 <link href="../../css/theme.css" rel="stylesheet"/>
 <link href="../../css/theme_extra.css" rel="stylesheet"/>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet"/>
 <script>
     // Current page data
-    var mkdocs_page_name = "\u4e00\u7ef4\u6570\u7ec4\u6784\u9020\u6811\u7ed3\u6784";
-    var mkdocs_page_input_path = "algos/from-arr-to-tree.md";
+    var mkdocs_page_name = "Elastic search dig deep";
+    var mkdocs_page_input_path = "xb/elastic-search-dig-deep.md";
     var mkdocs_page_url = null;
   </script>
 <script defer="" src="../../js/jquery-2.1.1.min.js"></script>
@@ -61,11 +61,20 @@
 </ul>
 <p class="caption"><span class="caption-text">算法</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../int-to-binary-str/">整数转二进制字符串</a>
+<li class="toctree-l1"><a class="reference internal" href="../../algos/int-to-binary-str/">整数转二进制字符串</a>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../multiple-field-sort/">多字段排序</a>
+<li class="toctree-l1"><a class="reference internal" href="../../algos/multiple-field-sort/">多字段排序</a>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../lru-cache-go/">LRU 线程安全和高并发</a>
+<li class="toctree-l1"><a class="reference internal" href="../../algos/lru-cache-go/">LRU 线程安全和高并发</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">数学/逻辑</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../problem-solve/learn-problem-solve-with-polya/">和波利亚学解题</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../problem-solve/probability/">计数和概率</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../problem-solve/%E9%80%BB%E8%BE%91%E6%99%BA%E5%8A%9B%E9%A2%98/">逻辑</a>
 </li>
 </ul>
 <p class="caption"><span class="caption-text">构建自己的 X 项目</span></p>
@@ -161,7 +170,7 @@
 <div aria-label="breadcrumbs navigation" role="navigation">
 <ul class="wy-breadcrumbs">
 <li><a href="../..">Docs</a> »</li>
-<li>一维数组构造树结构</li>
+<li>Elastic search dig deep</li>
 <li class="wy-breadcrumbs-aside">
 </li>
 </ul>
@@ -169,17 +178,6 @@
 </div>
 <div role="main">
 <div class="section">
-<h1 id="_1">一维数组构造树结构</h1>
-<h2 id="1">方法 1</h2>
-<p>数组中每个元素都有自己的 id,父节点的 id,节点值, 有了这些信息是足够构建一颗树的,问题是如何高效的构建</p>
-<p>第一个最容易想到的方法是自顶向下, 先找到父节点, 再找到父节点的子节点,一直往下找</p>
-<p>如何找到某个父节点的子节点? 可以先遍历一遍生成一个 父节点 id -&gt; [子节点数组] 的哈希表</p>
-<p>然后递归的构建一棵树 ,  父节点的 id 假设为 0</p>
-<p>这样的时间复杂度为 o(n) 空间复杂度也为 o(n) , 还能接受</p>
-<h2 id="2">方法 2</h2>
-<p>这个方法是很久之前在网上看到的, 以当时的水平看了很久才明白</p>
-<p>这个方法的思想,相当于从树的任意一个节点开始构造整棵树 , 其实和第一种方法类似, 但哈希表是在整个过程中渐渐形成的 </p>
-<p>每次遍历到一个节点的时候,会先检查父节点是否已经存在,如果存在则直接挂到父节点名下, 否则虚拟一个父节点的容器出来,挂在这个虚拟父节点的名下</p>
 </div>
 </div>
 <footer>
