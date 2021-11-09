@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
+<head>
+<meta charset="utf-8"/>
+<meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="../../img/favicon.ico" rel="shortcut icon"/>
+<title>模拟一个 cpu - Log0c</title>
+<link href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" rel="stylesheet">
+<link href="../../css/theme.css" rel="stylesheet"/>
+<link href="../../css/theme_extra.css" rel="stylesheet"/>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet"/>
+<script>
+    // Current page data
+    var mkdocs_page_name = "\u6a21\u62df\u4e00\u4e2a cpu";
+    var mkdocs_page_input_path = "build-my-own-x/emulator.md";
+    var mkdocs_page_url = null;
+  </script>
+<script defer="" src="../../js/jquery-2.1.1.min.js"></script>
+<script defer="" src="../../js/modernizr-2.8.3.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+</link></head>
+<body class="wy-body-for-nav" role="document">
+<div class="wy-grid-for-nav">
+<nav class="wy-nav-side stickynav" data-toggle="wy-nav-shift">
+<div class="wy-side-scroll">
+<div class="wy-side-nav-search">
+<a class="icon icon-home" href="../.."> Log0c</a>
+</div>
+<div aria-label="main navigation" class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../..">主页</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">问题排查 / 性能优化</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../too-much-folder/netease-music-problem/">mac 网易云音乐 cpu 占用高问题排查</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../mac/mac-note-stalled/">mac Notes.app 卡死问题</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../mac/osx86_external_ssd_swap_problem/">mac 外部 SSD Swap 分区开启问题</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../too-much-folder/go-shadowing-variable/">go shadowing variable 造成的歧义</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../too-much-folder/go-concurrent-map-read-write-bug/">go 并发读写 map 问题一例</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../too-much-folder/go-pprof-memory-leak/">使用 pprof 排查内存泄漏</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../too-much-folder/db-metadatalock/">数据库 metadata lock 问题排查</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../too-much-folder/black-box-io-problem/">黑盒排查磁盘空间告警/IO问题</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../too-much-folder/black-box-cpu-high-problem/">cpu 排查的几个案例</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../too-much-folder/black-box-network-problem/">network 排查的几个案例</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">labs</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../labs/6824-mapreduce/">MIT 6.824 - MapReduce</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../labs/6824-raft/">MIT 6.824 - Raft</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../labs/6824-kv/">MIT 6.824 - KV</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../labs/csapp-shell/">CSAPP - Shell</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../labs/csapp-proxy/">CSAPP - Proxy</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../labs/cs144/">CS144</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">工具</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../tools/xdebug/">Xdebug 深入学习</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../tools/chrome-dev-tools/">Chrome Dev Tools 深入学习</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../tools/markdown-diagram/">Markdown Diagram 功能</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../too-much-folder/yaml-lint/">yaml lint</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">算法</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../algos/int-to-binary-str/">整数转二进制字符串</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../algos/multiple-field-sort/">多字段排序</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../algos/lru-cache-go/">LRU 线程安全和高并发</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">构建自己的 X 项目</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../jquery/">构建自己的 jQuery</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../php-framework/">构建自己的 PHP 框架</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../lisp-compiler/">构建 Lisp Compiler</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../regex/">Regex Engine 学习</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">PHP</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../php/how-composer-work/">Composer 是如何工作的</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../php/business-logic-framework/">关于业务代码的框架</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../php/symfony-lock/">Symfony Lock Component</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">杂项</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../others/mac_py_env_deploy/">Mac Python环境 miniConda 搭建</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../others/taylor-otwell-interview/">Taylor otwell 采访文章</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">零碎知识点</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../knowledge-reduce/tricks/">编程技巧/方法</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../knowledge-reduce/network_programming/">网络编程</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../knowledge-reduce/problem_trace/">问题排查</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../knowledge-reduce/network-course/">计算机网络课程分享</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../knowledge-reduce/mysql/">MYSQL</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../knowledge-reduce/language_trait_and_implementation/">语言特性/底层实现</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../knowledge-reduce/computer_composition/">计算机组成原理</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">归档</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/blog_deploy_log/">博客服务器环境搭建记录</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../redis/redis_code_book_reading/">Redis 设计与实现笔记</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/laracasts_learning_path/">Laracasts学习记录</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/black_sierra/">K480N 黑苹果安装记录</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/php_career_guide_line/">从框架看PHP的五种境界[转]</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/laravel_marcoable/">Laravel中的Marcoable</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/laravel_code_book_reading/">Laravel框架关键技术-阅读总结</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/laravel_admin_code_reading/">Laravel-Admin源码阅读</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/first_internship/">实习</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../summary/2017/">2017 总结</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/second_job/">2018 总结</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../summary/2019/">2019 总结</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../summary/2020/">2020 总结</a>
+</li>
+</ul>
+</div>
+</div>
+</nav>
+<section class="wy-nav-content-wrap" data-toggle="wy-nav-shift">
+<nav aria-label="top navigation" class="wy-nav-top" role="navigation">
+<i class="fa fa-bars" data-toggle="wy-nav-top"></i>
+<a href="../..">Log0c</a>
+</nav>
+<div class="wy-nav-content">
+<div class="rst-content">
+<div aria-label="breadcrumbs navigation" role="navigation">
+<ul class="wy-breadcrumbs">
+<li><a href="../..">Docs</a> »</li>
+<li>模拟一个 cpu</li>
+<li class="wy-breadcrumbs-aside">
+</li>
+</ul>
+<hr/>
+</div>
+<div role="main">
+<div class="section">
+<h1 id="cpu">模拟一个 cpu</h1>
+<p>深入理解计算机的学习项目之一, 模拟的是一个功能比较简单的 chip 8指令集的 cpu , 并且不带中断功能, 各种事件如按键的触发是通过每次循环的时候检查并执行的</p>
+<h2 id="_1">大体流程</h2>
+<p>cpu 的每次执行可以被分解为 取指令, 翻译指令, 执行指令的过程</p>
+<p>指令是存放在内存中的, 所以还需要模拟内存, 内存通过一个 stack 结构的数组来模拟</p>
+<p>翻译指令通过一个哈希表, 获取执行指令对应触发的函数</p>
+<p>执行指令即运行上一步得到的函数</p>
+<h1 id="_2">寄存器和函数实现</h1>
+<p>如果实现的是一个类似纸带机的模拟器, 那就只需要一个 PC(Program Counter) 记录当前执行的位置即可</p>
+<p>但这里还需要实现函数结构, 所以有一些额外的寄存器</p>
+<p>函数的实现在内存中是通过栈来实现的, 栈的特点就是先进后出,后进先出, 和函数的调用关系一样</p>
+<p>当最后调用的一个函数弹出的时候, 我们需要知道上一个函数调用的起始位置是哪里, 因此这个起始位置需要被保存起来, 这个位置称为? , 在调用后,在新的栈的前一个位置保存</p>
+<p>函数的返回值是通过保持在一个称为 eax 的寄存器中实现的</p>
+<p>函数的传参会在调用后,在新的栈处进行拷贝</p>
+<h2 id="cpu-io">CPU 对键盘 IO 事件的处理</h2>
+<h2 id="cpu_1">CPU 对声音事件的处理</h2>
+<h2 id="_3">参考资料</h2>
+<h2 id="_4">结尾</h2>
+<p>学习这个模拟器的本意是希望实现一个 GB 模拟器, 但由于 GB 模拟器的图形方面的模拟难度比较高, 先过了一遍这个相对简单的, 对 CPU软件方面的运行过程有了大致的了解, 但硬件方面比如各种逻辑门的模拟还有待进一步学习 (CS61c/from nand to tetris)</p>
+</div>
+</div>
+<footer>
+<hr/>
+<div role="contentinfo">
+<!-- Copyright etc -->
+</div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+</div>
+</div>
+</section>
+</div>
+<div aria-label="versions" class="rst-versions" role="note">
+<span class="rst-current-version" data-toggle="rst-current-version">
+</span>
+</div>
+<script>var base_url = '../..';</script>
+<script defer="" src="../../js/theme.js"></script>
+<script defer="" src="../../js/mermaid.min.js"></script>
+<script defer="" src="../../js/custom.js"></script>
+<script defer="">
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(false);
+        };
+    </script>
+</body>
+</html>

@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
+<head>
+<meta charset="utf-8"/>
+<meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="../../img/favicon.ico" rel="shortcut icon"/>
+<title>Laracasts学习记录 - Log0c</title>
+<link href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" rel="stylesheet">
+<link href="../../css/theme.css" rel="stylesheet"/>
+<link href="../../css/theme_extra.css" rel="stylesheet"/>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet"/>
+<script>
+    // Current page data
+    var mkdocs_page_name = "Laracasts\u5b66\u4e60\u8bb0\u5f55";
+    var mkdocs_page_input_path = "archive/laracasts_learning_path.md";
+    var mkdocs_page_url = null;
+  </script>
+<script defer="" src="../../js/jquery-2.1.1.min.js"></script>
+<script defer="" src="../../js/modernizr-2.8.3.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+</link></head>
+<body class="wy-body-for-nav" role="document">
+<div class="wy-grid-for-nav">
+<nav class="wy-nav-side stickynav" data-toggle="wy-nav-shift">
+<div class="wy-side-scroll">
+<div class="wy-side-nav-search">
+<a class="icon icon-home" href="../.."> Log0c</a>
+</div>
+<div aria-label="main navigation" class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../..">主页</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">问题排查 / 性能优化</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../too-much-folder/netease-music-problem/">mac 网易云音乐 cpu 占用高问题排查</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../mac/mac-note-stalled/">mac Notes.app 卡死问题</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../mac/osx86_external_ssd_swap_problem/">mac 外部 SSD Swap 分区开启问题</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../too-much-folder/go-shadowing-variable/">go shadowing variable 造成的歧义</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../too-much-folder/go-concurrent-map-read-write-bug/">go 并发读写 map 问题一例</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../too-much-folder/go-pprof-memory-leak/">使用 pprof 排查内存泄漏</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../too-much-folder/db-metadatalock/">数据库 metadata lock 问题排查</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../too-much-folder/black-box-io-problem/">黑盒排查磁盘空间告警/IO问题</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../too-much-folder/black-box-cpu-high-problem/">cpu 排查的几个案例</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../too-much-folder/black-box-network-problem/">network 排查的几个案例</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">labs</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../labs/6824-mapreduce/">MIT 6.824 - MapReduce</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../labs/6824-raft/">MIT 6.824 - Raft</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../labs/6824-kv/">MIT 6.824 - KV</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../labs/csapp-shell/">CSAPP - Shell</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../labs/csapp-proxy/">CSAPP - Proxy</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../labs/cs144/">CS144</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">工具</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../tools/xdebug/">Xdebug 深入学习</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../tools/chrome-dev-tools/">Chrome Dev Tools 深入学习</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../tools/markdown-diagram/">Markdown Diagram 功能</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../too-much-folder/yaml-lint/">yaml lint</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">算法</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../algos/int-to-binary-str/">整数转二进制字符串</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../algos/multiple-field-sort/">多字段排序</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../algos/lru-cache-go/">LRU 线程安全和高并发</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">构建自己的 X 项目</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../build-my-own-x/jquery/">构建自己的 jQuery</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../build-my-own-x/php-framework/">构建自己的 PHP 框架</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../build-my-own-x/lisp-compiler/">构建 Lisp Compiler</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../build-my-own-x/regex/">Regex Engine 学习</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">PHP</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../php/how-composer-work/">Composer 是如何工作的</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../php/business-logic-framework/">关于业务代码的框架</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../php/symfony-lock/">Symfony Lock Component</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">杂项</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../others/mac_py_env_deploy/">Mac Python环境 miniConda 搭建</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../others/taylor-otwell-interview/">Taylor otwell 采访文章</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">零碎知识点</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../knowledge-reduce/tricks/">编程技巧/方法</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../knowledge-reduce/network_programming/">网络编程</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../knowledge-reduce/problem_trace/">问题排查</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../knowledge-reduce/network-course/">计算机网络课程分享</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../knowledge-reduce/mysql/">MYSQL</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../knowledge-reduce/language_trait_and_implementation/">语言特性/底层实现</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../knowledge-reduce/computer_composition/">计算机组成原理</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">归档</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../blog_deploy_log/">博客服务器环境搭建记录</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../redis/redis_code_book_reading/">Redis 设计与实现笔记</a>
+</li>
+<li class="toctree-l1 current"><a class="reference internal current" href="./">Laracasts学习记录</a>
+<ul class="current">
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../black_sierra/">K480N 黑苹果安装记录</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../php_career_guide_line/">从框架看PHP的五种境界[转]</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../laravel_marcoable/">Laravel中的Marcoable</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../laravel_code_book_reading/">Laravel框架关键技术-阅读总结</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../laravel_admin_code_reading/">Laravel-Admin源码阅读</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../first_internship/">实习</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../summary/2017/">2017 总结</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../second_job/">2018 总结</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../summary/2019/">2019 总结</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../summary/2020/">2020 总结</a>
+</li>
+</ul>
+</div>
+</div>
+</nav>
+<section class="wy-nav-content-wrap" data-toggle="wy-nav-shift">
+<nav aria-label="top navigation" class="wy-nav-top" role="navigation">
+<i class="fa fa-bars" data-toggle="wy-nav-top"></i>
+<a href="../..">Log0c</a>
+</nav>
+<div class="wy-nav-content">
+<div class="rst-content">
+<div aria-label="breadcrumbs navigation" role="navigation">
+<ul class="wy-breadcrumbs">
+<li><a href="../..">Docs</a> »</li>
+<li>归档 »</li>
+<li>Laracasts学习记录</li>
+<li class="wy-breadcrumbs-aside">
+</li>
+</ul>
+<hr/>
+</div>
+<div role="main">
+<div class="section">
+<p>一篇记录laracasts课程完成情况的文章,略微潦草,有时间记得重新整理</p>
+<!-- more -->
+<h4 id="_1">贯穿所有课程的理念</h4>
+<p>(Jeff的讲课能力,能把一些十分复杂的东西讲的简单易懂,因为他我才喜欢上编程,也希望能和他一样保持热情)
+Jeff传达给我的最重要的几个理念是:
+先写出良好可读的抽象再实现具体细节;
+一点小小的效率提升积少成多省下巨大的时间,对工具的熟练,灵活使用往往被忽略;
+前期良好的设计和过程中合理的重构让项目不会陷入慢慢腐烂的状态;
+对项目大小有正确的估计,不必死死遵循原则,灵活变通;
+想办法简化复杂或者重复的操作（快捷键，Alias别名，VIM，脚本，代码片段如emmet，Alfred etc）</p>
+<h4 id="_2">重要的课程</h4>
+<p><code>Lets build a form with Laravel and TDD</code>
+学习了如何写出良好的测试,使得重构的过程中不再畏手畏脚,并通过Vue和Laravel的整合写出了一个功能齐全的论坛系统</p>
+<p>内容分类: 
+Laravel+PHPUnit的测试编写
+重构,整理代码
+Forum基础功能实现
+Blade+Vue的使用方式
+Laravel功能(Channel , 通知系统, 查询优化(N+1 , 复用) , Scout)
+展望-&gt;下一个课程(How to Manage an opensource project)</p>
+<p><code>Learn Vue2 :Step By Step</code>
+学习Vue2的一些基础概念,数据绑定,事件监听,组件.进阶学习了Webpack和vue-cli,路由构建SPA的过程,最后使用Vue+ES6的面向对象构建了一个可复用的前端Form组件</p>
+<p><code>Incremental APIs</code>
+这是Laravel4时期的老教程,但内容并不过时,教会了我如何设计一个合理健壮的API,对照Twitter接口,对常用HTTP状态码进行封装,自定义状态码,对数据用Transformer类进行转换过滤,并展示了一个分页接口的设计(Laravel5的Paginate已经默认实现)</p>
+<p><code>SOLID Principles in PHP</code>
+讲述面向对象设计的五大原则SOLID,看完之后我又去看了Taylor Otwell几年前写的书From Apprentice to Artisan , 写下了对他们的理解,<a href="https://carlclone.github.io/Laravel/from-apprentice-to-artisan-review">From Apprentice to Artisan 读后感</a> </p>
+<p><code>Design Patterns in PHP</code>
+使用现实例子简单介绍了装饰器模式,适配器模式,模板方法模式,策略模式,责任链模式,Specification模式,观察者模式. 印象不深,我对设计模式的理解更多来自于PHP 对象,模式与实践一书.</p>
+<p><code>Advanced Eloquent</code>
+第一遍没看明白,几个星期后的第二遍清晰了许多,Eloquent组件有相当复杂的分层和结构,这里是我的<a href="https://carlclone.github.io/Laravel/eloquent-source-code-summary">Eloquent源码总结文</a></p>
+<p><code>Simple Rule for Simple Code</code>
+一些简单的原则提高代码的可读性,和<a href="https://github.com/jupeter/clean-code-php">Clean Code PHP</a>的内容类似</p>
+<p><code>The PHP Practioner</code>
+前半部分介绍了PHP的基础知识,后半部分实现了一个简单的框架,主要有:对PDO数据库常用操作的抽象(Connection类用于连接,QueryBuilder类用于执行查询操作),抽离配置(config.php),路由($_REQUEST匹配),分离视图Views.</p>
+<p><code>ES2015 Crash Course</code>
+学习ES2015(ES6)的基本概念.</p>
+<p><code>Intermediate Laravel</code>
+跟随者Jeff阅读了Laravel Scheduling , Command , Event/Listener , Illuminate Contracts , Container 部分的源码, 对内部精密的实现有了更深层次的了解, 课后阅读了 DI Container 反射解决依赖的部分的源码, 大部分核心概念得到了加强.</p>
+<p><code>Eloquent Techniques</code>
+讲解了DB类transaction的源码执行过程(是个很好的学习闭包的例子)
+设计一个跟踪文档修改记录的系统 (可以用版本区分)
+记录字段的前后变化 
+Filters类的设计,之前在Forum里看过</p>
+<h4 id="_3">还没懂的</h4>
+<p><code>Whip Monstrous Code Into Shape</code> <br/>
+大量的复杂重构实践,难度略高,需要长期积累和不断实践</p>
+<p><code>Code Katas in PHP</code> <br/>
+偏简单算法和TDD规范,需要再看看
+1.找Prime Factor 
+2.转化为罗马数字
+3.保龄球游戏(单元测试)
+4.字符串计算器
+5.网球计分
+6.fizzbuzz游戏 </p>
+<p><code>Real-time with Socket.io</code> <br/>
+websocket长连接应用,Socket.io是websocket和其他许多通信机制的一层封装,提供给开发者一套简单调用的接口</p>
+<h4 id="_4">难度较低的课程</h4>
+<p><code>Laravel Extra Credits</code>
+大杂烩</p>
+<p><code>Laravel Auth Techniques</code>
+Github 社会化登录的实践,OAuth的验证过程, 并阅读了Laravel Socialite包的部分简单底层封装.</p>
+<p><code>Testing Laravel</code>
+完成</p>
+<p><code>PHP Extra Credits</code>
+完成</p>
+<p><code>How Do I</code>
+基本完成</p>
+<p><code>Object-Oriented Bootcamp</code>
+完成</p>
+<p><code>PHP7 Up and Running</code>
+需要复习</p>
+<p><code>Be Awesome in PHPStorm</code>
+需要重新检查技巧
+PHPStorm的使用技巧</p>
+<p><code>Git Me Some Version Control</code>
+可能需要复习或者实践</p>
+<p><code>Learn Redis Through Examples</code>
+完成</p>
+<p><code>Setup a Mac Dev Machine From Scratch</code>
+完成</p>
+<p><code>Sublime Text Mastery</code>
+忽略 换vscode编辑器了</p>
+<p><code>Understanding Regular Expressions</code>
+正则匹配基础知识,https://regex101.com/   学习正则好网站.
+一些必记基础回顾 : 
+/ 表达式部分  /
+[]匹配单个字符的所有可能性  ,在[] 里面的^ 代表除了这些之外的字符 
++ 一个或多个 <br/>
+* 0或多个
+{} 比如 \s{3} 表示匹配三个空格，\s[1,3]表示匹配一到三个空格
+() 获取这个部分的匹配 , 使用$0 , $1 获取?
+\w 与“[A-Za-z0-9_]”等效 大写和小写反过来
+\s 指空白，包括空格、换行、tab缩进等所有的空白  \S 大写和小写反过来
+\d 数字 
+| 或
+部分字符需要被转移\ 处理 如 .
+^ 匹配的开始  $ 匹配的结束
+? 懒惰匹配 尽可能短
+. 匹配任何单个字符</p>
+<p><code>Vim Mastery</code>
+Jeff说了一句对我影响深远的话,让编辑器和自己的手和身体融为一体,减少在操作上的无畏消耗</p>
+<p><code>FrontEnd Extra Credit</code>
+完成</p>
+<h4 id="_5">一些应用型的课程:</h4>
+<p>全部完成
+<code>Build Project Flyer with me</code>
+<code>Hands on Community Contributions</code>
+<code>Discover Symfony Components</code>
+<code>How to Build Command-Line Apps</code></p>
+</div>
+</div>
+<footer>
+<div aria-label="footer navigation" class="rst-footer-buttons" role="navigation">
+<a class="btn btn-neutral float-right" href="../black_sierra/" title="K480N 黑苹果安装记录">Next <span class="icon icon-circle-arrow-right"></span></a>
+<a class="btn btn-neutral" href="../../redis/redis_code_book_reading/" title="Redis 设计与实现笔记"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+</div>
+<hr/>
+<div role="contentinfo">
+<!-- Copyright etc -->
+</div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+</div>
+</div>
+</section>
+</div>
+<div aria-label="versions" class="rst-versions" role="note">
+<span class="rst-current-version" data-toggle="rst-current-version">
+<span><a href="../../redis/redis_code_book_reading/" style="color: #fcfcfc;">« Previous</a></span>
+<span style="margin-left: 15px"><a href="../black_sierra/" style="color: #fcfcfc">Next »</a></span>
+</span>
+</div>
+<script>var base_url = '../..';</script>
+<script defer="" src="../../js/theme.js"></script>
+<script defer="" src="../../js/mermaid.min.js"></script>
+<script defer="" src="../../js/custom.js"></script>
+<script defer="">
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(false);
+        };
+    </script>
+</body>
+</html>

@@ -1,0 +1,69 @@
+sol1 : 递归 , 每次将一个节点插入已 reverse 的链表中 , 传入参数 reversed 链表头和尾 , 下一个要 reverse 的节点
+
+sol2 : 开辟新空间 , 将要 reverse 的节点一个个取出来反转 , 再接回去
+
+
+
+链表也有很强的递归性质 , 想象成一颗倾斜的树 , 可以用到很多树的recusive 方法
+
+    ListNode reverse(ListNode head) {
+        if (head.next == null) return head;
+        ListNode last = reverse(head.next);
+        head.next.next = head;
+        head.next = null;
+        return last;
+    }
+
+    ListNode successor = null;
+    ListNode reverseN(ListNode head, int n) {
+        if (n == 1) {
+            successor = head.next;
+            return head;
+        }
+        ListNode last = reverseN(head.next, n - 1);
+        head.next.next = head;
+        head.next = successor;
+        return last;
+    }    
+
+    public ListNode reverseBetween(ListNode head, int m, int n) {
+        if (m == 1) {
+            // You can also expand the code here to get rid of the helper function 'reverseN'
+            return reverseN(head, n);
+        }
+        head.next = reverseBetween(head.next, m - 1, n - 1);
+        return head;
+    }
+
+
+    https://leetcode.com/problems/reverse-linked-list-ii/solution/242639
+
+
+
+
+
+
+
+    iterative solution with same thought process
+
+    class Solution:    
+    def reverseBetween(self, head: ListNode, m: int, n: int) -> ListNode:
+        prev, current = ListNode(0, head), head
+        result = prev
+        
+        for i in range(0, m-1):
+            prev.next = current;
+            current = current.next;
+            prev = prev.next
+        
+        last = current
+        
+        for i in range(n-m+1):
+            temp = current.next
+            current.next = prev.next
+            prev.next = current
+            current = temp
+        
+        last.next = temp
+        
+        return result.next

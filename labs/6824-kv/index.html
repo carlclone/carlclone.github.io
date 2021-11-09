@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
+<head>
+<meta charset="utf-8"/>
+<meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="../../img/favicon.ico" rel="shortcut icon"/>
+<title>MIT 6.824 - KV - Log0c</title>
+<link href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" rel="stylesheet">
+<link href="../../css/theme.css" rel="stylesheet"/>
+<link href="../../css/theme_extra.css" rel="stylesheet"/>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet"/>
+<script>
+    // Current page data
+    var mkdocs_page_name = "MIT 6.824 - KV";
+    var mkdocs_page_input_path = "labs/6824-kv.md";
+    var mkdocs_page_url = null;
+  </script>
+<script defer="" src="../../js/jquery-2.1.1.min.js"></script>
+<script defer="" src="../../js/modernizr-2.8.3.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+</link></head>
+<body class="wy-body-for-nav" role="document">
+<div class="wy-grid-for-nav">
+<nav class="wy-nav-side stickynav" data-toggle="wy-nav-shift">
+<div class="wy-side-scroll">
+<div class="wy-side-nav-search">
+<a class="icon icon-home" href="../.."> Log0c</a>
+</div>
+<div aria-label="main navigation" class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../..">主页</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">问题排查 / 性能优化</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../too-much-folder/netease-music-problem/">mac 网易云音乐 cpu 占用高问题排查</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../mac/mac-note-stalled/">mac Notes.app 卡死问题</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../mac/osx86_external_ssd_swap_problem/">mac 外部 SSD Swap 分区开启问题</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../too-much-folder/go-shadowing-variable/">go shadowing variable 造成的歧义</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../too-much-folder/go-concurrent-map-read-write-bug/">go 并发读写 map 问题一例</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../too-much-folder/go-pprof-memory-leak/">使用 pprof 排查内存泄漏</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../too-much-folder/db-metadatalock/">数据库 metadata lock 问题排查</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../too-much-folder/black-box-io-problem/">黑盒排查磁盘空间告警/IO问题</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../too-much-folder/black-box-cpu-high-problem/">cpu 排查的几个案例</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../too-much-folder/black-box-network-problem/">network 排查的几个案例</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">labs</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../6824-mapreduce/">MIT 6.824 - MapReduce</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../6824-raft/">MIT 6.824 - Raft</a>
+</li>
+<li class="toctree-l1 current"><a class="reference internal current" href="./">MIT 6.824 - KV</a>
+<ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="#duplicate-request">关于请求防重 (Duplicate request) 的要求</a>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#3b">关于 3B</a>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#_1">问题记录</a>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#guide">guide 阅读笔记</a>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../csapp-shell/">CSAPP - Shell</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../csapp-proxy/">CSAPP - Proxy</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../cs144/">CS144</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">工具</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../tools/xdebug/">Xdebug 深入学习</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../tools/chrome-dev-tools/">Chrome Dev Tools 深入学习</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../tools/markdown-diagram/">Markdown Diagram 功能</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../too-much-folder/yaml-lint/">yaml lint</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">算法</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../algos/int-to-binary-str/">整数转二进制字符串</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../algos/multiple-field-sort/">多字段排序</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../algos/lru-cache-go/">LRU 线程安全和高并发</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">构建自己的 X 项目</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../build-my-own-x/jquery/">构建自己的 jQuery</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../build-my-own-x/php-framework/">构建自己的 PHP 框架</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../build-my-own-x/lisp-compiler/">构建 Lisp Compiler</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../build-my-own-x/regex/">Regex Engine 学习</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">PHP</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../php/how-composer-work/">Composer 是如何工作的</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../php/business-logic-framework/">关于业务代码的框架</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../php/symfony-lock/">Symfony Lock Component</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">杂项</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../others/mac_py_env_deploy/">Mac Python环境 miniConda 搭建</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../others/taylor-otwell-interview/">Taylor otwell 采访文章</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">零碎知识点</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../knowledge-reduce/tricks/">编程技巧/方法</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../knowledge-reduce/network_programming/">网络编程</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../knowledge-reduce/problem_trace/">问题排查</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../knowledge-reduce/network-course/">计算机网络课程分享</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../knowledge-reduce/mysql/">MYSQL</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../knowledge-reduce/language_trait_and_implementation/">语言特性/底层实现</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../knowledge-reduce/computer_composition/">计算机组成原理</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">归档</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/blog_deploy_log/">博客服务器环境搭建记录</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../redis/redis_code_book_reading/">Redis 设计与实现笔记</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/laracasts_learning_path/">Laracasts学习记录</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/black_sierra/">K480N 黑苹果安装记录</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/php_career_guide_line/">从框架看PHP的五种境界[转]</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/laravel_marcoable/">Laravel中的Marcoable</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/laravel_code_book_reading/">Laravel框架关键技术-阅读总结</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/laravel_admin_code_reading/">Laravel-Admin源码阅读</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/first_internship/">实习</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../summary/2017/">2017 总结</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/second_job/">2018 总结</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../summary/2019/">2019 总结</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../summary/2020/">2020 总结</a>
+</li>
+</ul>
+</div>
+</div>
+</nav>
+<section class="wy-nav-content-wrap" data-toggle="wy-nav-shift">
+<nav aria-label="top navigation" class="wy-nav-top" role="navigation">
+<i class="fa fa-bars" data-toggle="wy-nav-top"></i>
+<a href="../..">Log0c</a>
+</nav>
+<div class="wy-nav-content">
+<div class="rst-content">
+<div aria-label="breadcrumbs navigation" role="navigation">
+<ul class="wy-breadcrumbs">
+<li><a href="../..">Docs</a> »</li>
+<li>labs »</li>
+<li>MIT 6.824 - KV</li>
+<li class="wy-breadcrumbs-aside">
+</li>
+</ul>
+<hr/>
+</div>
+<div role="main">
+<div class="section">
+<h1 id="key-value">高可用的 Key-Value 服务</h1>
+<p>第三个 Lab, 相对比较轻松的一个, 目标是在 Lab2 实现的 Raft 协议基础上, 实现一个高可用的键值对服务, raft 在这里的职责就是负责这个强一致性服务的高可用, 通过复制和选举, 对应到 kv 服务的任务就是将读写请求发给 raft 复制, 并且由于要求强一致性, 所有的读写只能通过 leader 节点日志复制后才能得到响应 (完全线性化)</p>
+<p>这个 kv server 也是一个集群, 集群里每个节点都对应一个 raft 节点 , 在启动 kv server 里一个节点的时候, 同时也要启动一个 raft 节点</p>
+<p>这样之后, 当某个 kv 节点的 raft 节点为 leader 时, 这个 kv 节点就对外提供读写服务</p>
+<p>这里的客户端实现不考虑性能, 直接轮询所有的 kv 节点, 如果是 leader 就向其发出请求</p>
+<p>重点是 kv 节点和 raft 节点的交互, 它们之间是异步的, kv 节点会通过一个 channel 收到 raft 节点成功的响应, 因此需要开一个协程1负责监听这个 channel , </p>
+<p>又因为kv 客户端和 kv server 节点的交互是同步的, 势必需要阻塞在等待 raft 响应的地方, 等待协程 1 通知结果</p>
+<p>协程 1 又如何确定哪个结果是哪个请求的呢, 因此就需要给每个请求都附加一个唯一 ID, 并且和一个 channel 关联上, 到时候通知就根据唯一 ID 取到对应的 channel, 并从这个 channel 发送结果给kv 客户端</p>
+<h2 id="duplicate-request">关于请求防重 (Duplicate request) 的要求</h2>
+<p>场景: 网络不可靠的情况, 例如client 发给 leader 请求后, 响应超时, 重试</p>
+<p>request id 设为每个 client 各有一个单调递增的request id 计数, 在 server 端会记录下最近一次完成的请求 request id , 这样子如果是之前旧的, 重复的请求, 就会小于等于当前的 request id</p>
+<p>最新的一个结果会记录下来, 有重复的返回</p>
+<p>leader可能会更换, 因此请求相关的属性也要作为日志的一部分复制到每个节点</p>
+<h2 id="3b">关于 3B</h2>
+<p>日志压缩 / 快照</p>
+<p>日志压缩的描述: </p>
+<pre><code>set a 1
+set a 2
+
+两条日志可以合并为
+set a 2
+</code></pre>
+<p>raft 的职责是为上层提供复制服务, 所以除了通过日志的形式之外, 还可以通过快照的形式实现复制, 以此来节约空间</p>
+<p>由于快照会比单条的日志大得多, 复制的开销更大,  所以快照只会在超过某个阈值 (日志过大) 的情况下触发, 并复制到其余大多数节点, 之后将已包含在快照里的日志删除</p>
+<p>当一个新的 kv 节点 +  raft 节点加入后, 日志的索引值一定小于 leader 节点现存的日志索引值, 这时候就需要先将快照发给 raft 节点进行保存和 apply, 之后再进行日志复制</p>
+<h2 id="_1">问题记录</h2>
+<p>lab3 自己是用状态机的模型写的, 虽然能过但是在 putAppend 和 get 都加了锁,并发很低 , 去学习了别人的实现 , 发现设计思路实在是太优秀了 , 模仿了 raft 的 start()函数和 applyCh , 对每个 op 进行 start , 然后每个 op 分配一个 channel 等待结果 , 并发无敌 , 感叹自己实在是想不到这种写法 (模型也套娃 ?)</p>
+<p>lab3a 先把guide的hint都理解了 复述一遍，不然浪费时间 ，tryapply取出来 容忍kv状态机延后获取 ，忘记对follower的状态机进行指令复述操作了</p>
+<p>每次都会多append一个</p>
+<p>重复请求?</p>
+<p>未复制到大多数的commit ?</p>
+<h2 id="guide">guide 阅读笔记</h2>
+<pre><code>强一致性 leads to linearizability
+每个server都有一个关联的raft peer
+put , append , get 只会发给是leader的raft server
+每个op都要提交到raft
+每个kvserver都要execute op from raft log in order
+ck不知道谁是leader, 如果发到非leader,需要重试发给其他server,如果server已经提交op到raft (这也意味着apply到kv状态机中了)  , 该server(leader)就可以返回结果给客户端
+如果op commit失败 ( 比如leader换人了 ) , server告知wrong leader , client重试其他server
+kvserver之间只通过raft沟通
+确保lab2 reliably pass
+允许在ApplyMsg和AppendEntries中加字段
+go test -race 检查deadlock
+网络和server问题 , ck可能发生同一个rpc多次 , 场景: leaderA提交了一个entry后失败了,ck没收到reply, 会把请求发给其他leader , 所以要保证put和append的幂等 , 要给command加上id , 重复id , 并保存到一个map中, 如果该请求已经commit过,那直接返回请求结果
+解决重复请求,包括ck发请求到leaderA term1 , 等待reply , 没收到 , 然后发请求到leaderB term2的情况
+go test - run 3A
+
+需要解决的一个场景: leader 已经对某个ck rpc执行了start , 但是在commit这个log之前失去了leadership , ck需要重试其他server直到找到新leader , 一个做法就是server检测自己失去了leadership , 检测的方法是发现另一个不同的请求出现在同一index上?? , 或者raft term改变 ,
+ 如果前任leader发现了网络分区, 他不会知道谁是leader , that’s fine , 等待网络分区恢复
+优化: 记住上一次的leader, 先发
+op需要加unique id , 保证exact just once
+</code></pre>
+<p>​   </p>
+</div>
+</div>
+<footer>
+<div aria-label="footer navigation" class="rst-footer-buttons" role="navigation">
+<a class="btn btn-neutral float-right" href="../csapp-shell/" title="CSAPP - Shell">Next <span class="icon icon-circle-arrow-right"></span></a>
+<a class="btn btn-neutral" href="../6824-raft/" title="MIT 6.824 - Raft"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+</div>
+<hr/>
+<div role="contentinfo">
+<!-- Copyright etc -->
+</div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+</div>
+</div>
+</section>
+</div>
+<div aria-label="versions" class="rst-versions" role="note">
+<span class="rst-current-version" data-toggle="rst-current-version">
+<span><a href="../6824-raft/" style="color: #fcfcfc;">« Previous</a></span>
+<span style="margin-left: 15px"><a href="../csapp-shell/" style="color: #fcfcfc">Next »</a></span>
+</span>
+</div>
+<script>var base_url = '../..';</script>
+<script defer="" src="../../js/theme.js"></script>
+<script defer="" src="../../js/mermaid.min.js"></script>
+<script defer="" src="../../js/custom.js"></script>
+<script defer="">
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(false);
+        };
+    </script>
+</body>
+</html>

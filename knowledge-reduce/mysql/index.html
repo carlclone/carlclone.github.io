@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
+<head>
+<meta charset="utf-8"/>
+<meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="../../img/favicon.ico" rel="shortcut icon"/>
+<title>MYSQL - Log0c</title>
+<link href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" rel="stylesheet">
+<link href="../../css/theme.css" rel="stylesheet"/>
+<link href="../../css/theme_extra.css" rel="stylesheet"/>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet"/>
+<script>
+    // Current page data
+    var mkdocs_page_name = "MYSQL";
+    var mkdocs_page_input_path = "knowledge-reduce/mysql.md";
+    var mkdocs_page_url = null;
+  </script>
+<script defer="" src="../../js/jquery-2.1.1.min.js"></script>
+<script defer="" src="../../js/modernizr-2.8.3.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+</link></head>
+<body class="wy-body-for-nav" role="document">
+<div class="wy-grid-for-nav">
+<nav class="wy-nav-side stickynav" data-toggle="wy-nav-shift">
+<div class="wy-side-scroll">
+<div class="wy-side-nav-search">
+<a class="icon icon-home" href="../.."> Log0c</a>
+</div>
+<div aria-label="main navigation" class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../..">主页</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">问题排查 / 性能优化</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../too-much-folder/netease-music-problem/">mac 网易云音乐 cpu 占用高问题排查</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../mac/mac-note-stalled/">mac Notes.app 卡死问题</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../mac/osx86_external_ssd_swap_problem/">mac 外部 SSD Swap 分区开启问题</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../too-much-folder/go-shadowing-variable/">go shadowing variable 造成的歧义</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../too-much-folder/go-concurrent-map-read-write-bug/">go 并发读写 map 问题一例</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../too-much-folder/go-pprof-memory-leak/">使用 pprof 排查内存泄漏</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../too-much-folder/db-metadatalock/">数据库 metadata lock 问题排查</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../too-much-folder/black-box-io-problem/">黑盒排查磁盘空间告警/IO问题</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../too-much-folder/black-box-cpu-high-problem/">cpu 排查的几个案例</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../too-much-folder/black-box-network-problem/">network 排查的几个案例</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">labs</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../labs/6824-mapreduce/">MIT 6.824 - MapReduce</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../labs/6824-raft/">MIT 6.824 - Raft</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../labs/6824-kv/">MIT 6.824 - KV</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../labs/csapp-shell/">CSAPP - Shell</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../labs/csapp-proxy/">CSAPP - Proxy</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../labs/cs144/">CS144</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">工具</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../tools/xdebug/">Xdebug 深入学习</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../tools/chrome-dev-tools/">Chrome Dev Tools 深入学习</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../tools/markdown-diagram/">Markdown Diagram 功能</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../too-much-folder/yaml-lint/">yaml lint</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">算法</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../algos/int-to-binary-str/">整数转二进制字符串</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../algos/multiple-field-sort/">多字段排序</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../algos/lru-cache-go/">LRU 线程安全和高并发</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">构建自己的 X 项目</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../build-my-own-x/jquery/">构建自己的 jQuery</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../build-my-own-x/php-framework/">构建自己的 PHP 框架</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../build-my-own-x/lisp-compiler/">构建 Lisp Compiler</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../build-my-own-x/regex/">Regex Engine 学习</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">PHP</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../php/how-composer-work/">Composer 是如何工作的</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../php/business-logic-framework/">关于业务代码的框架</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../php/symfony-lock/">Symfony Lock Component</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">杂项</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../others/mac_py_env_deploy/">Mac Python环境 miniConda 搭建</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../others/taylor-otwell-interview/">Taylor otwell 采访文章</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">零碎知识点</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../tricks/">编程技巧/方法</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../network_programming/">网络编程</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../problem_trace/">问题排查</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../network-course/">计算机网络课程分享</a>
+</li>
+<li class="toctree-l1 current"><a class="reference internal current" href="./">MYSQL</a>
+<ul class="current">
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../language_trait_and_implementation/">语言特性/底层实现</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../computer_composition/">计算机组成原理</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">归档</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/blog_deploy_log/">博客服务器环境搭建记录</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../redis/redis_code_book_reading/">Redis 设计与实现笔记</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/laracasts_learning_path/">Laracasts学习记录</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/black_sierra/">K480N 黑苹果安装记录</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/php_career_guide_line/">从框架看PHP的五种境界[转]</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/laravel_marcoable/">Laravel中的Marcoable</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/laravel_code_book_reading/">Laravel框架关键技术-阅读总结</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/laravel_admin_code_reading/">Laravel-Admin源码阅读</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/first_internship/">实习</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../summary/2017/">2017 总结</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/second_job/">2018 总结</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../summary/2019/">2019 总结</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../summary/2020/">2020 总结</a>
+</li>
+</ul>
+</div>
+</div>
+</nav>
+<section class="wy-nav-content-wrap" data-toggle="wy-nav-shift">
+<nav aria-label="top navigation" class="wy-nav-top" role="navigation">
+<i class="fa fa-bars" data-toggle="wy-nav-top"></i>
+<a href="../..">Log0c</a>
+</nav>
+<div class="wy-nav-content">
+<div class="rst-content">
+<div aria-label="breadcrumbs navigation" role="navigation">
+<ul class="wy-breadcrumbs">
+<li><a href="../..">Docs</a> »</li>
+<li>零碎知识点 »</li>
+<li>MYSQL</li>
+<li class="wy-breadcrumbs-aside">
+</li>
+</ul>
+<hr/>
+</div>
+<div role="main">
+<div class="section">
+<p> </p>
+<!-- more -->
+<h1 id="hasonesql-entity">关联查询 hasone底层是什么sql。配置表之间的关联关系 创建表entity</h1>
+<p>有拆分的也有 join 的</p>
+<p>https://gin-gonic.com/zh-cn/docs/introduction/
+https://gorm.io/zh_CN/docs/performance.html</p>
+<p>https://blog.csdn.net/qq_28053177/article/details/82187821</p>
+<p>https://solutionsreview.com/business-intelligence/the-best-apache-kafka-books-and-upcoming-titles-to-consider/</p>
+<h1 id="join-where">join 和 where 哪个先执行, 和分成两条查哪个更好</h1>
+<p>取决于数据库的抽样统计结果和优化器的判断, 两者都差不多, 拆分查询对后期拆分业务, 扩展有好处 , join 减少一次网络请求</p>
+<p>https://stackoverflow.com/questions/3960561/where-and-join-order-of-operation
+高性能 mysql</p>
+<h1 id="_1">为什么很少看到子查询</h1>
+<p>因为在 5.5 之前的版本, mysql 对子查询的执行计划优化是很差的(参考高性能 MySQL), 因此很多人都养成了习惯 , 使用 join 和拆分查询的方式,而不是子查询</p>
+<h1 id="b-tree-b-more-tree-4b">B-Tree 和B more Tree (4、b+树特性)</h1>
+<p>B more Tree产生的原因: 常规的树结构不能很好地支持"区间查询" (需要进行一次从根节点开始的中序遍历,时间复杂度O(n) , 因为树结构不支持从某个节点开始有序遍历)</p>
+<p>和跳跃表(多级链表索引,每一级都定位到更小的范围,最后找到元素)很相似 , 但却是两个不一样的演化分支 </p>
+<p>所有的数据都放在叶子节点 , 并串成链表 , 其他节点都是索引节点 , 不存数据</p>
+<p>继承了树结构优势的同时支持了快速的区间查询</p>
+<p>所以B+树更加适合在区间查询的情况，通常B+树用于数据库索引，而B树则常用于文件索引。</p>
+<h1 id="optimistic-lock-pessimistic-lock">Optimistic Lock / Pessimistic Lock</h1>
+<p>前置知识 :加锁操作会有额外的CPU消耗</p>
+<p>乐观锁假设发生冲突的情况很少 , 不对数据进行加锁操作 , 只在更新或者查询的时候检查这个时间段内是否被其他人修改 , 后续处理一般是重试
+悲观锁则相反,使用数据的时候立即加锁,其他人只能等待锁释放后才能使用</p>
+<p>InnoDB的RC和RR事务底层的MVCC实现就是一个乐观锁, 在正确的场景下使用乐观锁可以提高并发度</p>
+<p>等等！乐观锁不就是汇编里的原子操作CAS ，先检查内存中的旧值，如果被修改了就更新失败</p>
+<h1 id="innodb-vs-redis">事务在InnoDB中的部分实现细节 vs Redis</h1>
+<h1 id="acid">ACID</h1>
+<blockquote>
+<p>WARNING : 和分布式中CAP的C区分开,不是一个概念</p>
+</blockquote>
+<p>Atomicity 事务的语句要么全部执行要么全部回滚</p>
+<p>Isolation 多个事务同时执行互不影响  (InnoDB提供了多种隔离级别,供用户在并发度和隔离性之间权衡后选择合适的级别 , 较常使用的是RC和RR , 使用MVCC实现)</p>
+<p>Durability 持久性 , redolog 先顺序写磁盘 , 之后再写入正确的位置(要求随机IO,耗时) , 官方文档成为doublewrite buffer </p>
+<p>Consistency 定义最模糊的一个性质 , 但根据官方文档里的实现和Wikipedia:
+保证数据库约束不被违反 (依据wiki的定义主要是这条)</p>
+<p>(依据官方文档的实现:doublewrite buffer和crash recovery)
+保证事务提交后,未来的事务一定能看到影响 (崩溃后重启,会从redolog中读取写入正确位置后再执行其他事务)
+保证事务中的操作能正确,有效地执行</p>
+<h2 id="_2">资料</h2>
+<p>https://dev.mysql.com/doc/refman/5.6/en/mysql-acid.html
+https://en.wikipedia.org/wiki/ACID#Consistency
+https://developpaper.com/question/how-to-understand-consistency-in-mysql/</p>
+<h1 id="clustered-index-vs-non-clustered-index">Clustered Index vs Non-Clustered Index</h1>
+<p>CI 的叶子节点保存的是整行的完整数据 , NCI的叶子节点只保存了CI的主键ID</p>
+<p>如果从NCI查,并且不是覆盖索引,此时还需要返回CI中再查一次</p>
+<h1 id="unique-index-vs-normal-index">Unique Index vs Normal Index</h1>
+<p>UI每次维护的时候还需要检查唯一性 , 写性能损耗比NI的高
+查性能的差异可以忽略不计,因此能用NI的时候用NI</p>
+<h1 id="_3">不适合建立索引的场景</h1>
+<p>频繁写 , 频繁维护索引, 在非递增的情况下还容易产生页分裂
+重复值过多 , 用"二分查找"的思维去理解, 例子:性别字段, 过滤掉一半之后依然需要遍历表一半的数据 (时间复杂度退化成O(n/2))
+varchar字段建索引更容易产生页分裂 (未查证)</p>
+<h1 id="_4">联合索引</h1>
+<p>可以理解为多维有序数组多层遍历,取符合的数据</p>
+<p>当然实际上是Bmore Tree的区间查询过程, 先搜索树找到第一个符合条件的叶子节点,再从叶子节点链表向后遍历</p>
+<p>5.5 之前只能匹配第一列,然后依个回主键索引再判断第二个条件</p>
+<p>5.6 之后的索引下推功能,可以直接先排除掉不符合条件的数据,减少回主键索引查询的次数</p>
+<p>最左前缀原则: 最左N个字段 or 字符串索引的最左M个字符</p>
+<p>后续:测试+查高性能MySQL</p>
+<p>参考:
+mysql 45讲-第5讲</p>
+<h1 id="7-select-from-t-where-a-and-b-order-by-c-limit-0100">7. select * from t where a=? and b&gt;? order by c limit 0,100 如何加索引</h1>
+<p>a b c
+1 2 3
+1 3 9
+1 9 3
+2 9 4
+. . .
+. . .</p>
+<p>基于MySQL 5.6之后的索引下推规则分析</p>
+<p>(a,b,c)的情况: 先筛选出3条数据,再判断b </p>
+<p>(b,a,c)的情况: 可能筛选出n多条的数据,再每一条判断a</p>
+<p>这个案例下 (a,b,c) 更优</p>
+<p>仔细分析一下这题为什么要这样加索引</p>
+<p>加上c 减少filesort , a,b顺序可以用到联合索引的两列 , (b,a,c) 只能用到第一列索引, 因为在树搜索的时候会产生多个分支, 所以引擎选择从第一个元素向后遍历</p>
+</div>
+</div>
+<footer>
+<div aria-label="footer navigation" class="rst-footer-buttons" role="navigation">
+<a class="btn btn-neutral float-right" href="../language_trait_and_implementation/" title="语言特性/底层实现">Next <span class="icon icon-circle-arrow-right"></span></a>
+<a class="btn btn-neutral" href="../network-course/" title="计算机网络课程分享"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+</div>
+<hr/>
+<div role="contentinfo">
+<!-- Copyright etc -->
+</div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+</div>
+</div>
+</section>
+</div>
+<div aria-label="versions" class="rst-versions" role="note">
+<span class="rst-current-version" data-toggle="rst-current-version">
+<span><a href="../network-course/" style="color: #fcfcfc;">« Previous</a></span>
+<span style="margin-left: 15px"><a href="../language_trait_and_implementation/" style="color: #fcfcfc">Next »</a></span>
+</span>
+</div>
+<script>var base_url = '../..';</script>
+<script defer="" src="../../js/theme.js"></script>
+<script defer="" src="../../js/mermaid.min.js"></script>
+<script defer="" src="../../js/custom.js"></script>
+<script defer="">
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(false);
+        };
+    </script>
+</body>
+</html>

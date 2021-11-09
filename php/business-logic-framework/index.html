@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
+<head>
+<meta charset="utf-8"/>
+<meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="../../img/favicon.ico" rel="shortcut icon"/>
+<title>关于业务代码的框架 - Log0c</title>
+<link href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" rel="stylesheet">
+<link href="../../css/theme.css" rel="stylesheet"/>
+<link href="../../css/theme_extra.css" rel="stylesheet"/>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet"/>
+<script>
+    // Current page data
+    var mkdocs_page_name = "\u5173\u4e8e\u4e1a\u52a1\u4ee3\u7801\u7684\u6846\u67b6";
+    var mkdocs_page_input_path = "php/business-logic-framework.md";
+    var mkdocs_page_url = null;
+  </script>
+<script defer="" src="../../js/jquery-2.1.1.min.js"></script>
+<script defer="" src="../../js/modernizr-2.8.3.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+</link></head>
+<body class="wy-body-for-nav" role="document">
+<div class="wy-grid-for-nav">
+<nav class="wy-nav-side stickynav" data-toggle="wy-nav-shift">
+<div class="wy-side-scroll">
+<div class="wy-side-nav-search">
+<a class="icon icon-home" href="../.."> Log0c</a>
+</div>
+<div aria-label="main navigation" class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../..">主页</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">问题排查 / 性能优化</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../too-much-folder/netease-music-problem/">mac 网易云音乐 cpu 占用高问题排查</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../mac/mac-note-stalled/">mac Notes.app 卡死问题</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../mac/osx86_external_ssd_swap_problem/">mac 外部 SSD Swap 分区开启问题</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../too-much-folder/go-shadowing-variable/">go shadowing variable 造成的歧义</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../too-much-folder/go-concurrent-map-read-write-bug/">go 并发读写 map 问题一例</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../too-much-folder/go-pprof-memory-leak/">使用 pprof 排查内存泄漏</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../too-much-folder/db-metadatalock/">数据库 metadata lock 问题排查</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../too-much-folder/black-box-io-problem/">黑盒排查磁盘空间告警/IO问题</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../too-much-folder/black-box-cpu-high-problem/">cpu 排查的几个案例</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../too-much-folder/black-box-network-problem/">network 排查的几个案例</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">labs</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../labs/6824-mapreduce/">MIT 6.824 - MapReduce</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../labs/6824-raft/">MIT 6.824 - Raft</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../labs/6824-kv/">MIT 6.824 - KV</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../labs/csapp-shell/">CSAPP - Shell</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../labs/csapp-proxy/">CSAPP - Proxy</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../labs/cs144/">CS144</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">工具</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../tools/xdebug/">Xdebug 深入学习</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../tools/chrome-dev-tools/">Chrome Dev Tools 深入学习</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../tools/markdown-diagram/">Markdown Diagram 功能</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../too-much-folder/yaml-lint/">yaml lint</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">算法</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../algos/int-to-binary-str/">整数转二进制字符串</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../algos/multiple-field-sort/">多字段排序</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../algos/lru-cache-go/">LRU 线程安全和高并发</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">构建自己的 X 项目</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../build-my-own-x/jquery/">构建自己的 jQuery</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../build-my-own-x/php-framework/">构建自己的 PHP 框架</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../build-my-own-x/lisp-compiler/">构建 Lisp Compiler</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../build-my-own-x/regex/">Regex Engine 学习</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">PHP</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../how-composer-work/">Composer 是如何工作的</a>
+</li>
+<li class="toctree-l1 current"><a class="reference internal current" href="./">关于业务代码的框架</a>
+<ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="#_2">一些问题</a>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#_3">小想法记录</a>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#_4">结尾</a>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#_5">参考资料</a>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../symfony-lock/">Symfony Lock Component</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">杂项</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../others/mac_py_env_deploy/">Mac Python环境 miniConda 搭建</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../others/taylor-otwell-interview/">Taylor otwell 采访文章</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">零碎知识点</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../knowledge-reduce/tricks/">编程技巧/方法</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../knowledge-reduce/network_programming/">网络编程</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../knowledge-reduce/problem_trace/">问题排查</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../knowledge-reduce/network-course/">计算机网络课程分享</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../knowledge-reduce/mysql/">MYSQL</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../knowledge-reduce/language_trait_and_implementation/">语言特性/底层实现</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../knowledge-reduce/computer_composition/">计算机组成原理</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">归档</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/blog_deploy_log/">博客服务器环境搭建记录</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../redis/redis_code_book_reading/">Redis 设计与实现笔记</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/laracasts_learning_path/">Laracasts学习记录</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/black_sierra/">K480N 黑苹果安装记录</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/php_career_guide_line/">从框架看PHP的五种境界[转]</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/laravel_marcoable/">Laravel中的Marcoable</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/laravel_code_book_reading/">Laravel框架关键技术-阅读总结</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/laravel_admin_code_reading/">Laravel-Admin源码阅读</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/first_internship/">实习</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../summary/2017/">2017 总结</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/second_job/">2018 总结</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../summary/2019/">2019 总结</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../summary/2020/">2020 总结</a>
+</li>
+</ul>
+</div>
+</div>
+</nav>
+<section class="wy-nav-content-wrap" data-toggle="wy-nav-shift">
+<nav aria-label="top navigation" class="wy-nav-top" role="navigation">
+<i class="fa fa-bars" data-toggle="wy-nav-top"></i>
+<a href="../..">Log0c</a>
+</nav>
+<div class="wy-nav-content">
+<div class="rst-content">
+<div aria-label="breadcrumbs navigation" role="navigation">
+<ul class="wy-breadcrumbs">
+<li><a href="../..">Docs</a> »</li>
+<li>PHP »</li>
+<li>关于业务代码的框架</li>
+<li class="wy-breadcrumbs-aside">
+</li>
+</ul>
+<hr/>
+</div>
+<div role="main">
+<div class="section">
+<h1 id="_1">关于业务代码的框架</h1>
+<p>对于我参与过的大部分项目来说,业务代码的分层如下基本就够用了 (可测试和易于修改)</p>
+<pre><code>Controller
+|
+Service        &lt;-   Third Party Library
+|
+Repository
+</code></pre>
+<p>在 Java 的 Spring boot 框架中, Service 和 Repository 的注入是通过注解的形式实现的, 在 PHP 中也有通过类反射的方式自动注入的实现, 所以只需要在 Controller 的构造函数中, 或者 Controller 的方法中注入 Service 即可 (注入由HTTP Kernel 在负责)</p>
+<h2 id="_2">一些问题</h2>
+<p>但是在实际开发中会有一些问题</p>
+<ul>
+<li>一个 Service 可能会依赖许多的 Repository, 通过构造函数的方式注入会有额外的开销, 因为可能这一次调用只使用了一部分的 Repository</li>
+<li>ServiceA 依赖 ServiceB, ServiceB 又依赖 ServiceA, 造成循环依赖, 自动反射注入的时候出现问题 </li>
+</ul>
+<p>第一个问题</p>
+<ul>
+<li>
+<p>可能不是问题,实例化的开销并没有想的那么严重</p>
+</li>
+<li>
+<p>可以在容器中定义实例化描述, Service 依赖于容器, 在使用到该 Repository 的时候才从容器中取</p>
+</li>
+<li>
+<p>可以使用 RepositoryManager/Factory 的形式, 在使用到该 Repository 的时候由Manager 实例化</p>
+</li>
+</ul>
+<p>两种形式差不多, 都是想办法延迟加载, 但对开发者不友好, IDE 无法自动提示了</p>
+<p>第二个问题</p>
+<ul>
+<li>两个 Service 相互依赖, 就得考虑是不是职责的划分有问题了, 这时候也许可以引入第三个Service, 类似微服务中的"聚合服务"的概念 </li>
+<li>和 Repository 一样引入一个 Manger 的角色, 类比微服务中的注册中心</li>
+</ul>
+<h2 id="_3">小想法记录</h2>
+<p>一些第三方的库,通常是通过 ServiceProvider 注入到容器中, 然后我们使用的时候从容器中去取,如果一定要在容器中显式定义实例化过程, 我们可以参考第三方库, 将 Repository 的实例化写入到一个 RepositoryServiceProvider 中, Service 的实例化写入到 ServiceServiceProvider 中, 起到一个分类的作用</p>
+<h2 id="_4">结尾</h2>
+<p>之前在构建 PHP 框架的时候想到了这个问题, 参与过的项目基本都没有在业务这层遵循好依赖注入的原则, 这次好好总结了一下</p>
+<p>并且在之前学习杨波老师的微服务课程的过程中, 学习了一些架构设计的理念, 在单体应用内部的设计中也是通用的, 每个 Service 类的设计就类似微服务中的一个服务, 做好服务的拆分很重要, 这要求开发人员非常了解业务, 我个人对业务知识这块一直是比较无感的, 希望通过这个案例让自己重视起来</p>
+<h2 id="_5">参考资料</h2>
+<p><a href="https://time.geekbang.org/course/intro/100031401">Spring Boot与Kubernetes云原生微服务实践</a></p>
+<p><a href="https://www.youtube.com/watch?v=GCl8nhEMSv8">Product service and repository</a></p>
+<p>之前看到的企业级框架 java 的 <a href="http://www.tinygroup.org/docs/04b2cd7aa22b427fa3dc8fd0fea52f5f">tiny framework</a> , 有很多值得参考的地方,如数据级权限, 分库分表, 太多了</p>
+<p>Symfony 有一套 Service/Repository 的 Bundles, 有空看看怎么设计的</p>
+</div>
+</div>
+<footer>
+<div aria-label="footer navigation" class="rst-footer-buttons" role="navigation">
+<a class="btn btn-neutral float-right" href="../symfony-lock/" title="Symfony Lock Component">Next <span class="icon icon-circle-arrow-right"></span></a>
+<a class="btn btn-neutral" href="../how-composer-work/" title="Composer 是如何工作的"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+</div>
+<hr/>
+<div role="contentinfo">
+<!-- Copyright etc -->
+</div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+</div>
+</div>
+</section>
+</div>
+<div aria-label="versions" class="rst-versions" role="note">
+<span class="rst-current-version" data-toggle="rst-current-version">
+<span><a href="../how-composer-work/" style="color: #fcfcfc;">« Previous</a></span>
+<span style="margin-left: 15px"><a href="../symfony-lock/" style="color: #fcfcfc">Next »</a></span>
+</span>
+</div>
+<script>var base_url = '../..';</script>
+<script defer="" src="../../js/theme.js"></script>
+<script defer="" src="../../js/mermaid.min.js"></script>
+<script defer="" src="../../js/custom.js"></script>
+<script defer="">
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(false);
+        };
+    </script>
+</body>
+</html>

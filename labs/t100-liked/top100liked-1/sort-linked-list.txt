@@ -1,0 +1,85 @@
+func main() {
+	s:=&ListNode{
+		Val:  4,
+		Next: &ListNode{
+			Val:  2,
+			Next: &ListNode{
+				Val:  1,
+				Next: &ListNode{
+					Val:  1,
+					Next: &ListNode{
+						Val:  3,
+						Next: nil,
+					},
+				},
+			},
+		},
+	}
+
+	sortList(s)
+
+}
+
+type ListNode struct {
+	Val  int
+	Next *ListNode
+}
+
+/**
+ * Definition for singly-linked list.
+ * type ListNode struct {
+ *     Val int
+ *     Next *ListNode
+ * }
+ */
+
+ // 链表的指针移动和断开操作 要模拟好 , 画个图
+func sortList(head *ListNode) *ListNode {
+	if head==nil {
+		return nil
+	}
+
+	dummy :=&ListNode{
+		Val:  0,
+		Next: head,
+	}
+
+	// 4->2->1->3 become 2->1->3
+	cur:=head.Next
+
+	//cut the node out of origin linked list
+	// dummy->4
+	// cur:2->1->3
+	head.Next=nil
+
+	for cur!=nil {
+		//cut (2) out of origin
+		//dummy->4
+		//(2)
+		tmp:=cur.Next
+		cur.Next=nil
+		// insert the node to new list
+		insert(cur,dummy)
+		//cur:1->3
+		cur=tmp
+	}
+	return dummy.Next
+}
+
+func insert(node *ListNode, dummy *ListNode) {
+	prev:=dummy
+	cur :=dummy.Next
+	// find a place that node is smaller than cur
+	for cur !=nil {
+		if cur.Val>node.Val {
+			prev.Next=node
+			node.Next = cur
+			return
+		}
+		cur=cur.Next
+		prev=prev.Next
+	}
+
+	// if not found , insert into list tail
+	prev.Next = node
+}

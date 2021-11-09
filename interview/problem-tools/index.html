@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
+<head>
+<meta charset="utf-8"/>
+<meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="../../img/favicon.ico" rel="shortcut icon"/>
+<title>Problem tools - Log0c</title>
+<link href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" rel="stylesheet">
+<link href="../../css/theme.css" rel="stylesheet"/>
+<link href="../../css/theme_extra.css" rel="stylesheet"/>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet"/>
+<script>
+    // Current page data
+    var mkdocs_page_name = "Problem tools";
+    var mkdocs_page_input_path = "interview/problem-tools.md";
+    var mkdocs_page_url = null;
+  </script>
+<script defer="" src="../../js/jquery-2.1.1.min.js"></script>
+<script defer="" src="../../js/modernizr-2.8.3.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+</link></head>
+<body class="wy-body-for-nav" role="document">
+<div class="wy-grid-for-nav">
+<nav class="wy-nav-side stickynav" data-toggle="wy-nav-shift">
+<div class="wy-side-scroll">
+<div class="wy-side-nav-search">
+<a class="icon icon-home" href="../.."> Log0c</a>
+</div>
+<div aria-label="main navigation" class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../..">主页</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">问题排查 / 性能优化</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../too-much-folder/netease-music-problem/">mac 网易云音乐 cpu 占用高问题排查</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../mac/mac-note-stalled/">mac Notes.app 卡死问题</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../mac/osx86_external_ssd_swap_problem/">mac 外部 SSD Swap 分区开启问题</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../too-much-folder/go-shadowing-variable/">go shadowing variable 造成的歧义</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../too-much-folder/go-concurrent-map-read-write-bug/">go 并发读写 map 问题一例</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../too-much-folder/go-pprof-memory-leak/">使用 pprof 排查内存泄漏</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../too-much-folder/db-metadatalock/">数据库 metadata lock 问题排查</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../too-much-folder/black-box-io-problem/">黑盒排查磁盘空间告警/IO问题</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../too-much-folder/black-box-cpu-high-problem/">cpu 排查的几个案例</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../too-much-folder/black-box-network-problem/">network 排查的几个案例</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">labs</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../labs/6824-mapreduce/">MIT 6.824 - MapReduce</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../labs/6824-raft/">MIT 6.824 - Raft</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../labs/6824-kv/">MIT 6.824 - KV</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../labs/csapp-shell/">CSAPP - Shell</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../labs/csapp-proxy/">CSAPP - Proxy</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../labs/cs144/">CS144</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">工具</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../tools/xdebug/">Xdebug 深入学习</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../tools/chrome-dev-tools/">Chrome Dev Tools 深入学习</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../tools/markdown-diagram/">Markdown Diagram 功能</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../too-much-folder/yaml-lint/">yaml lint</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">算法</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../algos/int-to-binary-str/">整数转二进制字符串</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../algos/multiple-field-sort/">多字段排序</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../algos/lru-cache-go/">LRU 线程安全和高并发</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">构建自己的 X 项目</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../build-my-own-x/jquery/">构建自己的 jQuery</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../build-my-own-x/php-framework/">构建自己的 PHP 框架</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../build-my-own-x/lisp-compiler/">构建 Lisp Compiler</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../build-my-own-x/regex/">Regex Engine 学习</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">PHP</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../php/how-composer-work/">Composer 是如何工作的</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../php/business-logic-framework/">关于业务代码的框架</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../php/symfony-lock/">Symfony Lock Component</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">杂项</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../others/mac_py_env_deploy/">Mac Python环境 miniConda 搭建</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../others/taylor-otwell-interview/">Taylor otwell 采访文章</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">零碎知识点</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../knowledge-reduce/tricks/">编程技巧/方法</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../knowledge-reduce/network_programming/">网络编程</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../knowledge-reduce/problem_trace/">问题排查</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../knowledge-reduce/network-course/">计算机网络课程分享</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../knowledge-reduce/mysql/">MYSQL</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../knowledge-reduce/language_trait_and_implementation/">语言特性/底层实现</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../knowledge-reduce/computer_composition/">计算机组成原理</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">归档</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/blog_deploy_log/">博客服务器环境搭建记录</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../redis/redis_code_book_reading/">Redis 设计与实现笔记</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/laracasts_learning_path/">Laracasts学习记录</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/black_sierra/">K480N 黑苹果安装记录</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/php_career_guide_line/">从框架看PHP的五种境界[转]</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/laravel_marcoable/">Laravel中的Marcoable</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/laravel_code_book_reading/">Laravel框架关键技术-阅读总结</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/laravel_admin_code_reading/">Laravel-Admin源码阅读</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/first_internship/">实习</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../summary/2017/">2017 总结</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/second_job/">2018 总结</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../summary/2019/">2019 总结</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../summary/2020/">2020 总结</a>
+</li>
+</ul>
+</div>
+</div>
+</nav>
+<section class="wy-nav-content-wrap" data-toggle="wy-nav-shift">
+<nav aria-label="top navigation" class="wy-nav-top" role="navigation">
+<i class="fa fa-bars" data-toggle="wy-nav-top"></i>
+<a href="../..">Log0c</a>
+</nav>
+<div class="wy-nav-content">
+<div class="rst-content">
+<div aria-label="breadcrumbs navigation" role="navigation">
+<ul class="wy-breadcrumbs">
+<li><a href="../..">Docs</a> »</li>
+<li>Problem tools</li>
+<li class="wy-breadcrumbs-aside">
+</li>
+</ul>
+<hr/>
+</div>
+<div role="main">
+<div class="section">
+<p>学习能力 编码能力 思维能力</p>
+<h1 id="_1">常用解决问题工具</h1>
+<p>解决问题的四步 : UPS check !</p>
+<p>要找几个帮助解决问题的工具,并且能在遇到问题的时候条件反射地应用这些工具</p>
+<ul>
+<li>
+<p>最小测试用例法,如红黑题,1 红,1 黑,2 红,2 黑,做的时候用到了这个方法,但是没模拟出场景</p>
+</li>
+<li>
+<p>简化问题法,拿到红的概率最大-&gt;拿到红的次数最多,这样就变成了一个可以模拟的问题</p>
+</li>
+<li>
+<p>倒推法,假设结果,然后模拟场景倒推 , 排除不正确的路径 ,利用倒推排除错误答案 </p>
+</li>
+<li>
+<p>增删改 条件</p>
+</li>
+<li>
+<p>转化成更简单的问题 / 等价的问题
+  求解类似的问题 , 但是有的问题表面一致,实际抽象可能不一致 , 记忆掌握和分析问题的时候要尽量抽象地看待, 才能最大化联想空间
+  像删空格那题,你都联想到冒泡排序了,为什么就不能联想到插入排序,排序的本质就是 comparator 比较函数 , 不过感觉这题还是用特例法最快吧 </p>
+</li>
+<li>
+<p>最后才用试错法</p>
+</li>
+<li>
+<p>算法题 , 画图 定义 伪代码</p>
+</li>
+</ul>
+<p>如果问题的状态空间有限, 试错+特例也是很容易找到的 , 比如红黑球那道</p>
+<p>划掉不重要的, 下划线高亮重要的条件</p>
+<p>把思考过程写下来 , 时刻准备纸笔</p>
+<p>人的思考过程就像开着一盏灯摸黑前行 , 借助纸笔,帮助回顾</p>
+<p>我面试的时候容易被环境分散注意力,没办法集中在题目上,以后都写下思考过程, 增加工作记忆缓存 , 或者说出来,最好还是写下来吧..</p>
+<p>波利亚思维方法 : 时刻不忘未知量 , 特例启发思考 , 倒推</p>
+<p>联想法是混乱的,如果感觉不能很快联想到已知的问题 , 那就 用最小用例(多试几次), 直觉模拟场景法, 倒推法 , 然后在图纸上把推演/思考过程写下来,画下来 , 画图法</p>
+<p>确实,回来后用联想法,第二题虽然联想到了分区过程,但远没有直觉和最小用例来得快</p>
+<p>考察问题的反面, 如至少,至多问题 </p>
+<h1 id="_2">问题收集</h1>
+<ul>
+<li>
+<p>还有第一道概率题,50 红,50 黑,两个箱子,怎么放,拿到红的概率最大,脑子一片空白</p>
+</li>
+<li>
+<p>第二道,on时间复杂度,o1 空间复杂度去除字符数组的空格,并返回空格个数,也是傻了</p>
+</li>
+<li>
+<p>烙饼排序</p>
+</li>
+<li>
+<p>nim 问题</p>
+</li>
+<li>
+<p>9公升4公升水桶倒6公升水的问题</p>
+</li>
+<li>
+<p>9点连线问题</p>
+</li>
+<li>
+<p>6根火柴搭出4个面的问题</p>
+</li>
+<li>
+<p>“木板”问题</p>
+</li>
+</ul>
+<p>好题目举例：烙饼排序问题（考察特例启发法以及观察能力）、Nim问题（还有简单版本的取火柴问题）（烙饼排序问题和Nim问题可参见《编程之美》）、9公升4公升水桶倒6公升水的问题（考察倒过来思考问题的能力）、9点连线问题、6根火柴搭出4个面的问题、“木板”问题（考察思维定势，此外《心理学与生活》的第九章也有好几个经典的问题）、许多数论问题（观察能力、演绎能力、归纳能力）。此外，我们最近也在讨论好题目</p>
+<p>目前知道的几个:  之前在youtube 看的视频</p>
+<p>泛化问题,求解泛化后的问题</p>
+<p>意识孵化法
+烫手山芋法</p>
+<p>砖头有多少种用途, 从属性维度进行抽象 , 长方形的,有棱角的,其他有类似属性的物体有什么用途 , 修改属性,磨成粉末,打磨棱角,再联想其他物体</p>
+<p>是否已理解了知识最本质的东西 , 军事材料 多方向对一个点发起攻击,形成巨大威力 , x 射线为例</p>
+<p>一类题目是考察思维的题目, 如果某些性质无法通过题目本身获得, 那就是考察知识储备和联想的题目</p>
+<p>思维的习惯很重要, 好习惯不容易培养起来</p>
+<p>好题目和坏题目</p>
+<p>演绎,归纳,观察能力是什么</p>
+<p>思维能力的这些工具,需要不断练习,变成习惯 , 编码能力也一样</p>
+<p>总结,总结!!!</p>
+<h2 id="_3">资料</h2>
+<p>youtube
+how to solve it / 数学的发现 / 数学与猜想
+暗时间
+程序员面试宝典
+剑指offer
+psychology of problem solving
+如何解题:现代启发式方法
+陶哲轩教你学数学</p>
+</div>
+</div>
+<footer>
+<hr/>
+<div role="contentinfo">
+<!-- Copyright etc -->
+</div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+</div>
+</div>
+</section>
+</div>
+<div aria-label="versions" class="rst-versions" role="note">
+<span class="rst-current-version" data-toggle="rst-current-version">
+</span>
+</div>
+<script>var base_url = '../..';</script>
+<script defer="" src="../../js/theme.js"></script>
+<script defer="" src="../../js/mermaid.min.js"></script>
+<script defer="" src="../../js/custom.js"></script>
+<script defer="">
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(false);
+        };
+    </script>
+</body>
+</html>

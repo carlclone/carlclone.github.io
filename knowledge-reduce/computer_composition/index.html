@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
+<head>
+<meta charset="utf-8"/>
+<meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="../../img/favicon.ico" rel="shortcut icon"/>
+<title>计算机组成原理 - Log0c</title>
+<link href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" rel="stylesheet">
+<link href="../../css/theme.css" rel="stylesheet"/>
+<link href="../../css/theme_extra.css" rel="stylesheet"/>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet"/>
+<script>
+    // Current page data
+    var mkdocs_page_name = "\u8ba1\u7b97\u673a\u7ec4\u6210\u539f\u7406";
+    var mkdocs_page_input_path = "knowledge-reduce/computer_composition.md";
+    var mkdocs_page_url = null;
+  </script>
+<script defer="" src="../../js/jquery-2.1.1.min.js"></script>
+<script defer="" src="../../js/modernizr-2.8.3.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+</link></head>
+<body class="wy-body-for-nav" role="document">
+<div class="wy-grid-for-nav">
+<nav class="wy-nav-side stickynav" data-toggle="wy-nav-shift">
+<div class="wy-side-scroll">
+<div class="wy-side-nav-search">
+<a class="icon icon-home" href="../.."> Log0c</a>
+</div>
+<div aria-label="main navigation" class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../..">主页</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">问题排查 / 性能优化</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../too-much-folder/netease-music-problem/">mac 网易云音乐 cpu 占用高问题排查</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../mac/mac-note-stalled/">mac Notes.app 卡死问题</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../mac/osx86_external_ssd_swap_problem/">mac 外部 SSD Swap 分区开启问题</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../too-much-folder/go-shadowing-variable/">go shadowing variable 造成的歧义</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../too-much-folder/go-concurrent-map-read-write-bug/">go 并发读写 map 问题一例</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../too-much-folder/go-pprof-memory-leak/">使用 pprof 排查内存泄漏</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../too-much-folder/db-metadatalock/">数据库 metadata lock 问题排查</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../too-much-folder/black-box-io-problem/">黑盒排查磁盘空间告警/IO问题</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../too-much-folder/black-box-cpu-high-problem/">cpu 排查的几个案例</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../too-much-folder/black-box-network-problem/">network 排查的几个案例</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">labs</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../labs/6824-mapreduce/">MIT 6.824 - MapReduce</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../labs/6824-raft/">MIT 6.824 - Raft</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../labs/6824-kv/">MIT 6.824 - KV</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../labs/csapp-shell/">CSAPP - Shell</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../labs/csapp-proxy/">CSAPP - Proxy</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../labs/cs144/">CS144</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">工具</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../tools/xdebug/">Xdebug 深入学习</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../tools/chrome-dev-tools/">Chrome Dev Tools 深入学习</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../tools/markdown-diagram/">Markdown Diagram 功能</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../too-much-folder/yaml-lint/">yaml lint</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">算法</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../algos/int-to-binary-str/">整数转二进制字符串</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../algos/multiple-field-sort/">多字段排序</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../algos/lru-cache-go/">LRU 线程安全和高并发</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">构建自己的 X 项目</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../build-my-own-x/jquery/">构建自己的 jQuery</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../build-my-own-x/php-framework/">构建自己的 PHP 框架</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../build-my-own-x/lisp-compiler/">构建 Lisp Compiler</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../build-my-own-x/regex/">Regex Engine 学习</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">PHP</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../php/how-composer-work/">Composer 是如何工作的</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../php/business-logic-framework/">关于业务代码的框架</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../php/symfony-lock/">Symfony Lock Component</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">杂项</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../others/mac_py_env_deploy/">Mac Python环境 miniConda 搭建</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../others/taylor-otwell-interview/">Taylor otwell 采访文章</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">零碎知识点</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../tricks/">编程技巧/方法</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../network_programming/">网络编程</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../problem_trace/">问题排查</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../network-course/">计算机网络课程分享</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../mysql/">MYSQL</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../language_trait_and_implementation/">语言特性/底层实现</a>
+</li>
+<li class="toctree-l1 current"><a class="reference internal current" href="./">计算机组成原理</a>
+<ul class="current">
+</ul>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">归档</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/blog_deploy_log/">博客服务器环境搭建记录</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../redis/redis_code_book_reading/">Redis 设计与实现笔记</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/laracasts_learning_path/">Laracasts学习记录</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/black_sierra/">K480N 黑苹果安装记录</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/php_career_guide_line/">从框架看PHP的五种境界[转]</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/laravel_marcoable/">Laravel中的Marcoable</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/laravel_code_book_reading/">Laravel框架关键技术-阅读总结</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/laravel_admin_code_reading/">Laravel-Admin源码阅读</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/first_internship/">实习</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../summary/2017/">2017 总结</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/second_job/">2018 总结</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../summary/2019/">2019 总结</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../summary/2020/">2020 总结</a>
+</li>
+</ul>
+</div>
+</div>
+</nav>
+<section class="wy-nav-content-wrap" data-toggle="wy-nav-shift">
+<nav aria-label="top navigation" class="wy-nav-top" role="navigation">
+<i class="fa fa-bars" data-toggle="wy-nav-top"></i>
+<a href="../..">Log0c</a>
+</nav>
+<div class="wy-nav-content">
+<div class="rst-content">
+<div aria-label="breadcrumbs navigation" role="navigation">
+<ul class="wy-breadcrumbs">
+<li><a href="../..">Docs</a> »</li>
+<li>零碎知识点 »</li>
+<li>计算机组成原理</li>
+<li class="wy-breadcrumbs-aside">
+</li>
+</ul>
+<hr/>
+</div>
+<div role="main">
+<div class="section">
+<p> </p>
+<!-- more -->
+<h1 id="ieee-754">实现一个浮点数结构体和加减乘除运算 IEEE 754</h1>
+<h1 id="_1">判断浮点数是不是另一个数的倍数问题</h1>
+<p>这题看似简单,但是却有许多坑, 越界丢失精度问题</p>
+<h1 id="_2">判断俩浮点数是否相等</h1>
+<p>相减后差值在可接受范围内 math.Abs</p>
+<h1 id="c">c 语言指针的指针</h1>
+<p>如果直接传指针变量进去函数的话 , 只能修改指向的变量值 , 不能修改外部作用域指针变量的地址 , 此时就需要传入指针的指针</p>
+<p>参考https://www.youtube.com/watch?v=jUcqT37FdUI&amp;list=PLLchAlP_W0GfYWjv6Off6lfk4xNe_l-QB&amp;index=42</p>
+<h1 id="_3">指针和引用</h1>
+<p>学习 CSAPP 和 CS61c 的过程中 , 接触了汇编 和 C 指针的底层是什么后 , 指针和引用的区别可以清楚地讲出来了 , 编译成机器码后, 根本没有变量名这个东西, 所以”引用”的不同的变量名其实是同一个变量(同一个地址) , 但是两个”指针”是两个不同的变量 , 这两个变量里存储着相同的地址 (他们有自己的地址 , 里面存着目标变量的地址)</p>
+<h1 id="_4">函数的返回是如何实现的 , 返回值存储在哪里</h1>
+<p>根据 AT&amp;T 汇编的标准, 返回值存储在一个叫做 eax 的寄存器中</p>
+<p>当函数返回时, 首先会将寄存器的值从栈弹出并还原 , 比如 ebp 和 esp 寄存器 ,  同时要还原 (程序计数器? )到之前执行的程序代码位置继续往下跑</p>
+<p>参考https://www.youtube.com/watch?v=5iQkR69H_1M&amp;list=PLLchAlP_W0GfYWjv6Off6lfk4xNe_l-QB&amp;index=30</p>
+<h1 id="ieee754">浮点数表示 IEEE754标准</h1>
+<p>浮点数的产生过程 , 用尽量少的占用位置表示尽量大的数字 , 一张小纸无法写下有82位的整数 , 但科学计数法可以 .</p>
+<h2 id="_5">部分十进制浮点数无法精确表示的原因</h2>
+<p>将0.1十进制数转换为二进制数的过程 , 将小数点右移 , 也就是X2 , 取整数部分,直到小数部分为0</p>
+<p>0.1X2=0.2      0.0</p>
+<p>0.2X2=0.4      0.00</p>
+<p>0.4X2=0.8     0.000</p>
+<p>0.8X2=1.6     0.0001</p>
+<p>0.6X2=1.2     0.00011</p>
+<p>0.2X2=0.4     0.000110</p>
+<p>开始无限循环.......</p>
+<p>而浮点数的有效位是有限的 , 因此出现了误差</p>
+<h2 id="_6">浮点数的加法</h2>
+<p>先对齐指数位(小的向大的对齐) , 然后有效位相加 , 因此较小的数在对齐的时候也会损失精度 , 指数位相差越大 , 相加的误差就越大 , </p>
+<p>例子:</p>
+<p>解决浮点数加法问题的方案 : Kahan Summation 算法</p>
+<h2 id="decimal">定点数(Decimal)</h2>
+<p>浮点数适合不需要非常精确结果的情况</p>
+<p>如果想要精确表示十进制小数 , 小数位确定 , 可以使用定点数(Decimal) </p>
+<p>定点数的表示法是: 一部分比特用来表示整数部分 , 一部分比特用来表示小数 , 缺点是能表示的数字范围很小</p>
+<p>0.1的定点数表示 , 假设计算机只能处理8比特,不考虑负数</p>
+<p>前面4比特可以表示整数范围0-9 , 后面4比特表示小数范围0-9 , 可表示0-9.9的数</p>
+<p>0000 0001</p>
+<p>应用场景 , 最常用的是在超市、银行这样需要用小数记录金额的情况里。在超市里面，我们的小数最多也就到分</p>
+<h2 id="_7">历史上惨重的浮点数事件 , 警示!!!!</h2>
+<p>1991年海湾战争 , 导弹计算失误致使美军28人死亡260人受伤 , 0.000000095的时间误差, 在距离上被放大到573米 , 防御系统没有启动 (生命的代价)</p>
+<p>1996年欧洲宇航局, 10多亿美元的航天器在39秒后烟消云散 , 源于错误地把浮点数当做整型使用 , 看似极其小的问题被无限放大</p>
+<p>1980年温哥华股票交易所, 使用floor去掉了小数位 , 在每天数百万次的交易中积累成天文数字</p>
+<h2 id="_8">延伸</h2>
+<p>业务上的处理方法 : 银行家算法</p>
+<p>实现一遍IEEE754</p>
+<h2 id="_9">问题</h2>
+<ol>
+<li>
+<p>64位的浮点数加法在相差多大后 , 小的那个数完全丢失?</p>
+</li>
+<li>
+<p>PHP中的浮点数底层是如何处理的 , 和IEEE754的浮点数表现不一样</p>
+</li>
+</ol>
+<h2 id="_10">参考资料</h2>
+<p>1.计算机组成原理课15 ,16</p>
+<p>2.<a href="https://mp.weixin.qq.com/s/0KDPWQXhBIsDDQwo3FYlag">公众号&lt;是不是很酷&gt; - 浮点数文章</a></p>
+<p>3.<a href="https://www.jianshu.com/p/7c636d8f18d5">网页资料</a></p>
+<p>4.IEEE754官方资料 </p>
+<p>https://ieeexplore.ieee.org/document/4610935</p>
+<p>https://zh.wikipedia.org/zh-hans/IEEE_754</p>
+<p>5.<a href="https://blog.csdn.net/crjmail/article/details/79723051">实现参考</a></p>
+<h1 id="whiletruecpuwhiletruesleep1">为什么while(true){}会把cpu占用率打满,while(true){sleep(1)}不会</h1>
+<blockquote>
+<p>linux 性能优化课有讲到,后面回顾的时候总结下来</p>
+</blockquote>
+<p>以下内容是当前的理解,不一定正确 </p>
+<p>cpu占用率的定义 , 某个时间的cpu时间片实际有线程在运行的时间</p>
+<p>sleep(1)会阻塞当前线程(放入等待队列) , 而{} 会分尽量多的时间片给当前线程 </p>
+<p>循环监听要记得 sleep , 避免空转占满 cpu 时间</p>
+<p>参考https://www.v2ex.com/t/622020#reply34</p>
+<p>https://www.v2ex.com/t/352157</p>
+<p>https://blog.csdn.net/zhuyijian135757/article/details/42269329</p>
+<p>https://blog.csdn.net/liangrui1988/article/details/79230480</p>
+<p>https://www.jianshu.com/p/669015fc537c</p>
+<p>https://bbs.csdn.net/topics/390478522</p>
+<p>cpu利用率</p>
+<p>http://www.easemob.com/news/1242</p>
+<pre><code>
+ipwx:  
+这种典型就是操作系统原理没学过才会发出的疑问。科班还是有科班的底蕴的。
+
+ipwx:
+这么说吧，线程占用 cpu 必须是在运行，而线程被操作系统调度才会被运行。因为 io 或者其他原因阻塞，线程会进入操作系统的等待队列，不会被运行。线程即使不进入阻塞，也不一定一直运行，操作系统随时可以打断线程，让它暂停，让渡资源给别的线程运行一段时间，再切换回来。当然资源充足情况下操作系统一般不会主动打断线程运行。
+</code></pre>
+<p>关键词 java 无限循环 阻塞 cpu占用率实际是什么</p>
+<h1 id="_11">栈空间和堆空间</h1>
+<p><code>浏览器课 12</code></p>
+<h2 id="_12">语言分类</h2>
+<p>静态语言: 在使用前就确认变量的数据类型</p>
+<p>动态语言: 在运行过程中需要检查数据类型 , 不需要在声明的时候确认</p>
+<p>强类型: 不支持隐式类型转换</p>
+<p>弱类型: 支持隐式类型转换</p>
+<p>隐式类型转换: 把int变量赋值给bool变量 , 赋值过程中编译器悄悄把int转换为了bool</p>
+<p>PHP / Javascript 动态,弱类型</p>
+<p>Go / Java 静态,强类型</p>
+<p>C 静态,弱类型</p>
+<p>Python 动态,强类型</p>
+<h2 id="_13">代码空间分析</h2>
+<p>代码空间</p>
+<p>栈空间</p>
+<p>堆空间</p>
+<h2 id="_14">代码执行过程</h2>
+<p>创建函数执行上下文 , 原始类型存在上下文 的变量环境中 , 引用类型只存储地址 , 真正存储位置是堆</p>
+<h2 id="_15">引用存在堆的原因</h2>
+<p>栈空间不能太大, 影响上下文切换效率</p>
+<p>引用类型占用空间一般较大,而且大小不确定</p>
+<p>堆空间很大,缺点是分配和回收内存耗时</p>
+<h2 id="_16">闭包的内存模型</h2>
+<p>和我之前想的一样, 将这个闭包所包含的上下文状态封装到一个引用类型的对象里了</p>
+<h2 id="_17">题目</h2>
+<p>JS对象完整拷贝</p>
+<p>1 手动递归遍历拷贝</p>
+<p>2 json编码再解码</p>
+<h1 id="_18">内存保护</h1>
+<p><code>组成原理课 41</code></p>
+<p>内存空间有个保护机制, 在代码空间里的才拥有"可执行"权限 , 其他的没有 , 因此要防止注入攻击的话 , 保证变量在正确的空间里就行了 , 反推的话 , MySQL有prepare阶段可以区分执行代码和参数 , 避免在词法分析阶段当成可执行的一部分 , 后端可以编码,转义 , 前端也可以进行限制</p>
+<h1 id="_19">二进制编码</h1>
+<p><code>组成原理课 11</code></p>
+<h2 id="_20">进制转换</h2>
+<p>低 - &gt; 高      左移(x2) 相加        1011 = 1X2^3+0X2^2 ....</p>
+<p>高 - &gt; 低     右移(/2)取余 </p>
+<h2 id="_21">正负数二进制表示法</h2>
+<p>原码表示 , 最左一位表示正负号</p>
+<p>补码 , 最左一位依然表示正负号 , 但也参与计算</p>
+<p>补码能多表示一个数 , 并且加法不需要额外特殊处理 , 底层电路更简单</p>
+<p>比如两位的二进制数</p>
+<blockquote>
+<p>二进制补码表示</p>
+</blockquote>
+<p>​           10      11     00   01</p>
+<p>​           -2      -1       0     1</p>
+<blockquote>
+<p>原码表示</p>
+</blockquote>
+<p>​       11   10   00   01 </p>
+<p>​       -1     0     0     1</p>
+<h2 id="_22">字符编码</h2>
+<blockquote>
+<p>ASCII字符集</p>
+</blockquote>
+<p>占用 1个字节 8位二进制数</p>
+<p>15 的整数表示00001111 , ASCII字符串表示 0011 0001 0011 0101 </p>
+<blockquote>
+<p>UNICODE字符集</p>
+</blockquote>
+<p>UNICODE第二层编码 UTF8 UFT16 UTF32
+完整表示Unicode需要21位 , 0x0~0x10FFFF ,  1114112个字符</p>
+<pre><code>  比如，“汉字”对应的Unicode值是0x6c49和0x5b57，而编码实现是：
+
+char data_utf8[]={0xE6,0xB1,0x89,0xE5,0xAD,0x97};//UTF-8编码
+char16_t data_utf16[]={0x6C49,0x5B57};        //UTF-16编码
+char32_t data_utf32[]={0x00006C49,0x00005B57};//UTF-32编码
+</code></pre>
+<p>UTF8的8表示以1字节为单位, 有1个字节,2个字节,3个字节,4个字节</p>
+<p>UTF16以2字节为单位</p>
+<p>UTF32基本等同于UNICODE , 4字节为单位</p>
+<blockquote>
+<p>字符编码模型演化过程</p>
+</blockquote>
+<pre><code>在计算机中，要建立一种“字符编码模型”，需要四步【4】。
+
+要有一个字符库，确定这些字符足够表意。 比如ASCII字符集，已经足够表示英语，但不能表示中文，于是产生GB2312字符集。
+第一层编码，给每个字符编个数字，英文叫Code Point 或 Code Position。比如ASCII字符集中，65表示“A”，97表示“a”。
+第二层编码，确定表示字符的二进制位数（8位，16位，32位）。ASCII使用7位，DBCS（双字节字符集）使用16位。
+第三层编码，确定字符二进制值的存储格式（大端法，小端法）。比如X86机器使用小端法。
+    一种字符集一般只有一种编码方式，当字符集不够用时，会增加一些新的符号，形成新的字符集。对于新的符号会有新的数字，新的编码格式。所以有时“字符集”和“字符编码”的概念并不严格区分。比如ASCII码，可以指128个字符的字符集，也可以指对这128个字符的编码方式。不过有的字符集有多种编码格式，比如Unicode字符集，Utf8、Utf16都是其编码格式（第二层编码）。
+</code></pre>
+<blockquote>
+<p>总结一遍</p>
+</blockquote>
+<ol>
+<li>确定字符库</li>
+<li>第一层编码,给每个字符编个数字 , 英文叫Code point或Code Position , 如ASCII的'A' 为65</li>
+<li>第二层编码,确定字符的二进制位数 , ASCII是7位 , UTF8是变长</li>
+<li>第三层编码,确定二进制值的存储格式(大端小端) , x86为小端</li>
+</ol>
+<h2 id="_23">参考资料</h2>
+<p>https://www.cnblogs.com/notbecoder/p/4840783.html 字符集和字符编码</p>
+<h2 id="_24">问题</h2>
+<p>1.Go中对字符编码的各种隐式处理</p>
+<h1 id="_25">执行体(任务)的演化</h1>
+<blockquote>
+<p>许世伟架构课11</p>
+</blockquote>
+<h2 id="_26">协程的出现背景</h2>
+<p>伴随着互联网的发展和高性能网络服务器的需求而出现</p>
+<h3 id="_27">网络服务器的特征</h3>
+<p>1网络程序充斥着大量的网络IO,磁盘IO
+2线程的开销太大</p>
+<h3 id="_28">解决方案的演化</h3>
+<h4 id="_29">减少线程数量</h4>
+<p>引入事件循环模型,异步IO编程,但因此引入了新的问题</p>
+<h4 id="_30">引入的新问题: 编程风格问题</h4>
+<p>异步IO实在是繁琐复杂 , 因此协程出现, 回归同步IO编程风格 , 同时开销相比线程小很多 (go的协程初始堆栈只有4K)</p>
+<h2 id="_31">线程的出现背景</h2>
+<p>同一个软件内也有多任务的需求,并且需要共享地址空间</p>
+<h2 id="_32">进程的出现背景</h2>
+<p>实现多任务的一种实现方式是多个CPU,每个CPU处理一个任务,但是钱不够买不起那么多呀,科学家就想办法怎么
+实现单核CPU执行多任务, 于是将cpu时间切成了多段时间片,每段时间片由一个"执行体"拥有 , 最早期的执行体就是进程</p>
+</div>
+</div>
+<footer>
+<div aria-label="footer navigation" class="rst-footer-buttons" role="navigation">
+<a class="btn btn-neutral float-right" href="../../archive/blog_deploy_log/" title="博客服务器环境搭建记录">Next <span class="icon icon-circle-arrow-right"></span></a>
+<a class="btn btn-neutral" href="../language_trait_and_implementation/" title="语言特性/底层实现"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+</div>
+<hr/>
+<div role="contentinfo">
+<!-- Copyright etc -->
+</div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+</div>
+</div>
+</section>
+</div>
+<div aria-label="versions" class="rst-versions" role="note">
+<span class="rst-current-version" data-toggle="rst-current-version">
+<span><a href="../language_trait_and_implementation/" style="color: #fcfcfc;">« Previous</a></span>
+<span style="margin-left: 15px"><a href="../../archive/blog_deploy_log/" style="color: #fcfcfc">Next »</a></span>
+</span>
+</div>
+<script>var base_url = '../..';</script>
+<script defer="" src="../../js/theme.js"></script>
+<script defer="" src="../../js/mermaid.min.js"></script>
+<script defer="" src="../../js/custom.js"></script>
+<script defer="">
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(false);
+        };
+    </script>
+</body>
+</html>

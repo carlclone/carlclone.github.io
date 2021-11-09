@@ -1,0 +1,43 @@
+// 变量命名有问题 , 函数定义和执行不一致 ,写完要走一遍简单 case
+
+// 抽象出 bst 的遍历操作 , 写一个循环的版本
+
+func searchMatrix(matrix [][]int, target int) bool {
+	if len(matrix)==0 {
+		return false
+	}
+	if len(matrix[0])==0 {
+		return false
+	}
+
+	m:=len(matrix[0])
+
+	return search(matrix,target,0,m-1)
+}
+
+func search(matrix [][]int, target int,i,j int) bool {
+
+	m:=len(matrix[0])
+	n:=len(matrix)
+
+	head:=matrix[i][j]
+
+	if head==target {
+		return true
+	}
+	if target<head && hasLeftChild(m,n,i,j-1) {
+		return search(matrix,target,i,j-1)
+	}
+	if target>head && hasRightChild(m,n,i+1,j) {
+		return search(matrix,target,i+1,j)
+	}
+	return false
+}
+
+func hasLeftChild(m,n,i,j int) bool {
+	return j>=0 && j<m
+}
+
+func hasRightChild(m,n,i,j int) bool {
+	return i>=0 && i<n
+}

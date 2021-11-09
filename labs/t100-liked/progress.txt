@@ -1,0 +1,31 @@
+# algo
+top100 13/100
+point to offer  0/100
+
+# sys design
+url shorten
+metric log service
+payment system
+chat system
+rate limit service
+通用幂等保证服务 Avoiding Double Payments in a Distributed Payments System
+
+# course labs / project
+6824
+cs144
+cmu15445
+distributed-crontab
+csapp
+beargit
+build-your-own-x
+talent plan
+
+# 八股文    50 / subject
+
+# 面经  0/50
+
+# ood
+leetcode - oop 板块
+
+# books / course
+

@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
+<head>
+<meta charset="utf-8"/>
+<meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="../../img/favicon.ico" rel="shortcut icon"/>
+<title>Laravel框架关键技术-阅读总结 - Log0c</title>
+<link href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" rel="stylesheet">
+<link href="../../css/theme.css" rel="stylesheet"/>
+<link href="../../css/theme_extra.css" rel="stylesheet"/>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet"/>
+<script>
+    // Current page data
+    var mkdocs_page_name = "Laravel\u6846\u67b6\u5173\u952e\u6280\u672f-\u9605\u8bfb\u603b\u7ed3";
+    var mkdocs_page_input_path = "archive/laravel_code_book_reading.md";
+    var mkdocs_page_url = null;
+  </script>
+<script defer="" src="../../js/jquery-2.1.1.min.js"></script>
+<script defer="" src="../../js/modernizr-2.8.3.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+</link></head>
+<body class="wy-body-for-nav" role="document">
+<div class="wy-grid-for-nav">
+<nav class="wy-nav-side stickynav" data-toggle="wy-nav-shift">
+<div class="wy-side-scroll">
+<div class="wy-side-nav-search">
+<a class="icon icon-home" href="../.."> Log0c</a>
+</div>
+<div aria-label="main navigation" class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../..">主页</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">问题排查 / 性能优化</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../too-much-folder/netease-music-problem/">mac 网易云音乐 cpu 占用高问题排查</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../mac/mac-note-stalled/">mac Notes.app 卡死问题</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../mac/osx86_external_ssd_swap_problem/">mac 外部 SSD Swap 分区开启问题</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../too-much-folder/go-shadowing-variable/">go shadowing variable 造成的歧义</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../too-much-folder/go-concurrent-map-read-write-bug/">go 并发读写 map 问题一例</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../too-much-folder/go-pprof-memory-leak/">使用 pprof 排查内存泄漏</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../too-much-folder/db-metadatalock/">数据库 metadata lock 问题排查</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../too-much-folder/black-box-io-problem/">黑盒排查磁盘空间告警/IO问题</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../too-much-folder/black-box-cpu-high-problem/">cpu 排查的几个案例</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../too-much-folder/black-box-network-problem/">network 排查的几个案例</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">labs</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../labs/6824-mapreduce/">MIT 6.824 - MapReduce</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../labs/6824-raft/">MIT 6.824 - Raft</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../labs/6824-kv/">MIT 6.824 - KV</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../labs/csapp-shell/">CSAPP - Shell</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../labs/csapp-proxy/">CSAPP - Proxy</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../labs/cs144/">CS144</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">工具</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../tools/xdebug/">Xdebug 深入学习</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../tools/chrome-dev-tools/">Chrome Dev Tools 深入学习</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../tools/markdown-diagram/">Markdown Diagram 功能</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../too-much-folder/yaml-lint/">yaml lint</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">算法</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../algos/int-to-binary-str/">整数转二进制字符串</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../algos/multiple-field-sort/">多字段排序</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../algos/lru-cache-go/">LRU 线程安全和高并发</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">构建自己的 X 项目</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../build-my-own-x/jquery/">构建自己的 jQuery</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../build-my-own-x/php-framework/">构建自己的 PHP 框架</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../build-my-own-x/lisp-compiler/">构建 Lisp Compiler</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../build-my-own-x/regex/">Regex Engine 学习</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">PHP</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../php/how-composer-work/">Composer 是如何工作的</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../php/business-logic-framework/">关于业务代码的框架</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../php/symfony-lock/">Symfony Lock Component</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">杂项</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../others/mac_py_env_deploy/">Mac Python环境 miniConda 搭建</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../others/taylor-otwell-interview/">Taylor otwell 采访文章</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">零碎知识点</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../knowledge-reduce/tricks/">编程技巧/方法</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../knowledge-reduce/network_programming/">网络编程</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../knowledge-reduce/problem_trace/">问题排查</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../knowledge-reduce/network-course/">计算机网络课程分享</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../knowledge-reduce/mysql/">MYSQL</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../knowledge-reduce/language_trait_and_implementation/">语言特性/底层实现</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../knowledge-reduce/computer_composition/">计算机组成原理</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">归档</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../blog_deploy_log/">博客服务器环境搭建记录</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../redis/redis_code_book_reading/">Redis 设计与实现笔记</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../laracasts_learning_path/">Laracasts学习记录</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../black_sierra/">K480N 黑苹果安装记录</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../php_career_guide_line/">从框架看PHP的五种境界[转]</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../laravel_marcoable/">Laravel中的Marcoable</a>
+</li>
+<li class="toctree-l1 current"><a class="reference internal current" href="./">Laravel框架关键技术-阅读总结</a>
+<ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="#_1">组件化开发</a>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#composer_1">composer使用</a>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#laravel">构建Laravel框架</a>
+<ul>
+<li class="toctree-l3"><a class="reference internal" href="#1composerjson">1.项目初始化：composer.json</a>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#2">2.添加路由组件</a>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#3">3.添加控制器模块</a>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#4">4.添加模型组件</a>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#5">5.添加视图组件</a>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../laravel_admin_code_reading/">Laravel-Admin源码阅读</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../first_internship/">实习</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../summary/2017/">2017 总结</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../second_job/">2018 总结</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../summary/2019/">2019 总结</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../summary/2020/">2020 总结</a>
+</li>
+</ul>
+</div>
+</div>
+</nav>
+<section class="wy-nav-content-wrap" data-toggle="wy-nav-shift">
+<nav aria-label="top navigation" class="wy-nav-top" role="navigation">
+<i class="fa fa-bars" data-toggle="wy-nav-top"></i>
+<a href="../..">Log0c</a>
+</nav>
+<div class="wy-nav-content">
+<div class="rst-content">
+<div aria-label="breadcrumbs navigation" role="navigation">
+<ul class="wy-breadcrumbs">
+<li><a href="../..">Docs</a> »</li>
+<li>归档 »</li>
+<li>Laravel框架关键技术-阅读总结</li>
+<li class="wy-breadcrumbs-aside">
+</li>
+</ul>
+<hr/>
+</div>
+<div role="main">
+<div class="section">
+<p>本书主要讲解laravel框架底层组件的实现细节，设计模式在框架中的运用，和一个laravel应用实例</p>
+<!-- more -->
+<h2 id="composer">第一章 组件化开发与composer使用</h2>
+<h3 id="_1">组件化开发</h3>
+<p>Laravel底层就使用了很多Symfony的组件，如果对一些组件不满意可以使用其他开源组件替换，如Laravel的Illuminate Container类可以替换为Pimple的IOC容器类。</p>
+<h3 id="composer_1">composer使用</h3>
+<p>composer的自动加载有PSR-0，PSR-4，classmap，files四种规范形式，files主要用来加载函数库，classmap会搜索目录下的所有php和inc后缀的文件生成映射，PSR-4是命名空间和目录的映射，PSR-0已渐渐被废除。</p>
+<h3 id="laravel">构建Laravel框架</h3>
+<p>目标：MVC框架，实现路由，控制器，数据库操作，视图模板
+借助工具：Laravel的Illuminate组件</p>
+<p>步骤：</p>
+<h4 id="1composerjson">1.项目初始化：composer.json</h4>
+<h4 id="2">2.添加路由组件</h4>
+<h4 id="3">3.添加控制器模块</h4>
+<h4 id="4">4.添加模型组件</h4>
+<h4 id="5">5.添加视图组件</h4>
+<h2 id="laravel_1">第二章 Laravel安装和环境搭建（无需总结）</h2>
+<h2 id="laravelphp">第三章 Laravel框架中常用的PHP语法</h2>
+<h3 id="_2">组件化开发语法条件</h3>
+<p><code>命名空间</code> 
+类似文件系统的文件夹，同时是实现自动加载的一个机制（命名空间到文件夹路径的映射）</p>
+<p><code>文件包含</code>
+include和require，作用几乎一样，报错级别不同，require会中止，include会继续执行。也是自动加载实现的基础。</p>
+<h3 id="_3">匿名函数</h3>
+<p>匿名函数也就是closure，主要的用法有：作为callback函数， 储存作用域状态，修改传入类状态。</p>
+<h3 id="_4">魔术</h3>
+<p><code>魔术方法</code>
+魔术方法在执行某些操作的时候触发，如在Eloquent Model里使用__get和__set 对attribute数组进行获取和添加</p>
+<p><code>魔术常量</code>
+如$_SERVER 等等</p>
+<h3 id="_5">反射</h3>
+<p>依赖注入和IOC容器的实现机制，获取Class信息</p>
+<h3 id="_6">后期静态绑定</h3>
+<p>static和self 扩展类调用父类的时候有所区别，如Laravel中Model调用Model Abstract Class</p>
+<h3 id="trait">Trait</h3>
+<p>横向继承，组合，解决PHP单继承的缺点</p>
+<h2 id="laravelhttp">第四章 Laravel框架中使用的HTTP协议基础</h2>
+<p>后端工程师更多关注与复杂的业务流程和架构设计，这一章的内容是常常被忽视的知识点。</p>
+<pre><code>HTTP协议，应用层协议，无状态， 报文包含HTTP首部和主体数据，TCP三次握手建立连接，请求一次就关闭连接。
+</code></pre>
+<p>```数据链路层 和 网络层 各自的职责
+数据包的封装格式,数据包如何从一台主机传到另一台</p>
+<pre><code>
+</code></pre>
+<p>数据链路层 和 网络层 各自的职责</p>
+<pre><code>
+</code></pre>
+<p>网段内通信和网段之间的通信  （地址转发表，路由控制表） 内只需要地址转发表，之间需要路由控制表，两个都需要ARP</p>
+<pre><code>
+</code></pre>
+<p>ARP协议的职责：解析IP和MAC的映射关系</p>
+<pre><code>
+</code></pre>
+<p>DNS 负责域名解析</p>
+<pre><code>
+</code></pre>
+<p>HTTP request和response报文结构</p>
+<p>状态码  1 继续 2 成功 3 重定向 4 客户端错误 5 服务端错误
+```</p>
+<h2 id="laravel_2">第五章 Laravel框架初识</h2>
+<h3 id="laravel_3">Laravel框架应用程序目录结构（无需总结）</h3>
+<h3 id="laravel_4">Laravel应用程序的三个重要环节</h3>
+<h4 id="_7">路由</h4>
+<p>再路由服务提供者启动过程中由Route-ServiceProvider.php中的<code>map</code>方法和<code>require_app_path('Http/routes.php');</code>加载。</p>
+<h4 id="_8">控制器</h4>
+<p>作为HTTP请求的二次分发控制部分，与路由关系紧密，但通过服务容器以依赖注入的方式解决了这种耦合关系，使得控制器与其他类耦合度非常低。</p>
+<h4 id="_9">视图</h4>
+<p>Laravel将视图作为一个独立的组件与控制器解耦，在任何位置使用<code>view() 相当于View::make(),最终调用的是Illuminate\View\Factory\make()方法，进而创建Illuminate/View/View类的实例化对象</code>,就可以加载视图。</p>
+<h2 id="laravel_5">Laravel框架中的设计模式</h2>
+<h3 id="_10">服务容器</h3>
+<h4 id="_11">工厂模式</h4>
+<h4 id="ioc">IOC模式</h4>
+<h4 id="_12">源码解析（之后要认真看看）</h4>
+<h3 id="_13">请求处理管道</h3>
+<p>容器和服务提供者解决了依赖注入和资源获取的功能，因为我们可以随时获取需要的服务，实现想要的功能。而对于服务器，真正需要的处理请求并生成响应输出给客户端，这些步骤要达到松耦合，在Laravel中使用了中间件，设计者将其比喻成洋葱，分成许多的层，每层有特定的功能，可随时添加和修改层。中间件使用的是装饰者模式，但在PHP特有的编程方式下形式发送了变化。</p>
+<h4 id="_14">装饰者模式</h4>
+<p>装饰者模式主要遵循了设计原则中的开闭原则，不修改源代码的情况下添加或减少功能。</p>
+<p>装饰者实现统一的接口，并以依赖注入的形式将装饰者实例化，继承父类，重写方法决定是在父类方法前执行还是之后。</p>
+<blockquote>
+<p>书中的实例：</p>
+<p>小芳类实现Decorator接口的display()</p>
+<p>服饰类同样实现接口的display()，并可依赖注入其他Decorator修饰它们，调用注入的Decorator类的display()</p>
+<p>鞋子类继承服饰类，并重写父类方法，在父类display之前执行</p>
+<p>裙子类继承服饰类，并重写父类方法，在父类之前执行</p>
+<p>Fire类继承服饰类，重写父类方法，在之前和之后分别执行自己的逻辑</p>
+<p>在这个例子中小芳类是对请求的响应，相当于控制器。而这些打扮类就相当于中间件的功能，在打扮的过程中可随时增加新的打扮类，只要该类继承Finery类并调用父类的同名方法，这就是装饰者模式的应用场景</p>
+</blockquote>
+<h4 id="_15">请求处理管道</h4>
+<p>实例间的功能调用通过闭包函数完成</p>
+<h4 id="_16">部分源码（之后要认真看看）</h4>
+<h2 id="_17">第七章 请求到响应的生命周期</h2>
+<h2 id="_18">第八章 服务容器与服务提供者</h2>
+<h2 id="_19">最后 书中的练习</h2>
+<p><a href="github">构建的Laravel框架</a></p>
+</div>
+</div>
+<footer>
+<div aria-label="footer navigation" class="rst-footer-buttons" role="navigation">
+<a class="btn btn-neutral float-right" href="../laravel_admin_code_reading/" title="Laravel-Admin源码阅读">Next <span class="icon icon-circle-arrow-right"></span></a>
+<a class="btn btn-neutral" href="../laravel_marcoable/" title="Laravel中的Marcoable"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+</div>
+<hr/>
+<div role="contentinfo">
+<!-- Copyright etc -->
+</div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+</div>
+</div>
+</section>
+</div>
+<div aria-label="versions" class="rst-versions" role="note">
+<span class="rst-current-version" data-toggle="rst-current-version">
+<span><a href="../laravel_marcoable/" style="color: #fcfcfc;">« Previous</a></span>
+<span style="margin-left: 15px"><a href="../laravel_admin_code_reading/" style="color: #fcfcfc">Next »</a></span>
+</span>
+</div>
+<script>var base_url = '../..';</script>
+<script defer="" src="../../js/theme.js"></script>
+<script defer="" src="../../js/mermaid.min.js"></script>
+<script defer="" src="../../js/custom.js"></script>
+<script defer="">
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(false);
+        };
+    </script>
+</body>
+</html>

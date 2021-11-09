@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
+<head>
+<meta charset="utf-8"/>
+<meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="../../img/favicon.ico" rel="shortcut icon"/>
+<title>编程技巧/方法 - Log0c</title>
+<link href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" rel="stylesheet">
+<link href="../../css/theme.css" rel="stylesheet"/>
+<link href="../../css/theme_extra.css" rel="stylesheet"/>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet"/>
+<script>
+    // Current page data
+    var mkdocs_page_name = "\u7f16\u7a0b\u6280\u5de7/\u65b9\u6cd5";
+    var mkdocs_page_input_path = "knowledge-reduce/tricks.md";
+    var mkdocs_page_url = null;
+  </script>
+<script defer="" src="../../js/jquery-2.1.1.min.js"></script>
+<script defer="" src="../../js/modernizr-2.8.3.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+</link></head>
+<body class="wy-body-for-nav" role="document">
+<div class="wy-grid-for-nav">
+<nav class="wy-nav-side stickynav" data-toggle="wy-nav-shift">
+<div class="wy-side-scroll">
+<div class="wy-side-nav-search">
+<a class="icon icon-home" href="../.."> Log0c</a>
+</div>
+<div aria-label="main navigation" class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../..">主页</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">问题排查 / 性能优化</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../too-much-folder/netease-music-problem/">mac 网易云音乐 cpu 占用高问题排查</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../mac/mac-note-stalled/">mac Notes.app 卡死问题</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../mac/osx86_external_ssd_swap_problem/">mac 外部 SSD Swap 分区开启问题</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../too-much-folder/go-shadowing-variable/">go shadowing variable 造成的歧义</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../too-much-folder/go-concurrent-map-read-write-bug/">go 并发读写 map 问题一例</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../too-much-folder/go-pprof-memory-leak/">使用 pprof 排查内存泄漏</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../too-much-folder/db-metadatalock/">数据库 metadata lock 问题排查</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../too-much-folder/black-box-io-problem/">黑盒排查磁盘空间告警/IO问题</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../too-much-folder/black-box-cpu-high-problem/">cpu 排查的几个案例</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../too-much-folder/black-box-network-problem/">network 排查的几个案例</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">labs</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../labs/6824-mapreduce/">MIT 6.824 - MapReduce</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../labs/6824-raft/">MIT 6.824 - Raft</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../labs/6824-kv/">MIT 6.824 - KV</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../labs/csapp-shell/">CSAPP - Shell</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../labs/csapp-proxy/">CSAPP - Proxy</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../labs/cs144/">CS144</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">工具</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../tools/xdebug/">Xdebug 深入学习</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../tools/chrome-dev-tools/">Chrome Dev Tools 深入学习</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../tools/markdown-diagram/">Markdown Diagram 功能</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../too-much-folder/yaml-lint/">yaml lint</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">算法</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../algos/int-to-binary-str/">整数转二进制字符串</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../algos/multiple-field-sort/">多字段排序</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../algos/lru-cache-go/">LRU 线程安全和高并发</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">构建自己的 X 项目</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../build-my-own-x/jquery/">构建自己的 jQuery</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../build-my-own-x/php-framework/">构建自己的 PHP 框架</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../build-my-own-x/lisp-compiler/">构建 Lisp Compiler</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../build-my-own-x/regex/">Regex Engine 学习</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">PHP</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../php/how-composer-work/">Composer 是如何工作的</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../php/business-logic-framework/">关于业务代码的框架</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../php/symfony-lock/">Symfony Lock Component</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">杂项</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../others/mac_py_env_deploy/">Mac Python环境 miniConda 搭建</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../others/taylor-otwell-interview/">Taylor otwell 采访文章</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">零碎知识点</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal current" href="./">编程技巧/方法</a>
+<ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="#_2">其他尽早错误的例子</a>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../network_programming/">网络编程</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../problem_trace/">问题排查</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../network-course/">计算机网络课程分享</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../mysql/">MYSQL</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../language_trait_and_implementation/">语言特性/底层实现</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../computer_composition/">计算机组成原理</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">归档</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/blog_deploy_log/">博客服务器环境搭建记录</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../redis/redis_code_book_reading/">Redis 设计与实现笔记</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/laracasts_learning_path/">Laracasts学习记录</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/black_sierra/">K480N 黑苹果安装记录</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/php_career_guide_line/">从框架看PHP的五种境界[转]</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/laravel_marcoable/">Laravel中的Marcoable</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/laravel_code_book_reading/">Laravel框架关键技术-阅读总结</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/laravel_admin_code_reading/">Laravel-Admin源码阅读</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/first_internship/">实习</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../summary/2017/">2017 总结</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/second_job/">2018 总结</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../summary/2019/">2019 总结</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../summary/2020/">2020 总结</a>
+</li>
+</ul>
+</div>
+</div>
+</nav>
+<section class="wy-nav-content-wrap" data-toggle="wy-nav-shift">
+<nav aria-label="top navigation" class="wy-nav-top" role="navigation">
+<i class="fa fa-bars" data-toggle="wy-nav-top"></i>
+<a href="../..">Log0c</a>
+</nav>
+<div class="wy-nav-content">
+<div class="rst-content">
+<div aria-label="breadcrumbs navigation" role="navigation">
+<ul class="wy-breadcrumbs">
+<li><a href="../..">Docs</a> »</li>
+<li>零碎知识点 »</li>
+<li>编程技巧/方法</li>
+<li class="wy-breadcrumbs-aside">
+</li>
+</ul>
+<hr/>
+</div>
+<div role="main">
+<div class="section">
+<p> </p>
+<!-- more -->
+<h1 id="_1">尽早错误</h1>
+<blockquote>
+<p>已经被我频繁地使用于检查变量为空的情况</p>
+</blockquote>
+<pre><code>//嵌套写法
+if (a == true) {
+    if (b == true) {
+        doSomething()
+    }
+}
+
+//尽早错误写法
+if (a!=true) {
+    return
+}
+if (b!=true) {
+    return
+}
+doSomething()
+</code></pre>
+<h2 id="_2">其他尽早错误的例子</h2>
+<blockquote>
+<p>10x程序员工作法27 尽早暴露问题</p>
+</blockquote>
+<p>1.重构的作者Martin flower写的文章 - <a href="https://www.martinfowler.com/ieeeSoftware/failFast.pdf">fail fast</a></p>
+<p>2.尽早检查参数错误,而不是让已经错误的参数继续往后流入数据库,导致难以分析错误来源</p>
+<p>3.数据库配置,缺少重要配置的时候直接报错,而不是设立默认值,比如最大连接数默认值10,配置项拼写错误,读取不到配置,然后在线上造成异常的缓慢,并可能耗费几天的时间来排查</p>
+<p>4.做需求,做项目,有问题尽早提出来,越拖越难解决</p>
+<h1 id="_3">避免使用否定条件</h1>
+<blockquote>
+<p>这条不是硬性要求,但能提高代码可读性</p>
+</blockquote>
+<pre><code>if (!exist) {
+ doSomething()
+}
+
+
+if (notExist) {
+    doSomething()
+}
+</code></pre>
+<h1 id="_4">二进制位运算标志位表示状态</h1>
+<blockquote>
+<p>用二进制位运算,而不是数组遍历,在资源紧缺的时候性能优化还是很重要的,然后其实可读性也非常好</p>
+</blockquote>
+<p>参考Redis源码中的例子: Client结构体里的flags属性</p>
+<pre><code>if (server.maxidletime &amp;&amp;
+        // 不检查作为从服务器的客户端
+        !(c-&gt;flags &amp; REDIS_SLAVE) &amp;&amp;    /* no timeout for slaves */
+        // 不检查作为主服务器的客户端
+        !(c-&gt;flags &amp; REDIS_MASTER) &amp;&amp;   /* no timeout for masters */
+        // 不检查被阻塞的客户端
+        !(c-&gt;flags &amp; REDIS_BLOCKED) &amp;&amp;  /* no timeout for BLPOP */
+        // 不检查订阅了频道的客户端
+        dictSize(c-&gt;pubsub_channels) == 0 &amp;&amp; /* no timeout for pubsub */
+        // 不检查订阅了模式的客户端
+        listLength(c-&gt;pubsub_patterns) == 0 &amp;&amp;
+        // 客户端最后一次与服务器通讯的时间已经超过了 maxidletime 时间
+        (now - c-&gt;lastinteraction &gt; server.maxidletime))
+    {
+        redisLog(REDIS_VERBOSE,"Closing idle client");
+        // 关闭超时客户端
+        freeClient(c);
+        return 1;
+    }
+</code></pre>
+<p>参考<a href="[https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Operators/Bitwise_Operators#%E7%A4%BA%E4%BE%8B](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Operators/Bitwise_Operators#示例)">MDN</a>的例子</p>
+<pre><code>var FLAG_A = 1; // 0001
+var FLAG_B = 2; // 0010
+var FLAG_C = 4; // 0100
+var FLAG_D = 8; // 1000
+
+var mask = FLAG_A | FLAG_B | FLAG_D; // 0001 | 0010 | 1000 =&gt; 1011
+
+// 如果我们有 cat
+if (flags &amp; FLAG_C) { // 0101 &amp; 0100 =&gt; 0100 =&gt; true
+   // do stuff
+}
+
+// 如果我们有 bat 或者 cat 至少一个
+// (0101 &amp; 0010) || (0101 &amp; 0100) =&gt; 0000 || 0100 =&gt; true
+if ((flags &amp; FLAG_B) || (flags &amp; FLAG_C)) {
+   // do stuff
+}
+
+// 如果我们有 bat 或者 cat 至少一个
+var mask = FLAG_B | FLAG_C; // 0010 | 0100 =&gt; 0110
+if (flags &amp; mask) { // 0101 &amp; 0110 =&gt; 0100 =&gt; true
+   // do stuff
+}
+
+# 或运算可以设置标志位
+// 我们有 cat 和 duck
+var mask = FLAG_C | FLAG_D; // 0100 | 1000 =&gt; 1100
+flags |= mask;   // 0101 | 1100 =&gt; 1101
+
+# 与运算可以清楚标志位
+// 我们没有 ant 也没有 cat
+var mask = ~(FLAG_A | FLAG_C); // ~0101 =&gt; 1010
+flags &amp;= mask;   // 1101 &amp; 1010 =&gt; 1000
+
+德摩根定律：
+~(FLAG_A | FLAG_C)  euqals ~FLAG_A &amp; ~FLAG_C
+
+
+# 异或运算，相同的置为0 ，不同的为1 ， 这个例子中用于切换标志位
+
+// 如果我们以前没有 bat ，那么我们现在有 bat
+// 但是如果我们已经有了一个，那么现在没有了
+// 对 cat 也是相同的情况
+var mask = FLAG_B | FLAG_C;
+flags = flags ^ mask;   // 1100 ^ 0110 =&gt; 1010
+
+# 非运算翻转
+// entering parallel universe...
+flags = ~flags;    // ~1010 =&gt; 0101
+
+</code></pre>
+<h2 id="_5">延伸</h2>
+<p>创建掩码，转换为二进制的算法实现：</p>
+<pre><code>function createMask () {
+  var nMask = 0, nFlag = 0, nLen = arguments.length &gt; 32 ? 32 : arguments.length;
+  for (nFlag; nFlag &lt; nLen; nMask |= arguments[nFlag] &lt;&lt; nFlag++);
+  return nMask;
+}
+var mask1 = createMask(true, true, false, true); // 11, i.e.: 1011
+var mask2 = createMask(false, false, true); // 4, i.e.: 0100
+var mask3 = createMask(true); // 1, i.e.: 0001
+// etc.
+
+alert(mask1); // 打印 11
+</code></pre>
+<pre><code>function arrayFromMask (nMask) {
+  // nMask 必须介于 -2147483648 和 2147483647 之间
+  if (nMask &gt; 0x7fffffff || nMask &lt; -0x80000000) { 
+    throw new TypeError("arrayFromMask - out of range"); 
+  }
+  for (var nShifted = nMask, aFromMask = []; nShifted; 
+       aFromMask.push(Boolean(nShifted &amp; 1)), nShifted &gt;&gt;&gt;= 1);
+  return aFromMask;
+}
+
+var array1 = arrayFromMask(11);
+var array2 = arrayFromMask(4);
+var array3 = arrayFromMask(1);
+
+alert("[" + array1.join(", ") + "]");
+// 打印 "[true, true, false, true]", i.e.: 11, i.e.: 1011
+</code></pre>
+<pre><code>function createBinaryString (nMask) {
+  // nMask must be between -2147483648 and 2147483647
+  for (var nFlag = 0, nShifted = nMask, sMask = ""; nFlag &lt; 32;
+       nFlag++, sMask += String(nShifted &gt;&gt;&gt; 31), nShifted &lt;&lt;= 1);
+  return sMask;
+}
+
+var string1 = createBinaryString(11);
+var string2 = createBinaryString(4);
+var string3 = createBinaryString(1);
+
+alert(string1);
+// 打印 00000000000000000000000000001011, i.e. 11
+</code></pre>
+<h1 id="_6">不要在一开始就过度抽象，先思考模型的最小状态</h1>
+<blockquote>
+<p>用现实世界的模型创建类 ,容易创造出OOP 怪兽</p>
+</blockquote>
+<p>eloquent js ，OOP一章</p>
+<h1 id="_7">学习开源代码该如何入手？</h1>
+<blockquote>
+<p>消息队列课 09</p>
+</blockquote>
+<h2 id="_8">先看文档, 而且确保是最新的 , 中文可能不是最新的</h2>
+<p>1.quick start 先搭建起来, 跑一些例子</p>
+<p>2.Introduction 看基本概念 , 名词术语 ,可能会有专门的basic concepts 文档 ,然后是使用场景 , use cases , ecosystem  , 在ecosystem中查看是否有和当前需求匹配的案例 , 如果有 , 可以少走很多弯路</p>
+<h2 id="_9">然后问自己这些问题</h2>
+<p>这个项目是干什么的？
+能解决哪些问题？
+适合在哪些场景使用？
+有哪些功能？
+如何使用？</p>
+<blockquote>
+<p>并不是说之后就能直接看源码 , 因为程序代码是一个网状结构, 不适合顺序阅读 , 容易被网缠住</p>
+<p>大部分开源项目诞生的方式 , 某个科学家发表某篇论文被大厂看到了 , 实现了出来 , 这篇论文就是这个项目的灵魂 , 比如kafka的</p>
+</blockquote>
+<h2 id="_10">之后, 带着问题去读源码 ,  最好是带着问题的<strong>答案</strong>去读</h2>
+<p>kafka的官网有 design和implementation章节 , 可以寻找实现原理/答案 , 但是一般的项目好像没有吧 ...</p>
+<p>可以把更多的精力放在实现细节上, 而不是被全局绕晕 , 形成一个阅读单元 , 点线面最后串成网</p>
+<h2 id="_11">最后,最重要的是，把主要的流程用流程图或者时序图画出来，把重点的算法、原理用文字写出来。</h2>
+<h2 id="_12">作业</h2>
+<p>课后，建议你找一个你熟悉的开源项目，可以是消息相关的，也可以是无关的开源项目，确定一个问题，用这节课中讲到的“带着问题和答案去读源码”的方法，去读一点源码。然后，最重要的是，把主要的流程用流程图或者时序图画出来，把重点的算法、原理用文字写出来。</p>
+<h2 id="_13">下面的评论</h2>
+<p>实在不行你还可以跟着别人的源码解析文章去读源码。 (我就是这样....)</p>
+<h1 id="push-checklist">push 代码前的Checklist</h1>
+<p>1.可能出错的代码加try catch避免扩大影响范围
+2.检查副作用
+3.影响范围估算
+4.幂等性检查</p>
+</div>
+</div>
+<footer>
+<div aria-label="footer navigation" class="rst-footer-buttons" role="navigation">
+<a class="btn btn-neutral float-right" href="../network_programming/" title="网络编程">Next <span class="icon icon-circle-arrow-right"></span></a>
+<a class="btn btn-neutral" href="../../others/taylor-otwell-interview/" title="Taylor otwell 采访文章"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+</div>
+<hr/>
+<div role="contentinfo">
+<!-- Copyright etc -->
+</div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+</div>
+</div>
+</section>
+</div>
+<div aria-label="versions" class="rst-versions" role="note">
+<span class="rst-current-version" data-toggle="rst-current-version">
+<span><a href="../../others/taylor-otwell-interview/" style="color: #fcfcfc;">« Previous</a></span>
+<span style="margin-left: 15px"><a href="../network_programming/" style="color: #fcfcfc">Next »</a></span>
+</span>
+</div>
+<script>var base_url = '../..';</script>
+<script defer="" src="../../js/theme.js"></script>
+<script defer="" src="../../js/mermaid.min.js"></script>
+<script defer="" src="../../js/custom.js"></script>
+<script defer="">
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(false);
+        };
+    </script>
+</body>
+</html>

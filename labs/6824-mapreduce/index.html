@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
+<head>
+<meta charset="utf-8"/>
+<meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="../../img/favicon.ico" rel="shortcut icon"/>
+<title>MIT 6.824 - MapReduce - Log0c</title>
+<link href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" rel="stylesheet">
+<link href="../../css/theme.css" rel="stylesheet"/>
+<link href="../../css/theme_extra.css" rel="stylesheet"/>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet"/>
+<script>
+    // Current page data
+    var mkdocs_page_name = "MIT 6.824 - MapReduce";
+    var mkdocs_page_input_path = "labs/6824-mapreduce.md";
+    var mkdocs_page_url = null;
+  </script>
+<script defer="" src="../../js/jquery-2.1.1.min.js"></script>
+<script defer="" src="../../js/modernizr-2.8.3.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+</link></head>
+<body class="wy-body-for-nav" role="document">
+<div class="wy-grid-for-nav">
+<nav class="wy-nav-side stickynav" data-toggle="wy-nav-shift">
+<div class="wy-side-scroll">
+<div class="wy-side-nav-search">
+<a class="icon icon-home" href="../.."> Log0c</a>
+</div>
+<div aria-label="main navigation" class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../..">主页</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">问题排查 / 性能优化</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../too-much-folder/netease-music-problem/">mac 网易云音乐 cpu 占用高问题排查</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../mac/mac-note-stalled/">mac Notes.app 卡死问题</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../mac/osx86_external_ssd_swap_problem/">mac 外部 SSD Swap 分区开启问题</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../too-much-folder/go-shadowing-variable/">go shadowing variable 造成的歧义</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../too-much-folder/go-concurrent-map-read-write-bug/">go 并发读写 map 问题一例</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../too-much-folder/go-pprof-memory-leak/">使用 pprof 排查内存泄漏</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../too-much-folder/db-metadatalock/">数据库 metadata lock 问题排查</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../too-much-folder/black-box-io-problem/">黑盒排查磁盘空间告警/IO问题</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../too-much-folder/black-box-cpu-high-problem/">cpu 排查的几个案例</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../too-much-folder/black-box-network-problem/">network 排查的几个案例</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">labs</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal current" href="./">MIT 6.824 - MapReduce</a>
+<ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="#_1">前言</a>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#mapreduce_1">mapreduce 例子</a>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#_2">系统开发</a>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#_3">功能列表</a>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#_4">问题记录</a>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#_5">结尾</a>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#_6">参考资料</a>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#_7">后续扩展学习</a>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#reading">reading 摘抄</a>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#_8">命令记录</a>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../6824-raft/">MIT 6.824 - Raft</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../6824-kv/">MIT 6.824 - KV</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../csapp-shell/">CSAPP - Shell</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../csapp-proxy/">CSAPP - Proxy</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../cs144/">CS144</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">工具</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../tools/xdebug/">Xdebug 深入学习</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../tools/chrome-dev-tools/">Chrome Dev Tools 深入学习</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../tools/markdown-diagram/">Markdown Diagram 功能</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../too-much-folder/yaml-lint/">yaml lint</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">算法</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../algos/int-to-binary-str/">整数转二进制字符串</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../algos/multiple-field-sort/">多字段排序</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../algos/lru-cache-go/">LRU 线程安全和高并发</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">构建自己的 X 项目</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../build-my-own-x/jquery/">构建自己的 jQuery</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../build-my-own-x/php-framework/">构建自己的 PHP 框架</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../build-my-own-x/lisp-compiler/">构建 Lisp Compiler</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../build-my-own-x/regex/">Regex Engine 学习</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">PHP</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../php/how-composer-work/">Composer 是如何工作的</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../php/business-logic-framework/">关于业务代码的框架</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../php/symfony-lock/">Symfony Lock Component</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">杂项</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../others/mac_py_env_deploy/">Mac Python环境 miniConda 搭建</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../others/taylor-otwell-interview/">Taylor otwell 采访文章</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">零碎知识点</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../knowledge-reduce/tricks/">编程技巧/方法</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../knowledge-reduce/network_programming/">网络编程</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../knowledge-reduce/problem_trace/">问题排查</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../knowledge-reduce/network-course/">计算机网络课程分享</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../knowledge-reduce/mysql/">MYSQL</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../knowledge-reduce/language_trait_and_implementation/">语言特性/底层实现</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../knowledge-reduce/computer_composition/">计算机组成原理</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">归档</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/blog_deploy_log/">博客服务器环境搭建记录</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../redis/redis_code_book_reading/">Redis 设计与实现笔记</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/laracasts_learning_path/">Laracasts学习记录</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/black_sierra/">K480N 黑苹果安装记录</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/php_career_guide_line/">从框架看PHP的五种境界[转]</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/laravel_marcoable/">Laravel中的Marcoable</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/laravel_code_book_reading/">Laravel框架关键技术-阅读总结</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/laravel_admin_code_reading/">Laravel-Admin源码阅读</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/first_internship/">实习</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../summary/2017/">2017 总结</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/second_job/">2018 总结</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../summary/2019/">2019 总结</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../summary/2020/">2020 总结</a>
+</li>
+</ul>
+</div>
+</div>
+</nav>
+<section class="wy-nav-content-wrap" data-toggle="wy-nav-shift">
+<nav aria-label="top navigation" class="wy-nav-top" role="navigation">
+<i class="fa fa-bars" data-toggle="wy-nav-top"></i>
+<a href="../..">Log0c</a>
+</nav>
+<div class="wy-nav-content">
+<div class="rst-content">
+<div aria-label="breadcrumbs navigation" role="navigation">
+<ul class="wy-breadcrumbs">
+<li><a href="../..">Docs</a> »</li>
+<li>labs »</li>
+<li>MIT 6.824 - MapReduce</li>
+<li class="wy-breadcrumbs-aside">
+</li>
+</ul>
+<hr/>
+</div>
+<div role="main">
+<div class="section">
+<h1 id="mapreduce">MapReduce</h1>
+<p><a href="https://github.com/carlclone/MIT-6.824-LAB-2020/tree/lab3/src/mr">github 地址</a></p>
+<h2 id="_1">前言</h2>
+<p>6.824课程的第一个 Lab, 目标是一个可以把大任务拆分成若干个可以并行运行的小任务, 自动分配到不同的机器上运行的系统, 将数据工程师的心智负担解放出来</p>
+<p>有了这样一个系统, 负责编写 map 和 reduce 程序的数据工程师们就不再需要关注拆分后的文件如何存储, 如何分配到不同的机器上运行, 如何将运行结果最终 merge, 也不需要关心异常问题的处理, 例如某个 worker 宕掉, 某个 task 运行缓慢的处理, 可以专注在真正关心的程序的开发上</p>
+<pre><code>mapreduce
+
+input is (already) split into M files
+  Input1 -&gt; Map -&gt; a,1 b,1
+  Input2 -&gt; Map -&gt;     b,1
+  Input3 -&gt; Map -&gt; a,1     c,1
+                    |   |   |
+                    |   |   -&gt; Reduce -&gt; c,1
+                    |   -----&gt; Reduce -&gt; b,2
+                    ---------&gt; Reduce -&gt; a,2
+
+解决的问题:
+让用户只需要关心 map 和 reduce
+隐藏:
+sending app code to servers
+  tracking which tasks are done
+  moving data from Maps to Reduces
+  balancing load over servers
+  recovering from failures
+
+MapReduce single-handedly made big cluster computation popular.
+  - Not the most efficient or flexible.
+  + Scales well.
+  + Easy to program -- failures and data movement are hidden.
+  These were good trade-offs in practice.
+  We will see some more advanced successors later in the course.
+  Have fun with the lab!
+
+</code></pre>
+<h2 id="mapreduce_1">mapreduce 例子</h2>
+<p>课程里的例子, 我看的时候有些细节不是很明白, 这次回顾时我尝试描述一个实际应用的例子</p>
+<p>模型是函数式编程中的 map , reduce 函数</p>
+<p>对应到单词统计这个例子就是</p>
+<pre><code>完整的文章 : 你好,张三,很高兴遇见你. 你好,李四.
+
+对文章进行切割, 让文章的 map 操作可以在多个机器并行执行
+
+文章块1 : 你好啊,张三,很高兴遇见你啊.
+
+文章块2: 你好,李四.
+
+map 函数的过程把文章转换成了 k,v 键值对
+map 任务 1 结果:
+
+单词=&gt;计数
+你好 =&gt; 1
+啊=&gt;1
+张三=&gt;1
+很=&gt;1
+高兴=&gt;1
+....
+啊=&gt;1
+
+map 任务 2 结果:
+单词=&gt;计数
+你好=&gt;1
+李四=&gt;1
+
+为了 reduce 任务能独立,并行地执行,每个 reduce 之间没有关联关系, 将哈希值相同的 key 被放到同一个 reduce 任务中
+
+reduce 任务 1:
+你好=&gt;1
+你好=&gt;1
+张三=&gt;1
+...
+
+reduce 任务 2:
+啊=&gt;1
+啊=&gt;1
+高兴=&gt;1
+李四=&gt;1
+...
+
+reduce 任务 1 结果:
+你好=&gt;2
+张三=&gt;1
+...
+
+reduce 任务 2 结果:
+啊=&gt;2
+高兴=&gt;1
+李四=&gt;1
+...
+
+merge + sort 任务结果:
+你好=&gt;2
+啊=&gt;2
+张三=&gt;1
+李四=&gt;1
+...
+
+</code></pre>
+<h2 id="_2">系统开发</h2>
+<p>主要的模型是单 master 多 worker , 我这里使用了worker 主动去 master 拉任务的模式, 任务的类型有 map 任务和 reduce 任务, reduce 任务只有等所有 map 任务完成后才会生成和分配</p>
+<p>这里定义了一个规范, map 的输入是(filename,contents) 所有任务都可以被map 转换成 key,value 形式 , reduce 的规范是 (key,values) , values 是所有 key 相同的 value 聚合后的数组</p>
+<h2 id="_3">功能列表</h2>
+<p><strong>已实现的功能:</strong></p>
+<ul>
+<li>
+<p>master 初始化map 任务列表</p>
+</li>
+<li>
+<p>worker 向 master 取 map 任务执行, 通知 master 任务执行完成</p>
+</li>
+<li>
+<p>worker向 master 取 reduce 任务, 通知执行完成</p>
+</li>
+<li>
+<p>master 定期检查任务超时情况,重新分配</p>
+</li>
+</ul>
+<p><strong>待实现的功能:</strong></p>
+<ul>
+<li>新增一项 merge 任务, 将 reduce 任务的输出合并</li>
+</ul>
+<p><strong>Fault tolerance 相关</strong>:</p>
+<ul>
+<li>worker 心跳检查</li>
+<li>master 宕机 (多 master, 选举 , 状态持久化和recovery) </li>
+</ul>
+<p>Master崩溃的解决方案 , 会在Lab2和3 接触到 , 要对重要的状态实时持久化 , 并对维护的task列表实行checkpoint+从这个点开始的log </p>
+<ul>
+<li>论文里提到的其他点</li>
+</ul>
+<h2 id="_4">问题记录</h2>
+<p><strong>多个 worker 同时向一个中间文件写入, 产生了输入错乱的情况</strong></p>
+<ul>
+<li>
+<p>一个 worker 的中间输出应该写入自己单独的文件 (mr-map 任务 id-reduce 任务 id, 而不是 mr-reduce 任务 id), 然后在 reduce 的时候读取这些文件, 虽然说这个问题没有触发过, 是在后面阅读代码的时候发现的, 但想到 web 框架中的写日志也是单例 , 加文件锁写的, 问题应该还是存在的</p>
+</li>
+<li>
+<p>在不要求性能的情况下, 加个文件锁也能解决问题....</p>
+</li>
+</ul>
+<p><strong>worker 取任务的时候未加锁, 导致一个任务重复运行两次</strong></p>
+<ul>
+<li>worker 去 master 取任务的时候要加锁, 避免一个任务被分配给了多个 worker</li>
+</ul>
+<p><strong>超时任务重分配问题记录</strong> </p>
+<ul>
+<li>
+<p>lab 要求实现 worker 执行超时后重新分配的机制, 原 worker 可能还在执行, 所以在写入中间文件的时候文件如果已存在, 就直接跳过</p>
+</li>
+<li>
+<p>全部worker都在等某个很慢的 worker 执行的情况, 增加超时, 分配给其他人做</p>
+</li>
+</ul>
+<p><strong>worker 异常崩溃,中间文件不完整</strong> </p>
+<ul>
+<li>文件的写入要先写入临时文件,完成后再重命名, 防止各种异常情况造成文件结果不完整</li>
+</ul>
+<p><strong>写入异常慢</strong> </p>
+<ul>
+<li>写入文件之前先把要写的数据按文件聚合好后, 再写入, 减少write 函数的系统调用</li>
+</ul>
+<p>还有许多未记录忘记了的...很伤, 还有些现在看起来很低级的错误</p>
+<h2 id="_5">结尾</h2>
+<p>在 v2ex 逛的时候发现了这门课程, 这是第一个 Lab, 主要的收获是编码能力得到了提升</p>
+<p>fault-tolerance 是本课程一个重要的点</p>
+<h2 id="_6">参考资料</h2>
+<p><a href="https://pdos.csail.mit.edu/6.824/labs/raft-locking.txt">关于锁的文章</a></p>
+<p><a href="https://pdos.csail.mit.edu/6.824/labs/lab-mr.html">lab1</a></p>
+<p><a href="https://pdos.csail.mit.edu/6.824/notes/l01.txt">lec1</a></p>
+<p><a href="https://pdos.csail.mit.edu/6.824/papers/mapreduce.pdf">lec1 paper</a></p>
+<p><a href="https://pdos.csail.mit.edu/6.824/papers/tour-faq.txt">go tour faq</a></p>
+<h2 id="_7">后续扩展学习</h2>
+<p>golang so 后缀文件的插件形式?</p>
+<p>阅读对比其他人的实现</p>
+<p><a href="https://www.oschina.net/question/142976_70051">同时 append 一个文件 会有问题吗</a></p>
+<h2 id="reading">reading 摘抄</h2>
+<p>The worker should put intermediate Map output in files in the current directory, where your worker can later read them as input to Reduce tasks.    </p>
+<p>The worker implementation should put the output of the X'th reduce task in the file mr-out-X.</p>
+<ul>
+<li>The master, as an RPC server, will be concurrent; don't forget to lock shared data.</li>
+<li>Use Go's race detector, with go build -race and go run -race. test-mr.sh has a comment that shows you how to enable the race detector for the tests.</li>
+<li>Workers will sometimes need to wait, e.g. reduces can't start until the last map has finished. One possibility is for workers to periodically ask the master for work, sleeping with time.Sleep() between each request. Another possibility is for the relevant RPC handler in the master to have a loop that waits, either with time.Sleep() or sync.Cond. Go runs the handler for each RPC in its own thread, so the fact that one handler is waiting won't prevent the master from processing other RPCs.</li>
+<li>The master can't reliably distinguish between crashed workers, workers that are alive but have stalled for some reason, and workers that are executing but too slowly to be useful. The best you can do is have the master wait for some amount of time, and then give up and re-issue the task to a different worker. For this lab, have the master wait for ten seconds; after that the master should assume the worker has died (of course, it might not have).</li>
+<li>To test crash recovery, you can use the mrapps/crash.go application plugin. It randomly exits in the Map and Reduce functions.</li>
+<li>To ensure that nobody observes partially written files in the presence of crashes, the MapReduce paper mentions the trick of using a temporary file and atomically renaming it once it is completely written. You can use ioutil.TempFile to create a temporary file and os.Rename to atomically rename it.</li>
+<li>test-mr.sh runs all the processes in the sub-directory mr-tmp, so if something goes wrong and you want to look at intermediate or output files, look there.</li>
+</ul>
+<h2 id="_8">命令记录</h2>
+<pre><code>go build -buildmode=plugin ../mrapps/wc.go
+
+$ rm mr-out*
+$ go run mrmaster.go pg-*.txt
+
+$ go run mrworker.go wc.so   运行多个worker
+</code></pre>
+</div>
+</div>
+<footer>
+<div aria-label="footer navigation" class="rst-footer-buttons" role="navigation">
+<a class="btn btn-neutral float-right" href="../6824-raft/" title="MIT 6.824 - Raft">Next <span class="icon icon-circle-arrow-right"></span></a>
+<a class="btn btn-neutral" href="../../too-much-folder/black-box-network-problem/" title="network 排查的几个案例"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+</div>
+<hr/>
+<div role="contentinfo">
+<!-- Copyright etc -->
+</div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+</div>
+</div>
+</section>
+</div>
+<div aria-label="versions" class="rst-versions" role="note">
+<span class="rst-current-version" data-toggle="rst-current-version">
+<span><a href="../../too-much-folder/black-box-network-problem/" style="color: #fcfcfc;">« Previous</a></span>
+<span style="margin-left: 15px"><a href="../6824-raft/" style="color: #fcfcfc">Next »</a></span>
+</span>
+</div>
+<script>var base_url = '../..';</script>
+<script defer="" src="../../js/theme.js"></script>
+<script defer="" src="../../js/mermaid.min.js"></script>
+<script defer="" src="../../js/custom.js"></script>
+<script defer="">
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(false);
+        };
+    </script>
+</body>
+</html>

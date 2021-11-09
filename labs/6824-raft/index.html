@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
+<head>
+<meta charset="utf-8"/>
+<meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="../../img/favicon.ico" rel="shortcut icon"/>
+<title>MIT 6.824 - Raft - Log0c</title>
+<link href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" rel="stylesheet">
+<link href="../../css/theme.css" rel="stylesheet"/>
+<link href="../../css/theme_extra.css" rel="stylesheet"/>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet"/>
+<script>
+    // Current page data
+    var mkdocs_page_name = "MIT 6.824 - Raft";
+    var mkdocs_page_input_path = "labs/6824-raft.md";
+    var mkdocs_page_url = null;
+  </script>
+<script defer="" src="../../js/jquery-2.1.1.min.js"></script>
+<script defer="" src="../../js/modernizr-2.8.3.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+</link></head>
+<body class="wy-body-for-nav" role="document">
+<div class="wy-grid-for-nav">
+<nav class="wy-nav-side stickynav" data-toggle="wy-nav-shift">
+<div class="wy-side-scroll">
+<div class="wy-side-nav-search">
+<a class="icon icon-home" href="../.."> Log0c</a>
+</div>
+<div aria-label="main navigation" class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../..">主页</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">问题排查 / 性能优化</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../too-much-folder/netease-music-problem/">mac 网易云音乐 cpu 占用高问题排查</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../mac/mac-note-stalled/">mac Notes.app 卡死问题</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../mac/osx86_external_ssd_swap_problem/">mac 外部 SSD Swap 分区开启问题</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../too-much-folder/go-shadowing-variable/">go shadowing variable 造成的歧义</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../too-much-folder/go-concurrent-map-read-write-bug/">go 并发读写 map 问题一例</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../too-much-folder/go-pprof-memory-leak/">使用 pprof 排查内存泄漏</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../too-much-folder/db-metadatalock/">数据库 metadata lock 问题排查</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../too-much-folder/black-box-io-problem/">黑盒排查磁盘空间告警/IO问题</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../too-much-folder/black-box-cpu-high-problem/">cpu 排查的几个案例</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../too-much-folder/black-box-network-problem/">network 排查的几个案例</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">labs</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../6824-mapreduce/">MIT 6.824 - MapReduce</a>
+</li>
+<li class="toctree-l1 current"><a class="reference internal current" href="./">MIT 6.824 - Raft</a>
+<ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="#cap">CAP</a>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#_1">问题记录</a>
+<ul>
+<li class="toctree-l3"><a class="reference internal" href="#_2">三个版本</a>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#_3">投票阻塞</a>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#channel">角色变换,读取到channel 里的旧数据</a>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#_4">日志快速回退</a>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#_5">多线程调试问题</a>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#testfigure8unreliable2c">TestFigure8Unreliable2C 一直过不了</a>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#_6">协程作用域问题</a>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#term">任期号(term)的变化</a>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#_7">超时时间重置问题</a>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#_8">后续学习</a>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#_9">其他</a>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#_10">资料</a>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#_11">结尾</a>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../6824-kv/">MIT 6.824 - KV</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../csapp-shell/">CSAPP - Shell</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../csapp-proxy/">CSAPP - Proxy</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../cs144/">CS144</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">工具</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../tools/xdebug/">Xdebug 深入学习</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../tools/chrome-dev-tools/">Chrome Dev Tools 深入学习</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../tools/markdown-diagram/">Markdown Diagram 功能</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../too-much-folder/yaml-lint/">yaml lint</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">算法</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../algos/int-to-binary-str/">整数转二进制字符串</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../algos/multiple-field-sort/">多字段排序</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../algos/lru-cache-go/">LRU 线程安全和高并发</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">构建自己的 X 项目</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../build-my-own-x/jquery/">构建自己的 jQuery</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../build-my-own-x/php-framework/">构建自己的 PHP 框架</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../build-my-own-x/lisp-compiler/">构建 Lisp Compiler</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../build-my-own-x/regex/">Regex Engine 学习</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">PHP</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../php/how-composer-work/">Composer 是如何工作的</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../php/business-logic-framework/">关于业务代码的框架</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../php/symfony-lock/">Symfony Lock Component</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">杂项</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../others/mac_py_env_deploy/">Mac Python环境 miniConda 搭建</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../others/taylor-otwell-interview/">Taylor otwell 采访文章</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">零碎知识点</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../knowledge-reduce/tricks/">编程技巧/方法</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../knowledge-reduce/network_programming/">网络编程</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../knowledge-reduce/problem_trace/">问题排查</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../knowledge-reduce/network-course/">计算机网络课程分享</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../knowledge-reduce/mysql/">MYSQL</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../knowledge-reduce/language_trait_and_implementation/">语言特性/底层实现</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../knowledge-reduce/computer_composition/">计算机组成原理</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">归档</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/blog_deploy_log/">博客服务器环境搭建记录</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../redis/redis_code_book_reading/">Redis 设计与实现笔记</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/laracasts_learning_path/">Laracasts学习记录</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/black_sierra/">K480N 黑苹果安装记录</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/php_career_guide_line/">从框架看PHP的五种境界[转]</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/laravel_marcoable/">Laravel中的Marcoable</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/laravel_code_book_reading/">Laravel框架关键技术-阅读总结</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/laravel_admin_code_reading/">Laravel-Admin源码阅读</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/first_internship/">实习</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../summary/2017/">2017 总结</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/second_job/">2018 总结</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../summary/2019/">2019 总结</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../summary/2020/">2020 总结</a>
+</li>
+</ul>
+</div>
+</div>
+</nav>
+<section class="wy-nav-content-wrap" data-toggle="wy-nav-shift">
+<nav aria-label="top navigation" class="wy-nav-top" role="navigation">
+<i class="fa fa-bars" data-toggle="wy-nav-top"></i>
+<a href="../..">Log0c</a>
+</nav>
+<div class="wy-nav-content">
+<div class="rst-content">
+<div aria-label="breadcrumbs navigation" role="navigation">
+<ul class="wy-breadcrumbs">
+<li><a href="../..">Docs</a> »</li>
+<li>labs »</li>
+<li>MIT 6.824 - Raft</li>
+<li class="wy-breadcrumbs-aside">
+</li>
+</ul>
+<hr/>
+</div>
+<div role="main">
+<div class="section">
+<h1 id="raft">Raft</h1>
+<p>第二个 Lab, 目标是还原 raft paper 定义的 raft 算法, raft 是一个为了解决(<strong>有状态服务</strong>)(<strong>高可用</strong>)(强一致)问题的一个算法, 它通过将状态复制到集群里的大多数节点中作为提交完成的标志来实现这一点, 并且只有 leader 能向外界提供服务(读写) , 当 leader 宕机后, 会从集群中重新选举一个新的 leader 提供服务, 从而实现高可用 , 不可用的时间只有短暂的选举时间 </p>
+<h2 id="cap">CAP</h2>
+<p>尝试套入 raft 后的理解 :</p>
+<p>raft 是强一致的, 因为读和写都是线性操作</p>
+<p>raft 是"高可用的", 有选举机制和复制机制, 但出现网络分区时会出现不可用</p>
+<p>raft 是允许出现网络分区的, 多数派的一边依然可以提供正常服务</p>
+<p>出现了网络分区后, raft 为了保证对外展现出强一致性, 少数派的一边无法提供服务, 所以 raft 是 CP 的</p>
+<p>举另一个 AP 的例子, DNS 服务, 出现网络分区后, 为了保持两个分区都有可用性, DNS 的每个节点都能提供读, 解析到的 IP 可能不是最新的, 因此牺牲了强一致性,  所以 DNS 是 AP 的</p>
+<p>我对这里可用性的理解: 网络分区后, 两个分区都能提供服务</p>
+<p>这里一致性的理解: 网络分区后, 任一时刻依然能读到最新的写入</p>
+<h2 id="_1">问题记录</h2>
+<h3 id="_2">三个版本</h3>
+<ul>
+<li>第一次</li>
+</ul>
+<p>面向测试用例编程, 写出来的代码完全不能用, 到处是 bug</p>
+<ul>
+<li>第二次</li>
+</ul>
+<p>对整个模型有了大致的理解, 线程安全问题又搞出一堆 bug (锁加的乱七八糟 , 粒度也没有一致)</p>
+<ul>
+<li>第三次</li>
+</ul>
+<p>在一个伙伴的提点下, 使用了一个并发测试脚本, 每个测试用例并发1000 个执行, 结果发现了许多完全是侥幸通过的 case, 隐藏了许多并发下的线程安全问题未解决, 只好回过头从第一个 case开始排查, 并且将打的日志整理规范(格式,日志级别,分类) , 直接减少锁的使用, 换事件循环的方式写</p>
+<h3 id="_3">投票阻塞</h3>
+<p>在选举阶段的一个 case 中, 某个 follower 会随机断开 , 此时 candidate 发送的投票请求阻塞在了这个 follower 上, 导致了该候选人没有及时获得足够的选票转变成 leader , 所有follower都变成 candidate , 并且不断开始新一轮选举</p>
+<h3 id="channel">角色变换,读取到channel 里的旧数据</h3>
+<p>在 candidate 收到投票处,我使用的是 go 的 channel , 背景是 : candidate 在收到足够的选票后 , 需要立即变成 leader 开始发送心跳 , 这导致了后续多余的选票还在 channel 里 , 当这个 leader 下一次变成 candidate 的时候 , 会取到上一次选举的投票 , 造成了选出多个 leader 的错误现象 , 解决方案是在 candidate 转变成 leader 的时候需要”清空 channel” , 其实就是重新初始化一个 channel , 把清空交给 GC 来处理</p>
+<h3 id="_4">日志快速回退</h3>
+<p>场景: 网络分区, 旧 leader 在少数派分区里, 依然可以接收客户端写请求, 也可以复制到该分区其他节点, 但是由于无法复制到大多数节点, 所以是不可用的, 分区网络恢复后, 这些节点的日志和另一个分区的日志存在不一致, 需要回退到某个一致的状态, 然后重新复制正确的日志</p>
+<p>test case 是 UnrealiableFigure83C , 这个测试用例中,所有的raft 实例都会随机的断开,崩溃,请求延迟,乱序 , 造成的问题是实例之间日志的不一致情况经常发生,而且差异很大 , 在这个情况 , 论文中写的是”现实中很少发生 , 所以优化是不必要的” , 但在这个 case 中有超时时间限制 , 如果不进行优化 , 通过率会很低 , 翻阅了资料后在一份 guide 中找到了解决的方案 , 实现快速回退一整个任期 , 而不是一个一个的回退  , follower 会检查自己是否有该冲突的任期的 log , 如果有就把第一个的 index 发过去 , leader 直接回退到这个 index 上开始一致性同步 , 如果没有 , 那么 leader 直接回退到 leader 的 log 中该任期的第一个 index</p>
+<h3 id="_5">多线程调试问题</h3>
+<p>只能依靠日志和并发测试 , 单步调试比较难发现问题</p>
+<h3 id="testfigure8unreliable2c">TestFigure8Unreliable2C 一直过不了</h3>
+<p>https://github.com/springfieldking/mit-6.824-golabs-2018/issues/1</p>
+<p>https://segmentfault.com/a/1190000021628173
+￼</p>
+<h3 id="_6">协程作用域问题</h3>
+<pre><code>rf.mu.Lock()
+  rf.currentTerm += 1
+  rf.state = Candidate
+  for &lt;each peer&gt; {
+    go func() {
+      rf.mu.Lock()
+      args.Term = rf.currentTerm
+      rf.mu.Unlock()
+      Call("Raft.RequestVote", &amp;args, ...)
+      // handle the reply...
+    } ()
+  }
+  rf.mu.Unlock()
+
+go发现有其他goroutine引用了变量currentTerm , 把currentTerm移到了堆空间里 , 主和子goroutine都看到同一个任期变量 , 导致变化的时候每个peer看到的可能不一致 , 
+所以需要将任期以参数穿进去 , 此时go会对每个goroutine的currentTerm进行一次拷贝 , 保证任期的一致
+</code></pre>
+<h3 id="term">任期号(term)的变化</h3>
+<p>follower转变成candidate的时候 , currentTerm +1
+candidate变成leader的时候 , 维持currentTerm
+candidate变成follower的时候 , currentTerm = leader的term</p>
+<h3 id="_7">超时时间重置问题</h3>
+<p>给他人投票的时候忘记重置超时时间了</p>
+<p>主要有两个时间要注意, 一个是选举超时时间, 一个是心跳超时时间</p>
+<h2 id="_8">后续学习</h2>
+<p>看看其他人的 raft 是怎么优化的</p>
+<p>测试用例第一 , 做那么多 lab 学到的</p>
+<p>读 etcd raft 部分</p>
+<h2 id="_9">其他</h2>
+<p>raft 应用 : etcd , github 的 orchestra (一个健康检查服务)实现高可用</p>
+<p>spacex 的控制电脑用了三台机器做投票决策 , 降低了太空环境的干扰问题和机器成本  </p>
+<p>拜占庭将军问题</p>
+<h2 id="_10">资料</h2>
+<pre><code>￼多次测试脚本:
+running tests in parallel makes it easier to find concurrency bugs
+
+[bash script] by a previous TA https://gist.github.com/jonhoo/f686cacb4b9fe716d5aa
+
+论文翻译 https://www.cnblogs.com/linbingdong/p/6442673.html
+comiser 参考https://github.com/comiser/MIT-6.824-2016/blob/master/src/raft/raft.go
+etcd raft 参考https://gocode.cc/project/14/article/134
+raft 运行动画 https://raft.github.io/
+lec2 intro https://pdos.csail.mit.edu/6.824/notes/l-gfs.txt
+gfs paper https://pdos.csail.mit.edu/6.824/papers/gfs.pdf
+lab2 raft https://pdos.csail.mit.edu/6.824/labs/lab-raft.html
+gfs faq https://pdos.csail.mit.edu/6.824/papers/gfs-faq.txt
+
+
+
+</code></pre>
+<h2 id="_11">结尾</h2>
+<p>出于对分布式系统感兴趣 , 开始的一次实践学习 , 难度五颗星,  有的 bug 一卡就几天 , 极其耗时 </p>
+</div>
+</div>
+<footer>
+<div aria-label="footer navigation" class="rst-footer-buttons" role="navigation">
+<a class="btn btn-neutral float-right" href="../6824-kv/" title="MIT 6.824 - KV">Next <span class="icon icon-circle-arrow-right"></span></a>
+<a class="btn btn-neutral" href="../6824-mapreduce/" title="MIT 6.824 - MapReduce"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+</div>
+<hr/>
+<div role="contentinfo">
+<!-- Copyright etc -->
+</div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+</div>
+</div>
+</section>
+</div>
+<div aria-label="versions" class="rst-versions" role="note">
+<span class="rst-current-version" data-toggle="rst-current-version">
+<span><a href="../6824-mapreduce/" style="color: #fcfcfc;">« Previous</a></span>
+<span style="margin-left: 15px"><a href="../6824-kv/" style="color: #fcfcfc">Next »</a></span>
+</span>
+</div>
+<script>var base_url = '../..';</script>
+<script defer="" src="../../js/theme.js"></script>
+<script defer="" src="../../js/mermaid.min.js"></script>
+<script defer="" src="../../js/custom.js"></script>
+<script defer="">
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(false);
+        };
+    </script>
+</body>
+</html>

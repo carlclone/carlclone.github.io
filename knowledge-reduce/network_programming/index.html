@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
+<head>
+<meta charset="utf-8"/>
+<meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="../../img/favicon.ico" rel="shortcut icon"/>
+<title>网络编程 - Log0c</title>
+<link href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" rel="stylesheet">
+<link href="../../css/theme.css" rel="stylesheet"/>
+<link href="../../css/theme_extra.css" rel="stylesheet"/>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet"/>
+<script>
+    // Current page data
+    var mkdocs_page_name = "\u7f51\u7edc\u7f16\u7a0b";
+    var mkdocs_page_input_path = "knowledge-reduce/network_programming.md";
+    var mkdocs_page_url = null;
+  </script>
+<script defer="" src="../../js/jquery-2.1.1.min.js"></script>
+<script defer="" src="../../js/modernizr-2.8.3.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+</link></head>
+<body class="wy-body-for-nav" role="document">
+<div class="wy-grid-for-nav">
+<nav class="wy-nav-side stickynav" data-toggle="wy-nav-shift">
+<div class="wy-side-scroll">
+<div class="wy-side-nav-search">
+<a class="icon icon-home" href="../.."> Log0c</a>
+</div>
+<div aria-label="main navigation" class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../..">主页</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">问题排查 / 性能优化</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../too-much-folder/netease-music-problem/">mac 网易云音乐 cpu 占用高问题排查</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../mac/mac-note-stalled/">mac Notes.app 卡死问题</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../mac/osx86_external_ssd_swap_problem/">mac 外部 SSD Swap 分区开启问题</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../too-much-folder/go-shadowing-variable/">go shadowing variable 造成的歧义</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../too-much-folder/go-concurrent-map-read-write-bug/">go 并发读写 map 问题一例</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../too-much-folder/go-pprof-memory-leak/">使用 pprof 排查内存泄漏</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../too-much-folder/db-metadatalock/">数据库 metadata lock 问题排查</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../too-much-folder/black-box-io-problem/">黑盒排查磁盘空间告警/IO问题</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../too-much-folder/black-box-cpu-high-problem/">cpu 排查的几个案例</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../too-much-folder/black-box-network-problem/">network 排查的几个案例</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">labs</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../labs/6824-mapreduce/">MIT 6.824 - MapReduce</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../labs/6824-raft/">MIT 6.824 - Raft</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../labs/6824-kv/">MIT 6.824 - KV</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../labs/csapp-shell/">CSAPP - Shell</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../labs/csapp-proxy/">CSAPP - Proxy</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../labs/cs144/">CS144</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">工具</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../tools/xdebug/">Xdebug 深入学习</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../tools/chrome-dev-tools/">Chrome Dev Tools 深入学习</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../tools/markdown-diagram/">Markdown Diagram 功能</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../too-much-folder/yaml-lint/">yaml lint</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">算法</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../algos/int-to-binary-str/">整数转二进制字符串</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../algos/multiple-field-sort/">多字段排序</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../algos/lru-cache-go/">LRU 线程安全和高并发</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">构建自己的 X 项目</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../build-my-own-x/jquery/">构建自己的 jQuery</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../build-my-own-x/php-framework/">构建自己的 PHP 框架</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../build-my-own-x/lisp-compiler/">构建 Lisp Compiler</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../build-my-own-x/regex/">Regex Engine 学习</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">PHP</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../php/how-composer-work/">Composer 是如何工作的</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../php/business-logic-framework/">关于业务代码的框架</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../php/symfony-lock/">Symfony Lock Component</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">杂项</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../others/mac_py_env_deploy/">Mac Python环境 miniConda 搭建</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../others/taylor-otwell-interview/">Taylor otwell 采访文章</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">零碎知识点</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../tricks/">编程技巧/方法</a>
+</li>
+<li class="toctree-l1 current"><a class="reference internal current" href="./">网络编程</a>
+<ul class="current">
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../problem_trace/">问题排查</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../network-course/">计算机网络课程分享</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../mysql/">MYSQL</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../language_trait_and_implementation/">语言特性/底层实现</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../computer_composition/">计算机组成原理</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">归档</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/blog_deploy_log/">博客服务器环境搭建记录</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../redis/redis_code_book_reading/">Redis 设计与实现笔记</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/laracasts_learning_path/">Laracasts学习记录</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/black_sierra/">K480N 黑苹果安装记录</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/php_career_guide_line/">从框架看PHP的五种境界[转]</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/laravel_marcoable/">Laravel中的Marcoable</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/laravel_code_book_reading/">Laravel框架关键技术-阅读总结</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/laravel_admin_code_reading/">Laravel-Admin源码阅读</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/first_internship/">实习</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../summary/2017/">2017 总结</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/second_job/">2018 总结</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../summary/2019/">2019 总结</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../summary/2020/">2020 总结</a>
+</li>
+</ul>
+</div>
+</div>
+</nav>
+<section class="wy-nav-content-wrap" data-toggle="wy-nav-shift">
+<nav aria-label="top navigation" class="wy-nav-top" role="navigation">
+<i class="fa fa-bars" data-toggle="wy-nav-top"></i>
+<a href="../..">Log0c</a>
+</nav>
+<div class="wy-nav-content">
+<div class="rst-content">
+<div aria-label="breadcrumbs navigation" role="navigation">
+<ul class="wy-breadcrumbs">
+<li><a href="../..">Docs</a> »</li>
+<li>零碎知识点 »</li>
+<li>网络编程</li>
+<li class="wy-breadcrumbs-aside">
+</li>
+</ul>
+<hr/>
+</div>
+<div role="main">
+<div class="section">
+<p> </p>
+<!-- more -->
+<blockquote>
+<p>目标: 能用自己的话精炼正确地总结出每一节的知识点 , 就算完成目标了</p>
+</blockquote>
+<h1 id="tcp">TCP三次握手</h1>
+<blockquote>
+<p>涉及到安全的模型,脑子里都要有一个前置条件 , 双方互不信任 , 信道不可靠</p>
+</blockquote>
+<p><code>网络课 04</code></p>
+<p>1 确认SN</p>
+<p>2.这个问题的本质是, 双方基于"信道不可靠"的前提下的通信, 但是通信双发需要就某个问题达成一致. 而要解决这个问题, 无论你在消息中包含什么信息, 三次通信是理论上的最小值. 所以三次握手不是TCP本身的要求, 而是为了满足"在不可靠信道上可靠地传输信息"这一需求所导致的</p>
+<p>3.建立两个单向连接的过程</p>
+<ul>
+<li>
+<p>客户端结束阻塞在connect  , ESTABLISHED 客户端到服务端的单向连接</p>
+</li>
+<li>
+<p>服务端结束阻塞在accept , ESTABLISHED 服务端到客户端的单向连接</p>
+</li>
+</ul>
+<p>4.TCP 的设计思想是 best effort , 即尽最大努力去保证可靠性 , 这也是一个体现</p>
+<h1 id="http-https">HTTP 和 HTTPS 的细节深入学习</h1>
+<h2 id="query-string-https">query string 在 HTTPS中的问题</h2>
+<p>最近抓包时发现HTTPS是会对query string进行加密的 , 并不会显示在url中</p>
+<p>但这就可以用query string传重要参数了吗</p>
+<p>但是作为浏览器访问的页面就有可能被缓存下url , 还有被保存在referrer http头中</p>
+<h2 id="http">http 缓存的几种方式</h2>
+<p>Cache-Control
+Expires</p>
+<h1 id="_1">消息队列和事件循环</h1>
+<p><code>浏览器课 15</code></p>
+<h2 id="_2">经典实现</h2>
+<p>1.浏览器的Javascript异步实现 , 渲染进程,IO进程和事件队列的关系</p>
+<p>2.网络框架如Netty 的  , 多路复用(select , poll , epoll )+非阻塞IO  事件循环模型</p>
+<p>3.消息队列课程中,老师实现的RPC框架 也使用到了事件循环模型</p>
+<h2 id="_3">事件循环模型的演化过程?</h2>
+<blockquote>
+<p>背景 : 有多个任务要执行</p>
+</blockquote>
+<p>1.最基本的顺序执行</p>
+<p>2.为了解决1中不能在执行途中插入新的任务 , 新增了"循环"和"事件"</p>
+<p>3.为了解决2中不能接收来自其他线程的任务,新增了"消息队列" , 并且在从队列中获取任务的时候需要加锁 , 是block queue</p>
+<p>4 更进一步想要接收来自其他进程的任务 , 需要IPC通信 , 然后有一个专门的线程负责接收并插入队列 , 这个线程就是IO线程  (chrome浏览器中 , 渲染主线程负责事件执行 , IO线程负责事件分发)</p>
+<h2 id="_4">后续</h2>
+<p>实现一遍事件循环模型</p>
+<h1 id="https">HTTPS的演化过程</h1>
+<blockquote>
+<p>浏览器课 36
+趣谈网络协议课 15 后面还有两道有趣的思考题</p>
+</blockquote>
+<h2 id="_5">安全层的设计</h2>
+<blockquote>
+<p>为了防止中间人攻击, 在HTTP和TCP之间引入了一个加密/解密层  SSL/TLS ,也就是对数据加密解密的方式</p>
+</blockquote>
+<h3 id="1">演化1 使用简单的对称加密</h3>
+<p>使用简单的对称加密 ( 加密和解密都用同一个秘钥) , 因此双方需要先知道加解密方式和秘钥</p>
+<p>1.浏览器告知 加解密列表和一个随机数
+2.服务器从中选一个加解密方式,也生成一个随机数,告知浏览器
+3.双方都有两个随机数和加解密方式 , 用于合成秘钥
+4.使用秘钥开始通信</p>
+<h3 id="2">演化2 协商加密的过程是明文的,黑客也可能合成秘钥</h3>
+<p>使用非对称加密 , 公钥和私钥 , 一个用于加密时 , 另一个则只能用于解密</p>
+<h3 id="3">演化3 非对称加密效率过低的问题</h3>
+<p>混合对称和非对称</p>
+<h3 id="4">演化4: 身份伪造问题</h3>
+<blockquote>
+<p>例子: 劫持dns , 将域名定位到假的ip服务器上</p>
+</blockquote>
+<p>使用第三方公证人(权威机构CA) 颁发 证书来证明 , 服务器不是伪造的 </p>
+<p>将之前颁发公钥的过程改为了颁发证书,公钥在证书中</p>
+<h4 id="_6">问题:如何从证书中获取公钥</h4>
+<p>大概和https的演化过程差不多吧 , 非对称加密获得</p>
+<h3 id="5">演化5: 黑客虽然不知道包的内容, 但是可以重复发送同一个包(重放攻击)</h3>
+<p>使用timestamp + nonce随机数 , 后端判断只处理一次 ,  保证请求幂等性</p>
+<h3 id="6">演化6: 最后一道保障 , 签名 , 保证未经篡改</h3>
+<p>假设有人想办法篡改了timestamp+nonce (这里没有想明白是怎么篡改的) , 但还有个签名字段 , 黑客并不知道签名算法 , 无法生成正确的签名 , 服务端识别后直接丢弃</p>
+<h1 id="select-i-o">select 感知多个I-O事件</h1>
+<p><code>网络编程课 20</code></p>
+<h2 id="io">什么是IO多路复用?</h2>
+<p>一个网络程序里通常会有多种IO , 比如 标准输入输出 , 网络套接字IO , 在单进程的情况下 , 一般只能阻塞在一种IO上等待 , 而IO多路复用就类似上面的事件循环 , 将多种IO看成不同的事件 , 解决了阻塞在一种IO上的问题</p>
+<p>在这里 , 内核则相当于上文中派发任务的"IO进程"  , 应用程序则相当于"渲染进程"</p>
+<p>但有一个区别是,linux的多路复用实现并没有用到队列 ,  非linux的kqueue实现则使用了队列</p>
+<h2 id="select">select的使用方法?</h2>
+<p>设置一个描述符集合 , 一个读事件集合 , 写事件集合 , 异常事件集合 
+描述符基数是当前最大描述符 +1；
+每次 select 调用完成之后，记得要重置待测试集合</p>
+<h2 id="sigpipe">SIGPIPE信号是什么?</h2>
+<p>待查资料</p>
+<h2 id="selectunixpipe">select可以对unix管道(pipe)进行检测么? 检测的就绪条件是什么?</h2>
+<p>待查资料</p>
+<h2 id="1-select">根据我们前面的描述，一个描述符集合哪些描述符被设置为 1，需要进行检测是完全可以知道的，你认为 select 函数里一定需要传入描述字基数这个值么？请你分析一下这样设计的目的又是什么呢？</h2>
+<p>因为内核扫描集合是从大到小扫描的 , 比如集合{ 0 , 1 ,4 } ,  4表示为 fd[5-1] , 如果没有给基数, 内核还需要多扫描一遍获得这个数 , 但又引出一个问题 , 为什么要从大到小扫描? 突然想起一个"局部性原理" , 越接近当前时间生成的描述符越容易被访问到(越容易有事件发生 ) , 类似LRU缓存 , 是这样吗?</p>
+<h1 id="polli-o">poll：另一种I-O多路复用</h1>
+<p><code>网络编程课 21</code></p>
+<blockquote>
+<p>产生背景: select默认最大值为1024</p>
+</blockquote>
+<h2 id="_7">使用方法?</h2>
+<p>传入pollfd结构体组成的数组 , 数组大小可以突破1024 , pollfd的结构:</p>
+<pre><code>struct pollfd {
+    int    fd;       /* file descriptor */
+    short  events;   /* events to look for */
+    short  revents;  /* events returned */
+ };
+</code></pre>
+<h2 id="event_set-init_size">第一道，在我们的程序里 event_set 数组的大小固定为 INIT_SIZE，这在实际的生产环境肯定是需要改进的。你知道如何改进吗？</h2>
+<p>使用数据结构课中的动态数组的扩容缩容方案</p>
+<h2 id="connect_fd-event_set">第二道，如果我们进行了改进，那么接下来把连接描述字 connect_fd 也加入到 event_set 里，如何配合进行改造呢？</h2>
+<h1 id="i-o">非阻塞I-O</h1>
+<p><code>网络编程课 22</code></p>
+<h2 id="_8">高性能网络编程的演进过程?</h2>
+<p>1.阻塞IO , 等待内核完成</p>
+<p>2.非阻塞IO, 立即返回 ,  使用轮询检查完成情况</p>
+<p>3.非阻塞IO+多路复用 , 减少轮询造成的CPU时间浪费</p>
+<p>需要特别注意非阻塞的write操作 , 每次都可能只write了一部分到发送缓冲区 , 所以要用偏移量把剩下的在后面继续发出去 ( 因此各自框架抽象出了buffer , 隐藏对socket字节流的直接操作 )</p>
+<pre><code>ssize_t writen(int fd, const void * data, size_t n)
+{
+    size_t      nleft;
+    ssize_t     nwritten;
+    const char  *ptr;
+
+    ptr = data;
+    nleft = n;
+    // 如果还有数据没被拷贝完成，就一直循环
+    while (nleft &gt; 0) {
+        if ( (nwritten = write(fd, ptr, nleft)) &lt;= 0) {
+           /* 这里 EINTR 是非阻塞 non-blocking 情况下，通知我们再次调用 write() */
+            if (nwritten &lt; 0 &amp;&amp; errno == EINTR)
+                nwritten = 0;      
+            else
+                return -1;         /* 出错退出 */
+        }
+
+        /* 指针增大，剩下字节数变小 */
+        nleft -= nwritten;
+        ptr   += nwritten;
+    }
+    return n;
+}
+</code></pre>
+<p>作者还描述了read和write在不同模式下各自可能的异常 , 之后实操可以用到</p>
+<h2 id="_9">这一节的代码比较多, 思考题也还没看?</h2>
+<h1 id="epoll">epoll</h1>
+<p><code>网络编程课 23</code></p>
+<p><img alt="image-20191120140931373" src="/img/images/epoll.png"/></p>
+<h2 id="_10">使用方法?</h2>
+<p>epoll_create() 创建epoll实例
+epoll_ctl 增加删除 事件
+epoll_wait() 挂起进程 , 等待内核IO事件分发</p>
+<h2 id="vs">边缘触发 VS 条件触发 ?</h2>
+<p>后面有一节, 好像是epoll源码解析的, 讲到了他们的底层实现
+目前的理解: 边缘触发只触发一次(只有第一次满足条件的时候才触发) , 条件触发会触发多次 , 直到进行了read操作读取</p>
+<p>ET比LT效率要高 , 但异常处理也更为复杂</p>
+<p>这部分只涉及到高效性的问题 , 无需重点关注</p>
+<h2 id="eventsmask">events的二进制mask 设计 ?</h2>
+<p>EPOLLIN | EPOLLET
+二进制遍历int mask的方法: </p>
+<h2 id="20select-etlt-21poll">实践题两道 , 修改20节select的代码 , 看看是ET还是LT ,  同理修改21节poll的代码</h2>
+<h2 id="epoll_1">epoll惊群问题?</h2>
+<h1 id="c10k">C10K问题：高并发模型设计</h1>
+<p><code>网络编程课 24</code></p>
+<h2 id="c10k_1">C10K = ?</h2>
+<p>C10K = Client 10000 or Connection 10000 =  10000个并发连接 ?</p>
+<h2 id="_11">演化过程?</h2>
+<blockquote>
+<p>主要线索: 如何感知和调度IO事件 (阻塞/非阻塞 , 多路复用),处理上万个套接字的IO  , 如何分配进程,线程资源给上万个连接?</p>
+</blockquote>
+<p>1.阻塞IO+进程</p>
+<p>2.阻塞IO+线程</p>
+<p>3.非阻塞IO轮询+线程</p>
+<p>4.非阻塞IO+多路复用+线程   (避免轮询浪费CPU时间,交出控制权)</p>
+<p>5.非阻塞IO+多路复用+多线程 , 所谓的主从reactor模式 , epoll事件分发器可以叫做reactor , 也叫事件驱动或eventloop , 也就是浏览器渲染的运行方式 , 主渲染 , 从进行事件分发</p>
+<p>6.异步非阻塞IO+多线程 , AIO相关的在30节有说 , 没有深入了解</p>
+<h2 id="_12">异步 阻塞非阻塞</h2>
+<p>同步异步指的是 从内核态读取数据到用户态的过程 , 需要等待的是同步, 交给内核来完成 , 直接返回的是异步</p>
+<p>阻塞非阻塞指的是 , 当某个描述符不可读时 , 阻塞会陷入等待 , 而非阻塞直接返回</p>
+<p>同步 IO , 阻塞 CPU 等待 IO 中断
+异步 IO , 腾出 CPU 时间 , 等有IO中断发生的时候再通知 CPU</p>
+<p>同步调用和异步调用的区别是，是否等待被调用方执行完成并返回结果
+阻塞和非阻塞的区别是 , 被调用方是否立即返回结果,不管是否执行完成</p>
+<p>虽然说有多路复用的存在 , 阻塞和非阻塞似乎没有什么太大的区别 , 但是为了程序的健壮性(fd可读事件是不是有可能会误触发？还有22节一个监听套接字的极端情况) , 依然推荐使用非阻塞</p>
+<h2 id="netty">Netty是 用哪种模型?</h2>
+<p>reactor模型 , 底层是Java的NIO</p>
+<h2 id="c10m">C10M问题? 单机处理千万级并发 , 能实现吗 , 瓶颈在哪?</h2>
+<h1 id="_13">优雅地关闭还是粗暴地关闭</h1>
+<p><code>网络编程课11</code></p>
+<p>close 直接关闭单向读写</p>
+<p>shutdown只关闭单向写 , 等到对方发送FIN才关闭单向读</p>
+<p>close后,继续发送数据的话,会收到RST报文,  继续写入会触发SIGPIPE信号 , 不处理会发送错误</p>
+<h1 id="time-wait">TIME-WAIT</h1>
+<p><code>网络编程课  10</code></p>
+<p>1 保证被动关闭方收到ACK  ( 否则被动方重发FIN的时候会收到RST报文, 关闭错误)</p>
+<p>2 避免旧连接的迷路报文影响新的"化身"连接 ( 2MSL的时间保证报文消失)</p>
+<p>过多的解决方案:</p>
+<p>复用TIME_WAIT端口</p>
+<p>减少TIME_WAIT时间</p>
+<p>不适合的解决方案 和造成的后果:</p>
+<p>跳过TIME_WAIT</p>
+<p>暴力重置连接状态</p>
+<p>SO_LINGER强制关闭</p>
+<h1 id="http-keep-alive">HTTP keep-alive</h1>
+<blockquote>
+<p>透视HTTP协议 17</p>
+</blockquote>
+<p>1.1中默认开启    </p>
+<p>Connection:keep-alive
+Connection: close
+Keep-Alive: timeout=value  需要双方遵循,约束力弱</p>
+<p>长连接,连接复用</p>
+<h2 id="_14">造成的问题</h2>
+<p>连接把服务器资源用完</p>
+<h2 id="_15">解决</h2>
+<p>nginx 
+keepalive_timeout 1000
+keepalive_request 5</p>
+<h1 id="ip">IP层是如何寻路的</h1>
+<blockquote>
+<p>趣谈网络协议 08</p>
+</blockquote>
+<p>1 通过CIDR和子网掩码,判断是否是当前局域网
+2.1 是-&gt;ARP查到目标MAC地址,放入第二层,发出去
+2.2 否-&gt;发到网关,网关查询路由表转发到另一个网口,修改二层的源MAC和目标MAC</p>
+<h1 id="mac">在局域网中MAC层是如何发包的</h1>
+<p>1.集线器,广播
+2.交换机,广播,然后记录下来,下次不需要广播直接发</p>
+</div>
+</div>
+<footer>
+<div aria-label="footer navigation" class="rst-footer-buttons" role="navigation">
+<a class="btn btn-neutral float-right" href="../problem_trace/" title="问题排查">Next <span class="icon icon-circle-arrow-right"></span></a>
+<a class="btn btn-neutral" href="../tricks/" title="编程技巧/方法"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+</div>
+<hr/>
+<div role="contentinfo">
+<!-- Copyright etc -->
+</div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+</div>
+</div>
+</section>
+</div>
+<div aria-label="versions" class="rst-versions" role="note">
+<span class="rst-current-version" data-toggle="rst-current-version">
+<span><a href="../tricks/" style="color: #fcfcfc;">« Previous</a></span>
+<span style="margin-left: 15px"><a href="../problem_trace/" style="color: #fcfcfc">Next »</a></span>
+</span>
+</div>
+<script>var base_url = '../..';</script>
+<script defer="" src="../../js/theme.js"></script>
+<script defer="" src="../../js/mermaid.min.js"></script>
+<script defer="" src="../../js/custom.js"></script>
+<script defer="">
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(false);
+        };
+    </script>
+</body>
+</html>

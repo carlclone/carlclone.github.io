@@ -1,0 +1,71 @@
+/*
+拆分sub problem , buildGraph DAG图 ， pre[1] -> pre[0]  表示上课顺序
+然后DFS walk ， 标记当前路径 和 visited ， 如果遇到当前路径上的 ， 那就说明有环
+*/
+func canFinish(numCourses int, prerequisites [][]int) bool {
+	d:=&CycleDetection{
+		onPath:     make(map[int]bool),
+		visited:    make(map[int]bool),
+		numCourses: numCourses,
+		pres: prerequisites,
+		graph:buildGraph(prerequisites),
+	}
+	for i:=0;i<numCourses;i++ {
+		hasCycle:=d.walk(i)
+		if hasCycle {
+			return false
+		}
+	}
+	return true
+}
+
+type CycleDetection struct {
+	onPath map[int]bool
+	visited map[int]bool
+	numCourses int
+	pres [][]int
+	graph map[int][]int
+}
+
+func buildGraph(pre [][]int) map[int][]int {
+	m:=make(map[int][]int)
+	for _,v:=range pre {
+		if m[v[1]]==nil {
+			m[v[1]]=make([]int,0)
+		}
+		m[v[1]] = append(m[v[1]],v[0])
+	}
+	return m
+}
+
+func (t *CycleDetection) walk(point int) (hasCycle bool) {
+	if t.onPath[point] {
+		return true
+	}
+	if t.visited[point] {
+		return false
+	}
+
+	t.visited[point] = true
+	t.onPath[point] = true
+	nextPoints,ok:=t.graph[point]
+	//之前把 t.onPath[point] = true 放这里了，导致!ok的时候没重置 ， 对了 用defer ， php和java的话用finally
+	defer func() {
+		t.onPath[point] = false
+	}()
+
+	if !ok {
+		return false
+	}
+
+
+	for _,v:=range nextPoints {
+		hasCycle=t.walk(v)
+		if hasCycle {
+			break
+		}
+	}
+
+
+	return hasCycle
+}

@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
+<head>
+<meta charset="utf-8"/>
+<meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="../../img/favicon.ico" rel="shortcut icon"/>
+<title>2018 总结 - Log0c</title>
+<link href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" rel="stylesheet">
+<link href="../../css/theme.css" rel="stylesheet"/>
+<link href="../../css/theme_extra.css" rel="stylesheet"/>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet"/>
+<script>
+    // Current page data
+    var mkdocs_page_name = "2018 \u603b\u7ed3";
+    var mkdocs_page_input_path = "archive/second_job.md";
+    var mkdocs_page_url = null;
+  </script>
+<script defer="" src="../../js/jquery-2.1.1.min.js"></script>
+<script defer="" src="../../js/modernizr-2.8.3.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+</link></head>
+<body class="wy-body-for-nav" role="document">
+<div class="wy-grid-for-nav">
+<nav class="wy-nav-side stickynav" data-toggle="wy-nav-shift">
+<div class="wy-side-scroll">
+<div class="wy-side-nav-search">
+<a class="icon icon-home" href="../.."> Log0c</a>
+</div>
+<div aria-label="main navigation" class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../..">主页</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">问题排查 / 性能优化</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../too-much-folder/netease-music-problem/">mac 网易云音乐 cpu 占用高问题排查</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../mac/mac-note-stalled/">mac Notes.app 卡死问题</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../mac/osx86_external_ssd_swap_problem/">mac 外部 SSD Swap 分区开启问题</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../too-much-folder/go-shadowing-variable/">go shadowing variable 造成的歧义</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../too-much-folder/go-concurrent-map-read-write-bug/">go 并发读写 map 问题一例</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../too-much-folder/go-pprof-memory-leak/">使用 pprof 排查内存泄漏</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../too-much-folder/db-metadatalock/">数据库 metadata lock 问题排查</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../too-much-folder/black-box-io-problem/">黑盒排查磁盘空间告警/IO问题</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../too-much-folder/black-box-cpu-high-problem/">cpu 排查的几个案例</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../too-much-folder/black-box-network-problem/">network 排查的几个案例</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">labs</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../labs/6824-mapreduce/">MIT 6.824 - MapReduce</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../labs/6824-raft/">MIT 6.824 - Raft</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../labs/6824-kv/">MIT 6.824 - KV</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../labs/csapp-shell/">CSAPP - Shell</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../labs/csapp-proxy/">CSAPP - Proxy</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../labs/cs144/">CS144</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">工具</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../tools/xdebug/">Xdebug 深入学习</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../tools/chrome-dev-tools/">Chrome Dev Tools 深入学习</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../tools/markdown-diagram/">Markdown Diagram 功能</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../too-much-folder/yaml-lint/">yaml lint</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">算法</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../algos/int-to-binary-str/">整数转二进制字符串</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../algos/multiple-field-sort/">多字段排序</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../algos/lru-cache-go/">LRU 线程安全和高并发</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">构建自己的 X 项目</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../build-my-own-x/jquery/">构建自己的 jQuery</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../build-my-own-x/php-framework/">构建自己的 PHP 框架</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../build-my-own-x/lisp-compiler/">构建 Lisp Compiler</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../build-my-own-x/regex/">Regex Engine 学习</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">PHP</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../php/how-composer-work/">Composer 是如何工作的</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../php/business-logic-framework/">关于业务代码的框架</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../php/symfony-lock/">Symfony Lock Component</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">杂项</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../others/mac_py_env_deploy/">Mac Python环境 miniConda 搭建</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../others/taylor-otwell-interview/">Taylor otwell 采访文章</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">零碎知识点</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../knowledge-reduce/tricks/">编程技巧/方法</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../knowledge-reduce/network_programming/">网络编程</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../knowledge-reduce/problem_trace/">问题排查</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../knowledge-reduce/network-course/">计算机网络课程分享</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../knowledge-reduce/mysql/">MYSQL</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../knowledge-reduce/language_trait_and_implementation/">语言特性/底层实现</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../knowledge-reduce/computer_composition/">计算机组成原理</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">归档</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../blog_deploy_log/">博客服务器环境搭建记录</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../redis/redis_code_book_reading/">Redis 设计与实现笔记</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../laracasts_learning_path/">Laracasts学习记录</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../black_sierra/">K480N 黑苹果安装记录</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../php_career_guide_line/">从框架看PHP的五种境界[转]</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../laravel_marcoable/">Laravel中的Marcoable</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../laravel_code_book_reading/">Laravel框架关键技术-阅读总结</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../laravel_admin_code_reading/">Laravel-Admin源码阅读</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../first_internship/">实习</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../summary/2017/">2017 总结</a>
+</li>
+<li class="toctree-l1 current"><a class="reference internal current" href="./">2018 总结</a>
+<ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="#_2">工作</a>
+<ul>
+<li class="toctree-l3"><a class="reference internal" href="#_3">后台基本功能搭建</a>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#_4">商城小程序</a>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#_5">公众号和公众号后台</a>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#_6">评价问卷后台</a>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#_7">实践活动评价体系</a>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#_8">总结</a>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#_9">不足和改善</a>
+<ul>
+<li class="toctree-l3"><a class="reference internal" href="#_10">第二年的目标</a>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../summary/2019/">2019 总结</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../summary/2020/">2020 总结</a>
+</li>
+</ul>
+</div>
+</div>
+</nav>
+<section class="wy-nav-content-wrap" data-toggle="wy-nav-shift">
+<nav aria-label="top navigation" class="wy-nav-top" role="navigation">
+<i class="fa fa-bars" data-toggle="wy-nav-top"></i>
+<a href="../..">Log0c</a>
+</nav>
+<div class="wy-nav-content">
+<div class="rst-content">
+<div aria-label="breadcrumbs navigation" role="navigation">
+<ul class="wy-breadcrumbs">
+<li><a href="../..">Docs</a> »</li>
+<li>归档 »</li>
+<li>2018 总结</li>
+<li class="wy-breadcrumbs-aside">
+</li>
+</ul>
+<hr/>
+</div>
+<div role="main">
+<div class="section">
+<p>额额额</p>
+<!-- more -->
+<p>毕业后的第一份工作,算上实习是第二份,回到了家惠州生活,幸运地遇到了Laravel,Jeffery Way和他的Laracasts,一家使用Laravel的公司,还有无数开源项目作者的帮助.有一群待人很好的同事和轻松的工作氛围.</p>
+<h1 id="_1"></h1>
+<h4 id="_2">工作</h4>
+<h5 id="_3">后台基本功能搭建</h5>
+<p>后台管理员,角色,菜单设置
+<img alt="image.png" src="/img/er/3830995-6b924b048583a1a8.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240"/></p>
+<p><img alt="image.png" src="/img/er/3830995-a94023f2594e3921.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240"/>
+<img alt="image.png" src="/img/er/3830995-79740019420cc91b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240"/></p>
+<p>计划任务设置
+<img alt="image.png" src="/img/er/3830995-c7bf809a5751a876.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240"/></p>
+<p>API测试工具
+<img alt="image.png" src="/img/er/3830995-853c98c82b4391bc.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240"/></p>
+<p>生成表 模型 控制器的脚手架
+<img alt="image.png" src="/img/er/3830995-be38c3d74b906205.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240"/></p>
+<p>日志和异常查看
+<img alt="image.png" src="/img/er/3830995-e98279232f852a8e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240"/>
+<img alt="image.png" src="/img/er/3830995-0094ecd60e405bfe.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240"/></p>
+<p>商城后台:
+<img alt="image.png" src="/img/er/3830995-c3cf49e9c05cc9b2.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240"/>
+<img alt="image.png" src="/img/er/3830995-de45fb4c16537683.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240"/>
+<img alt="image.png" src="/img/er/3830995-1bc0ab04587f3f73.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240"/>
+<img alt="image.png" src="/img/er/3830995-6245515a319a8fc3.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240"/>
+<img alt="image.png" src="/img/er/3830995-5c4d67897c43a5e5.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240"/>
+<img alt="image.png" src="/img/er/3830995-b7cd65a610e897ed.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240"/>
+<img alt="image.png" src="/img/er/3830995-e8fbbe87503b59f1.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240"/>
+<img alt="image.png" src="/img/er/3830995-b24c70fa39c2197b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240"/>
+<img alt="image.png" src="/img/er/3830995-326ad46aa9471cc1.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240"/>
+<img alt="image.png" src="/img/er/3830995-9977422e19b12807.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240"/>
+<img alt="image.png" src="/img/er/3830995-ca1c4c27562977c1.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240"/>
+<img alt="image.png" src="/img/er/3830995-7d2b1759f979062d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240"/></p>
+<h5 id="_4">商城小程序</h5>
+<p><img alt="image.png" src="/img/er/3830995-f79ee218b49685ad.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240"/>
+<img alt="image.png" src="/img/er/3830995-1acb417c5c0e8748.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240"/>
+<img alt="image.png" src="/img/er/3830995-0d9264a9e7661dbd.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240"/>
+<img alt="image.png" src="/img/er/3830995-853f2c7072371177.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240"/>
+<img alt="image.png" src="/img/er/3830995-66833dfd524b43c8.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240"/>
+<img alt="image.png" src="/img/er/3830995-947bb45c0c5fc24e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240"/>
+<img alt="image.png" src="/img/er/3830995-7aacd1b54a5185bd.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240"/></p>
+<h5 id="_5">公众号和公众号后台</h5>
+<p><img alt="image.png" src="/img/er/3830995-9e10f8cf60e365c0.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240"/>
+<img alt="image.png" src="/img/er/3830995-4b5c5ea2497b6270.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240"/>
+<img alt="image.png" src="/img/er/3830995-a54b4d88a8bebee3.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240"/></p>
+<p><img alt="image.png" src="/img/er/3830995-b2e197f427581e7d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240"/>
+<img alt="image.png" src="/img/er/3830995-832b72b03a54a12c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240"/>
+<img alt="image.png" src="/img/er/3830995-6070f41476c6f6f9.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240"/></p>
+<h5 id="_6">评价问卷后台</h5>
+<p><img alt="image.png" src="/img/er/3830995-71eafc52c07cde51.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240"/>
+<img alt="image.png" src="/img/er/3830995-86579f8be0765b7b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240"/></p>
+<h5 id="_7">实践活动评价体系</h5>
+<p><img alt="image.png" src="/img/er/3830995-8b457ccb40f2a872.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240"/>
+<img alt="image.png" src="/img/er/3830995-86ff1577951d7252.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240"/>
+<img alt="image.png" src="/img/er/3830995-b834561081ef99c9.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240"/>
+<img alt="image.png" src="/img/er/3830995-9fea20bc3a41f562.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240"/>
+<img alt="image.png" src="/img/er/3830995-e50ba66ed356e90d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240"/>
+<img alt="image.png" src="/img/er/3830995-18b156c95751c6ee.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240"/>
+<img alt="image.png" src="/img/er/3830995-bdbb9904d4e1454e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240"/>
+<img alt="image.png" src="/img/er/3830995-0b0a18f6b164c4ff.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240"/>
+<img alt="image.png" src="/img/er/3830995-8f7877fa807e594f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240"/>
+<img alt="image.png" src="/img/er/3830995-4d5f20e267c91165.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240"/></p>
+<h4 id="_8">总结</h4>
+<p>得益于Laravel , EasyWeChat , Laravel-Admin 等开源项目的帮助 , 工作和生活得以很好地兼顾 , 如果有能力了希望自己也能做一个帮助到开发者的项目</p>
+<p>Jeffery Way是我Larvel和OOP , TDD学习路上的导师 , V2EX和LaravelChina上有许多大神的帖子打击我使我不断学习 , 这半年总的来说没白费 .</p>
+<h3 id="_9">不足和改善</h3>
+<p>1.编码前请使用百分之70的时间认真思考再下手.
+2.系统设计和画图能力的提升(UML图)
+3.重视边界条件,非法输入处理
+4.面向对象能力(是块难啃的大饼,尽量遵循SOLID的情况下,5.也要能联想起关联的设计模式使用场景)
+6.完成基本功能后想办法优化的习惯
+7.保持住规范,别因为一时舒服给后期留坑
+8.动手实践时间过短 , 学习和读源码的时间过多</p>
+<h4 id="_10">第二年的目标</h4>
+<p>1.继续学习计算机基础,引用韩天峰大佬的建议阅读书籍.</p>
+<blockquote>
+<p>包括深入理解计算机系统、现代操作系统、C程序设计语言、C语言数据结构和算法、Unix环境高级编程、TCP/IP网络通信详解。另外我建议大家学习一下面向对象方面知识，PHP这方面的书不太多，建议看Java面向对象编程、Java编程思想、J2EE这些书。PHP语言基础方面，建议认真地把PHP5权威编程这本书好好读完。另外不光要读，还要照着书中的讲解动手去编程实践。</p>
+</blockquote>
+<p>2.希望能抽出时间,带上相机骑一次长途到想去的地方.
+3.做一个真正意义的开源项目.</p>
+</div>
+</div>
+<footer>
+<div aria-label="footer navigation" class="rst-footer-buttons" role="navigation">
+<a class="btn btn-neutral float-right" href="../../summary/2019/" title="2019 总结">Next <span class="icon icon-circle-arrow-right"></span></a>
+<a class="btn btn-neutral" href="../../summary/2017/" title="2017 总结"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+</div>
+<hr/>
+<div role="contentinfo">
+<!-- Copyright etc -->
+</div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+</div>
+</div>
+</section>
+</div>
+<div aria-label="versions" class="rst-versions" role="note">
+<span class="rst-current-version" data-toggle="rst-current-version">
+<span><a href="../../summary/2017/" style="color: #fcfcfc;">« Previous</a></span>
+<span style="margin-left: 15px"><a href="../../summary/2019/" style="color: #fcfcfc">Next »</a></span>
+</span>
+</div>
+<script>var base_url = '../..';</script>
+<script defer="" src="../../js/theme.js"></script>
+<script defer="" src="../../js/mermaid.min.js"></script>
+<script defer="" src="../../js/custom.js"></script>
+<script defer="">
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(false);
+        };
+    </script>
+</body>
+</html>

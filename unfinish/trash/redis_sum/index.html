@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
+<head>
+<meta charset="utf-8"/>
+<meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="../../../img/favicon.ico" rel="shortcut icon"/>
+<title>Redis应用场景-理解总结 - Log0c</title>
+<link href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" rel="stylesheet">
+<link href="../../../css/theme.css" rel="stylesheet"/>
+<link href="../../../css/theme_extra.css" rel="stylesheet"/>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet"/>
+<script>
+    // Current page data
+    var mkdocs_page_name = "Redis\u5e94\u7528\u573a\u666f-\u7406\u89e3\u603b\u7ed3";
+    var mkdocs_page_input_path = "unfinish/trash/redis_sum.md";
+    var mkdocs_page_url = null;
+  </script>
+<script defer="" src="../../../js/jquery-2.1.1.min.js"></script>
+<script defer="" src="../../../js/modernizr-2.8.3.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+</link></head>
+<body class="wy-body-for-nav" role="document">
+<div class="wy-grid-for-nav">
+<nav class="wy-nav-side stickynav" data-toggle="wy-nav-shift">
+<div class="wy-side-scroll">
+<div class="wy-side-nav-search">
+<a class="icon icon-home" href="../../.."> Log0c</a>
+</div>
+<div aria-label="main navigation" class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../..">主页</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">问题排查 / 性能优化</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../too-much-folder/netease-music-problem/">mac 网易云音乐 cpu 占用高问题排查</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../mac/mac-note-stalled/">mac Notes.app 卡死问题</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../mac/osx86_external_ssd_swap_problem/">mac 外部 SSD Swap 分区开启问题</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../too-much-folder/go-shadowing-variable/">go shadowing variable 造成的歧义</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../too-much-folder/go-concurrent-map-read-write-bug/">go 并发读写 map 问题一例</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../too-much-folder/go-pprof-memory-leak/">使用 pprof 排查内存泄漏</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../too-much-folder/db-metadatalock/">数据库 metadata lock 问题排查</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../too-much-folder/black-box-io-problem/">黑盒排查磁盘空间告警/IO问题</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../too-much-folder/black-box-cpu-high-problem/">cpu 排查的几个案例</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../too-much-folder/black-box-network-problem/">network 排查的几个案例</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">labs</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../labs/6824-mapreduce/">MIT 6.824 - MapReduce</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../labs/6824-raft/">MIT 6.824 - Raft</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../labs/6824-kv/">MIT 6.824 - KV</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../labs/csapp-shell/">CSAPP - Shell</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../labs/csapp-proxy/">CSAPP - Proxy</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../labs/cs144/">CS144</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">工具</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../tools/xdebug/">Xdebug 深入学习</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tools/chrome-dev-tools/">Chrome Dev Tools 深入学习</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tools/markdown-diagram/">Markdown Diagram 功能</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../too-much-folder/yaml-lint/">yaml lint</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">算法</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../algos/int-to-binary-str/">整数转二进制字符串</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../algos/multiple-field-sort/">多字段排序</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../algos/lru-cache-go/">LRU 线程安全和高并发</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">构建自己的 X 项目</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../build-my-own-x/jquery/">构建自己的 jQuery</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../build-my-own-x/php-framework/">构建自己的 PHP 框架</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../build-my-own-x/lisp-compiler/">构建 Lisp Compiler</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../build-my-own-x/regex/">Regex Engine 学习</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">PHP</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../php/how-composer-work/">Composer 是如何工作的</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../php/business-logic-framework/">关于业务代码的框架</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../php/symfony-lock/">Symfony Lock Component</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">杂项</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../others/mac_py_env_deploy/">Mac Python环境 miniConda 搭建</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../others/taylor-otwell-interview/">Taylor otwell 采访文章</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">零碎知识点</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../knowledge-reduce/tricks/">编程技巧/方法</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../knowledge-reduce/network_programming/">网络编程</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../knowledge-reduce/problem_trace/">问题排查</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../knowledge-reduce/network-course/">计算机网络课程分享</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../knowledge-reduce/mysql/">MYSQL</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../knowledge-reduce/language_trait_and_implementation/">语言特性/底层实现</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../knowledge-reduce/computer_composition/">计算机组成原理</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">归档</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../archive/blog_deploy_log/">博客服务器环境搭建记录</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../redis/redis_code_book_reading/">Redis 设计与实现笔记</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../archive/laracasts_learning_path/">Laracasts学习记录</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../archive/black_sierra/">K480N 黑苹果安装记录</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../archive/php_career_guide_line/">从框架看PHP的五种境界[转]</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../archive/laravel_marcoable/">Laravel中的Marcoable</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../archive/laravel_code_book_reading/">Laravel框架关键技术-阅读总结</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../archive/laravel_admin_code_reading/">Laravel-Admin源码阅读</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../archive/first_internship/">实习</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../summary/2017/">2017 总结</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../archive/second_job/">2018 总结</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../summary/2019/">2019 总结</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../summary/2020/">2020 总结</a>
+</li>
+</ul>
+</div>
+</div>
+</nav>
+<section class="wy-nav-content-wrap" data-toggle="wy-nav-shift">
+<nav aria-label="top navigation" class="wy-nav-top" role="navigation">
+<i class="fa fa-bars" data-toggle="wy-nav-top"></i>
+<a href="../../..">Log0c</a>
+</nav>
+<div class="wy-nav-content">
+<div class="rst-content">
+<div aria-label="breadcrumbs navigation" role="navigation">
+<ul class="wy-breadcrumbs">
+<li><a href="../../..">Docs</a> »</li>
+<li>Redis应用场景-理解总结</li>
+<li class="wy-breadcrumbs-aside">
+</li>
+</ul>
+<hr/>
+</div>
+<div role="main">
+<div class="section">
+<p>无</p>
+<!-- more -->
+<h1 id="_1">数据类型</h1>
+<p><strong>所有类型都是基于键值对存在</strong></p>
+<h2 id="string">String 字符串（也可以是数字）</h2>
+<p>常用命令<code>set,get,decr,incr,mget</code></p>
+<h2 id="hash-phphash-table">Hash 哈希映射表 （PHP的数组就是hash table）</h2>
+<p>常用命令<code>hget,hset,hgetall</code></p>
+<p>使用场景：和php数组作用类似。结构化的信息，如用户的一系列信息，商品的信息，由许多子信息构成，使用字符串需要序列化存储，修改需要反序列化再修改，Redis的Hash结构可以使你像在数据库中Update一个属性一样只修改某一项属性值。</p>
+<h2 id="list">List</h2>
+<p>常用命令<code>lpush,rpush,lpop,rpop,lrange</code>
+使用数据结构中的双向链表实现，lrange类似于线性表查询操作(关注列表，粉丝列表)，push和pop操作类似数据结构中的队列和栈的操作</p>
+<h2 id="set">Set 集合</h2>
+<p>常用命令<code>sadd,spop,smembers,sunion</code>
+类似于list，但是set中不允许有重复元素（自动排重）</p>
+<p>使用场景：set提供了判断某个成员是否在一个set集合内。可以存储一些集合性的数据。比如在微博应用中，可以将一个用户所有的关注人存在一个集合中，将其所有粉丝存在一个集合。使用求交集实现共同关注，共同喜好，使用差集实现二度好友（可能认识的好友），还有求并集。</p>
+<p>最后，上面对集合的操作，可以使用不同的命令选择返回给客户端，或者存到新的集合。</p>
+<h2 id="sorted-set">Sorted Set 有序集合</h2>
+<p>常用命令<code>zadd,zrange,zrem,zcard</code></p>
+<p>和set类似，但多了一个score字段实现自动排序，有序的并且不重复的集合</p>
+<p>使用场景：
+1.微博的博文发布时间作为score，则取出来的时候就已经按时间排序
+2.带优先级的消息队列，普通消息，重要消息</p>
+<h2 id="pubsub">Pub/Sub</h2>
+<p>发布和订阅功能，对某一个key值进行发布和订阅，发布后，所有订阅该key的客户端都会收到消息</p>
+<p>使用场景：即时消息系统，实时聊天，群聊</p>
+<p>还有些不常用的不列举了</p>
+<h1 id="_2">其他使用场景</h1>
+<p>在数据类型介绍中对一些场景进行了总结，这里是一些补充的部分。
+1.用于快速读取数据（缓存）
+2.作为计数器（Counter），如点赞，收藏数</p>
+<h1 id="demo">具体使用Demo，优化案例</h1>
+<p>1.显示最新的项目列表
+<code>SELECT * FROM foo WHERE ... ORDER BY time DESC LIMIT 10</code>  常用的显示最新10条数据，数据越多越慢</p>
+<p>Demo：用户的最新n条评论
+使用Redis的List的队列功能，先进先出，在存入数据库的同时将对应评论的ID LPUSH到列表中。
+<code>LPUSH latest.comments</code> <id></id></p>
+<p>裁剪列表长度为5000 
+<code>LTRIM latests.comments 0 5000</code>  ，当需要获取超出5000个的最新评论的时候，才去数据库读取</p>
+<pre><code>FUNCTION get_latest_comments(start, num_items):  
+    id_list = redis.lrange("latest.comments",start,start+num_items - 1)  
+    IF id_list.length &lt; num_items  
+        id_list = SQL_DB("SELECT ... ORDER BY time LIMIT ...")  
+    END  
+    RETURN id_list  
+END  
+</code></pre>
+<p>2.删除和过滤
+这个还没看懂</p>
+<pre><code>我们可以使用LREM来删除评论。如果删除操作非常少，另一个选择是直接跳过评论条目的入口，报告说该评论已经不存在。
+       有些时候你想要给不同的列表附加上不同的过滤器。如果过滤器的数量受到限制，你可以简单的为每个不同的过滤器使用不同的Redis列表。毕竟每个列表只有5000条项目，但Redis却能够使用非常少的内存来处理几百万条项目。
+</code></pre>
+<p>3.排行榜相关</p>
+<p>每次获得新得分时，我们用这样的代码
+<code>ZADD leaderboard  &lt;score&gt;  &lt;username&gt;</code></p>
+<p>获取前100名高分用户<code>ZREVRANGE leaderboard 0 99</code>   从大到小 ZRANGE从小到大
+获得特定用户的全球排名 <code>ZRANK leaderboard &lt;username&gt;</code></p>
+<p>4.按照用户投票和时间排序（还不是很明白）
+  score = points / time^alpha 
+  因此用户的投票会相应的把新闻挖出来，但时间会按照一定的指数将新闻埋下去。</p>
+<p>5.处理过期项目(具体应用场景？)</p>
+<p>6.计数</p>
+<p>7.特定时间内的特定项目</p>
+<p>8、实时分析正在发生的情况，用于数据统计与防止垃圾邮件等</p>
+<p>9、Pub/Sub</p>
+<p>10、队列</p>
+<p>11、缓存</p>
+<h1 id="_3">一些概念</h1>
+<p>Redis是单线程的</p>
+<h1 id="_4">参考</h1>
+<p><a href="http://blog.csdn.net/hguisu/article/details/8836819">Redis应用场景</a>
+<a href="https://redis.io/documentation">Redis官方文档</a>
+<a href="http://www.redis.cn/commands.html">Redis中文命令文档</a></p>
+</div>
+</div>
+<footer>
+<hr/>
+<div role="contentinfo">
+<!-- Copyright etc -->
+</div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+</div>
+</div>
+</section>
+</div>
+<div aria-label="versions" class="rst-versions" role="note">
+<span class="rst-current-version" data-toggle="rst-current-version">
+</span>
+</div>
+<script>var base_url = '../../..';</script>
+<script defer="" src="../../../js/theme.js"></script>
+<script defer="" src="../../../js/mermaid.min.js"></script>
+<script defer="" src="../../../js/custom.js"></script>
+<script defer="">
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(false);
+        };
+    </script>
+</body>
+</html>

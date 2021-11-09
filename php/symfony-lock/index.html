@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
+<head>
+<meta charset="utf-8"/>
+<meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="../../img/favicon.ico" rel="shortcut icon"/>
+<title>Symfony Lock Component - Log0c</title>
+<link href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" rel="stylesheet">
+<link href="../../css/theme.css" rel="stylesheet"/>
+<link href="../../css/theme_extra.css" rel="stylesheet"/>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet"/>
+<script>
+    // Current page data
+    var mkdocs_page_name = "Symfony Lock Component";
+    var mkdocs_page_input_path = "php/symfony-lock.md";
+    var mkdocs_page_url = null;
+  </script>
+<script defer="" src="../../js/jquery-2.1.1.min.js"></script>
+<script defer="" src="../../js/modernizr-2.8.3.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+</link></head>
+<body class="wy-body-for-nav" role="document">
+<div class="wy-grid-for-nav">
+<nav class="wy-nav-side stickynav" data-toggle="wy-nav-shift">
+<div class="wy-side-scroll">
+<div class="wy-side-nav-search">
+<a class="icon icon-home" href="../.."> Log0c</a>
+</div>
+<div aria-label="main navigation" class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../..">主页</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">问题排查 / 性能优化</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../too-much-folder/netease-music-problem/">mac 网易云音乐 cpu 占用高问题排查</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../mac/mac-note-stalled/">mac Notes.app 卡死问题</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../mac/osx86_external_ssd_swap_problem/">mac 外部 SSD Swap 分区开启问题</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../too-much-folder/go-shadowing-variable/">go shadowing variable 造成的歧义</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../too-much-folder/go-concurrent-map-read-write-bug/">go 并发读写 map 问题一例</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../too-much-folder/go-pprof-memory-leak/">使用 pprof 排查内存泄漏</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../too-much-folder/db-metadatalock/">数据库 metadata lock 问题排查</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../too-much-folder/black-box-io-problem/">黑盒排查磁盘空间告警/IO问题</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../too-much-folder/black-box-cpu-high-problem/">cpu 排查的几个案例</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../too-much-folder/black-box-network-problem/">network 排查的几个案例</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">labs</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../labs/6824-mapreduce/">MIT 6.824 - MapReduce</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../labs/6824-raft/">MIT 6.824 - Raft</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../labs/6824-kv/">MIT 6.824 - KV</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../labs/csapp-shell/">CSAPP - Shell</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../labs/csapp-proxy/">CSAPP - Proxy</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../labs/cs144/">CS144</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">工具</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../tools/xdebug/">Xdebug 深入学习</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../tools/chrome-dev-tools/">Chrome Dev Tools 深入学习</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../tools/markdown-diagram/">Markdown Diagram 功能</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../too-much-folder/yaml-lint/">yaml lint</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">算法</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../algos/int-to-binary-str/">整数转二进制字符串</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../algos/multiple-field-sort/">多字段排序</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../algos/lru-cache-go/">LRU 线程安全和高并发</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">构建自己的 X 项目</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../build-my-own-x/jquery/">构建自己的 jQuery</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../build-my-own-x/php-framework/">构建自己的 PHP 框架</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../build-my-own-x/lisp-compiler/">构建 Lisp Compiler</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../build-my-own-x/regex/">Regex Engine 学习</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">PHP</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../how-composer-work/">Composer 是如何工作的</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../business-logic-framework/">关于业务代码的框架</a>
+</li>
+<li class="toctree-l1 current"><a class="reference internal current" href="./">Symfony Lock Component</a>
+<ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="#_1">其他功能</a>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#_2">结尾</a>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#_3">参考资料</a>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">杂项</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../others/mac_py_env_deploy/">Mac Python环境 miniConda 搭建</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../others/taylor-otwell-interview/">Taylor otwell 采访文章</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">零碎知识点</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../knowledge-reduce/tricks/">编程技巧/方法</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../knowledge-reduce/network_programming/">网络编程</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../knowledge-reduce/problem_trace/">问题排查</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../knowledge-reduce/network-course/">计算机网络课程分享</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../knowledge-reduce/mysql/">MYSQL</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../knowledge-reduce/language_trait_and_implementation/">语言特性/底层实现</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../knowledge-reduce/computer_composition/">计算机组成原理</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">归档</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/blog_deploy_log/">博客服务器环境搭建记录</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../redis/redis_code_book_reading/">Redis 设计与实现笔记</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/laracasts_learning_path/">Laracasts学习记录</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/black_sierra/">K480N 黑苹果安装记录</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/php_career_guide_line/">从框架看PHP的五种境界[转]</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/laravel_marcoable/">Laravel中的Marcoable</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/laravel_code_book_reading/">Laravel框架关键技术-阅读总结</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/laravel_admin_code_reading/">Laravel-Admin源码阅读</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/first_internship/">实习</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../summary/2017/">2017 总结</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/second_job/">2018 总结</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../summary/2019/">2019 总结</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../summary/2020/">2020 总结</a>
+</li>
+</ul>
+</div>
+</div>
+</nav>
+<section class="wy-nav-content-wrap" data-toggle="wy-nav-shift">
+<nav aria-label="top navigation" class="wy-nav-top" role="navigation">
+<i class="fa fa-bars" data-toggle="wy-nav-top"></i>
+<a href="../..">Log0c</a>
+</nav>
+<div class="wy-nav-content">
+<div class="rst-content">
+<div aria-label="breadcrumbs navigation" role="navigation">
+<ul class="wy-breadcrumbs">
+<li><a href="../..">Docs</a> »</li>
+<li>PHP »</li>
+<li>Symfony Lock Component</li>
+<li class="wy-breadcrumbs-aside">
+</li>
+</ul>
+<hr/>
+</div>
+<div role="main">
+<div class="section">
+<h1 id="symfony-lock-component">Symfony 的 Lock Component</h1>
+<p>今天在闲逛 Symfony 官网看组件文档的时候无意中看到了这个 Symfony 官方的锁组件, 以前在公司的项目里大部分都是一个满足最基本需求的实现, 现在有了这样一个规范, 好好学习一下, 以后就不用踩坑, 重复造轮子了</p>
+<p>在大部分项目中看到对锁的封装, 都是使用的 redis 字符串类型, 资源的名称作为 key,随机值作为 value , 再加个最基本的锁超时时间设置 , 防止程序异常导致资源一直被锁住, 然后是加锁解锁</p>
+<p>这样在大部分场景都是可用的 , 但在长时间执行的程序有可能会出现下面的问题 :</p>
+<p>进程 1 抢锁,执行任务,锁超时释放
+进程 2 拿到锁,执行任务,爆发第一个问题(线程安全)
+进程 1 执行完毕,解锁,第二个问题(不是自己的锁)
+进程 2 解锁时候出错(锁已经被进程 1 释放)</p>
+<p>先解决问题 2 : 解锁的时候验证 value, 只有是自己的锁才能解开
+解决问题 1 : 尽可能保证程序执行时间&lt;锁超时时间,但又不能过长 , 将任务拆分成几个执行周期,对锁进行续租 . 但这个不能完全避免 , 问题 2 还是可能发生 , 此时当发现锁已经不在自己手上的时候,也回滚,确保数据一致性</p>
+<p>官网给出了比较好的实现方式</p>
+<pre><code>**拆分成几个短的执行周期,续租**
+</code></pre>
+<pre><code class="language-php">$lock = $factory-&gt;createLock('charts-generation', 30);
+
+if (!$lock-&gt;acquire()) {
+    return;
+}
+try {
+
+    while (!$finished) {
+        // perform a small part of the job.
+
+        // renew the lock for 30 more seconds.
+        $lock-&gt;refresh();
+    }
+} finally {
+    $lock-&gt;release();
+}   
+</code></pre>
+<p>发现锁不在自己手上了,回滚, 自此问题 1 和问题 2 都解决了</p>
+<pre><code class="language-php">// If we cannot acquire ourselves, it means some other process is already working on it
+if (!$lock-&gt;acquire()) {
+    return;
+}
+
+$this-&gt;beginTransaction();
+
+// Perform a very long process that might exceed TTL of the lock
+
+
+if ($lock-&gt;isAcquired()) { 
+    //严格来说上下这俩句不是原子性的,还存在很小很小的概率在提交之前的很短的时间超时,锁被其他进程获取了
+    // Still all good, no other instance has acquired the lock in the meantime, we're safe
+    $this-&gt;commit();
+} else {
+    // Bummer! Our lock has apparently exceeded TTL and another process has started in
+    // the meantime so it's not safe for us to commit.
+    $this-&gt;rollback();
+    throw new \Exception('Process failed');
+}       
+</code></pre>
+<h2 id="_1">其他功能</h2>
+<p>序列化锁,  可以让同一个锁在不同进程之间传递, 这个使用场景好像比较少</p>
+<p>阻塞取锁,  symfony lock 支持多种不同的底层存储实现, 有的底层存储原生支持阻塞取锁, 像 redis 不支持的话, 内部会有一个类似加了 for 循环, 直到取到锁才执行程序逻辑的实现</p>
+<p>读写锁, reader/writer 问题, 读读可以同时得到锁, 写读, 写写,读写只能拿到一个, 并且还有读者写者优先级问题</p>
+<p>锁拥有者检查, 上面说的问题 2</p>
+<p>多个锁底层存储实现</p>
+<p>Flock文件系统锁</p>
+<h2 id="_2">结尾</h2>
+<p>Symfony 有很多优秀,规范的组件, 以后工作中遇到非业务的功能实现先参考<a href="https://symfony.com/doc/current/components/index.html">这里</a></p>
+<h2 id="_3">参考资料</h2>
+<p><a href="https://symfony.com/doc/current/components/index.html">Symfony Components</a></p>
+<p><a href="https://symfony.com/doc/current/components/lock.html#blocking-locks">Lock Component</a></p>
+<p>左耳听风 - 锁</p>
+<p>极客时间</p>
+</div>
+</div>
+<footer>
+<div aria-label="footer navigation" class="rst-footer-buttons" role="navigation">
+<a class="btn btn-neutral float-right" href="../../others/mac_py_env_deploy/" title="Mac Python环境 miniConda 搭建">Next <span class="icon icon-circle-arrow-right"></span></a>
+<a class="btn btn-neutral" href="../business-logic-framework/" title="关于业务代码的框架"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+</div>
+<hr/>
+<div role="contentinfo">
+<!-- Copyright etc -->
+</div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+</div>
+</div>
+</section>
+</div>
+<div aria-label="versions" class="rst-versions" role="note">
+<span class="rst-current-version" data-toggle="rst-current-version">
+<span><a href="../business-logic-framework/" style="color: #fcfcfc;">« Previous</a></span>
+<span style="margin-left: 15px"><a href="../../others/mac_py_env_deploy/" style="color: #fcfcfc">Next »</a></span>
+</span>
+</div>
+<script>var base_url = '../..';</script>
+<script defer="" src="../../js/theme.js"></script>
+<script defer="" src="../../js/mermaid.min.js"></script>
+<script defer="" src="../../js/custom.js"></script>
+<script defer="">
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(false);
+        };
+    </script>
+</body>
+</html>
