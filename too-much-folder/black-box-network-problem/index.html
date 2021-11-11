@@ -35,7 +35,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../..">主页</a>
 </li>
 </ul>
-<p class="caption"><span class="caption-text">问题排查 / 性能优化</span></p>
+<p class="caption"><span class="caption-text">问题排查</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../netease-music-problem/">mac 网易云音乐 cpu 占用高问题排查</a>
 </li>
@@ -46,6 +46,8 @@
 <li class="toctree-l1"><a class="reference internal" href="../go-shadowing-variable/">go shadowing variable 造成的歧义</a>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../go-concurrent-map-read-write-bug/">go 并发读写 map 问题一例</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../go-bytebufferpool-leak-doubt/">go bytebufferpool 错误使用一例</a>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../go-pprof-memory-leak/">使用 pprof 排查内存泄漏</a>
 </li>
@@ -112,6 +114,8 @@
 </ul>
 </li>
 </ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../db-deadlock/">间隙锁造成的死锁</a>
 </li>
 </ul>
 <p class="caption"><span class="caption-text">labs</span></p>
@@ -235,7 +239,7 @@
 <div aria-label="breadcrumbs navigation" role="navigation">
 <ul class="wy-breadcrumbs">
 <li><a href="../..">Docs</a> »</li>
-<li>问题排查 / 性能优化 »</li>
+<li>问题排查 »</li>
 <li>network 排查的几个案例</li>
 <li class="wy-breadcrumbs-aside">
 </li>
@@ -319,6 +323,7 @@ $ iptables -I INPUT -p udp --sport 53 -m string --string googleusercontent --alg
 <li>tshark (wireshark 命令行版)</li>
 <li>wireshark 学习书籍 《Wireshark网络分析就这么简单》和《Wireshark网络分析的艺术》</li>
 <li>在使用 mysql 的时候也遇到过反向解析导致的超时</li>
+<li>fiddler 可以打开 pcap</li>
 </ul>
 <h2 id="syn_flood">SYN_FLOOD 攻击导致的服务缓慢或不可用</h2>
 <h3 id="dos">DOS 介绍</h3>
@@ -460,7 +465,7 @@ $ sudo cp wrk /usr/local/bin/
 </div>
 <footer>
 <div aria-label="footer navigation" class="rst-footer-buttons" role="navigation">
-<a class="btn btn-neutral float-right" href="../../labs/6824-mapreduce/" title="MIT 6.824 - MapReduce">Next <span class="icon icon-circle-arrow-right"></span></a>
+<a class="btn btn-neutral float-right" href="../db-deadlock/" title="间隙锁造成的死锁">Next <span class="icon icon-circle-arrow-right"></span></a>
 <a class="btn btn-neutral" href="../black-box-cpu-high-problem/" title="cpu 排查的几个案例"><span class="icon icon-circle-arrow-left"></span> Previous</a>
 </div>
 <hr/>
@@ -477,7 +482,7 @@ $ sudo cp wrk /usr/local/bin/
 <div aria-label="versions" class="rst-versions" role="note">
 <span class="rst-current-version" data-toggle="rst-current-version">
 <span><a href="../black-box-cpu-high-problem/" style="color: #fcfcfc;">« Previous</a></span>
-<span style="margin-left: 15px"><a href="../../labs/6824-mapreduce/" style="color: #fcfcfc">Next »</a></span>
+<span style="margin-left: 15px"><a href="../db-deadlock/" style="color: #fcfcfc">Next »</a></span>
 </span>
 </div>
 <script>var base_url = '../..';</script>

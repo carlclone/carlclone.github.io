@@ -7,15 +7,15 @@
 <meta content="IE=edge" http-equiv="X-UA-Compatible"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <link href="../../img/favicon.ico" rel="shortcut icon"/>
-<title>黑盒排查磁盘空间告警/IO问题 - Log0c</title>
+<title>go bytebufferpool 错误使用一例 - Log0c</title>
 <link href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" rel="stylesheet">
 <link href="../../css/theme.css" rel="stylesheet"/>
 <link href="../../css/theme_extra.css" rel="stylesheet"/>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet"/>
 <script>
     // Current page data
-    var mkdocs_page_name = "\u9ed1\u76d2\u6392\u67e5\u78c1\u76d8\u7a7a\u95f4\u544a\u8b66/IO\u95ee\u9898";
-    var mkdocs_page_input_path = "too-much-folder/black-box-io-problem.md";
+    var mkdocs_page_name = "go bytebufferpool \u9519\u8bef\u4f7f\u7528\u4e00\u4f8b";
+    var mkdocs_page_input_path = "too-much-folder/go-bytebufferpool-leak-doubt.md";
     var mkdocs_page_url = null;
   </script>
 <script defer="" src="../../js/jquery-2.1.1.min.js"></script>
@@ -47,29 +47,33 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../go-concurrent-map-read-write-bug/">go 并发读写 map 问题一例</a>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../go-bytebufferpool-leak-doubt/">go bytebufferpool 错误使用一例</a>
+<li class="toctree-l1 current"><a class="reference internal current" href="./">go bytebufferpool 错误使用一例</a>
+<ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="#_1">复现</a>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#_2">分析源码</a>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#_3">参考资料</a>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#demo">测试 demo</a>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#_4">其他使用上的坑</a>
+<ul>
+<li class="toctree-l3"><a class="reference internal" href="#bytebuffer">byte.Buffer 扩容 造成的内存泄漏</a>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#_5">内存浪费</a>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#_6">后续</a>
+</li>
+</ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../go-pprof-memory-leak/">使用 pprof 排查内存泄漏</a>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../db-metadatalock/">数据库 metadata lock 问题排查</a>
 </li>
-<li class="toctree-l1 current"><a class="reference internal current" href="./">黑盒排查磁盘空间告警/IO问题</a>
-<ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="#_1">问题描述</a>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="#_2">黑盒排查</a>
-<ul>
-<li class="toctree-l3"><a class="reference internal" href="#_3">思路一</a>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="#_4">思路二</a>
-</li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="#_5">模拟复现</a>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="#_6">参考资料</a>
-</li>
-</ul>
+<li class="toctree-l1"><a class="reference internal" href="../black-box-io-problem/">黑盒排查磁盘空间告警/IO问题</a>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../black-box-cpu-high-problem/">cpu 排查的几个案例</a>
 </li>
@@ -200,7 +204,7 @@
 <ul class="wy-breadcrumbs">
 <li><a href="../..">Docs</a> »</li>
 <li>问题排查 »</li>
-<li>黑盒排查磁盘空间告警/IO问题</li>
+<li>go bytebufferpool 错误使用一例</li>
 <li class="wy-breadcrumbs-aside">
 </li>
 </ul>
@@ -208,136 +212,214 @@
 </div>
 <div role="main">
 <div class="section">
-<h1 id="io">黑盒排查磁盘空间告警/IO问题</h1>
-<p>当时遇到这问题的时候自己是熟悉对应项目的, 后续想到如果代码不是自己写的,对项目也不熟悉,该如何排查此类 IO 问题?</p>
-<h2 id="_1">问题描述</h2>
-<p>服务器磁盘空间告警,接近爆满</p>
-<h2 id="_2">黑盒排查</h2>
-<p><code>df -h</code> 查看挂载空间情况</p>
-<h3 id="_3">思路一</h3>
-<p>观察指标,找出占用 IO 的进程打开的文件列表 或查看系统调用在写的文件路径</p>
+<h1 id="go-bytebufferpool">go bytebufferpool 错误使用一例</h1>
+<p>写新需求的时候发现一个远古代码, 使用 <code>bytebufferpool</code> 对象池库时只取出不放回,和同事讨论,觉得可能造成内存泄漏, 持怀疑态度</p>
+<h2 id="_1">复现</h2>
+<p>写了个 demo 尝试复现 , 开启 pprof</p>
+<p>结果是没有发生内存泄漏, 但是会造成 cpu 巨大的 gc 压力 , 实际占用内存也偏大 , 可能是因为还没来得及回收</p>
+<table>
+<thead>
+<tr>
+<th>指标</th>
+<th>放回</th>
+<th>不放回</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>mac 监控实际内存占用</td>
+<td>8MB</td>
+<td>46MB</td>
+</tr>
+<tr>
+<td>inuse_space</td>
+<td>512KB</td>
+<td>512KB</td>
+</tr>
+<tr>
+<td>alloc_space</td>
+<td>512KB</td>
+<td>49GB 持续增长</td>
+</tr>
+<tr>
+<td>cpu 使用</td>
+<td>100%</td>
+<td>200%</td>
+</tr>
+</tbody>
+</table>
+<p> </p>
+<h2 id="_2">分析源码</h2>
+<p><strong>Get 的执行过程</strong></p>
 <ul>
-<li><code>top</code> 查看服务器 cpu , 内存 , 网络 , IO 情况  , 定位到 cpu 的 iowait 较高 ,同时内存部分的 buff/cache 比较高(和文件读写有关)</li>
-<li>iowait 不能完全确定 io 高 (iowait的产生要满足两个条件，一是进程在等io，二是等io时没有进程可运行) , 再使用 <code>iostat -x -d 1</code> 观察系统详细 IO 信息 ,每秒读写量 , 确认写入占用很高</li>
-<li><code>pidstat -d 1</code> 查看各个进程的具体磁盘 IO 情况, 找出写入大的进程,记下 pid 18940  (kworker 和jbd2是文件系统内核线程,可以先不管) </li>
-<li><code>strace -p 18940</code> 查看进程系统调用, 主要是 write 和 stat 调用,定位文件路径</li>
-<li>或使用 <code>lsof -p 18940</code> 查看进程打开文件列表 , 文件也包括目录、块设备、动态库、网络套接字等。</li>
-<li>定位到日志文件,项目,查阅日志文件发现 INFO 级别也被打印</li>
-<li>框架支持动态调整日志级别,改为 WARNING <code>kill -SIGUSR2 18940</code></li>
-<li>再观察 <code>top</code> 和 <code>iostat</code></li>
+<li>byte.Buffer 在 pool 内部是链表 的一个节点 ,  取出的时候执行 <code>popHead</code> 从链表中去除, 于是在 pool 内部没有引用了 </li>
+<li>在外部函数执行栈结束后也没有引用了</li>
+<li>这种类型的堆变量会在go 定期的 gc 中被清除掉</li>
+<li>但是只 get 不 put 的话,就相当于没有使用到"池"的功能了, 每次都是重新创建销毁 , 所以要注意</li>
+<li>sync.pool 继续放回也有可能被 gc 回收掉 (pool 里实现的机制 ,在 stw 的时候手动调用 gc) , 因为 sync.pool 没有最大容量限制,都可以 put</li>
 </ul>
-<pre><code># 按1切换到每个CPU的使用情况 
-$ top 
-top - 14:43:43 up 1 day,  1:39,  2 users,  load average: 2.48, 1.09, 0.63 
-Tasks: 130 total,   2 running,  74 sleeping,   0 stopped,   0 zombie 
-%Cpu0  :  0.7 us,  6.0 sy,  0.0 ni,  0.7 id, 92.7 wa,  0.0 hi,  0.0 si,  0.0 st 
-%Cpu1  :  0.0 us,  0.3 sy,  0.0 ni, 92.3 id,  7.3 wa,  0.0 hi,  0.0 si,  0.0 st 
-KiB Mem :  8169308 total,   747684 free,   741336 used,  6680288 buff/cache 
-KiB Swap:        0 total,        0 free,        0 used.  7113124 avail Mem 
-
-  PID USER      PR  NI    VIRT    RES    SHR S  %CPU %MEM     TIME+ COMMAND 
-18940 root      20   0  656108 355740   5236 R   6.3  4.4   0:12.56 python 
-1312 root      20   0  236532  24116   9648 S   0.3  0.3   9:29.80 python3 
-</code></pre>
-<pre><code># -d表示显示I/O性能指标，-x表示显示扩展统计（即所有I/O指标） 
-$ iostat -x -d 1 
-Device            r/s     w/s     rkB/s     wkB/s   rrqm/s   wrqm/s  %rrqm  %wrqm r_await w_await aqu-sz rareq-sz wareq-sz  svctm  %util 
-loop0            0.00    0.00      0.00      0.00     0.00     0.00   0.00   0.00    0.00    0.00   0.00     0.00     0.00   0.00   0.00 
-sdb              0.00    0.00      0.00      0.00     0.00     0.00   0.00   0.00    0.00    0.00   0.00     0.00     0.00   0.00   0.00 
-sda              0.00   64.00      0.00  32768.00     0.00     0.00   0.00   0.00    0.00 7270.44 1102.18     0.00   512.00  15.50  99.20
-</code></pre>
-<pre><code>$ pidstat -d 1 
-
-15:08:35      UID       PID   kB_rd/s   kB_wr/s kB_ccwr/s iodelay  Command 
-15:08:36        0     18940      0.00  45816.00      0.00      96  python 
-
-15:08:36      UID       PID   kB_rd/s   kB_wr/s kB_ccwr/s iodelay  Command 
-15:08:37        0       354      0.00      0.00      0.00     350  jbd2/sda1-8 
-15:08:37        0     18940      0.00  46000.00      0.00      96  python 
-15:08:37        0     20065      0.00      0.00      0.00    1503  kworker/u4:2 
-</code></pre>
-<pre><code>$ strace -p 18940 
-strace: Process 18940 attached 
-...
-mmap(NULL, 314576896, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0x7f0f7aee9000 
-mmap(NULL, 314576896, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0x7f0f682e8000 
-write(3, "2018-12-05 15:23:01,709 - __main"..., 314572844 
-) = 314572844 
-munmap(0x7f0f682e8000, 314576896)       = 0 
-write(3, "\n", 1)                       = 1 
-munmap(0x7f0f7aee9000, 314576896)       = 0 
-close(3)                                = 0 
-stat("/tmp/logtest.txt.1", {st_mode=S_IFREG|0644, st_size=943718535, ...}) = 0 
-</code></pre>
-<pre><code>$ lsof -p 18940 
-COMMAND   PID USER   FD   TYPE DEVICE  SIZE/OFF    NODE NAME 
-python  18940 root  cwd    DIR   0,50      4096 1549389 / 
-python  18940 root  rtd    DIR   0,50      4096 1549389 / 
-… 
-python  18940 root    2u   CHR  136,0       0t0       3 /dev/pts/0 
-python  18940 root    3w   REG    8,1 117944320     303 /tmp/logtest.txt 
-</code></pre>
-<h3 id="_4">思路二</h3>
-<p>产生了大文件,搜索大于 800M 的文件 </p>
+<h2 id="_3">参考资料</h2>
 <ul>
-<li><code>find . -type f -size +800M  -print0 | xargs -0 du -h</code></li>
-<li>定位到某个项目的 log 文件</li>
-<li>查看日志内容</li>
-<li>检查代码对应打日志位置</li>
-<li>删除或迁移日志文件 <code>rm ...</code> 或<code>mv ...</code>  , 如果文件被其他进程使用中,还需要<code>sudo lsof -n |grep deleted</code> 找到对应进程,重启或 kill</li>
+<li>go 并发 10 - 性能提升大杀器</li>
+<li>go 语言项目实战 38 - 分析 go 代码性能 </li>
+<li>valyala 性能挖掘达人 , fasthttp , bytebufferpool</li>
 </ul>
-<h2 id="_5">模拟复现</h2>
-<p><code>docker run -v /tmp:/tmp --name=app -itd feisky/logapp</code></p>
-<pre><code>$ ps -ef | grep /app.py 
-root     18940 18921 73 14:41 pts/0    00:00:02 python /app.py 
-</code></pre>
-<pre><code>
-#拷贝案例应用源代码到当前目录
-$ docker cp app:/app.py . 
-
-#查看案例应用的源代码 https://github.com/feiskyer/linux-perf-examples/tree/master/logging-app
-$ cat app.py 
-
-logger = logging.getLogger(__name__) 
-logger.setLevel(level=logging.INFO) 
-rHandler = RotatingFileHandler("/tmp/logtest.txt", maxBytes=1024 * 1024 * 1024, backupCount=1) 
-rHandler.setLevel(logging.INFO) 
-
-def write_log(size): 
-  '''Write logs to file''' 
-  message = get_message(size) 
-  while True: 
-    logger.info(message) 
-    time.sleep(0.1) 
-
-if __name__ == '__main__': 
-  msg_size = 300 * 1024 * 1024 
-  write_log(msg_size) 
-</code></pre>
-<pre><code>
-def set_logging_info(signal_num, frame): 
-  '''Set loging level to INFO when receives SIGUSR1''' 
-  logger.setLevel(logging.INFO) 
-
-def set_logging_warning(signal_num, frame): 
-  '''Set loging level to WARNING when receives SIGUSR2''' 
-  logger.setLevel(logging.WARNING) 
-
-signal.signal(signal.SIGUSR1, set_logging_info) 
-signal.signal(signal.SIGUSR2, set_logging_warning) 
-</code></pre>
-<p><code>docker rm -f app</code></p>
-<h2 id="_6">参考资料</h2>
+<h2 id="demo">测试 demo</h2>
 <ul>
-<li><a href="https://time.geekbang.org/column/article/77885">linux 性能优化实战 - 找出狂打日志的内鬼</a></li>
-<li><a href="https://www.cnblogs.com/gcdd1993/p/12292422.html">记一次生产事故-磁盘被占满</a></li>
+<li>使用 net/http/pprof 获取性能数据 (支持 inuse_space 查看)</li>
 </ul>
+<pre><code>package main
+
+import (
+    "log"
+    "net/http"
+    _ "net/http/pprof"
+    "pkg/mod/github.com/valyala/bytebufferpool"
+)
+
+
+func main() {
+    go func() {
+        log.Println(http.ListenAndServe("localhost:6060", nil))
+    }()
+
+    fakeLogByte:=[]byte{}
+    for i:=0;i&lt;10000;i++ {
+        fakeLogByte=append(fakeLogByte,'l','o','g')
+    }
+
+    for {
+        RequestLog(fakeLogByte)
+    }
+
+}
+
+
+func RequestLog(fakeLogByte []byte) {
+    bb := bytebufferpool.Get()
+    bb.Write(fakeLogByte)
+    //bytebufferpool.Put(bb)
+}
+</code></pre>
+<ul>
+<li>通过命令行生成性能数据文件 (没有 inuse_space 数据)</li>
+</ul>
+<pre><code>//bytebuffer_pool_test.go
+
+package test
+
+import (
+    _ "net/http/pprof"
+    "pkg/mod/github.com/valyala/bytebufferpool"
+    "testing"
+)
+
+func TestByteBufferPool(t *testing.T) {
+    fakeLogByte:=[]byte{}
+    for i:=0;i&lt;10000;i++ {
+        fakeLogByte=append(fakeLogByte,'l','o','g')
+    }
+
+    for i:=0;i&lt;100000;i++  {
+        RequestLog(fakeLogByte)
+    }
+    //time.Sleep(10*time.Hour)
+}
+
+func RequestLog(fakeLogByte []byte) {
+    bb := bytebufferpool.Get()
+    bb.Write(fakeLogByte)
+    bytebufferpool.Put(bb)
+}
+
+go test -v bytebuffer_pool_test.go  -bench='.*' -cpuprofile cpu_put.out -memprofile mem_put.out
+</code></pre>
+<ul>
+<li>通过代码生成性能数据文件</li>
+</ul>
+<pre><code>func main() {
+    cpuOut,_:=os.Create("cpu.out")
+    defer cpuOut.Close()
+    pprof.StartCPUProfile(cpuOut)
+    defer pprof.StopCPUProfile()
+
+    memOut,_:=os.Create("mem.out")
+    defer memOut.Close()
+    defer pprof.WriteHeapProfile(memOut)
+
+    fakeLogByte:=[]byte{}
+    for i:=0;i&lt;10000;i++ {
+        fakeLogByte=append(fakeLogByte,'l','o','g')
+    }
+
+    for i:=0;i&lt;100000;i++  {
+        RequestLog(fakeLogByte)
+    }
+    //time.Sleep(10*time.Hour)
+}
+
+go run bytebuffer_pool.go
+</code></pre>
+<h2 id="_4">其他使用上的坑</h2>
+<h3 id="bytebuffer">byte.Buffer 扩容 造成的内存泄漏</h3>
+<p>既然这样使用不会造成内存泄漏,那是不是 pool 就没有内存泄漏问题了?</p>
+<p>查阅资料的过程中发现go 内置的 sync.pool 会有另外一种导致内存泄漏的问题 , 当从 pool 中取出 buffer 的时候还只是默认大小的 buffer , 但是在使用期间可能会造成 buffer 的扩容, 放回后 buffer 也依然是扩容后的大小, 如果扩容发生的次数特别多就会造成大量内存浪费 , 而且因为 pool 的回收机制, 这些大的 buffer 可能不被回收,  也是某种内存泄漏</p>
+<p><strong>复现</strong></p>
+<p>参考 go 官方库 <a href="https://github.com/golang/go/issues/23199">issue #23199</a></p>
+<p><strong>解决方案</strong></p>
+<p>在放回 pool 之前判断 , 如果大小大于某个值就直接丢弃</p>
+<ul>
+<li>encoding , json  , putEncodeState 函数</li>
+</ul>
+<pre><code>const maxSize = 1 &lt;&lt; 16 //64KiB
+if cap &gt; maxSize {
+    return
+}
+</code></pre>
+<ul>
+<li>fmt package, free 函数</li>
+</ul>
+<pre><code>if cap(p.buf) &gt; 64&lt;&lt;10 {  65536字节 = 64KB
+    return
+}
+</code></pre>
+<ul>
+<li>bytebufferpool 里的处理</li>
+</ul>
+<pre><code>// maxSize 的默认值为32MB 
+minBitSize = 6 // 2**6=64 is a CPU cache line size
+steps      = 20
+
+minSize = 1 &lt;&lt; minBitSize
+maxSize = 1 &lt;&lt; (minBitSize + steps - 1)     1&lt;&lt;25 = 33554432字节 = 32MB
+
+func (p *Pool) Put(b *ByteBuffer) {
+    idx := index(len(b.B))
+
+    if atomic.AddUint64(&amp;p.calls[idx], 1) &gt; calibrateCallsThreshold {
+        p.calibrate()
+    }
+    //如果小于 maxSize则放入 pool 中,否则忽略(丢弃)
+    maxSize := int(atomic.LoadUint64(&amp;p.maxSize))
+    if maxSize == 0 || cap(b.B) &lt;= maxSize {  //cap 返回 buffer 长度,单位字节
+        b.Reset()
+        p.pool.Put(b)
+    }
+}
+
+
+</code></pre>
+<h3 id="_5">内存浪费</h3>
+<p>除了扩容造成的内存泄漏(浪费)之外 , 还有使用大小不合适的 buffer 造成的浪费</p>
+<p>比如池子里都是4KB 的 buffer , 但实际使用只需要用到 512 Byte</p>
+<h2 id="_6">后续</h2>
+<p>尝试跟踪调试 gc 的过程</p>
 </div>
 </div>
 <footer>
 <div aria-label="footer navigation" class="rst-footer-buttons" role="navigation">
-<a class="btn btn-neutral float-right" href="../black-box-cpu-high-problem/" title="cpu 排查的几个案例">Next <span class="icon icon-circle-arrow-right"></span></a>
-<a class="btn btn-neutral" href="../db-metadatalock/" title="数据库 metadata lock 问题排查"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+<a class="btn btn-neutral float-right" href="../go-pprof-memory-leak/" title="使用 pprof 排查内存泄漏">Next <span class="icon icon-circle-arrow-right"></span></a>
+<a class="btn btn-neutral" href="../go-concurrent-map-read-write-bug/" title="go 并发读写 map 问题一例"><span class="icon icon-circle-arrow-left"></span> Previous</a>
 </div>
 <hr/>
 <div role="contentinfo">
@@ -352,8 +434,8 @@ signal.signal(signal.SIGUSR2, set_logging_warning)
 </div>
 <div aria-label="versions" class="rst-versions" role="note">
 <span class="rst-current-version" data-toggle="rst-current-version">
-<span><a href="../db-metadatalock/" style="color: #fcfcfc;">« Previous</a></span>
-<span style="margin-left: 15px"><a href="../black-box-cpu-high-problem/" style="color: #fcfcfc">Next »</a></span>
+<span><a href="../go-concurrent-map-read-write-bug/" style="color: #fcfcfc;">« Previous</a></span>
+<span style="margin-left: 15px"><a href="../go-pprof-memory-leak/" style="color: #fcfcfc">Next »</a></span>
 </span>
 </div>
 <script>var base_url = '../..';</script>

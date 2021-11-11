@@ -7,14 +7,14 @@
 <meta content="IE=edge" http-equiv="X-UA-Compatible"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <link href="../../img/favicon.ico" rel="shortcut icon"/>
-<title>Db deadlock - Log0c</title>
+<title>间隙锁造成的死锁 - Log0c</title>
 <link href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" rel="stylesheet">
 <link href="../../css/theme.css" rel="stylesheet"/>
 <link href="../../css/theme_extra.css" rel="stylesheet"/>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet"/>
 <script>
     // Current page data
-    var mkdocs_page_name = "Db deadlock";
+    var mkdocs_page_name = "\u95f4\u9699\u9501\u9020\u6210\u7684\u6b7b\u9501";
     var mkdocs_page_input_path = "too-much-folder/db-deadlock.md";
     var mkdocs_page_url = null;
   </script>
@@ -35,8 +35,8 @@
 <li class="toctree-l1"><a class="reference internal" href="../..">主页</a>
 </li>
 </ul>
-<p class="caption"><span class="caption-text">问题排查 / 性能优化</span></p>
-<ul>
+<p class="caption"><span class="caption-text">问题排查</span></p>
+<ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../netease-music-problem/">mac 网易云音乐 cpu 占用高问题排查</a>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../mac/mac-note-stalled/">mac Notes.app 卡死问题</a>
@@ -47,6 +47,8 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../go-concurrent-map-read-write-bug/">go 并发读写 map 问题一例</a>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="../go-bytebufferpool-leak-doubt/">go bytebufferpool 错误使用一例</a>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="../go-pprof-memory-leak/">使用 pprof 排查内存泄漏</a>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../db-metadatalock/">数据库 metadata lock 问题排查</a>
@@ -56,6 +58,24 @@
 <li class="toctree-l1"><a class="reference internal" href="../black-box-cpu-high-problem/">cpu 排查的几个案例</a>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../black-box-network-problem/">network 排查的几个案例</a>
+</li>
+<li class="toctree-l1 current"><a class="reference internal current" href="./">间隙锁造成的死锁</a>
+<ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="#_2">复现</a>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#_3">分析</a>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#_4">排查数据获取</a>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#_5">解决方案</a>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#_6">死锁介绍</a>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#_7">间隙锁什么时候会加</a>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#_8">参考资料</a>
+</li>
+</ul>
 </li>
 </ul>
 <p class="caption"><span class="caption-text">labs</span></p>
@@ -179,7 +199,8 @@
 <div aria-label="breadcrumbs navigation" role="navigation">
 <ul class="wy-breadcrumbs">
 <li><a href="../..">Docs</a> »</li>
-<li>Db deadlock</li>
+<li>问题排查 »</li>
+<li>间隙锁造成的死锁</li>
 <li class="wy-breadcrumbs-aside">
 </li>
 </ul>
@@ -187,35 +208,139 @@
 </div>
 <div role="main">
 <div class="section">
-<p>数据库死锁问题还是挺常见的, 记录下排查过程供以后查阅</p>
-<p>没有回滚,导致表加字段的时候卡住</p>
-<p>查阅, 某个事务执行了很长时间 , 但是不显示执行的 sql 语句</p>
-<h2 id="_1">问题复现</h2>
-<h2 id="_2">常见原因</h2>
+<h1 id="_1">间隙锁造成的死锁</h1>
+<p>可重复读隔离级别或更强级别, 加锁有可能加间隙锁 , 和插入意向锁形成死锁</p>
+<h2 id="_2">复现</h2>
+<pre><code>CREATE TABLE `order_record`  (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `order_no` int(11) DEFAULT NULL,
+  `status` int(4) DEFAULT NULL,
+  `create_date` datetime(0) DEFAULT NULL,
+  PRIMARY KEY (`id`) USING BTREE,
+  INDEX `idx_order_status`(`order_no`,`status`) USING BTREE
+) ENGINE = InnoDB
+
+# mysql&gt; show variables like '%isolation%';
+mysql&gt; show variables like 'autocommit';
++---------------+-------+
+| Variable_name | Value |
++---------------+-------+
+| autocommit    | ON    |
++---------------+-------+
+1 row in set (0.01 sec)
+
+mysql&gt; set autocommit = 0;
+Query OK, 0 rows affected (0.00 sec)
+
+事务 1:
+1 BEGIN;
+2 SELECT id FROM `order_record` where `order_no`=4 for update;
+5 INSERT INTO `order_record` (order_no,status,create_date) VALUES (4,1,'2019-01-01');
+锁等待......
+COMMIT; (未完成)
+
+事务 2:
+3 BEGIN;
+4 SELECT id FROM `order_record` where `order_no`=5 for update;
+6 INSERT INTO `order_record` (order_no,status,create_date) VALUES (5,1,'2019-01-01');
+锁等待......
+COMMIT; (未完成)
+</code></pre>
+<h2 id="_3">分析</h2>
 <ul>
-<li>事务没有在代码里提交或回滚</li>
+<li>由于 order_no 上的索引不是唯一索引, for update 会在索引上加排他锁, 并且隔离级别是REPEATABLE READ , 除了排他锁还会加间隙锁 , 因为此时表里没有任何记录 , 所以范围是 (-∞,+∞)</li>
+<li>事务 2 也在索引上加了(-∞,+∞) 的间隙锁</li>
+<li>事务 1 尝试获取 X insert intention lock (-∞,+∞) , 等待事务 2 的 (-∞,+∞) 的间隙锁</li>
+<li>事务 2 尝试获取 X insert intention lock (-∞,+∞) , 等待事务 1 的 (-∞,+∞) 的间隙锁</li>
+<li>死锁产生, 数据库开启了死锁检测, 回滚了事务 2</li>
 </ul>
-<p>这个比较容易遗漏, 避免的方法 1 , 使用 defer 判断 err ,并做回滚或提交
-2 , 使用 gorm 提供的事务闭包</p>
+<h2 id="_4">排查数据获取</h2>
 <ul>
-<li>可重复读隔离级别的间隙锁</li>
+<li>show engine innodb status 查看 innodb 日志,包含死锁检测日志</li>
 </ul>
-<p>避免方法 1 是否能使用提交读级别,可以则修改
-2 保证加锁解锁顺序 ( 有点难 )
-3 减小事务粒度</p>
-<p>开启事务超时?
-开启数据库死锁检测(开销大?)
-死锁时自动回滚其中一个?</p>
-<h2 id="_3">排查过程</h2>
-<h2 id="_4">数据库工具/ 参数优化</h2>
-<p>win10 onetab 里</p>
-<h2 id="_5">参考资料</h2>
-<p>win10 onetab 里
-xb 备份资料里
-geektime</p>
+<pre><code>事务 1
+2021-11-11 15:27:04 0x70000b5c6000
+*** (1) TRANSACTION:
+TRANSACTION 1141004, ACTIVE 10 sec inserting
+mysql tables in use 1, locked 1
+LOCK WAIT 3 lock struct(s), heap size 1136, 2 row lock(s), undo log entries 1
+MySQL thread id 72, OS thread handle 123145493192704, query id 1380 localhost 127.0.0.1 root update
+INSERT INTO `order_record` (order_no,status,create_date) VALUES (4,1,'2019-01-01')
+*** (1) WAITING FOR THIS LOCK TO BE GRANTED:
+RECORD LOCKS space id 3193 page no 4 n bits 72 index idx_order_status of table `test`.`order_record` trx id 1141004 lock_mode X insert intention waiting
+Record lock, heap no 1 PHYSICAL RECORD: n_fields 1; compact format; info bits 0
+ 0: len 8; hex 73757072656d756d; asc supremum;;
+
+
+事务 2
+*** (2) TRANSACTION:
+TRANSACTION 1141005, ACTIVE 7 sec inserting
+mysql tables in use 1, locked 1
+3 lock struct(s), heap size 1136, 2 row lock(s), undo log entries 1
+MySQL thread id 70, OS thread handle 123145492914176, query id 1381 localhost 127.0.0.1 root update
+INSERT INTO `order_record` (order_no,status,create_date) VALUES (5,1,'2019-01-01')
+*** (2) HOLDS THE LOCK(S):
+RECORD LOCKS space id 3193 page no 4 n bits 72 index idx_order_status of table `test`.`order_record` trx id 1141005 lock_mode X
+Record lock, heap no 1 PHYSICAL RECORD: n_fields 1; compact format; info bits 0
+ 0: len 8; hex 73757072656d756d; asc supremum;;
+
+*** (2) WAITING FOR THIS LOCK TO BE GRANTED:
+RECORD LOCKS space id 3193 page no 4 n bits 72 index idx_order_status of table `test`.`order_record` trx id 1141005 lock_mode X insert intention waiting
+Record lock, heap no 1 PHYSICAL RECORD: n_fields 1; compact format; info bits 0
+ 0: len 8; hex 73757072656d756d; asc supremum;;
+
+*** WE ROLL BACK TRANSACTION (2)
+</code></pre>
+<ul>
+<li>select * from innodb_lock_waits; 查看处于锁等待的事务</li>
+<li>select * from innodb_locks; 查看持有锁的事务</li>
+</ul>
+<h2 id="_5">解决方案</h2>
+<ul>
+<li>order_no 设为唯一索引</li>
+<li>开启死锁检测  , show variables like '%deadlock%'; 检查死锁检测是否开启</li>
+<li>设置 lock_wait_timeout,  show variables like '%timeout%'; 检查 lock_wait 超时时间</li>
+<li>使用 RC 隔离级别 (如果业务允许幻读和不可重复读) , show variables like '%isolation%'; 检查隔离级别</li>
+<li>gap lock 默认开启, innodb_locks_unsafe_for_binlog 为 disable</li>
+</ul>
+<h2 id="_6">死锁介绍</h2>
+<ul>
+<li>独占资源,有排他锁出现 (MVCC 解决一部分)</li>
+<li>阻塞时不主动让步 (lockwait_timeout)</li>
+<li>不可抢占 (强行回滚其中一个)</li>
+<li>循环等待 (死锁检测,使用图算法检测环 | 执行顺序保证 )</li>
+</ul>
+<h2 id="_7">间隙锁什么时候会加</h2>
+<ul>
+<li>间隙锁加在两个记录之间 , 如果某个方向没有记录则是无穷大 , 且插入意向锁也是间隙锁的一种 (<a href="https://dev.mysql.com/doc/refman/8.0/en/innodb-locking.html#innodb-insert-intention-locks">mysql 文档-Insert Intention Locks</a>) </li>
+<li>跟间隙锁存在冲突关系的，是“往这个间隙中插入一个记录”这个操作。间隙锁之间都不存在冲突关系。</li>
+<li>间隙锁的意义是提高执行效率</li>
+</ul>
+<pre><code>间隙锁的加锁规则
+加锁规则里面，包含了两个“原则”、两个“优化”和一个“bug”
+
+原则 1：加锁的基本单位是 next-key lock。希望你还记得，next-key lock 是前开后闭区间。
+原则 2：查找过程中访问到的对象才会加锁。
+优化 1：索引上的等值查询，给唯一索引加锁的时候，next-key lock 退化为行锁。
+优化 2：索引上的等值查询，向右遍历时且最后一个值不满足等值条件的时候，next-key lock 退化为间隙锁。
+一个 bug：唯一索引上的范围查询会访问到不满足条件的第一个值为止
+</code></pre>
+<h2 id="_8">参考资料</h2>
+<ul>
+<li><a href="https://time.geekbang.org/column/article/117247">36 | 记一次线上SQL死锁事故：如何避免死锁？</a></li>
+<li><a href="https://dev.mysql.com/doc/refman/8.0/en/innodb-locking.html#innodb-insert-intention-locks">mysql 文档-Insert Intention Locks</a></li>
+<li><a href="https://www.jianshu.com/p/09fe0c700984">深入理解MySQL的间隙锁</a></li>
+<li><a href="https://www.jianshu.com/p/325a492a859b">意向锁的意义</a></li>
+<li><a href="https://zhuanlan.zhihu.com/p/130235093">手把手教你分析Mysql死锁问题</a></li>
+<li><a href="https://time.geekbang.org/column/article/141816">死锁条件</a></li>
+</ul>
 </div>
 </div>
 <footer>
+<div aria-label="footer navigation" class="rst-footer-buttons" role="navigation">
+<a class="btn btn-neutral float-right" href="../../labs/6824-mapreduce/" title="MIT 6.824 - MapReduce">Next <span class="icon icon-circle-arrow-right"></span></a>
+<a class="btn btn-neutral" href="../black-box-network-problem/" title="network 排查的几个案例"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+</div>
 <hr/>
 <div role="contentinfo">
 <!-- Copyright etc -->
@@ -229,6 +354,8 @@ geektime</p>
 </div>
 <div aria-label="versions" class="rst-versions" role="note">
 <span class="rst-current-version" data-toggle="rst-current-version">
+<span><a href="../black-box-network-problem/" style="color: #fcfcfc;">« Previous</a></span>
+<span style="margin-left: 15px"><a href="../../labs/6824-mapreduce/" style="color: #fcfcfc">Next »</a></span>
 </span>
 </div>
 <script>var base_url = '../..';</script>

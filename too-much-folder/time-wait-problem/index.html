@@ -7,15 +7,15 @@
 <meta content="IE=edge" http-equiv="X-UA-Compatible"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <link href="../../img/favicon.ico" rel="shortcut icon"/>
-<title>关于这个系列 - Log0c</title>
+<title>Time wait problem - Log0c</title>
 <link href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" rel="stylesheet">
 <link href="../../css/theme.css" rel="stylesheet"/>
 <link href="../../css/theme_extra.css" rel="stylesheet"/>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet"/>
 <script>
     // Current page data
-    var mkdocs_page_name = "\u5173\u4e8e\u8fd9\u4e2a\u7cfb\u5217";
-    var mkdocs_page_input_path = "build-my-own-x/about.md";
+    var mkdocs_page_name = "Time wait problem";
+    var mkdocs_page_input_path = "too-much-folder/time-wait-problem.md";
     var mkdocs_page_url = null;
   </script>
 <script defer="" src="../../js/jquery-2.1.1.min.js"></script>
@@ -37,29 +37,29 @@
 </ul>
 <p class="caption"><span class="caption-text">问题排查</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../too-much-folder/netease-music-problem/">mac 网易云音乐 cpu 占用高问题排查</a>
+<li class="toctree-l1"><a class="reference internal" href="../netease-music-problem/">mac 网易云音乐 cpu 占用高问题排查</a>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../mac/mac-note-stalled/">mac Notes.app 卡死问题</a>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../mac/osx86_external_ssd_swap_problem/">mac 外部 SSD Swap 分区开启问题</a>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../../too-much-folder/go-shadowing-variable/">go shadowing variable 造成的歧义</a>
+<li class="toctree-l1"><a class="reference internal" href="../go-shadowing-variable/">go shadowing variable 造成的歧义</a>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../../too-much-folder/go-concurrent-map-read-write-bug/">go 并发读写 map 问题一例</a>
+<li class="toctree-l1"><a class="reference internal" href="../go-concurrent-map-read-write-bug/">go 并发读写 map 问题一例</a>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../../too-much-folder/go-bytebufferpool-leak-doubt/">go bytebufferpool 错误使用一例</a>
+<li class="toctree-l1"><a class="reference internal" href="../go-bytebufferpool-leak-doubt/">go bytebufferpool 错误使用一例</a>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../../too-much-folder/go-pprof-memory-leak/">使用 pprof 排查内存泄漏</a>
+<li class="toctree-l1"><a class="reference internal" href="../go-pprof-memory-leak/">使用 pprof 排查内存泄漏</a>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../../too-much-folder/db-metadatalock/">数据库 metadata lock 问题排查</a>
+<li class="toctree-l1"><a class="reference internal" href="../db-metadatalock/">数据库 metadata lock 问题排查</a>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../../too-much-folder/black-box-io-problem/">黑盒排查磁盘空间告警/IO问题</a>
+<li class="toctree-l1"><a class="reference internal" href="../black-box-io-problem/">黑盒排查磁盘空间告警/IO问题</a>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../../too-much-folder/black-box-cpu-high-problem/">cpu 排查的几个案例</a>
+<li class="toctree-l1"><a class="reference internal" href="../black-box-cpu-high-problem/">cpu 排查的几个案例</a>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../../too-much-folder/black-box-network-problem/">network 排查的几个案例</a>
+<li class="toctree-l1"><a class="reference internal" href="../black-box-network-problem/">network 排查的几个案例</a>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../../too-much-folder/db-deadlock/">间隙锁造成的死锁</a>
+<li class="toctree-l1"><a class="reference internal" href="../db-deadlock/">间隙锁造成的死锁</a>
 </li>
 </ul>
 <p class="caption"><span class="caption-text">labs</span></p>
@@ -85,7 +85,7 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../tools/markdown-diagram/">Markdown Diagram 功能</a>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../../too-much-folder/yaml-lint/">yaml lint</a>
+<li class="toctree-l1"><a class="reference internal" href="../yaml-lint/">yaml lint</a>
 </li>
 </ul>
 <p class="caption"><span class="caption-text">算法</span></p>
@@ -99,13 +99,13 @@
 </ul>
 <p class="caption"><span class="caption-text">构建自己的 X 项目</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../jquery/">构建自己的 jQuery</a>
+<li class="toctree-l1"><a class="reference internal" href="../../build-my-own-x/jquery/">构建自己的 jQuery</a>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../php-framework/">构建自己的 PHP 框架</a>
+<li class="toctree-l1"><a class="reference internal" href="../../build-my-own-x/php-framework/">构建自己的 PHP 框架</a>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../lisp-compiler/">构建 Lisp Compiler</a>
+<li class="toctree-l1"><a class="reference internal" href="../../build-my-own-x/lisp-compiler/">构建 Lisp Compiler</a>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../regex/">Regex Engine 学习</a>
+<li class="toctree-l1"><a class="reference internal" href="../../build-my-own-x/regex/">Regex Engine 学习</a>
 </li>
 </ul>
 <p class="caption"><span class="caption-text">PHP</span></p>
@@ -183,7 +183,7 @@
 <div aria-label="breadcrumbs navigation" role="navigation">
 <ul class="wy-breadcrumbs">
 <li><a href="../..">Docs</a> »</li>
-<li>关于这个系列</li>
+<li>Time wait problem</li>
 <li class="wy-breadcrumbs-aside">
 </li>
 </ul>
@@ -191,19 +191,12 @@
 </div>
 <div role="main">
 <div class="section">
-<h1 id="_1">关于这个系列</h1>
-<p>杨波老师的分布式课 -&gt; 构建一个 mini 消息队列 </p>
-<p>又因为之前在 v2ex 看到 build-your-own-x 项目 , 看了一大堆有趣的小玩具</p>
-<p>然后是500 lines 这个项目</p>
-<p>然后是 codeproject.com</p>
-<p>孔子</p>
-<p>费曼</p>
-<p>这些项目的启发来自 github.com/build-your-own-x 项目, 500 lines / aosabook.org , </p>
-<p>还有杨波老师分布式案例课上讲到的一种学习方式 , 如果要学习消息队列 , 那就自己构建一个迷你版的消息队列 , 我个人是完全被这种学习方法迷住了 , 学习好像更有趣了 , 一点也不累了</p>
-<p>费曼先生说过  , 费曼说过,不亲手构建一个,就不算真正的学会 </p>
-<p>孔子也说过</p>
-<p>这会是我今后学习计算机领域知识的一个主要方式</p>
-<p>都是玩具级别的尝试,但是对理解设计原理很有帮助</p>
+<p>time wait 过多 , 占满连接跟踪数 </p>
+<p>解决:调高连接跟踪数 , docker 容器默认设置的特别小</p>
+<p>reuse 接口</p>
+<p>keep alive 让 client 端主动关闭</p>
+<p>调小等待时间</p>
+<p>参考 linux 内核实战 性能优化实战</p>
 </div>
 </div>
 <footer>

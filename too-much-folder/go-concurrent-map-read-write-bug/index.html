@@ -35,7 +35,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../..">主页</a>
 </li>
 </ul>
-<p class="caption"><span class="caption-text">问题排查 / 性能优化</span></p>
+<p class="caption"><span class="caption-text">问题排查</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../netease-music-problem/">mac 网易云音乐 cpu 占用高问题排查</a>
 </li>
@@ -51,11 +51,13 @@
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#_2">排查过程</a>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#_3">反思</a>
+<li class="toctree-l2"><a class="reference internal" href="#_3">后续思考</a>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#_4">参考资料</a>
 </li>
 </ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../go-bytebufferpool-leak-doubt/">go bytebufferpool 错误使用一例</a>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../go-pprof-memory-leak/">使用 pprof 排查内存泄漏</a>
 </li>
@@ -66,6 +68,8 @@
 <li class="toctree-l1"><a class="reference internal" href="../black-box-cpu-high-problem/">cpu 排查的几个案例</a>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../black-box-network-problem/">network 排查的几个案例</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../db-deadlock/">间隙锁造成的死锁</a>
 </li>
 </ul>
 <p class="caption"><span class="caption-text">labs</span></p>
@@ -189,7 +193,7 @@
 <div aria-label="breadcrumbs navigation" role="navigation">
 <ul class="wy-breadcrumbs">
 <li><a href="../..">Docs</a> »</li>
-<li>问题排查 / 性能优化 »</li>
+<li>问题排查 »</li>
 <li>go 并发读写 map 问题一例</li>
 <li class="wy-breadcrumbs-aside">
 </li>
@@ -200,7 +204,7 @@
 <div class="section">
 <h1 id="go-map">go 并发读写 map 问题一例</h1>
 <h2 id="_1">问题描述</h2>
-<p>上线一个新功能,发现服务时不时自动重启, QPS 也降的很厉害, 回滚后开始排查</p>
+<p>上线一个新功能,发现服务自动重启, QPS 也降的很厉害, 回滚后开始排查</p>
 <h2 id="_2">排查过程</h2>
 <ul>
 <li>检查代码,猜测是由于类型转换没有判断第二个 ok 返回值<code>i:=str.(int)</code>, 不能转换导致 panic</li>
@@ -213,17 +217,17 @@ fmt.Println(i)
 </code></pre>
 <ul>
 <li>
-<p>查看历史日志, 发现所有 goroutine 的调用栈都被打印出来了, 日志量特别多</p>
+<p>查看历史日志, 所有 goroutine 的调用栈都被打印出来了, 日志量特别多</p>
 </li>
 <li>
 <p>发现一条日志: <code>concurrent map read and map write</code> , 并且是 fatal error,不能被 recover() 捕获</p>
 </li>
 <li>
-<p>检查代码,发现框架对从配置中心获取的配置文件进行了缓存, 获取 config map 的返回值是同一个 map , 导致在外层修改时造成了并发 bug</p>
+<p>检查代码,得知框架对从配置中心获取的配置文件进行了缓存, 获取 config map 的返回值是同一个 map , 导致在外层修改时造成了并发 bug</p>
 </li>
 <li>这里的新需求不涉及也不适合对同一个 map 进行操作,排除加锁和其他线程安全 map 解决方案, 参考 gin 框架 <code>initQueryCache</code> 函数 , 使用<code>[]map[string]string(config)</code> , 强制转换生成一个新 map , 或使用 <code>copier</code> 拷贝</li>
 </ul>
-<h2 id="_3">反思</h2>
+<h2 id="_3">后续思考</h2>
 <ul>
 <li>
 <p>有时候并发问题在生产中隐藏的很深, 并不像 demo 代码那么容易看出来</p>
@@ -248,7 +252,7 @@ fmt.Println(i)
 </div>
 <footer>
 <div aria-label="footer navigation" class="rst-footer-buttons" role="navigation">
-<a class="btn btn-neutral float-right" href="../go-pprof-memory-leak/" title="使用 pprof 排查内存泄漏">Next <span class="icon icon-circle-arrow-right"></span></a>
+<a class="btn btn-neutral float-right" href="../go-bytebufferpool-leak-doubt/" title="go bytebufferpool 错误使用一例">Next <span class="icon icon-circle-arrow-right"></span></a>
 <a class="btn btn-neutral" href="../go-shadowing-variable/" title="go shadowing variable 造成的歧义"><span class="icon icon-circle-arrow-left"></span> Previous</a>
 </div>
 <hr/>
@@ -265,7 +269,7 @@ fmt.Println(i)
 <div aria-label="versions" class="rst-versions" role="note">
 <span class="rst-current-version" data-toggle="rst-current-version">
 <span><a href="../go-shadowing-variable/" style="color: #fcfcfc;">« Previous</a></span>
-<span style="margin-left: 15px"><a href="../go-pprof-memory-leak/" style="color: #fcfcfc">Next »</a></span>
+<span style="margin-left: 15px"><a href="../go-bytebufferpool-leak-doubt/" style="color: #fcfcfc">Next »</a></span>
 </span>
 </div>
 <script>var base_url = '../..';</script>

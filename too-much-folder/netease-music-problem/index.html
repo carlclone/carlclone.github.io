@@ -35,7 +35,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../..">主页</a>
 </li>
 </ul>
-<p class="caption"><span class="caption-text">问题排查 / 性能优化</span></p>
+<p class="caption"><span class="caption-text">问题排查</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal current" href="./">mac 网易云音乐 cpu 占用高问题排查</a>
 <ul class="current">
@@ -57,6 +57,8 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../go-concurrent-map-read-write-bug/">go 并发读写 map 问题一例</a>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="../go-bytebufferpool-leak-doubt/">go bytebufferpool 错误使用一例</a>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="../go-pprof-memory-leak/">使用 pprof 排查内存泄漏</a>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../db-metadatalock/">数据库 metadata lock 问题排查</a>
@@ -66,6 +68,8 @@
 <li class="toctree-l1"><a class="reference internal" href="../black-box-cpu-high-problem/">cpu 排查的几个案例</a>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../black-box-network-problem/">network 排查的几个案例</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../db-deadlock/">间隙锁造成的死锁</a>
 </li>
 </ul>
 <p class="caption"><span class="caption-text">labs</span></p>
@@ -189,7 +193,7 @@
 <div aria-label="breadcrumbs navigation" role="navigation">
 <ul class="wy-breadcrumbs">
 <li><a href="../..">Docs</a> »</li>
-<li>问题排查 / 性能优化 »</li>
+<li>问题排查 »</li>
 <li>mac 网易云音乐 cpu 占用高问题排查</li>
 <li class="wy-breadcrumbs-aside">
 </li>
@@ -200,8 +204,7 @@
 <div class="section">
 <h1 id="mac-cpu">mac 网易云音乐 cpu 占用高问题排查</h1>
 <h2 id="_1">问题描述</h2>
-<p>网易云音乐app 在我的 mac 10.13.6 系统上运行半小时以上就会占用百分之 500 以上的 cpu, 网上也没搜到类似问题 , 以前都是重启了事,但最近学习了 linux cpu 问题排查的技能,这次不能放过了</p>
-<p>问题在于 mac 的 unix 系统标准和 linux 不一样,很多工具都没有,还得找替代品 (考虑日常使用也换到 Linux ?)</p>
+<p><code>网易云音乐</code>在我的 macos 10.13.6 上运行半小时就会占用百分之 500 的 cpu, 找了一圈也没搜到类似问题 , 恰好最近学习了 linux cpu 问题排查</p>
 <h2 id="_2">问题排查</h2>
 <ul>
 <li>打算先看看 cpu 各个指标,结果连 top 也不一样,只拿到个 pid 17125</li>
@@ -282,12 +285,12 @@ getattrlist("/Users/lin/Library/Containers/com.netease.163music/Data/Caches/onli
 <li>跑了两小时,问题没有再出现</li>
 </ul>
 <h2 id="_3">猜测</h2>
-<p>我的网易云音乐客户端从 4,5 年前一直更新过来, 可能是以前的旧缓存导致的问题? 或者是缓存损坏?  <code>\0</code> 这个地方的 0 本来会不会是某个数字或字符串,但由于出错了导致只有默认值 0</p>
+<p>网易云音乐客户端从 4,5 年前一直更新过来, 可能是以前的旧缓存导致的问题? 或者是缓存损坏?  <code>\0</code> 看着像 C 语言里的字符串结束符</p>
 <h2 id="_4">疑问</h2>
 <ul>
 <li>为什么系统调用高上下文切换也高呢?</li>
 </ul>
-<p>因为系统调用需要从用户态陷入(trap)内核态,同样需要保存寄存器数据,切换页表, 参考 6.S081 xv6 课程和 OSTEP</p>
+<p>因为系统调用需要从用户态陷入(trap)内核态,同样需要保存寄存器数据,切换页表, 参考 <code>6.S081 xv6</code> 课程和 <code>OSTEP</code></p>
 </div>
 </div>
 <footer>

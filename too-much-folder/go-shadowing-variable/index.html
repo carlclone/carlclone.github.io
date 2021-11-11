@@ -35,7 +35,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../..">主页</a>
 </li>
 </ul>
-<p class="caption"><span class="caption-text">问题排查 / 性能优化</span></p>
+<p class="caption"><span class="caption-text">问题排查</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../netease-music-problem/">mac 网易云音乐 cpu 占用高问题排查</a>
 </li>
@@ -53,6 +53,8 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../go-concurrent-map-read-write-bug/">go 并发读写 map 问题一例</a>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="../go-bytebufferpool-leak-doubt/">go bytebufferpool 错误使用一例</a>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="../go-pprof-memory-leak/">使用 pprof 排查内存泄漏</a>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../db-metadatalock/">数据库 metadata lock 问题排查</a>
@@ -62,6 +64,8 @@
 <li class="toctree-l1"><a class="reference internal" href="../black-box-cpu-high-problem/">cpu 排查的几个案例</a>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../black-box-network-problem/">network 排查的几个案例</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../db-deadlock/">间隙锁造成的死锁</a>
 </li>
 </ul>
 <p class="caption"><span class="caption-text">labs</span></p>
@@ -185,7 +189,7 @@
 <div aria-label="breadcrumbs navigation" role="navigation">
 <ul class="wy-breadcrumbs">
 <li><a href="../..">Docs</a> »</li>
-<li>问题排查 / 性能优化 »</li>
+<li>问题排查 »</li>
 <li>go shadowing variable 造成的歧义</li>
 <li class="wy-breadcrumbs-aside">
 </li>
@@ -221,14 +225,16 @@ if true {
 <p>Goland : 开启probable bug inspection , 并修改为 error 级别警告 , 修改路径 <code>Settings-&gt;Inspections-&gt;Go-&gt;Probable bugs</code> , 右键选择<code>error</code> , 其中的一条 inspection 检查了上述的歧义问题 , <code>Reports declarations of variables that overlap with the declarations in the outer scope.</code></p>
 <p>其他编辑器: 使用 golangci-lint 检查 , 安装命令 <code>go get github.com/golangci/golangci-lint/cmd/golangci-lint@v1.41.1</code> , 运行 <code>golangci-lint run</code> , 与 Goland 集成方式 <code>settings-&gt;plugins</code> 搜索golangci 插件</p>
 <h1 id="_3">参考资料</h1>
-<p><a href="https://craftinginterpreters.com/resolving-and-binding.html">lox : resolving-and-binding</a></p>
-<p><a href="https://time.geekbang.org/column/article/390401">Go 语言项目开发实战-代码检查：如何进行静态代码检查？</a></p>
-<h2 id="_4">后续</h2>
-<p>其他代码检查工具</p>
 <ul>
-<li>并发检查 go run -race</li>
+<li><a href="https://craftinginterpreters.com/resolving-and-binding.html">lox : resolving-and-binding</a></li>
+<li><a href="https://time.geekbang.org/column/article/390401">Go 语言项目开发实战-代码检查：如何进行静态代码检查？</a></li>
+</ul>
+<h2 id="_4">后续</h2>
+<p>其他代码工具</p>
+<ul>
+<li>go run -race 并发检查</li>
 <li>go test</li>
-<li>go vet</li>
+<li>go vet 静态检查</li>
 <li>gofmt</li>
 </ul>
 </div>
