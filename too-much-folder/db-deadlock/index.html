@@ -7,14 +7,14 @@
 <meta content="IE=edge" http-equiv="X-UA-Compatible"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <link href="../../img/favicon.ico" rel="shortcut icon"/>
-<title>间隙锁造成的死锁 - Log0c</title>
+<title>db 间隙锁造成的死锁 - Log0c</title>
 <link href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" rel="stylesheet">
 <link href="../../css/theme.css" rel="stylesheet"/>
 <link href="../../css/theme_extra.css" rel="stylesheet"/>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet"/>
 <script>
     // Current page data
-    var mkdocs_page_name = "\u95f4\u9699\u9501\u9020\u6210\u7684\u6b7b\u9501";
+    var mkdocs_page_name = "db \u95f4\u9699\u9501\u9020\u6210\u7684\u6b7b\u9501";
     var mkdocs_page_input_path = "too-much-folder/db-deadlock.md";
     var mkdocs_page_url = null;
   </script>
@@ -39,27 +39,21 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../netease-music-problem/">mac 网易云音乐 cpu 占用高问题排查</a>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="../../mac/osx86_external_ssd_swap_problem/">mac 外部 SSD Swap 分区开启问题</a>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="../../mac/mac-note-stalled/">mac Notes.app 卡死问题</a>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../../mac/osx86_external_ssd_swap_problem/">mac 外部 SSD Swap 分区开启问题</a>
+<li class="toctree-l1"><a class="reference internal" href="../go-pprof-memory-leak/">go 使用 pprof 排查内存泄漏</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../go-bytebufferpool-leak-doubt/">go bytebufferpool 错误使用一例</a>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../go-shadowing-variable/">go shadowing variable 造成的歧义</a>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../go-concurrent-map-read-write-bug/">go 并发读写 map 问题一例</a>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../go-bytebufferpool-leak-doubt/">go bytebufferpool 错误使用一例</a>
+<li class="toctree-l1"><a class="reference internal" href="../db-metadatalock/">db metadata lock 问题排查</a>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../go-pprof-memory-leak/">使用 pprof 排查内存泄漏</a>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="../db-metadatalock/">数据库 metadata lock 问题排查</a>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="../black-box-io-problem/">黑盒排查磁盘空间告警/IO问题</a>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="../black-box-cpu-high-problem/">cpu 排查的几个案例</a>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="../black-box-network-problem/">network 排查的几个案例</a>
-</li>
-<li class="toctree-l1 current"><a class="reference internal current" href="./">间隙锁造成的死锁</a>
+<li class="toctree-l1 current"><a class="reference internal current" href="./">db 间隙锁造成的死锁</a>
 <ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="#_2">复现</a>
 </li>
@@ -69,13 +63,27 @@
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#_5">解决方案</a>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#_6">死锁介绍</a>
+<li class="toctree-l2"><a class="reference internal" href="#_6">预防措施</a>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#_7">间隙锁什么时候会加</a>
+<li class="toctree-l2"><a class="reference internal" href="#_7">死锁介绍</a>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#_8">参考资料</a>
+<li class="toctree-l2"><a class="reference internal" href="#_8">间隙锁什么时候会加</a>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#_9">参考资料</a>
 </li>
 </ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../db-deadlock-2/">db 复现不同索引之间的死锁</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../black-box-io-problem/">io 黑盒排查磁盘空间告警/IO问题</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../black-box-cpu-high-problem/">cpu 排查的几个案例</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../black-box-network-problem/">network 排查的几个案例</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../tcp-troubleshooting/">network tcp 常见状态异常</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../troubleshooting-cheatsheet/">all 问题排查速查表</a>
 </li>
 </ul>
 <p class="caption"><span class="caption-text">labs</span></p>
@@ -200,7 +208,7 @@
 <ul class="wy-breadcrumbs">
 <li><a href="../..">Docs</a> »</li>
 <li>问题排查 »</li>
-<li>间隙锁造成的死锁</li>
+<li>db 间隙锁造成的死锁</li>
 <li class="wy-breadcrumbs-aside">
 </li>
 </ul>
@@ -300,17 +308,24 @@ Record lock, heap no 1 PHYSICAL RECORD: n_fields 1; compact format; info bits 0
 <li>order_no 设为唯一索引</li>
 <li>开启死锁检测  , show variables like '%deadlock%'; 检查死锁检测是否开启</li>
 <li>设置 lock_wait_timeout,  show variables like '%timeout%'; 检查 lock_wait 超时时间</li>
-<li>使用 RC 隔离级别 (如果业务允许幻读和不可重复读) , show variables like '%isolation%'; 检查隔离级别</li>
 <li>gap lock 默认开启, innodb_locks_unsafe_for_binlog 为 disable</li>
 </ul>
-<h2 id="_6">死锁介绍</h2>
+<h2 id="_6">预防措施</h2>
+<ul>
+<li>避免长事务, 拆解事务</li>
+<li>更新表尽量使用主键</li>
+<li>使用 RC 隔离级别 (如果业务允许幻读和不可重复读) , show variables like '%isolation%'; 检查隔离级别</li>
+<li>保持执行顺序一致</li>
+<li>调小lockwait timeout , 避免大量事务等待消耗系统资源</li>
+</ul>
+<h2 id="_7">死锁介绍</h2>
 <ul>
 <li>独占资源,有排他锁出现 (MVCC 解决一部分)</li>
 <li>阻塞时不主动让步 (lockwait_timeout)</li>
 <li>不可抢占 (强行回滚其中一个)</li>
 <li>循环等待 (死锁检测,使用图算法检测环 | 执行顺序保证 )</li>
 </ul>
-<h2 id="_7">间隙锁什么时候会加</h2>
+<h2 id="_8">间隙锁什么时候会加</h2>
 <ul>
 <li>间隙锁加在两个记录之间 , 如果某个方向没有记录则是无穷大 , 且插入意向锁也是间隙锁的一种 (<a href="https://dev.mysql.com/doc/refman/8.0/en/innodb-locking.html#innodb-insert-intention-locks">mysql 文档-Insert Intention Locks</a>) </li>
 <li>跟间隙锁存在冲突关系的，是“往这个间隙中插入一个记录”这个操作。间隙锁之间都不存在冲突关系。</li>
@@ -325,7 +340,9 @@ Record lock, heap no 1 PHYSICAL RECORD: n_fields 1; compact format; info bits 0
 优化 2：索引上的等值查询，向右遍历时且最后一个值不满足等值条件的时候，next-key lock 退化为间隙锁。
 一个 bug：唯一索引上的范围查询会访问到不满足条件的第一个值为止
 </code></pre>
-<h2 id="_8">参考资料</h2>
+<p>数据库锁兼容性检查
+<img alt="image-20191120140931373" src="/img/db-deadlock.png"/></p>
+<h2 id="_9">参考资料</h2>
 <ul>
 <li><a href="https://time.geekbang.org/column/article/117247">36 | 记一次线上SQL死锁事故：如何避免死锁？</a></li>
 <li><a href="https://dev.mysql.com/doc/refman/8.0/en/innodb-locking.html#innodb-insert-intention-locks">mysql 文档-Insert Intention Locks</a></li>
@@ -338,8 +355,8 @@ Record lock, heap no 1 PHYSICAL RECORD: n_fields 1; compact format; info bits 0
 </div>
 <footer>
 <div aria-label="footer navigation" class="rst-footer-buttons" role="navigation">
-<a class="btn btn-neutral float-right" href="../../labs/6824-mapreduce/" title="MIT 6.824 - MapReduce">Next <span class="icon icon-circle-arrow-right"></span></a>
-<a class="btn btn-neutral" href="../black-box-network-problem/" title="network 排查的几个案例"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+<a class="btn btn-neutral float-right" href="../db-deadlock-2/" title="db 复现不同索引之间的死锁">Next <span class="icon icon-circle-arrow-right"></span></a>
+<a class="btn btn-neutral" href="../db-metadatalock/" title="db metadata lock 问题排查"><span class="icon icon-circle-arrow-left"></span> Previous</a>
 </div>
 <hr/>
 <div role="contentinfo">
@@ -354,8 +371,8 @@ Record lock, heap no 1 PHYSICAL RECORD: n_fields 1; compact format; info bits 0
 </div>
 <div aria-label="versions" class="rst-versions" role="note">
 <span class="rst-current-version" data-toggle="rst-current-version">
-<span><a href="../black-box-network-problem/" style="color: #fcfcfc;">« Previous</a></span>
-<span style="margin-left: 15px"><a href="../../labs/6824-mapreduce/" style="color: #fcfcfc">Next »</a></span>
+<span><a href="../db-metadatalock/" style="color: #fcfcfc;">« Previous</a></span>
+<span style="margin-left: 15px"><a href="../db-deadlock-2/" style="color: #fcfcfc">Next »</a></span>
 </span>
 </div>
 <script>var base_url = '../..';</script>

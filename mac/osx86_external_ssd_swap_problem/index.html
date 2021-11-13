@@ -39,8 +39,6 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../../too-much-folder/netease-music-problem/">mac 网易云音乐 cpu 占用高问题排查</a>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../mac-note-stalled/">mac Notes.app 卡死问题</a>
-</li>
 <li class="toctree-l1 current"><a class="reference internal current" href="./">mac 外部 SSD Swap 分区开启问题</a>
 <ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="#_1">问题</a>
@@ -57,23 +55,31 @@
 </li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="../mac-note-stalled/">mac Notes.app 卡死问题</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../too-much-folder/go-pprof-memory-leak/">go 使用 pprof 排查内存泄漏</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../too-much-folder/go-bytebufferpool-leak-doubt/">go bytebufferpool 错误使用一例</a>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="../../too-much-folder/go-shadowing-variable/">go shadowing variable 造成的歧义</a>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../too-much-folder/go-concurrent-map-read-write-bug/">go 并发读写 map 问题一例</a>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../../too-much-folder/go-bytebufferpool-leak-doubt/">go bytebufferpool 错误使用一例</a>
+<li class="toctree-l1"><a class="reference internal" href="../../too-much-folder/db-metadatalock/">db metadata lock 问题排查</a>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../../too-much-folder/go-pprof-memory-leak/">使用 pprof 排查内存泄漏</a>
+<li class="toctree-l1"><a class="reference internal" href="../../too-much-folder/db-deadlock/">db 间隙锁造成的死锁</a>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../../too-much-folder/db-metadatalock/">数据库 metadata lock 问题排查</a>
+<li class="toctree-l1"><a class="reference internal" href="../../too-much-folder/db-deadlock-2/">db 复现不同索引之间的死锁</a>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../../too-much-folder/black-box-io-problem/">黑盒排查磁盘空间告警/IO问题</a>
+<li class="toctree-l1"><a class="reference internal" href="../../too-much-folder/black-box-io-problem/">io 黑盒排查磁盘空间告警/IO问题</a>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../too-much-folder/black-box-cpu-high-problem/">cpu 排查的几个案例</a>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../too-much-folder/black-box-network-problem/">network 排查的几个案例</a>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../../too-much-folder/db-deadlock/">间隙锁造成的死锁</a>
+<li class="toctree-l1"><a class="reference internal" href="../../too-much-folder/tcp-troubleshooting/">network tcp 常见状态异常</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../too-much-folder/troubleshooting-cheatsheet/">all 问题排查速查表</a>
 </li>
 </ul>
 <p class="caption"><span class="caption-text">labs</span></p>
@@ -210,7 +216,7 @@
 <h2 id="_1">问题</h2>
 <p>公司电脑只有8G内存,打开大量网页的时候爆内存,黑苹果卡住</p>
 <h2 id="_2">原因</h2>
-<p>由于自己的黑苹果安装在外接的SSD硬盘上,通过USB接口连接,在mac中被识别为External Storage , 因此无法mount swap分区 , 相当于模式1 , 只使用内存 (为什么没有 OOM Killer 机制) , 一爆内存就死机</p>
+<p>由于自己的黑苹果安装在外接的SSD硬盘上,通过USB接口连接,在mac中被识别为External Storage , 因此无法mount swap分区 , 相当于模式1 , 只使用内存  , 一爆内存就死机(没有 OOM Killer 机制吗)</p>
 <h2 id="_3">解决</h2>
 <p>开机的时候强制mount ,添加启动脚本到/Library/LaunchDaemons/</p>
 <p><img alt="image-20191120140931373" src="/img/osx86_swap_sloved.jpg"/></p>
@@ -360,8 +366,8 @@ Solution:
 </div>
 <footer>
 <div aria-label="footer navigation" class="rst-footer-buttons" role="navigation">
-<a class="btn btn-neutral float-right" href="../../too-much-folder/go-shadowing-variable/" title="go shadowing variable 造成的歧义">Next <span class="icon icon-circle-arrow-right"></span></a>
-<a class="btn btn-neutral" href="../mac-note-stalled/" title="mac Notes.app 卡死问题"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+<a class="btn btn-neutral float-right" href="../mac-note-stalled/" title="mac Notes.app 卡死问题">Next <span class="icon icon-circle-arrow-right"></span></a>
+<a class="btn btn-neutral" href="../../too-much-folder/netease-music-problem/" title="mac 网易云音乐 cpu 占用高问题排查"><span class="icon icon-circle-arrow-left"></span> Previous</a>
 </div>
 <hr/>
 <div role="contentinfo">
@@ -376,8 +382,8 @@ Solution:
 </div>
 <div aria-label="versions" class="rst-versions" role="note">
 <span class="rst-current-version" data-toggle="rst-current-version">
-<span><a href="../mac-note-stalled/" style="color: #fcfcfc;">« Previous</a></span>
-<span style="margin-left: 15px"><a href="../../too-much-folder/go-shadowing-variable/" style="color: #fcfcfc">Next »</a></span>
+<span><a href="../../too-much-folder/netease-music-problem/" style="color: #fcfcfc;">« Previous</a></span>
+<span style="margin-left: 15px"><a href="../mac-note-stalled/" style="color: #fcfcfc">Next »</a></span>
 </span>
 </div>
 <script>var base_url = '../..';</script>
