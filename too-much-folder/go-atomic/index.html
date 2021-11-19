@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
+<head>
+<meta charset="utf-8"/>
+<meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="../../img/favicon.ico" rel="shortcut icon"/>
+<title>atomic LoadInt64 和 LoadInt32 使用疑问 - Log0c</title>
+<link href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" rel="stylesheet">
+<link href="../../css/theme.css" rel="stylesheet"/>
+<link href="../../css/theme_extra.css" rel="stylesheet"/>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet"/>
+<script>
+    // Current page data
+    var mkdocs_page_name = "atomic LoadInt64 \u548c LoadInt32 \u4f7f\u7528\u7591\u95ee";
+    var mkdocs_page_input_path = "too-much-folder/go-atomic.md";
+    var mkdocs_page_url = null;
+  </script>
+<script defer="" src="../../js/jquery-2.1.1.min.js"></script>
+<script defer="" src="../../js/modernizr-2.8.3.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/go.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+</link></head>
+<body class="wy-body-for-nav" role="document">
+<div class="wy-grid-for-nav">
+<nav class="wy-nav-side stickynav" data-toggle="wy-nav-shift">
+<div class="wy-side-scroll">
+<div class="wy-side-nav-search">
+<a class="icon icon-home" href="../.."> Log0c</a>
+</div>
+<div aria-label="main navigation" class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../..">主页</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">问题排查</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../netease-music-problem/">mac 网易云音乐 cpu 占用高问题排查</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../mac/osx86_external_ssd_swap_problem/">mac 外部 SSD Swap 分区开启问题</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../mac/mac-note-stalled/">mac Notes.app 卡死问题</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../go-pprof-memory-leak/">go 使用 pprof 排查内存泄漏</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../go-bytebufferpool-leak-doubt/">go bytebufferpool 错误使用一例</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../go-shadowing-variable/">go shadowing variable 造成的歧义</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../go-concurrent-map-read-write-bug/">go 并发读写 map 问题一例</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../db-metadatalock/">db metadata lock 问题排查</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../db-deadlock/">db 间隙锁造成的死锁</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../db-deadlock-2/">db 复现不同索引之间的死锁</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../black-box-io-problem/">io 黑盒排查磁盘空间告警/IO问题</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../black-box-cpu-high-problem/">cpu 排查的几个案例</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../black-box-network-problem/">network 排查的几个案例</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../tcp-troubleshooting/">network tcp 常见状态异常</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../troubleshooting-cheatsheet/">all 问题排查速查表</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">源码阅读</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../go-doc-reading-technique/">go 源码阅读技巧</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../go-valyala-bytebufferpool/">valyala/bytebufferpool</a>
+</li>
+<li class="toctree-l1 current"><a class="reference internal current" href="./">atomic LoadInt64 和 LoadInt32 使用疑问</a>
+<ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="#_1">赋值取值操作为什么不是原子的</a>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#go">如何查看 go 汇编代码</a>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#3216">为什么还有32位的原子操作，难道是提供给16位机器使用</a>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#_2">资料</a>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#_3">后续</a>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">labs</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../labs/6824-mapreduce/">MIT 6.824 - MapReduce</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../labs/6824-raft/">MIT 6.824 - Raft</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../labs/6824-kv/">MIT 6.824 - KV</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../labs/csapp-shell/">CSAPP - Shell</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../labs/csapp-proxy/">CSAPP - Proxy</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../labs/cs144/">CS144</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">工具</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../tools/xdebug/">Xdebug</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../tools/chrome-dev-tools/">Chrome Dev Tools</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../tools/markdown-diagram/">Markdown Diagram 功能</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../yaml-lint/">yaml lint</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">算法</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../algos/int-to-binary-str/">整数转二进制字符串</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../algos/multiple-field-sort/">多字段排序</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../algos/lru-cache-go/">LRU 线程安全和高并发</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">PHP</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../php/how-composer-work/">Composer 是如何工作的</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../php/business-logic-framework/">业务代码的框架</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../php/symfony-lock/">Symfony Lock Component</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../build-my-own-x/php-framework/">构建自己的 PHP 框架</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">杂项</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../others/mac_py_env_deploy/">Mac Python环境 miniConda 搭建</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../others/taylor-otwell-interview/">Taylor otwell 采访文章</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">零碎知识点</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../knowledge-reduce/tricks/">编程技巧/方法</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../knowledge-reduce/network_programming/">网络编程</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../knowledge-reduce/problem_trace/">问题排查</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../knowledge-reduce/network-course/">计算机网络课程分享</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../knowledge-reduce/mysql/">MYSQL</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../knowledge-reduce/language_trait_and_implementation/">语言特性/底层实现</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../knowledge-reduce/computer_composition/">计算机组成原理</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">归档</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/blog_deploy_log/">博客服务器环境搭建记录</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../redis/redis_code_book_reading/">Redis 设计与实现笔记</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/laracasts_learning_path/">Laracasts学习记录</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/black_sierra/">K480N 黑苹果安装记录</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/php_career_guide_line/">从框架看PHP的五种境界[转]</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/laravel_marcoable/">Laravel中的Marcoable</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/laravel_code_book_reading/">Laravel框架关键技术-阅读总结</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/laravel_admin_code_reading/">Laravel-Admin源码阅读</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/first_internship/">实习</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../summary/2017/">2017 总结</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/second_job/">2018 总结</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../summary/2019/">2019 总结</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../summary/2020/">2020 总结</a>
+</li>
+</ul>
+</div>
+</div>
+</nav>
+<section class="wy-nav-content-wrap" data-toggle="wy-nav-shift">
+<nav aria-label="top navigation" class="wy-nav-top" role="navigation">
+<i class="fa fa-bars" data-toggle="wy-nav-top"></i>
+<a href="../..">Log0c</a>
+</nav>
+<div class="wy-nav-content">
+<div class="rst-content">
+<div aria-label="breadcrumbs navigation" role="navigation">
+<ul class="wy-breadcrumbs">
+<li><a href="../..">Docs</a> »</li>
+<li>源码阅读 »</li>
+<li>atomic LoadInt64 和 LoadInt32 使用疑问</li>
+<li class="wy-breadcrumbs-aside">
+</li>
+</ul>
+<hr/>
+</div>
+<div role="main">
+<div class="section">
+<h1 id="atomic-loadint64-loadint32">atomic LoadInt64 和 LoadInt32 使用疑问</h1>
+<h2 id="_1">赋值取值操作为什么不是原子的</h2>
+<p>在阅读 bytebufferpool 和 workerpool 代码的时候经常看到<code>atomic.LoadUInt64</code> , <code>atomic.LoadInt32</code> , <code>atomic.StoreInt32</code> 等函数调用，产生了一个疑问，为什么整数操作要用到原子包里的东西</p>
+<p>一番搜寻后，得到一个答案是64位的操作在32位上并不是由一个指令完成的，而是分成前32位和后32位两部分操作完成，因此整个操作没有原子性保证</p>
+<p><strong>那要如何在32位机器上实现64位的原子操作呢？ 先分析一下可能出现的情况</strong></p>
+<pre><code>1. 执行完第一部分后，上下文切换到其他线程，其他线程读取该值，导致问题
+2. 多cpu，多核，有cpu cache的情况下，单个指令有硬件的缓存一致性协议保证，多个指令的话无法保证 ， 也导致问题
+3. 编译器对代码进行优化，打乱顺序，导致问题
+</code></pre>
+<ul>
+<li>
+<p>问题1是可见性的问题，读取同样也要加内存屏障， 这样即使发生了线程切换， 另一个线程也不会看到赋值到一半的int64 , 同时也提供了happens-before的保证</p>
+</li>
+<li>
+<p>问题2是原子性问题， 使用硬件提供的内存屏障指令，被内存屏障指令包围的操作只有在全部完成后才写入内存 （类似数据库里的事务BEGIN和COMMIT)</p>
+</li>
+<li>
+<p>问题3是有序性问题， 也由内存屏障提供， 阻止编译器,cpu的执行优化 ， go中甚至有的整数操作代码是直接用汇编写的 (数据库也会对语句乱序执行，但是在保证执行结果和顺序执行一致的情况下)</p>
+</li>
+</ul>
+<h2 id="go">如何查看 go 汇编代码</h2>
+<ul>
+<li>样例代码</li>
+</ul>
+<pre><code>package main
+
+const x int64 = 1 + 1&lt;&lt;33
+func main() {
+    var i=x
+    _ = i
+}
+</code></pre>
+<ul>
+<li>gdb</li>
+</ul>
+<pre><code>go build -gcflags "-N -l" -o gdb_sandbox main.go
+gdb gdb_sandbox
+
+进入 gdb 后
+layout split
+b main
+run
+</code></pre>
+<ul>
+<li>go tool compile / objdump</li>
+</ul>
+<pre><code>// objdump -gnu 好像没这个选项
+//GOARCH=386 go tool compile -N -l main.go
+//GOARCH=386 go tool objdump  main.o
+
+//GOARCH=amd64 go tool compile -N -l main.go
+//GOARCH=amd64 go tool objdump  main.o
+</code></pre>
+<ul>
+<li>64位和 32 位 int64 汇编代码对比 (macos-darwin)</li>
+</ul>
+<pre><code> 32 位:
+
+ main.go:5             0x2ec                   c7042401000000          MOVL $0x1, 0(SP)        
+ main.go:5             0x2f3                   c744240402000000        MOVL $0x2, 0x4(SP)
+
+ 64 位:
+ main.go:5             0x2d4                   48b80100000002000000    MOVQ $0x200000001, AX
+
+</code></pre>
+<ul>
+<li>LoadInt64 源码</li>
+</ul>
+<p>runtime/internal/atomic/atomic_amd64.go</p>
+<pre><code>func Load64(ptr *uint64) uint64 {
+    return *ptr
+}
+
+64位下直接取值
+
+</code></pre>
+<p>runtime/internal/atomic/asm_386.s</p>
+<pre><code>// uint64 atomicload64(uint64 volatile* addr);
+TEXT runtime∕internal∕atomic·Load64(SB), NOSPLIT, $0-12
+    MOVL    ptr+0(FP), AX
+    TESTL   $7, AX
+    JZ  2(PC)
+    MOVL    0, AX // crash with nil ptr deref
+    MOVQ    (AX), M0
+    MOVQ    M0, ret+4(FP)
+    EMMS
+    RET
+
+猜测: volatile 告知编译器不做优化 , NOSPLIT 和 EMMS 应该是内存屏障?    
+</code></pre>
+<h2 id="3216">为什么还有32位的原子操作，难道是提供给16位机器使用</h2>
+<p>GOARCH可以指定机器架构交叉编译，先看看go提供了哪些平台编译支持 , 并没有看到16位的参数</p>
+<pre><code>darwin/386
+darwin/amd64
+darwin/arm
+darwin/arm64
+</code></pre>
+<ul>
+<li>测试代码</li>
+</ul>
+<pre><code>package main
+
+
+const x int32 = 2 + 1 &lt;&lt; 30
+func main() {
+    var i  = x
+    _ = i
+}
+</code></pre>
+<ul>
+<li>64 位和 32 位 LoadInt32 源码 对比</li>
+</ul>
+<pre><code>runtime/internal/atomic/atomic_386.go
+func Load(ptr *uint32) uint32 {
+    return *ptr
+}
+
+runtime/internal/atomic/atomic_amd64.go
+func Load(ptr *uint32) uint32 {
+    return *ptr
+}
+
+和直接取值的编译结果没有区别
+</code></pre>
+<ul>
+<li>再看看arm64 的汇编</li>
+</ul>
+<pre><code>
+arm64 直接取值的编译结果
+main.go:6             0x2f5                   d2800040                MOVD $2, R0             
+main.go:6             0x2f9                   f2a80000                MOVK $(16384&lt;&lt;16), R0
+
+Loadint32 源码:
+// uint32 runtime∕internal∕atomic·Load(uint32 volatile* addr)
+TEXT ·Load(SB),NOSPLIT,$0-12
+    MOVD    ptr+0(FP), R0
+    LDARW   (R0), R0
+    MOVW    R0, ret+8(FP)
+    RET
+
+结论: arm64 平台的 32 位操作是不是原子操作,先操作前 16 位,再操作后 16 位
+</code></pre>
+<h2 id="_2">资料</h2>
+<ul>
+<li><a href="https://zh.wikipedia.org/wiki/%E5%86%85%E5%AD%98%E5%B1%8F%E9%9A%9C">内存屏障</a></li>
+<li><a href="https://liqiang.io/post/view-all-GOOS-and-GOARCH-for-go-3c2beacc">GOARCH 参数</a></li>
+<li><a href="">go 并发-12丨 atomic：要保证原子操作，一定要使用这几种方法</a></li>
+<li><a href="https://www.cnblogs.com/beyondblog/p/4423173.html">使用GDB调试Go语言</a></li>
+<li><a href="https://blog.huoding.com/2021/10/08/958">为什么会有atomic.LoadInt32</a></li>
+</ul>
+<h2 id="_3">后续</h2>
+<ul>
+<li>
+<p>既然 32 位执行 64 位操作不是原子的, 为什么不在编译的时候自动加内存屏障呢 , 而是要自己调用 atomic , 猜测是因为内存屏障开销大?</p>
+</li>
+<li>
+<p>所以这些流行的库为了提供给更多不同平台的机器使用，使用了 int 原子操作 ?</p>
+</li>
+<li>
+<p>atomic 包 ,主要提供了三种接口, RMW (read-modify-write ), 加载 , 存储 , 记住传的是指针</p>
+</li>
+</ul>
+</div>
+</div>
+<footer>
+<div aria-label="footer navigation" class="rst-footer-buttons" role="navigation">
+<a class="btn btn-neutral float-right" href="../../labs/6824-mapreduce/" title="MIT 6.824 - MapReduce">Next <span class="icon icon-circle-arrow-right"></span></a>
+<a class="btn btn-neutral" href="../go-valyala-bytebufferpool/" title="valyala/bytebufferpool"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+</div>
+<hr/>
+<div role="contentinfo">
+<!-- Copyright etc -->
+</div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+</div>
+</div>
+</section>
+</div>
+<div aria-label="versions" class="rst-versions" role="note">
+<span class="rst-current-version" data-toggle="rst-current-version">
+<span><a href="../go-valyala-bytebufferpool/" style="color: #fcfcfc;">« Previous</a></span>
+<span style="margin-left: 15px"><a href="../../labs/6824-mapreduce/" style="color: #fcfcfc">Next »</a></span>
+</span>
+</div>
+<script>var base_url = '../..';</script>
+<script defer="" src="../../js/theme.js"></script>
+<script defer="" src="../../js/mermaid.min.js"></script>
+<script defer="" src="../../js/custom.js"></script>
+<script defer="">
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(false);
+        };
+    </script>
+</body>
+</html>

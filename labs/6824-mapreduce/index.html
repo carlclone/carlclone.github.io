@@ -21,6 +21,7 @@
 <script defer="" src="../../js/jquery-2.1.1.min.js"></script>
 <script defer="" src="../../js/modernizr-2.8.3.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/go.min.js"></script>
 <script>hljs.initHighlightingOnLoad();</script>
 </link></head>
 <body class="wy-body-for-nav" role="document">
@@ -68,6 +69,15 @@
 <li class="toctree-l1"><a class="reference internal" href="../../too-much-folder/troubleshooting-cheatsheet/">all 问题排查速查表</a>
 </li>
 </ul>
+<p class="caption"><span class="caption-text">源码阅读</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../too-much-folder/go-doc-reading-technique/">go 源码阅读技巧</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../too-much-folder/go-valyala-bytebufferpool/">valyala/bytebufferpool</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../too-much-folder/go-atomic/">atomic LoadInt64 和 LoadInt32 使用疑问</a>
+</li>
+</ul>
 <p class="caption"><span class="caption-text">labs</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal current" href="./">MIT 6.824 - MapReduce</a>
@@ -107,9 +117,9 @@
 </ul>
 <p class="caption"><span class="caption-text">工具</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../tools/xdebug/">Xdebug 深入学习</a>
+<li class="toctree-l1"><a class="reference internal" href="../../tools/xdebug/">Xdebug</a>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../../tools/chrome-dev-tools/">Chrome Dev Tools 深入学习</a>
+<li class="toctree-l1"><a class="reference internal" href="../../tools/chrome-dev-tools/">Chrome Dev Tools</a>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../tools/markdown-diagram/">Markdown Diagram 功能</a>
 </li>
@@ -125,24 +135,15 @@
 <li class="toctree-l1"><a class="reference internal" href="../../algos/lru-cache-go/">LRU 线程安全和高并发</a>
 </li>
 </ul>
-<p class="caption"><span class="caption-text">构建自己的 X 项目</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../../build-my-own-x/jquery/">构建自己的 jQuery</a>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="../../build-my-own-x/php-framework/">构建自己的 PHP 框架</a>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="../../build-my-own-x/lisp-compiler/">构建 Lisp Compiler</a>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="../../build-my-own-x/regex/">Regex Engine 学习</a>
-</li>
-</ul>
 <p class="caption"><span class="caption-text">PHP</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../php/how-composer-work/">Composer 是如何工作的</a>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../../php/business-logic-framework/">关于业务代码的框架</a>
+<li class="toctree-l1"><a class="reference internal" href="../../php/business-logic-framework/">业务代码的框架</a>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../php/symfony-lock/">Symfony Lock Component</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../build-my-own-x/php-framework/">构建自己的 PHP 框架</a>
 </li>
 </ul>
 <p class="caption"><span class="caption-text">杂项</span></p>
@@ -419,7 +420,7 @@ $ go run mrworker.go wc.so   运行多个worker
 <footer>
 <div aria-label="footer navigation" class="rst-footer-buttons" role="navigation">
 <a class="btn btn-neutral float-right" href="../6824-raft/" title="MIT 6.824 - Raft">Next <span class="icon icon-circle-arrow-right"></span></a>
-<a class="btn btn-neutral" href="../../too-much-folder/troubleshooting-cheatsheet/" title="all 问题排查速查表"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+<a class="btn btn-neutral" href="../../too-much-folder/go-atomic/" title="atomic LoadInt64 和 LoadInt32 使用疑问"><span class="icon icon-circle-arrow-left"></span> Previous</a>
 </div>
 <hr/>
 <div role="contentinfo">
@@ -434,7 +435,7 @@ $ go run mrworker.go wc.so   运行多个worker
 </div>
 <div aria-label="versions" class="rst-versions" role="note">
 <span class="rst-current-version" data-toggle="rst-current-version">
-<span><a href="../../too-much-folder/troubleshooting-cheatsheet/" style="color: #fcfcfc;">« Previous</a></span>
+<span><a href="../../too-much-folder/go-atomic/" style="color: #fcfcfc;">« Previous</a></span>
 <span style="margin-left: 15px"><a href="../6824-raft/" style="color: #fcfcfc">Next »</a></span>
 </span>
 </div>

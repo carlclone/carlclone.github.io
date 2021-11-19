@@ -7,20 +7,21 @@
 <meta content="IE=edge" http-equiv="X-UA-Compatible"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <link href="../../../img/favicon.ico" rel="shortcut icon"/>
-<title>1 utils - Log0c</title>
+<title>xv6 速查表 - Log0c</title>
 <link href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" rel="stylesheet">
 <link href="../../../css/theme.css" rel="stylesheet"/>
 <link href="../../../css/theme_extra.css" rel="stylesheet"/>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet"/>
 <script>
     // Current page data
-    var mkdocs_page_name = "1 utils";
-    var mkdocs_page_input_path = "labs/xv6/1-utils.md";
+    var mkdocs_page_name = "xv6 \u901f\u67e5\u8868";
+    var mkdocs_page_input_path = "labs/xv6/xv6-cheatsheet.md";
     var mkdocs_page_url = null;
   </script>
 <script defer="" src="../../../js/jquery-2.1.1.min.js"></script>
 <script defer="" src="../../../js/modernizr-2.8.3.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/go.min.js"></script>
 <script>hljs.initHighlightingOnLoad();</script>
 </link></head>
 <body class="wy-body-for-nav" role="document">
@@ -68,6 +69,15 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../too-much-folder/troubleshooting-cheatsheet/">all 问题排查速查表</a>
 </li>
 </ul>
+<p class="caption"><span class="caption-text">源码阅读</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../too-much-folder/go-doc-reading-technique/">go 源码阅读技巧</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../too-much-folder/go-valyala-bytebufferpool/">valyala/bytebufferpool</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../too-much-folder/go-atomic/">atomic LoadInt64 和 LoadInt32 使用疑问</a>
+</li>
+</ul>
 <p class="caption"><span class="caption-text">labs</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../6824-mapreduce/">MIT 6.824 - MapReduce</a>
@@ -85,9 +95,9 @@
 </ul>
 <p class="caption"><span class="caption-text">工具</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../tools/xdebug/">Xdebug 深入学习</a>
+<li class="toctree-l1"><a class="reference internal" href="../../../tools/xdebug/">Xdebug</a>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../../../tools/chrome-dev-tools/">Chrome Dev Tools 深入学习</a>
+<li class="toctree-l1"><a class="reference internal" href="../../../tools/chrome-dev-tools/">Chrome Dev Tools</a>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../../tools/markdown-diagram/">Markdown Diagram 功能</a>
 </li>
@@ -103,24 +113,15 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../algos/lru-cache-go/">LRU 线程安全和高并发</a>
 </li>
 </ul>
-<p class="caption"><span class="caption-text">构建自己的 X 项目</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../build-my-own-x/jquery/">构建自己的 jQuery</a>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="../../../build-my-own-x/php-framework/">构建自己的 PHP 框架</a>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="../../../build-my-own-x/lisp-compiler/">构建 Lisp Compiler</a>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="../../../build-my-own-x/regex/">Regex Engine 学习</a>
-</li>
-</ul>
 <p class="caption"><span class="caption-text">PHP</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../php/how-composer-work/">Composer 是如何工作的</a>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../../../php/business-logic-framework/">关于业务代码的框架</a>
+<li class="toctree-l1"><a class="reference internal" href="../../../php/business-logic-framework/">业务代码的框架</a>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../../php/symfony-lock/">Symfony Lock Component</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../build-my-own-x/php-framework/">构建自己的 PHP 框架</a>
 </li>
 </ul>
 <p class="caption"><span class="caption-text">杂项</span></p>
@@ -189,7 +190,7 @@
 <div aria-label="breadcrumbs navigation" role="navigation">
 <ul class="wy-breadcrumbs">
 <li><a href="../../..">Docs</a> »</li>
-<li>1 utils</li>
+<li>xv6 速查表</li>
 <li class="wy-breadcrumbs-aside">
 </li>
 </ul>
@@ -197,6 +198,72 @@
 </div>
 <div role="main">
 <div class="section">
+<h1 id="xv6">xv6 速查表</h1>
+<h2 id="_1">常用命令</h2>
+<p>每次调试要 make clean 清除编译缓存</p>
+<p>make grade 全部成绩</p>
+<p>./grade-lab-util pingpong</p>
+<p>make GRADEFLAGS=pingpong grade</p>
+<h2 id="c">c 语法</h2>
+<p>神书: K&amp;R The C Programming Language</p>
+<p>char *argv[] , 可以通过 argv[下标] 来访问</p>
+<p>int abc[2]  定义并开辟 size 为 2 的数组 , 可通过 abc[0]访问</p>
+<p>struct stat st 定义名为 st 的 stat 结构体</p>
+<p>static char buf[DIRSIZ+1] 静态变量, 生命周期为整个运行期 , buf 名可以作为数组指针</p>
+<h2 id="xv6-function">xv6 function</h2>
+<p>stat 结构体</p>
+<p>st_mode 文件权限和文件类型信息
+st_ino   与该文件关联的inode
+st_dev   保存文件的设备
+st_uid   文件属主的UID号
+st_gid   文件属主的GID号
+st_atime 文件上一次被访问的时间
+st_ctime 文件的权限、属主、组或内容上一次被修改的时间
+st_mtime 文件的内容上一次被修改的时间。（和st_ctime的不同之处显而易见）
+st_nlink  该文件上硬连接的个数</p>
+<p>fstat(fd, &amp;st) 通过描述符获取文件信息
+stat(filename,&amp;st)  通过文件名获取文件信息</p>
+<p>fd = open(path,O_FLAGS) , fd&lt;0异常</p>
+<pre><code>1）O_RDONLY：以只读方式打开；
+
+2）O_WRONLY：以只写方式打开；
+
+3）O_RDWR ：以读写方式打开。
+
+　　另外，还有以下几种可选模式的组合（ 用按位或 || 来操作 ）：
+
+4）O_APPEND：把写入数据追加在文件的末尾；
+
+5）O_TRUNC：把文件长度设置为零，丢弃已有的内容；
+
+6）O_CREAT：如果需要，就按照参数 mode 中给出的访问模式创建文件；
+....
+</code></pre>
+<p>fprintf 打印 , 参数 (描述符, 字节数组)
+atoi(int) 字节数组-&gt;int</p>
+<p>int fd_arr[2]
+pipe(fd_arr)  创建管道
+close() 关闭描述符
+fork()==0 子进程 , 负值错误 , 正值父进程
+wait(整数指针) , 如 wait((int *)0) 等待所有子进程
+sizeof(int) int 的字节</p>
+<p>返回的字节数 = read(描述符,字节数组,要读的字节数) , 如果描述符是个目录(目录也是文件,指向一块包含其中文件信息的字节block) , 可以这样遍历读 while(read(fd, &amp;de, sizeof(de)) == sizeof(de)){
+write(描述符,字节数组,要写的字节数)</p>
+<p>"sadas" 也是字节数组</p>
+<p>printf(字符串) fprintf()的封装,写到标准输出
+getpid() 获取进程 id
+dup()
+strcpm() , ==不能对比字符串,而是对比指针值
+strlen() 获取字符串(以\0 结尾的)长度  (sizeof 求数据类型所占空间)
+memmove(dest,src,bytesize) 复制内容 http://c.biancheng.net/cpp/html/156.html</p>
+<p>memset(dst,'字节',前几个)</p>
+<pre><code>memset(str,'$',7);
+This is string.h library function
+$$$$$$$ string.h library function
+
+</code></pre>
+<p>strcpy(dst,src) 顾名思义</p>
+<p>strchr(str,ch) 返回第一次出现 ch 的指针 (指向 ch)</p>
 </div>
 </div>
 <footer>

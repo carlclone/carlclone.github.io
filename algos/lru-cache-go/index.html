@@ -21,6 +21,7 @@
 <script defer="" src="../../js/jquery-2.1.1.min.js"></script>
 <script defer="" src="../../js/modernizr-2.8.3.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/go.min.js"></script>
 <script>hljs.initHighlightingOnLoad();</script>
 </link></head>
 <body class="wy-body-for-nav" role="document">
@@ -68,6 +69,15 @@
 <li class="toctree-l1"><a class="reference internal" href="../../too-much-folder/troubleshooting-cheatsheet/">all 问题排查速查表</a>
 </li>
 </ul>
+<p class="caption"><span class="caption-text">源码阅读</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../too-much-folder/go-doc-reading-technique/">go 源码阅读技巧</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../too-much-folder/go-valyala-bytebufferpool/">valyala/bytebufferpool</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../too-much-folder/go-atomic/">atomic LoadInt64 和 LoadInt32 使用疑问</a>
+</li>
+</ul>
 <p class="caption"><span class="caption-text">labs</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../labs/6824-mapreduce/">MIT 6.824 - MapReduce</a>
@@ -85,9 +95,9 @@
 </ul>
 <p class="caption"><span class="caption-text">工具</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../tools/xdebug/">Xdebug 深入学习</a>
+<li class="toctree-l1"><a class="reference internal" href="../../tools/xdebug/">Xdebug</a>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../../tools/chrome-dev-tools/">Chrome Dev Tools 深入学习</a>
+<li class="toctree-l1"><a class="reference internal" href="../../tools/chrome-dev-tools/">Chrome Dev Tools</a>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../tools/markdown-diagram/">Markdown Diagram 功能</a>
 </li>
@@ -109,24 +119,15 @@
 </ul>
 </li>
 </ul>
-<p class="caption"><span class="caption-text">构建自己的 X 项目</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../../build-my-own-x/jquery/">构建自己的 jQuery</a>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="../../build-my-own-x/php-framework/">构建自己的 PHP 框架</a>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="../../build-my-own-x/lisp-compiler/">构建 Lisp Compiler</a>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="../../build-my-own-x/regex/">Regex Engine 学习</a>
-</li>
-</ul>
 <p class="caption"><span class="caption-text">PHP</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../php/how-composer-work/">Composer 是如何工作的</a>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../../php/business-logic-framework/">关于业务代码的框架</a>
+<li class="toctree-l1"><a class="reference internal" href="../../php/business-logic-framework/">业务代码的框架</a>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../php/symfony-lock/">Symfony Lock Component</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../build-my-own-x/php-framework/">构建自己的 PHP 框架</a>
 </li>
 </ul>
 <p class="caption"><span class="caption-text">杂项</span></p>
@@ -357,7 +358,7 @@ func (this *RegularLRUCache) offerNode(node *Node) {
 </div>
 <footer>
 <div aria-label="footer navigation" class="rst-footer-buttons" role="navigation">
-<a class="btn btn-neutral float-right" href="../../build-my-own-x/jquery/" title="构建自己的 jQuery">Next <span class="icon icon-circle-arrow-right"></span></a>
+<a class="btn btn-neutral float-right" href="../../php/how-composer-work/" title="Composer 是如何工作的">Next <span class="icon icon-circle-arrow-right"></span></a>
 <a class="btn btn-neutral" href="../multiple-field-sort/" title="多字段排序"><span class="icon icon-circle-arrow-left"></span> Previous</a>
 </div>
 <hr/>
@@ -374,7 +375,7 @@ func (this *RegularLRUCache) offerNode(node *Node) {
 <div aria-label="versions" class="rst-versions" role="note">
 <span class="rst-current-version" data-toggle="rst-current-version">
 <span><a href="../multiple-field-sort/" style="color: #fcfcfc;">« Previous</a></span>
-<span style="margin-left: 15px"><a href="../../build-my-own-x/jquery/" style="color: #fcfcfc">Next »</a></span>
+<span style="margin-left: 15px"><a href="../../php/how-composer-work/" style="color: #fcfcfc">Next »</a></span>
 </span>
 </div>
 <script>var base_url = '../..';</script>
