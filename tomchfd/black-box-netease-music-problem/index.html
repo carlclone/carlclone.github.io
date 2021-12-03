@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
+<head>
+<meta charset="utf-8"/>
+<meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="../../img/favicon.ico" rel="shortcut icon"/>
+<title>mac 网易云音乐 cpu 占用高排查 - Log0c</title>
+<link href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" rel="stylesheet">
+<link href="../../css/theme.css" rel="stylesheet"/>
+<link href="../../css/theme_extra.css" rel="stylesheet"/>
+<script>
+    // Current page data
+    var mkdocs_page_name = "mac \u7f51\u6613\u4e91\u97f3\u4e50 cpu \u5360\u7528\u9ad8\u6392\u67e5";
+    var mkdocs_page_input_path = "tomchfd/black-box-netease-music-problem.md";
+    var mkdocs_page_url = null;
+  </script>
+<script defer="" src="../../js/jquery-2.1.1.min.js"></script>
+<script defer="" src="../../js/modernizr-2.8.3.min.js"></script>
+</link></head>
+<body class="wy-body-for-nav" role="document">
+<div class="wy-grid-for-nav">
+<nav class="wy-nav-side stickynav" data-toggle="wy-nav-shift">
+<div class="wy-side-scroll">
+<div class="wy-side-nav-search">
+<a class="icon icon-home" href="../.."> Log0c</a>
+</div>
+<div aria-label="main navigation" class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../..">主页</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">问题排查</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal current" href="./">mac 网易云音乐 cpu 占用高排查</a>
+<ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="#_1">问题描述</a>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#_2">问题排查</a>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#_3">后续</a>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#_4">可能有用的资料</a>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../mac/osx86_external_ssd_swap_problem/">mac 外部 SSD Swap 分区开启问题</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../mac/mac-note-stalled/">mac Notes.app 卡死问题</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../go-pprof-memory-leak/">go 使用 pprof 排查内存泄漏</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../go-bytebufferpool-leak-doubt/">go bytebufferpool 错误使用一例</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../go-shadowing-variable/">go shadowing variable 造成的歧义</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../go-concurrent-map-read-write-bug/">go 并发读写 map 问题一例</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../db-metadatalock/">db metadata lock 问题排查</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../db-deadlock/">db 间隙锁造成的死锁</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../db-deadlock-2/">db 复现不同索引之间的死锁</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../black-box-io-problem/">io 黑盒排查磁盘空间告警/IO问题</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../black-box-cpu-high-problem/">cpu 排查的几个案例</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../black-box-network-problem/">network 排查的几个案例</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../black-box-tcp-troubleshooting/">network tcp 常见状态异常</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../black-box-troubleshooting-cheatsheet/">all 问题排查速查表</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">源码阅读</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../go-doc-reading-technique/">go 源码阅读小技巧</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../go-valyala-bytebufferpool/">valyala/bytebufferpool</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../go-atomic/">atomic LoadInt64 / LoadInt32</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">labs</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../labs/6824-mapreduce/">MIT 6.824 - MapReduce</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../labs/6824-raft/">MIT 6.824 - Raft</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../labs/6824-kv/">MIT 6.824 - KV</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../labs/csapp-shell/">CSAPP - Shell</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../labs/csapp-proxy/">CSAPP - Proxy</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../labs/cs144/">CS144</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">xv6</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../xv6-cheatsheet/">xv6 速查表</a>
+</li>
+<li class="toctree-l1"><a class="" href="../../asd.md">xv6 riscv64 寄存器</a>
+</li>
+<li class="toctree-l1"><a class="" href="../xv6-structure.md">xv6 整体源码结构</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../xv6-utils/">xv6 添加用户态程序</a>
+</li>
+<li class="toctree-l1"><a class="" href="../xv6-syscall.md   添加系统调用的步骤 , 调试跟着系统调用过程">xv6 添加系统调用</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../xv6-pgtbl/">xv6 优化- kernel 通过 MMU 解引用 user 指针</a>
+</li>
+<li class="toctree-l1"><a class="" href="../../asd.md">xv6 实现用户态 trap 处理</a>
+</li>
+<li class="toctree-l1"><a class="" href="../../asd.md">xv6 优化-延迟分配用户态内存申请</a>
+</li>
+<li class="toctree-l1"><a class="" href="../../asd.md">xv6 优化-实现 fork copy on write</a>
+</li>
+<li class="toctree-l1"><a class="" href="../../asd.md">xv6 实现用户态协程</a>
+</li>
+<li class="toctree-l1"><a class="" href="../../asd.md">xv6 优化锁开销</a>
+</li>
+<li class="toctree-l1"><a class="" href="../../asd.md">xv6 支持大文件</a>
+</li>
+<li class="toctree-l1"><a class="" href="../../asd.md">xv6 实现 mmap</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">工具</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../tools/xdebug/">Xdebug</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../tools/chrome-dev-tools/">Chrome Dev Tools</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../tools/markdown-diagram/">Markdown Diagram 功能</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../tool-yaml-lint/">yaml lint</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">算法</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../algos/int-to-binary-str/">整数转二进制字符串</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../algos/multiple-field-sort/">多字段排序</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../algos/lru-cache-go/">LRU 线程安全和高并发</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">PHP</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../php/how-composer-work/">Composer 是如何工作的</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../php/business-logic-framework/">业务代码的框架</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../php/symfony-lock/">Symfony Lock Component</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../build-my-own-x/php-framework/">构建自己的 PHP 框架</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">杂项</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../others/mac_py_env_deploy/">Mac Python环境 miniConda 搭建</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../others/taylor-otwell-interview/">Taylor otwell 采访文章</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">零碎知识点</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../knowledge-reduce/tricks/">编程技巧/方法</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../knowledge-reduce/network_programming/">网络编程</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../knowledge-reduce/problem_trace/">问题排查</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../knowledge-reduce/network-course/">计算机网络课程分享</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../knowledge-reduce/mysql/">MYSQL</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../knowledge-reduce/language_trait_and_implementation/">语言特性/底层实现</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../knowledge-reduce/computer_composition/">计算机组成原理</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">归档</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/blog_deploy_log/">博客服务器环境搭建记录</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../redis/redis_code_book_reading/">Redis 设计与实现笔记</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/laracasts_learning_path/">Laracasts学习记录</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/black_sierra/">K480N 黑苹果安装记录</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/php_career_guide_line/">从框架看PHP的五种境界[转]</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/laravel_marcoable/">Laravel中的Marcoable</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/laravel_code_book_reading/">Laravel框架关键技术-阅读总结</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/laravel_admin_code_reading/">Laravel-Admin源码阅读</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/first_internship/">实习</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../summary/2017/">2017 总结</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/second_job/">2018 总结</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../summary/2019/">2019 总结</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../summary/2020/">2020 总结</a>
+</li>
+</ul>
+</div>
+</div>
+</nav>
+<section class="wy-nav-content-wrap" data-toggle="wy-nav-shift">
+<nav aria-label="top navigation" class="wy-nav-top" role="navigation">
+<i class="fa fa-bars" data-toggle="wy-nav-top"></i>
+<a href="../..">Log0c</a>
+</nav>
+<div class="wy-nav-content">
+<div class="rst-content">
+<div aria-label="breadcrumbs navigation" role="navigation">
+<ul class="wy-breadcrumbs">
+<li><a href="../..">Docs</a> »</li>
+<li>问题排查 »</li>
+<li>mac 网易云音乐 cpu 占用高排查</li>
+<li class="wy-breadcrumbs-aside">
+</li>
+</ul>
+<hr/>
+</div>
+<div role="main">
+<div class="section">
+<h1 id="mac-cpu">mac 网易云音乐 cpu 占用高问题排查</h1>
+<h2 id="_1">问题描述</h2>
+<p>网易云音乐客户端在 macos 10.13.6 上不定期地会占用 500% 的 cpu , 重装了也不行</p>
+<p>找了一圈也没搜到类似问题 , 恰好最近学习了 linux cpu 问题排查, 派上用场了</p>
+<p>另外一个问题是 mac 的 unix 系统和 linux 不太一样,很多工具都没有, 得边查边找替代品</p>
+<h2 id="_2">问题排查</h2>
+<ul>
+<li>打算先看看 cpu 各个指标,结果自带的 top 看不到cpu 详细指标,, 只拿到个 pid 17125</li>
+<li><code>perf</code> 的替代品 <code>sample 17125 -f output.prof</code> <code>filtercalltree output.prof</code> , 得知有大量上下文切换函数和加锁解锁和文件操作</li>
+</ul>
+<pre><code>  Sort by top of stack, same collapsed (when &gt;= 5):
+        mach_msg_trap  (in libsystem_kernel.dylib)        22676         # 系统上下文切换的 trap
+        __psynch_cvwait  (in libsystem_kernel.dylib)        6186        # 上下文切换等待
+        __psynch_mutexwait  (in libsystem_kernel.dylib)        4828     # 加锁等待
+        __workq_kernreturn  (in libsystem_kernel.dylib)        4124     # 上下文切换返回用户态
+        __getattrlist  (in libsystem_kernel.dylib)        3670          # stat 加强版 (https://blog.csdn.net/kfy2011/article/details/50427878)
+        __select  (in libsystem_kernel.dylib)        2062               # 多路复用那个?
+        getattrlistbulk  (in libsystem_kernel.dylib)        792         # 类似 stat
+        lstat$INODE64  (in libsystem_kernel.dylib)        620           # 类似 stat
+        __psynch_mutexdrop  (in libsystem_kernel.dylib)        607      # 解锁
+        __open  (in libsystem_kernel.dylib)        587                  # 打开文件
+        close  (in libsystem_kernel.dylib)        251                   # 关闭文件
+</code></pre>
+<ul>
+<li>打开 <code>Activity Monitor.app</code> , 双击进程发现系统自带了 sample 功能</li>
+<li>打开 <code>statistics</code> 视图的时候, 发现各项指标都好高</li>
+<li>和 QQ 进程对比了一下,  mach 系统调用正常, 但是 上下文切换次数和 unix 系统调用超出了两个数量级, 有1亿次和6 亿次
+  <img alt="image-20191120140931373" src="/img/neteas-many-syscall.png"/>
+<img alt="image-20191120140931373" src="/img/qq-syscall.png"/></li>
+<li>寻找 <code>strace</code> 的替代品, 看看系统调用 <code>sudo dtruss -p 17125</code></li>
+<li>发现不停有大量的<code>stat</code>系统调用和大量的加锁解锁操作,路径也显示出来了</li>
+</ul>
+<pre><code>getattrlist("/Users/lin/Library/Containers/com.netease.163music/Data/Caches/online_play_cache\0", 0x70000D03BD78, 0x70000D03B9D0)        = 0 0
+lstat64("/Users/lin/Library/Containers/com.netease.163music/Data/Caches/online_play_cache\0", 0x70000D247EB0, 0x0)       = 0 0
+getattrlist("/Users/lin/Library/Containers/com.netease.163music/Data/Caches/online_play_cache\0", 0x70000D0BEE90, 0x70000D0BF290)        = 0 0
+psynch_mutexdrop(0x10B68C070, 0xB1AB1703, 0xB1AB1400)        = 0 0
+psynch_mutexwait(0x10B68C070, 0xB1AB1503, 0xB1AB1100)        = -1314187517 0
+geteuid(0x0, 0x0, 0x0)       = 501 0
+psynch_mutexdrop(0x10B68C070, 0xB1AB1703, 0xB1AB1500)        = 0 0
+psynch_mutexwait(0x10B68C070, 0xB1AB1603, 0xB1AB1200)        = -1314187517 0
+getattrlist("/Users/lin/Library/Containers/com.netease.163music/Data/Caches/online_play_cache\0", 0x60C0001348EC, 0x7F8F3D926CB8)        = 0 0
+psynch_mutexdrop(0x10B68C070, 0xB1AB1903, 0xB1AB1600)        = 0 0
+getattrlist("/Users/lin/Library/Containers/com.netease.163music/Data/Caches/online_play_cache\0", 0x70000CD29E90, 0x70000CD2A290)        = 0 0
+getattrlist("/Users/lin/Library/Containers/com.netease.163music/Data/Caches/online_play_cache\0", 0x70000D247D78, 0x70000D2479D0)        = 0 0
+psynch_mutexwait(0x10B68C070, 0xB1AB1703, 0xB1AB1300)        = -1314187005 0
+lstat64("/Users/lin/Library/Containers/com.netease.163music/Data/Caches/online_play_cache\0", 0x70000CBA0EB0, 0x0)       = 0 0
+geteuid(0x0, 0x0, 0x0)       = 501 0
+getattrlist("/Users/lin/Library/Containers/com.netease.163music/Data/Caches/online_play_cache\0", 0x6040003248AC, 0x7F8F3E809AB8)        = 0 0
+psynch_mutexdrop(0x10B68C070, 0xB1AB1A03, 0xB1AB1700)        = 0 0
+psynch_mutexwait(0x10B68C070, 0xB1AB1803, 0xB1AB1500)        = -1314186493 0
+psynch_mutexdrop(0x10B68C070, 0xB1AB1B03, 0xB1AB1800)        = 0 0
+psynch_mutexwait(0x10B68C070, 0xB1AB1903, 0xB1AB1500)        = -1314186493 0
+getattrlist("/Users/lin/Library/Containers/com.netease.163music/Data/Caches/online_play_cache\0", 0x70000D1C4E90, 0x70000D1C5290)        = 0 0
+getattrlist("/Users/lin/Library/Containers/com.netease.163music/Data/Caches/online_play_cache\0", 0x70000CBA0D78, 0x70000CBA09D0)        = 0 0
+psynch_mutexdrop(0x10B68C070, 0xB1AB1D03, 0xB1AB1900)        = 0 0
+psynch_mutexwait(0x10B68C070, 0xB1AB1A03, 0xB1AB1600)        = -1314185981 0
+geteuid(0x0, 0x0, 0x0)       = 501 0
+psynch_mutexdrop(0x10B68C070, 0xB1AB1D03, 0xB1AB1A00)        = 0 0
+psynch_mutexwait(0x10B68C070, 0xB1AB1B03, 0xB1AB1700)        = -1314185981 0
+getattrlist("/Users/lin/Library/Containers/com.netease.163music/Data/Caches/online_play_cache\0", 0x70000CA9AE90, 0x70000CA9B290)        = 0 0
+getattrlist("/Users/lin/Library/Containers/com.netease.163music/Data/Caches/online_play_cache\0", 0x60800032264C, 0x7F8F3D0156B8)        = 0 0
+open("/Users/lin/Library/Containers/com.netease.163music/Data/Caches/online_play_cache\0", 0x1100004, 0x5)       = 60 0
+psynch_mutexdrop(0x10B68C070, 0xB1AB1E03, 0xB1AB1B00)        = 0 0
+getattrlistbulk(0x3C, 0x60C00031A8C8, 0x7F8F3D92B000)        = 0 0
+getattrlist("/Users/lin/Library/Containers/com.netease.163music/Data/Caches/online_play_cache\0", 0x604000322BEC, 0x7F8F3E8088B8)        = 0 0
+close(0x3C)      = 0 0
+psynch_mutexwait(0x10B68C070, 0xB1AB1C03, 0xB1AB1800)        = -1314185725 0
+psynch_mutexdrop(0x10B68C070, 0xB1AB2203, 0xB1AB1C00)        = 0 0
+psynch_mutexwait(0x10B68C070, 0xB1AB1D03, 0xB1AB1800)        = -1314184701 0
+psynch_mutexdrop(0x10B68C070, 0xB1AB2203, 0xB1AB1D00)        = 0 0
+psynch_mutexwait(0x10B68C070, 0xB1AB1E03, 0xB1AB1A00)        = -1314184701 0
+open("/Users/lin/Library/Containers/com.netease.163music/Data/Caches/online_play_cache\0", 0x1100004, 0x7)       = 60 0
+psynch_mutexdrop(0x10B68C070, 0xB1AB2203, 0xB1AB1E00)        = 0 0
+psynch_mutexwait(0x10B68C070, 0xB1AB1F03, 0xB1AB1B00)        = -1314184701 0
+getattrlist("/Users/lin/Library/Containers/com.netease.163music/Data/Caches/online_play_cache\0", 0x70000D03BE90, 0x70000D03C290)        = 0 0
+psynch_mutexdrop(0x10B68C070, 0xB1AB2303, 0xB1AB1F00)        = 0 0
+getattrlistbulk(0x3C, 0x604000300C78, 0x7F8F3E81F000)        = 0 0
+close(0x3C)      = 0 0
+getattrlist("/Users/lin/Library/Containers/com.netease.163music/Data/Caches/online_play_cache\0", 0x60800032228C, 0x7F8F3CA35AB8)       
+</code></pre>
+<ul>
+<li>有多个线程在不停加锁-&gt;读取同一个目录-&gt;解锁 , 并且进入了 mutexwait , 有锁争用的情况</li>
+<li>和正常情况对比, psynch_muetxtwait 的返回值里有个负数 , 像是一直错误or 超时一直重试, 但是看不到客户端源码, 放弃继续往下查</li>
+<li>尝试把出现在日志里的online_play_cache目录删除,重启客户端自动重建 , 还是出现类似的问题</li>
+<li>后来查阅了其他两个问题类似的 github issue <a href="https://gitlab.com/gitlab-org/gitlab-foss/-/issues/33886">issue 1</a> ,<a href="https://github.com/owncloud/client/issues/5699">issue 2</a>
+   , 都说是 mac os 版本兼容的问题 , 尤其是前端的 fsevent , 恰好这客户端也是套了js前端做的</li>
+<li>找了个足够旧版本的网易云音乐安装上 , 问题消失了...</li>
+</ul>
+<h2 id="_3">后续</h2>
+<ul>
+<li>
+<p>为什么系统调用高上下文切换也高呢? 因为系统调用需要从用户态陷入(trap)内核态, 保存寄存器数据,切换页表, 参考 6.S081 xv6 课程和 OSTEP</p>
+</li>
+<li>
+<p>老版本系统还是不要随便更新东西了啊 , 可这些万恶的客户端一直弹更新很烦人</p>
+</li>
+<li>
+<p>虽然没查出什么有用的信息, 但过程还是挺有收获的</p>
+</li>
+</ul>
+<h2 id="_4">可能有用的资料</h2>
+<ul>
+<li>man page</li>
+<li><a href="https://devyang.space/2020/03/25/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3iOS%E4%B8%AD%E7%9A%84%E9%94%81/">darwin psynch_mutexwait syscall源码</a></li>
+<li><a href="https://opensource.apple.com/source/xnu/xnu-1504.3.12/bsd/kern/syscalls.master">bsd syscalls</a></li>
+<li><a href="https://opensource.apple.com/source/dtrace/dtrace-147/DTTk/dtruss.auto.html">dtruss</a></li>
+<li><a href="https://www.cnblogs.com/funkyRay/p/ios-di-ceng-yuan-li-qi-duo-xian-cheng-zhong.html">related issue</a></li>
+<li><a href="https://www.virtualbox.org/ticket/18089?cversion=1&amp;cnum_hist=18">re i</a></li>
+<li><a href="https://hello-david.github.io/archives/952f054c.html">re i</a></li>
+</ul>
+</div>
+</div>
+<footer>
+<div aria-label="footer navigation" class="rst-footer-buttons" role="navigation">
+<a class="btn btn-neutral float-right" href="../../mac/osx86_external_ssd_swap_problem/" title="mac 外部 SSD Swap 分区开启问题">Next <span class="icon icon-circle-arrow-right"></span></a>
+<a class="btn btn-neutral" href="../.." title="主页"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+</div>
+<hr/>
+<div role="contentinfo">
+<!-- Copyright etc -->
+</div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+</div>
+</div>
+</section>
+</div>
+<div aria-label="versions" class="rst-versions" role="note">
+<span class="rst-current-version" data-toggle="rst-current-version">
+<span><a href="../.." style="color: #fcfcfc;">« Previous</a></span>
+<span style="margin-left: 15px"><a href="../../mac/osx86_external_ssd_swap_problem/" style="color: #fcfcfc">Next »</a></span>
+</span>
+</div>
+<script>var base_url = '../..';</script>
+<script defer="" src="../../js/theme.js"></script>
+<script defer="" src="../../js/mermaid.min.js"></script>
+<script defer="" src="../../js/custom.js"></script>
+<script defer="">
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(false);
+        };
+    </script>
+</body>
+</html>

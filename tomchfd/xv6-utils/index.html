@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
+<head>
+<meta charset="utf-8"/>
+<meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="../../img/favicon.ico" rel="shortcut icon"/>
+<title>xv6 添加用户态程序 - Log0c</title>
+<link href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" rel="stylesheet">
+<link href="../../css/theme.css" rel="stylesheet"/>
+<link href="../../css/theme_extra.css" rel="stylesheet"/>
+<script>
+    // Current page data
+    var mkdocs_page_name = "xv6 \u6dfb\u52a0\u7528\u6237\u6001\u7a0b\u5e8f";
+    var mkdocs_page_input_path = "tomchfd/xv6-utils.md";
+    var mkdocs_page_url = null;
+  </script>
+<script defer="" src="../../js/jquery-2.1.1.min.js"></script>
+<script defer="" src="../../js/modernizr-2.8.3.min.js"></script>
+</link></head>
+<body class="wy-body-for-nav" role="document">
+<div class="wy-grid-for-nav">
+<nav class="wy-nav-side stickynav" data-toggle="wy-nav-shift">
+<div class="wy-side-scroll">
+<div class="wy-side-nav-search">
+<a class="icon icon-home" href="../.."> Log0c</a>
+</div>
+<div aria-label="main navigation" class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../..">主页</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">问题排查</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../black-box-netease-music-problem/">mac 网易云音乐 cpu 占用高排查</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../mac/osx86_external_ssd_swap_problem/">mac 外部 SSD Swap 分区开启问题</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../mac/mac-note-stalled/">mac Notes.app 卡死问题</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../go-pprof-memory-leak/">go 使用 pprof 排查内存泄漏</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../go-bytebufferpool-leak-doubt/">go bytebufferpool 错误使用一例</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../go-shadowing-variable/">go shadowing variable 造成的歧义</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../go-concurrent-map-read-write-bug/">go 并发读写 map 问题一例</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../db-metadatalock/">db metadata lock 问题排查</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../db-deadlock/">db 间隙锁造成的死锁</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../db-deadlock-2/">db 复现不同索引之间的死锁</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../black-box-io-problem/">io 黑盒排查磁盘空间告警/IO问题</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../black-box-cpu-high-problem/">cpu 排查的几个案例</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../black-box-network-problem/">network 排查的几个案例</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../black-box-tcp-troubleshooting/">network tcp 常见状态异常</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../black-box-troubleshooting-cheatsheet/">all 问题排查速查表</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">源码阅读</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../go-doc-reading-technique/">go 源码阅读小技巧</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../go-valyala-bytebufferpool/">valyala/bytebufferpool</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../go-atomic/">atomic LoadInt64 / LoadInt32</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">labs</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../labs/6824-mapreduce/">MIT 6.824 - MapReduce</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../labs/6824-raft/">MIT 6.824 - Raft</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../labs/6824-kv/">MIT 6.824 - KV</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../labs/csapp-shell/">CSAPP - Shell</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../labs/csapp-proxy/">CSAPP - Proxy</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../labs/cs144/">CS144</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">xv6</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../xv6-cheatsheet/">xv6 速查表</a>
+</li>
+<li class="toctree-l1"><a class="" href="../../asd.md">xv6 riscv64 寄存器</a>
+</li>
+<li class="toctree-l1"><a class="" href="../xv6-structure.md">xv6 整体源码结构</a>
+</li>
+<li class="toctree-l1 current"><a class="reference internal current" href="./">xv6 添加用户态程序</a>
+<ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="#sleep">sleep</a>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#ping-pong">ping pong</a>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#primes">primes</a>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#find">find</a>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#xargs">xargs</a>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#bug">BUG汇总</a>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="" href="../xv6-syscall.md   添加系统调用的步骤 , 调试跟着系统调用过程">xv6 添加系统调用</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../xv6-pgtbl/">xv6 优化- kernel 通过 MMU 解引用 user 指针</a>
+</li>
+<li class="toctree-l1"><a class="" href="../../asd.md">xv6 实现用户态 trap 处理</a>
+</li>
+<li class="toctree-l1"><a class="" href="../../asd.md">xv6 优化-延迟分配用户态内存申请</a>
+</li>
+<li class="toctree-l1"><a class="" href="../../asd.md">xv6 优化-实现 fork copy on write</a>
+</li>
+<li class="toctree-l1"><a class="" href="../../asd.md">xv6 实现用户态协程</a>
+</li>
+<li class="toctree-l1"><a class="" href="../../asd.md">xv6 优化锁开销</a>
+</li>
+<li class="toctree-l1"><a class="" href="../../asd.md">xv6 支持大文件</a>
+</li>
+<li class="toctree-l1"><a class="" href="../../asd.md">xv6 实现 mmap</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">工具</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../tools/xdebug/">Xdebug</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../tools/chrome-dev-tools/">Chrome Dev Tools</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../tools/markdown-diagram/">Markdown Diagram 功能</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../tool-yaml-lint/">yaml lint</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">算法</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../algos/int-to-binary-str/">整数转二进制字符串</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../algos/multiple-field-sort/">多字段排序</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../algos/lru-cache-go/">LRU 线程安全和高并发</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">PHP</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../php/how-composer-work/">Composer 是如何工作的</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../php/business-logic-framework/">业务代码的框架</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../php/symfony-lock/">Symfony Lock Component</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../build-my-own-x/php-framework/">构建自己的 PHP 框架</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">杂项</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../others/mac_py_env_deploy/">Mac Python环境 miniConda 搭建</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../others/taylor-otwell-interview/">Taylor otwell 采访文章</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">零碎知识点</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../knowledge-reduce/tricks/">编程技巧/方法</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../knowledge-reduce/network_programming/">网络编程</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../knowledge-reduce/problem_trace/">问题排查</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../knowledge-reduce/network-course/">计算机网络课程分享</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../knowledge-reduce/mysql/">MYSQL</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../knowledge-reduce/language_trait_and_implementation/">语言特性/底层实现</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../knowledge-reduce/computer_composition/">计算机组成原理</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">归档</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/blog_deploy_log/">博客服务器环境搭建记录</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../redis/redis_code_book_reading/">Redis 设计与实现笔记</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/laracasts_learning_path/">Laracasts学习记录</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/black_sierra/">K480N 黑苹果安装记录</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/php_career_guide_line/">从框架看PHP的五种境界[转]</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/laravel_marcoable/">Laravel中的Marcoable</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/laravel_code_book_reading/">Laravel框架关键技术-阅读总结</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/laravel_admin_code_reading/">Laravel-Admin源码阅读</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/first_internship/">实习</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../summary/2017/">2017 总结</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/second_job/">2018 总结</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../summary/2019/">2019 总结</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../summary/2020/">2020 总结</a>
+</li>
+</ul>
+</div>
+</div>
+</nav>
+<section class="wy-nav-content-wrap" data-toggle="wy-nav-shift">
+<nav aria-label="top navigation" class="wy-nav-top" role="navigation">
+<i class="fa fa-bars" data-toggle="wy-nav-top"></i>
+<a href="../..">Log0c</a>
+</nav>
+<div class="wy-nav-content">
+<div class="rst-content">
+<div aria-label="breadcrumbs navigation" role="navigation">
+<ul class="wy-breadcrumbs">
+<li><a href="../..">Docs</a> »</li>
+<li>xv6 »</li>
+<li>xv6 添加用户态程序</li>
+<li class="wy-breadcrumbs-aside">
+</li>
+</ul>
+<hr/>
+</div>
+<div role="main">
+<div class="section">
+<h1 id="xv6">xv6 添加用户态程序</h1>
+<h2 id="sleep">sleep</h2>
+<p>描述符 0 1 2 分别是标准输入,标准输出,错误输出</p>
+<p>支持命令行调用 sleep n , 简单判断输入参数 , 并调用 sleep syscall</p>
+<ul>
+<li>exit syscall</li>
+</ul>
+<p>exit 也是个系统调用, 接收一个 int 参数,
+https://mit-public-courses-cn-translatio.gitbook.io/mit6-s081/lec13-sleep-and-wakeup-robert/13.6-exit-systemcall
+传入-1时 , 一般表示错误, 父进程据此判断
+传入 0时 , 表示正常退出</p>
+<pre><code>$ make qemu
+      ...
+      init: starting sh
+      $ sleep 10
+      (nothing happens for a little while)
+      $
+</code></pre>
+<h2 id="ping-pong">ping pong</h2>
+<p>使用管道实现 parent 和 child 互传</p>
+<ul>
+<li>linux管道的特性</li>
+</ul>
+<p>pipe 的底层实现 , in-memory file ( buffer )</p>
+<p>管道由两个文件描述符组成 , 0 表示 read 端,1 表示 write 端
+子进程会继承管道, 但和父进程独立变化(close 不影响父进程)</p>
+<ul>
+<li>管道 close 某个方向是必须的吗</li>
+</ul>
+<p>父进程 close 写端, 子进程 close 读端, 形成单向的数据流动
+同时也是关闭没必要的文件描述符,减少进程描述符表占用
+并且如果父进程不 close , 无法检测到子进程已经关闭管道的描述符 , 造成继续写数据到管道并且阻塞 (因为还有一个读端 , 所以往管道里写数据不会报错 , 也不会触发 SIGPIPE)</p>
+<p>https://www.youtube.com/watch?v=Mqb2dVRe0uo
+https://stackoverflow.com/questions/24766013/is-it-really-necessary-to-close-the-unused-end-of-the-pipe-in-a-process/24768846</p>
+<p>https://stackoverflow.com/questions/19265191/why-should-you-close-a-pipe-in-linux</p>
+<p>https://www.cnblogs.com/nufangrensheng/p/3560130.html</p>
+<pre><code>$ make qemu
+    ...
+    init: starting sh
+    $ pingpong
+    4: received ping
+    3: received pong
+    $
+</code></pre>
+<h2 id="primes">primes</h2>
+<p>用管道实现素数筛 prime sieve</p>
+<ul>
+<li>什么是素数筛</li>
+</ul>
+<p>快速筛出 2~n的所有素数的方法 , 复杂度是 O(nlognlogn) , 要比一个一个判断快得多</p>
+<ul>
+<li>朴素实现 (埃氏筛)</li>
+</ul>
+<p>2~16
+每次看第一个,如果是素数,就划掉它的倍数,如 2, 划掉4,6,8,10,12,14,16</p>
+<p>下一轮第一个是 3, 同上 </p>
+<p>直到遍历结束</p>
+<ul>
+<li>伪代码
+使用一个 bool 数组表示划掉的数  isRemoved</li>
+</ul>
+<p>遍历 i =  2 到 n
+    如果 isRemoved , 跳过
+    如果 isPrime
+        遍历 i 到 n
+            如果是 i 的倍数,划掉
+定义 res 数组
+ 遍历i=2到 n
+    如果划掉了,跳过
+    否则加入 res 数组
+返回 res</p>
+<ul>
+<li>如何快速判断n是否素数
+遍历 i = 2到 根号 n 的数
+  如果n 能被整除,则不是  n%i==0
+  否则是</li>
+<li>为什么是根号 n  </li>
+</ul>
+<p>参考资料 https://blog.csdn.net/linraise/article/details/16992817</p>
+<ul>
+<li>用管道实现的思路
+父进程作为一个 master,把要处理的素数集通过管道给到第一个子进程, 并等待接收子进程处理的结果,
+第一个子进程筛第一遍,然后把剩余的交给子子进程继续筛,并等待结果 , 这样一直筛下去直到遍历结束,最后一个子进程一层一层返回给父进程</li>
+</ul>
+<p>每个进程只负责判断自己的倍数, 如果不是则传给下一个</p>
+<ul>
+<li>为什么要用管道实现</li>
+</ul>
+<p>提高了并行度吗? 在这个例子里 , 没有 , 文中写的是提高了程序的清晰度 , 代码更简洁易懂</p>
+<p>go 中的 channel , CSP 模型</p>
+<p>CSP 提供了自然的抽象,使得某些程序更简单</p>
+<p>https://swtch.com/~rsc/thread/</p>
+<p>参考6824 russ cox 的演讲</p>
+<pre><code> $ make qemu
+    ...
+    init: starting sh
+    $ primes
+    prime 2
+    prime 3
+    prime 5
+    prime 7
+    prime 11
+    prime 13
+    prime 17
+    prime 19
+    prime 23
+    prime 29
+    prime 31
+    $
+</code></pre>
+<h2 id="find">find</h2>
+<p>实际上只需要实现完全匹配 , 但是在 grep 中看到了一个很好的 match 实现,直接用了</p>
+<ul>
+<li>要实现的功能列表,案例</li>
+</ul>
+<p>参考 ls.c 和 grep.c</p>
+<p>任务: 看
+- ls.c(X) 
+- grep.c (rob pike大神级代码,参考这篇 https://www.cs.princeton.edu/courses/archive/spr09/cos333/beautiful.html)
+- find.c X</p>
+<ul>
+<li>文字梳理 grep.c 的逻辑 (待完成)</li>
+</ul>
+<p>网上找代码实现讲解 , 看不懂</p>
+<pre><code>$ make qemu
+    ...
+    init: starting sh
+    $ echo &gt; b
+    $ mkdir a
+    $ echo &gt; a/b
+    $ find . b
+    ./b
+    ./a/b
+    $ 
+</code></pre>
+<h2 id="xargs">xargs</h2>
+<ul>
+<li>xargs 介绍</li>
+</ul>
+<p>从标准输入读入每一行, 并对每一行执行命令 , 比如
+echo "1\n2" | xargs echo line
+输出</p>
+<pre><code>echo line 1
+echo lin 2
+</code></pre>
+<p>任务: 读 xargs.c</p>
+<p>网上找代码实现讲解 , 看不懂
+测试: make qemu , sh &lt; xargstest.sh</p>
+<p>char 数组的指针是不可变的
+char * 另外存</p>
+<p>C K&amp;R 书里有写 , 勉强记起来了</p>
+<p>现在写法是一个一个字节读的, 会产生多次系统调用 , 优化成一次读多个字节的</p>
+<h2 id="bug">BUG汇总</h2>
+<p>BUG1:</p>
+<pre><code>
+init: starting sh
+$ sleep 10
+usertrap(): unexpected scause 0x000000000000000d pid=3
+            sepc=0x0000000000000114 stval=0x0000000000003008
+</code></pre>
+<p>指令和寄存器列表:</p>
+<p>寄存器:
+- sepc</p>
+<p>指令:
+- scaue</p>
+<p>sleep.asm</p>
+<pre><code>    return 0;
+  24:   4501                    li  a0,0
+  26:   60a2                    ld  ra,8(sp)
+  28:   6402                    ld  s0,0(sp)
+  2a:   0141                    addi    sp,sp,16
+  2c:   8082                    ret
+</code></pre>
+<pre><code>exit(0);
+  40:   4501                    li  a0,0
+  42:   00000097            auipc   ra,0x0
+  46:   292080e7            jalr    658(ra) # 2d4 &lt;exit&gt;
+</code></pre>
+<p>BUG2:</p>
+<p>primes 忘记关 pipe 导致阻塞</p>
+<p>BUG3:
+字符数组末尾没加 0 , 读取越界了</p>
+</div>
+</div>
+<footer>
+<div aria-label="footer navigation" class="rst-footer-buttons" role="navigation">
+<a class="btn btn-neutral float-right" href="../xv6-pgtbl/" title="xv6 优化- kernel 通过 MMU 解引用 user 指针">Next <span class="icon icon-circle-arrow-right"></span></a>
+<a class="btn btn-neutral" href="../xv6-cheatsheet/" title="xv6 速查表"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+</div>
+<hr/>
+<div role="contentinfo">
+<!-- Copyright etc -->
+</div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+</div>
+</div>
+</section>
+</div>
+<div aria-label="versions" class="rst-versions" role="note">
+<span class="rst-current-version" data-toggle="rst-current-version">
+<span><a href="../xv6-cheatsheet/" style="color: #fcfcfc;">« Previous</a></span>
+<span style="margin-left: 15px"><a href="../xv6-pgtbl/" style="color: #fcfcfc">Next »</a></span>
+</span>
+</div>
+<script>var base_url = '../..';</script>
+<script defer="" src="../../js/theme.js"></script>
+<script defer="" src="../../js/mermaid.min.js"></script>
+<script defer="" src="../../js/custom.js"></script>
+<script defer="">
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(false);
+        };
+    </script>
+</body>
+</html>

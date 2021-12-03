@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
+<head>
+<meta charset="utf-8"/>
+<meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="../../img/favicon.ico" rel="shortcut icon"/>
+<title>Xv6 lazy - Log0c</title>
+<link href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" rel="stylesheet">
+<link href="../../css/theme.css" rel="stylesheet"/>
+<link href="../../css/theme_extra.css" rel="stylesheet"/>
+<script>
+    // Current page data
+    var mkdocs_page_name = "Xv6 lazy";
+    var mkdocs_page_input_path = "tomchfd/xv6-lazy.md";
+    var mkdocs_page_url = null;
+  </script>
+<script defer="" src="../../js/jquery-2.1.1.min.js"></script>
+<script defer="" src="../../js/modernizr-2.8.3.min.js"></script>
+</link></head>
+<body class="wy-body-for-nav" role="document">
+<div class="wy-grid-for-nav">
+<nav class="wy-nav-side stickynav" data-toggle="wy-nav-shift">
+<div class="wy-side-scroll">
+<div class="wy-side-nav-search">
+<a class="icon icon-home" href="../.."> Log0c</a>
+</div>
+<div aria-label="main navigation" class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../..">主页</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">问题排查</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../black-box-netease-music-problem/">mac 网易云音乐 cpu 占用高排查</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../mac/osx86_external_ssd_swap_problem/">mac 外部 SSD Swap 分区开启问题</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../mac/mac-note-stalled/">mac Notes.app 卡死问题</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../go-pprof-memory-leak/">go 使用 pprof 排查内存泄漏</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../go-bytebufferpool-leak-doubt/">go bytebufferpool 错误使用一例</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../go-shadowing-variable/">go shadowing variable 造成的歧义</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../go-concurrent-map-read-write-bug/">go 并发读写 map 问题一例</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../db-metadatalock/">db metadata lock 问题排查</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../db-deadlock/">db 间隙锁造成的死锁</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../db-deadlock-2/">db 复现不同索引之间的死锁</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../black-box-io-problem/">io 黑盒排查磁盘空间告警/IO问题</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../black-box-cpu-high-problem/">cpu 排查的几个案例</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../black-box-network-problem/">network 排查的几个案例</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../black-box-tcp-troubleshooting/">network tcp 常见状态异常</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../black-box-troubleshooting-cheatsheet/">all 问题排查速查表</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">源码阅读</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../go-doc-reading-technique/">go 源码阅读小技巧</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../go-valyala-bytebufferpool/">valyala/bytebufferpool</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../go-atomic/">atomic LoadInt64 / LoadInt32</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">labs</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../labs/6824-mapreduce/">MIT 6.824 - MapReduce</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../labs/6824-raft/">MIT 6.824 - Raft</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../labs/6824-kv/">MIT 6.824 - KV</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../labs/csapp-shell/">CSAPP - Shell</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../labs/csapp-proxy/">CSAPP - Proxy</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../labs/cs144/">CS144</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">xv6</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../xv6-cheatsheet/">xv6 速查表</a>
+</li>
+<li class="toctree-l1"><a class="" href="../../asd.md">xv6 riscv64 寄存器</a>
+</li>
+<li class="toctree-l1"><a class="" href="../xv6-structure.md">xv6 整体源码结构</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../xv6-utils/">xv6 添加用户态程序</a>
+</li>
+<li class="toctree-l1"><a class="" href="../xv6-syscall.md   添加系统调用的步骤 , 调试跟着系统调用过程">xv6 添加系统调用</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../xv6-pgtbl/">xv6 优化- kernel 通过 MMU 解引用 user 指针</a>
+</li>
+<li class="toctree-l1"><a class="" href="../../asd.md">xv6 实现用户态 trap 处理</a>
+</li>
+<li class="toctree-l1"><a class="" href="../../asd.md">xv6 优化-延迟分配用户态内存申请</a>
+</li>
+<li class="toctree-l1"><a class="" href="../../asd.md">xv6 优化-实现 fork copy on write</a>
+</li>
+<li class="toctree-l1"><a class="" href="../../asd.md">xv6 实现用户态协程</a>
+</li>
+<li class="toctree-l1"><a class="" href="../../asd.md">xv6 优化锁开销</a>
+</li>
+<li class="toctree-l1"><a class="" href="../../asd.md">xv6 支持大文件</a>
+</li>
+<li class="toctree-l1"><a class="" href="../../asd.md">xv6 实现 mmap</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">工具</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../tools/xdebug/">Xdebug</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../tools/chrome-dev-tools/">Chrome Dev Tools</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../tools/markdown-diagram/">Markdown Diagram 功能</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../tool-yaml-lint/">yaml lint</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">算法</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../algos/int-to-binary-str/">整数转二进制字符串</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../algos/multiple-field-sort/">多字段排序</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../algos/lru-cache-go/">LRU 线程安全和高并发</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">PHP</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../php/how-composer-work/">Composer 是如何工作的</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../php/business-logic-framework/">业务代码的框架</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../php/symfony-lock/">Symfony Lock Component</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../build-my-own-x/php-framework/">构建自己的 PHP 框架</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">杂项</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../others/mac_py_env_deploy/">Mac Python环境 miniConda 搭建</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../others/taylor-otwell-interview/">Taylor otwell 采访文章</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">零碎知识点</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../knowledge-reduce/tricks/">编程技巧/方法</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../knowledge-reduce/network_programming/">网络编程</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../knowledge-reduce/problem_trace/">问题排查</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../knowledge-reduce/network-course/">计算机网络课程分享</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../knowledge-reduce/mysql/">MYSQL</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../knowledge-reduce/language_trait_and_implementation/">语言特性/底层实现</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../knowledge-reduce/computer_composition/">计算机组成原理</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">归档</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/blog_deploy_log/">博客服务器环境搭建记录</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../redis/redis_code_book_reading/">Redis 设计与实现笔记</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/laracasts_learning_path/">Laracasts学习记录</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/black_sierra/">K480N 黑苹果安装记录</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/php_career_guide_line/">从框架看PHP的五种境界[转]</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/laravel_marcoable/">Laravel中的Marcoable</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/laravel_code_book_reading/">Laravel框架关键技术-阅读总结</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/laravel_admin_code_reading/">Laravel-Admin源码阅读</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/first_internship/">实习</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../summary/2017/">2017 总结</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/second_job/">2018 总结</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../summary/2019/">2019 总结</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../summary/2020/">2020 总结</a>
+</li>
+</ul>
+</div>
+</div>
+</nav>
+<section class="wy-nav-content-wrap" data-toggle="wy-nav-shift">
+<nav aria-label="top navigation" class="wy-nav-top" role="navigation">
+<i class="fa fa-bars" data-toggle="wy-nav-top"></i>
+<a href="../..">Log0c</a>
+</nav>
+<div class="wy-nav-content">
+<div class="rst-content">
+<div aria-label="breadcrumbs navigation" role="navigation">
+<ul class="wy-breadcrumbs">
+<li><a href="../..">Docs</a> »</li>
+<li>Xv6 lazy</li>
+<li class="wy-breadcrumbs-aside">
+</li>
+</ul>
+<hr/>
+</div>
+<div role="main">
+<div class="section">
+<p>Make this modification, boot xv6, and type echo hi to the shell. You should see something like this:</p>
+<p>$ echo hi
+usertrap(): unexpected scause 0x000000000000000f pid=3
+sepc=0x00000000000012a6 stval=0x0000000000004008
+panic: uvmunmap: not mapped
+QEMU: TerminatedThe "usertrap(): ..." message is from the user trap handler in trap.c; it has caught an exception that it does not know how to handle. Make sure you understand why this page fault occurs. The "stval=0x0..04008" indicates that the virtual address that caused the page fault is 0x4008.</p>
+<p>https://mit-public-courses-cn-translatio.gitbook.io/mit6-s081/lec08-page-faults-frans/8.2-lazy-page-allocation
+sepc 是什么  , 发生错误时的用户代码 pc
+stval 是什么 , 操作的虚拟地址
+scause 有哪些值</p>
+<p>为什么 echo 要用到堆</p>
+<p>sh.asm</p>
+<p>hp-&gt;s.size = nu;
+12a6:   01652423            sw  s6,8(a0)</p>
+<p>shell 里调用了 malloc -&gt; sbrk -&gt; sys_sbrk  来执行命令 (存放 cmd 结构)</p>
+<p>init: starting sh
+usertrap(): unexpected scause 0x000000000000000c pid=17
+sepc=0x0000000000000364 stval=0x0000000000000364
+init: starting sh
+usertrap(): unexpected scause 0x000000000000000c pid=18
+sepc=0x0000000000000364 stval=0x0000000000000364
+init: starting sh
+usertrap(): unexpected scause 0x000000000QEMU: Terminated</p>
+<p>test lazy unmap: OK
+running test out of memory
+panic: walk
+QEMU: Terminated</p>
+<p>用 gdb , 打日志 , 看 backtrace 查</p>
+<p>addr 不是 uint64 导致 溢出3</p>
+<p>// https://pdos.csail.mit.edu/6.S081/2020/labs/traps.html</p>
+<p>running test out of memory
+0x000000008000062c
+0x0000000080001086
+0x0000000080001198
+0x0000000080001718
+0x000000008000293a
+0x0000000000000a94
+panic: walk
+QEMU: Terminated</p>
+<p>if(va &gt;= MAXVA) {
+printf("%d:%d",va,MAXVA);
+panic("walk");
+}</p>
+<p>running test out of memory
+-2147471360:00x000000008000062c
+0x000000008000109a
+0x00000000800011ac
+0x000000008000172c
+0x000000008000294e
+0x0000000000000a94
+panic: walk
+QEMU: Terminated</p>
+<p>负数 , 什么东西溢出了
+-7fffd000:00x000000008000062c</p>
+<p>用之前 lab 写的 backtrace 程序 + 符号表 追踪栈
+(base) ➜  xv6-labs-2020 git:(lazy) ✗ riscv64-unknown-elf-addr2line -e kernel/kernel
+0x000000008000062c
+0x0000000080001086
+0x0000000080001198
+0x0000000080001718
+0x000000008000293a
+0x0000000000000a94/Users/lin/s081/xv6-labs-2020/kernel/printf.c:123
+/Users/lin/s081/xv6-labs-2020/kernel/vm.c:83
+/Users/lin/s081/xv6-labs-2020/kernel/vm.c:166
+/Users/lin/s081/xv6-labs-2020/kernel/vm.c:481
+/Users/lin/s081/xv6-labs-2020/kernel/trap.c:72</p>
+<p>0x00000000800010bc
+0x00000000800011ce
+0x000000008000174e
+0x0000000080002970
+0x0000000000000a94/Users/lin/s081/xv6-labs-2020/kernel/vm.c:86
+/Users/lin/s081/xv6-labs-2020/kernel/vm.c:169
+/Users/lin/s081/xv6-labs-2020/kernel/vm.c:484
+/Users/lin/s081/xv6-labs-2020/kernel/trap.c:72</p>
+<p>c 弱类型的坑 , xv6 的 bug</p>
+<p>测试代码的逻辑:</p>
+<p>panic("walk") -&gt;
+va &gt;= MAXVA -&gt;
+发现 printf 没实现打印64位 , 照着改, 写了个printlong
+打印 va 和 MAXVA 和 bt
+这么说是 va 超过 MAXVA 了? 应该在 malloc -&gt; sbrk 的地方拦截
+加上了, 还是没用? 为啥 , 打印一下 addr+n</p>
+<p>发现前面 va 都是 uint64 的, 这里传进去的 addr 是 int , 而且刚开始打印%d的时候是负数
+想起 c 是弱类型的, 被强制转换了!
+查看代码提交记录, 发现 06 年 rsc 都是用 int 的,因为那时候64 位还不普及 , 然后 19 年 f 把返回值改成 uint64 , 但是这个 addr 没改!</p>
+<p>c 弱类型好坑
+用着 go 的思维在排查 , 忘记了 c 是弱类型</p>
+<p>78003780
+79003790
+7a0037a0
+7b0037b0
+7c0037c0
+7d0037d0
+7e0037e0
+7f0037f0
+80003800
+81003810
+80003000:00x000000008000062c
+0x00000000800010bc
+0x00000000800011ce
+0x000000008000174e
+0x0000000080002970
+0x0000000000000a78
+panic: walk
+QEMU 5.2.0 monitor - type 'help' for more information
+这时候怎么看也是超过 MAXVA 了啊, 很奇怪, 这时候还没有怀疑 xv6 代码错了 ,  写了个demo 测试了一下, 还是一样, 突然发现 addr 和 n 的类型是 int
+32位有符号啊 , 最后一位为 1 的话为负数了! 把 int 改成 uint64 , 泪目了,一天就这么过去了 </p>
+<p>2046834592
+2063611824
+2080389056
+2097166288
+2113943520
+2130720752
+-2147469312
+-2130692080
+80003000:00x000000008000062c
+0x00000000800010bc
+0x00000000800011ce
+0x000000008000174e
+0x0000000080002970
+0x0000000000000a78
+panic: walk
+QEMU: Terminated</p>
+<p>1</p>
+<p>总结:</p>
+<p>有很多坏习惯 , 养成了就难改</p>
+<p>每个函数都要加定义注释 , 说明函数是做什么用的, 参数, 返回什么</p>
+<p>代码设计
+函数接口设计 , 参数设计 , 定义 什么的</p>
+<p>代码里的 if else 代码块 含义 设计 , 变量定义</p>
+<p>xv6 int addr 的 bug , 地址应该是 uint64 ,</p>
+<p>stval 是 被调用方不会还原的寄存器 , 要在一开始就存好</p>
+<p>一个函数别做太多事, 还把 p-&gt;killed 写里面了,  内核里的 walkaddr 根本不需要 kill 进程 , 而且内核里是软件 walk 页表,根本没有触发 pgfault , 也就没有 stval , 还傻傻的去 stval 取</p>
+<p>这两个地方还是不知道 &lt; 和 &gt;= 是怎么判断出来的</p>
+<p>PGROUNDUP 是往高地址 ROUND 的</p>
+<p>if (va &lt; PGROUNDUP(ustack)) {
+return 0;</p>
+<pre><code>} else if (va &gt;= p-&gt;sz) {
+    return 0;
+} else {
+
+
+}
+
+
+使用某个函数的时候看其他地方是怎么调用的, 看看函数接口定义 , 要做好错误处理
+
+
+
+不要用 ide 的 refactor 功能随便把某块代码封装成函数 , 如果要封装得先定义好函数接口 , 清楚函数是做什么用的
+
+
+lazy alloc , walk 页表的可能情况 , 没有 pte ( pte 为 0) , 或 pte_v 为 0, pte_u 为 0
+
+修改某个函数时也要清楚函数的定义, 参数 , 返回值定义 , 理解函数的作用 , 避免把函数语义给篡改了
+
+找本书或课程看看 , 关于代码设计, 维护的 , 坏习惯
+
+列出所有的坏习惯, 写代码前看看
+
+学习 lazy-debug 的写法 : 函数说明清除 , debug 日志清楚
+</code></pre>
+<p>crucial check
+t is easy for a kernel developer to omit a crucial check, and real-world kernels have a long
+history of missing checks whose absence can be exploited by user programs to obtain kernel priv-
+ileges. It is likely that xv6 doesn’t do a complete job of validating user-level data supplied to the
+kernel, which a malicious user program might be able to exploit to circumvent xv6’s isolation</p>
+<p>增量式地改进是一种管理复杂度的强大工具。正如Polya在数学问题求解中所建议的那样——理解问题、形成计划、执行计划，而后再回顾你的做法。</p>
+<p>找bug, 调试技巧 (问题排查) , 有固定的套路 或检查顺序吗 , 如何节省时间</p>
+<p>xv6 vmprint , backtrace , gdb , printf , </p>
+<p>panic 后还会继续跑 其他进程</p>
+<p>0x0000000080002966
+0x0000000000000a78
+panic: walk
+asd!0x0000000080002d94
+0x0000000080002c44
+0x0000000080002906
+0x0000000000000030
+asd!0x0000000080002d94
+0x0000000080002c44
+0x0000000080002906
+0x0000000000000030
+asd!0x0000000080002d94
+0x0000000080002c44</p>
+</div>
+</div>
+<footer>
+<hr/>
+<div role="contentinfo">
+<!-- Copyright etc -->
+</div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+</div>
+</div>
+</section>
+</div>
+<div aria-label="versions" class="rst-versions" role="note">
+<span class="rst-current-version" data-toggle="rst-current-version">
+</span>
+</div>
+<script>var base_url = '../..';</script>
+<script defer="" src="../../js/theme.js"></script>
+<script defer="" src="../../js/mermaid.min.js"></script>
+<script defer="" src="../../js/custom.js"></script>
+<script defer="">
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(false);
+        };
+    </script>
+</body>
+</html>

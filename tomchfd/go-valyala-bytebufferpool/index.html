@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
+<head>
+<meta charset="utf-8"/>
+<meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="../../img/favicon.ico" rel="shortcut icon"/>
+<title>valyala/bytebufferpool - Log0c</title>
+<link href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" rel="stylesheet">
+<link href="../../css/theme.css" rel="stylesheet"/>
+<link href="../../css/theme_extra.css" rel="stylesheet"/>
+<script>
+    // Current page data
+    var mkdocs_page_name = "valyala/bytebufferpool";
+    var mkdocs_page_input_path = "tomchfd/go-valyala-bytebufferpool.md";
+    var mkdocs_page_url = null;
+  </script>
+<script defer="" src="../../js/jquery-2.1.1.min.js"></script>
+<script defer="" src="../../js/modernizr-2.8.3.min.js"></script>
+</link></head>
+<body class="wy-body-for-nav" role="document">
+<div class="wy-grid-for-nav">
+<nav class="wy-nav-side stickynav" data-toggle="wy-nav-shift">
+<div class="wy-side-scroll">
+<div class="wy-side-nav-search">
+<a class="icon icon-home" href="../.."> Log0c</a>
+</div>
+<div aria-label="main navigation" class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../..">主页</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">问题排查</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../black-box-netease-music-problem/">mac 网易云音乐 cpu 占用高排查</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../mac/osx86_external_ssd_swap_problem/">mac 外部 SSD Swap 分区开启问题</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../mac/mac-note-stalled/">mac Notes.app 卡死问题</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../go-pprof-memory-leak/">go 使用 pprof 排查内存泄漏</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../go-bytebufferpool-leak-doubt/">go bytebufferpool 错误使用一例</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../go-shadowing-variable/">go shadowing variable 造成的歧义</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../go-concurrent-map-read-write-bug/">go 并发读写 map 问题一例</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../db-metadatalock/">db metadata lock 问题排查</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../db-deadlock/">db 间隙锁造成的死锁</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../db-deadlock-2/">db 复现不同索引之间的死锁</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../black-box-io-problem/">io 黑盒排查磁盘空间告警/IO问题</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../black-box-cpu-high-problem/">cpu 排查的几个案例</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../black-box-network-problem/">network 排查的几个案例</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../black-box-tcp-troubleshooting/">network tcp 常见状态异常</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../black-box-troubleshooting-cheatsheet/">all 问题排查速查表</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">源码阅读</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../go-doc-reading-technique/">go 源码阅读小技巧</a>
+</li>
+<li class="toctree-l1 current"><a class="reference internal current" href="./">valyala/bytebufferpool</a>
+<ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="#_1">暴露的接口</a>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#_2">主要结构体</a>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#get">Get 主要流程</a>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#put">Put 主要流程</a>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#_3">细节优化</a>
+<ul>
+<li class="toctree-l3"><a class="reference internal" href="#cpu-cache-line">cpu cache line</a>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#_4">基于统计的阈值校准</a>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#_5">原子操作代替锁</a>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#_6">切片重置</a>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#_7">其他</a>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#_8">性能测试</a>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#_9">参考资料</a>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../go-atomic/">atomic LoadInt64 / LoadInt32</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">labs</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../labs/6824-mapreduce/">MIT 6.824 - MapReduce</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../labs/6824-raft/">MIT 6.824 - Raft</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../labs/6824-kv/">MIT 6.824 - KV</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../labs/csapp-shell/">CSAPP - Shell</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../labs/csapp-proxy/">CSAPP - Proxy</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../labs/cs144/">CS144</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">xv6</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../xv6-cheatsheet/">xv6 速查表</a>
+</li>
+<li class="toctree-l1"><a class="" href="../../asd.md">xv6 riscv64 寄存器</a>
+</li>
+<li class="toctree-l1"><a class="" href="../xv6-structure.md">xv6 整体源码结构</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../xv6-utils/">xv6 添加用户态程序</a>
+</li>
+<li class="toctree-l1"><a class="" href="../xv6-syscall.md   添加系统调用的步骤 , 调试跟着系统调用过程">xv6 添加系统调用</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../xv6-pgtbl/">xv6 优化- kernel 通过 MMU 解引用 user 指针</a>
+</li>
+<li class="toctree-l1"><a class="" href="../../asd.md">xv6 实现用户态 trap 处理</a>
+</li>
+<li class="toctree-l1"><a class="" href="../../asd.md">xv6 优化-延迟分配用户态内存申请</a>
+</li>
+<li class="toctree-l1"><a class="" href="../../asd.md">xv6 优化-实现 fork copy on write</a>
+</li>
+<li class="toctree-l1"><a class="" href="../../asd.md">xv6 实现用户态协程</a>
+</li>
+<li class="toctree-l1"><a class="" href="../../asd.md">xv6 优化锁开销</a>
+</li>
+<li class="toctree-l1"><a class="" href="../../asd.md">xv6 支持大文件</a>
+</li>
+<li class="toctree-l1"><a class="" href="../../asd.md">xv6 实现 mmap</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">工具</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../tools/xdebug/">Xdebug</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../tools/chrome-dev-tools/">Chrome Dev Tools</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../tools/markdown-diagram/">Markdown Diagram 功能</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../tool-yaml-lint/">yaml lint</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">算法</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../algos/int-to-binary-str/">整数转二进制字符串</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../algos/multiple-field-sort/">多字段排序</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../algos/lru-cache-go/">LRU 线程安全和高并发</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">PHP</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../php/how-composer-work/">Composer 是如何工作的</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../php/business-logic-framework/">业务代码的框架</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../php/symfony-lock/">Symfony Lock Component</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../build-my-own-x/php-framework/">构建自己的 PHP 框架</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">杂项</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../others/mac_py_env_deploy/">Mac Python环境 miniConda 搭建</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../others/taylor-otwell-interview/">Taylor otwell 采访文章</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">零碎知识点</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../knowledge-reduce/tricks/">编程技巧/方法</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../knowledge-reduce/network_programming/">网络编程</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../knowledge-reduce/problem_trace/">问题排查</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../knowledge-reduce/network-course/">计算机网络课程分享</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../knowledge-reduce/mysql/">MYSQL</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../knowledge-reduce/language_trait_and_implementation/">语言特性/底层实现</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../knowledge-reduce/computer_composition/">计算机组成原理</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">归档</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/blog_deploy_log/">博客服务器环境搭建记录</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../redis/redis_code_book_reading/">Redis 设计与实现笔记</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/laracasts_learning_path/">Laracasts学习记录</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/black_sierra/">K480N 黑苹果安装记录</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/php_career_guide_line/">从框架看PHP的五种境界[转]</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/laravel_marcoable/">Laravel中的Marcoable</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/laravel_code_book_reading/">Laravel框架关键技术-阅读总结</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/laravel_admin_code_reading/">Laravel-Admin源码阅读</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/first_internship/">实习</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../summary/2017/">2017 总结</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/second_job/">2018 总结</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../summary/2019/">2019 总结</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../summary/2020/">2020 总结</a>
+</li>
+</ul>
+</div>
+</div>
+</nav>
+<section class="wy-nav-content-wrap" data-toggle="wy-nav-shift">
+<nav aria-label="top navigation" class="wy-nav-top" role="navigation">
+<i class="fa fa-bars" data-toggle="wy-nav-top"></i>
+<a href="../..">Log0c</a>
+</nav>
+<div class="wy-nav-content">
+<div class="rst-content">
+<div aria-label="breadcrumbs navigation" role="navigation">
+<ul class="wy-breadcrumbs">
+<li><a href="../..">Docs</a> »</li>
+<li>源码阅读 »</li>
+<li>valyala/bytebufferpool</li>
+<li class="wy-breadcrumbs-aside">
+</li>
+</ul>
+<hr/>
+</div>
+<div role="main">
+<div class="section">
+<h1 id="bytebufferpool">bytebufferpool</h1>
+<p>今天来阅读一下 valyala大神的 bytebufferpool 字节对象缓冲池 , 看看在sync.pool的基础上做了什么优化</p>
+<p><a href="https://github.com/valyala/bytebufferpool/blob/master/pool.go">pool.go</a></p>
+<h2 id="_1">暴露的接口</h2>
+<pre><code>func (p *Pool) Get() *ByteBuffer {
+func (p *Pool) Put(b *ByteBuffer) {
+</code></pre>
+<p>和 sync.Pool 一样只提供了 Get 和 Put 接口 , ByteBuffer 是另外实现的类似 byte.Buffer 的结构,提供相同的接口和据说更好的性能 (找个时间压测一下)</p>
+<h2 id="_2">主要结构体</h2>
+<pre><code>type Pool struct {
+    calls       [steps]uint64   //用于统计不同容量范围的 buffer 的获取次数 , 如 step 0 存放 0-64 字节的 buffer 获取次数
+    calibrating uint64 // 校准中的标志位, 不能执行 put 操作
+
+    defaultSize uint64 // 当pool 中没有buffer 时,初始化的默认大小 , 会根据统计结果动态变化
+    maxSize     uint64 // 当 buffer 放回时的size 判断, 避免 buffer &gt; maxSize 造成内存泄漏
+
+    pool sync.Pool // 底层还是使用 sync.Pool 对象池
+}
+
+</code></pre>
+<p>结构和使用都非常简单, 实例化 Pool 就行</p>
+<h2 id="get">Get 主要流程</h2>
+<p>先看看主体的流程 , 比较短 , 不画脑图了</p>
+<ul>
+<li>尝试从 sync.Pool 中获取 ,获取不到则创建一个新的 ByteBuffer ,size 为 defaultSize</li>
+</ul>
+<pre><code>func (p *Pool) Get() *ByteBuffer {
+    v := p.pool.Get()
+    if v != nil {
+        return v.(*ByteBuffer)
+    }
+    return &amp;ByteBuffer{
+        B: make([]byte, 0, atomic.LoadUint64(&amp;p.defaultSize)),
+    }
+}
+</code></pre>
+<h2 id="put">Put 主要流程</h2>
+<ul>
+<li>先获取该 buffer 所在的区间下标 , 该区间调用次数+1 (统计逻辑)</li>
+<li>然后判断该区间是否触发了校准阈值, 如果是, 开始校准 (校准逻辑写在下面的细节优化里)</li>
+<li>如果未触发,判断该 buffer 的 cap 是否超过 maxSize, 超过则丢弃</li>
+<li>否则 reset 切片的 len为 0 , <code>b.B = b.B[:0]</code> , 并且放入池子中</li>
+</ul>
+<pre><code>func (p *Pool) Put(b *ByteBuffer) {
+    idx := index(len(b.B))
+
+    if atomic.AddUint64(&amp;p.calls[idx], 1) &gt; calibrateCallsThreshold {
+        p.calibrate()
+    }
+
+    maxSize := int(atomic.LoadUint64(&amp;p.maxSize))
+    if maxSize == 0 || cap(b.B) &lt;= maxSize {
+        b.Reset()
+        p.pool.Put(b)
+    }
+}
+</code></pre>
+<h2 id="_3">细节优化</h2>
+<p>有很多细节上的优化, 算是复习了一下之前学到的知识点</p>
+<h3 id="cpu-cache-line">cpu cache line</h3>
+<p>这里使用了最小 64 (2^6次方) 字节并已他为倍数设置了 bytebuffer 的minSize 和 maxSize</p>
+<pre><code>    minBitSize = 6 // 2**6=64 is a CPU cache line size
+    steps      = 20
+
+    minSize = 1 &lt;&lt; minBitSize
+    maxSize = 1 &lt;&lt; (minBitSize + steps - 1)
+</code></pre>
+<p>Q: 为什么要用 64 字节? </p>
+<p>因为 cpu cache 从内存加载到各级 cache 是以 64 字节的 cache line 为单位的 , 使用 64 字节可以避免最坏情况下多次访问内存 , 比如 50 字节 (没有64 字节对齐)</p>
+<p>Q: 之前有看过说 go 编译器会做字节对齐, 那这里还需要额外对齐吗?</p>
+<p>需要,因为编译器的对齐是 4 或 8 字节对齐</p>
+<p>资料:</p>
+<ul>
+<li><a href="https://time.geekbang.org/column/article/107477">计算机组成原理- 高速缓存（上）：“4毫秒”究竟值多少钱？</a></li>
+<li><a href="">系统性能调优必知必会-01 | CPU缓存：怎样写代码能够让CPU执行得更快？</a></li>
+<li><a href="https://juejin.cn/post/6975177721097748516">go 中的内存对齐</a></li>
+</ul>
+<h3 id="_4">基于统计的阈值校准</h3>
+<ul>
+<li>当某个 cap 范围内的调用次数超过 42000 次时 , 会触发校准操作 , 重新计算 defaultSize  和 maxSize , 并重新统计</li>
+<li>defaultSize 用于当池子中没有可用 buffer 时 , 创建的新 buffer 的size</li>
+<li>
+<p>maxSize 用于限制放回的 buffer,如果超过 maxSize 则丢弃</p>
+</li>
+<li>
+<p>统计分为 20 个范围(0-64kB,64-128kB .... ) , 计算buffer 放回时,落在每个cap范围的buffer数量, 并做排序</p>
+</li>
+<li>defaultSize 取命中次数最多 的 buffer size , 减少扩容造成的性能消耗</li>
+<li>maxSize 取从大到小排序后前百分之 95 的命中中 最大的 size , 保证百分之 95 的放回操作都不会被丢弃 (缓解 gc)</li>
+</ul>
+<pre><code>func (p *Pool) calibrate() {
+    if !atomic.CompareAndSwapUint64(&amp;p.calibrating, 0, 1) {
+        return
+    }
+
+    a := make(callSizes, 0, steps)
+    var callsSum uint64
+    for i := uint64(0); i &lt; steps; i++ {
+        calls := atomic.SwapUint64(&amp;p.calls[i], 0)
+        callsSum += calls
+        a = append(a, callSize{
+            calls: calls,
+            size:  minSize &lt;&lt; i,
+        })
+    }
+    sort.Sort(a)
+
+    defaultSize := a[0].size
+    maxSize := defaultSize
+
+    maxSum := uint64(float64(callsSum) * maxPercentile)
+    callsSum = 0
+    for i := 0; i &lt; steps; i++ {
+        if callsSum &gt; maxSum {
+            break
+        }
+        callsSum += a[i].calls
+        size := a[i].size
+        if size &gt; maxSize {
+            maxSize = size
+        }
+    }
+
+    atomic.StoreUint64(&amp;p.defaultSize, defaultSize)
+    atomic.StoreUint64(&amp;p.maxSize, maxSize)
+
+    atomic.StoreUint64(&amp;p.calibrating, 0)
+}
+</code></pre>
+<h3 id="_5">原子操作代替锁</h3>
+<p>类似这种 flag 标志位的, 使用原子操作开销要比锁性能好 , 这里的标志位是 calibrating (校准中)</p>
+<pre><code>if !atomic.CompareAndSwapUint64(&amp;p.calibrating, 0, 1) {
+        return
+    }
+</code></pre>
+<h3 id="_6">切片重置</h3>
+<p>使用 <code>b.B = b.B[:0]</code> 重置切片 , 而不是构建一个新数组切片</p>
+<h2 id="_7">其他</h2>
+<ul>
+<li>没有分不同buffer 大小的池子</li>
+</ul>
+<p>在 go 并发课中读到了这样的一种优化 , 但在这里没看到</p>
+<p>但作者在注释里写了 , 希望由用户自行判断 buffer 的使用类型 , 不同使用类型用不同的 pool</p>
+<pre><code>// Distinct pools may be used for distinct types of byte buffers.
+// Properly determined byte buffer types with their own pools may help reducing
+// memory waste.
+</code></pre>
+<p>像 mysql 的连接池也是一样 , 耗时的操作也可以放到另外一个连接池去 , 减少对短时操作的影响</p>
+<p>这里有另外一个库实现了 , 实现也不难,再这个 pool 的基础上再封装一层pool 的数组,不同大小的 buffer 从不同的 pool 中取 参考 go 并发 <a href="file:///Volumes/COURSE/%E6%96%B0%E5%88%86%E7%B1%BB/Go%E5%92%8C%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F%E5%92%8C%E5%AD%98%E5%82%A8%E5%92%8C%E6%95%B0%E6%8D%AE%E5%BA%93%E5%92%8C%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/go%E5%B9%B6%E5%8F%91/10%E4%B8%A8%20Pool%EF%BC%9A%E6%80%A7%E8%83%BD%E6%8F%90%E5%8D%87%E5%A4%A7%E6%9D%80%E5%99%A8.html">pool 性能提升大杀器</a></p>
+<h2 id="_8">性能测试</h2>
+<p>这里有个使用 go benchmark 对不同的 buffer pool 的对比, bytebufferpool 的性能还是很好的 , <a href="https://github.com/omgnull/go-benchmark">buffer pool bench</a></p>
+<pre><code>BenchmarkGenericBuf-8                      1000000    1741 ns/op     2624 B/op    4 allocs/op
+BenchmarkGenericStackBuf-8                 1000000    1695 ns/op     2624 B/op    4 allocs/op
+BenchmarkAllocBuf-8                        1000000    1770 ns/op     2624 B/op    4 allocs/op
+BenchmarkSyncPoolBuf-8                    50000000      43.5 ns/op      0 B/op    0 allocs/op
+BenchmarkBpoolPoolBuf-8                   10000000     177 ns/op        0 B/op    0 allocs/op
+BenchmarkByteBufferPoolBuf-8              50000000      39.0 ns/op      0 B/op    0 allocs/op
+BenchmarkEasyJsonBuffer-8                  3000000     503 ns/op      608 B/op    4 allocs/op
+BenchmarkEasyJsonBuffer_OptimizedSize-8   20000000      85.8 ns/op     32 B/op    1 allocs/op
+</code></pre>
+<h2 id="_9">参考资料</h2>
+<ul>
+<li><a href="https://zh.wikipedia.org/wiki/%E5%86%85%E5%AD%98%E5%B1%8F%E9%9A%9C">wiki-内存屏障</a></li>
+<li><a href="">go 项目开发实战 - 性能分析 , 测试</a></li>
+<li><a href="https://zhuanlan.zhihu.com/p/80578541">go benchmark实践与原理</a></li>
+<li><a href="https://maolonglong.tech/golang/bytebufferpool/">高性能字节池 - bytebufferpool 源码分析</a></li>
+<li><a href="https://github.com/valyala/fasthttp#fasthttp-best-practices">fasthttp best practice</a></li>
+</ul>
+</div>
+</div>
+<footer>
+<div aria-label="footer navigation" class="rst-footer-buttons" role="navigation">
+<a class="btn btn-neutral float-right" href="../go-atomic/" title="atomic LoadInt64 / LoadInt32">Next <span class="icon icon-circle-arrow-right"></span></a>
+<a class="btn btn-neutral" href="../go-doc-reading-technique/" title="go 源码阅读小技巧"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+</div>
+<hr/>
+<div role="contentinfo">
+<!-- Copyright etc -->
+</div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+</div>
+</div>
+</section>
+</div>
+<div aria-label="versions" class="rst-versions" role="note">
+<span class="rst-current-version" data-toggle="rst-current-version">
+<span><a href="../go-doc-reading-technique/" style="color: #fcfcfc;">« Previous</a></span>
+<span style="margin-left: 15px"><a href="../go-atomic/" style="color: #fcfcfc">Next »</a></span>
+</span>
+</div>
+<script>var base_url = '../..';</script>
+<script defer="" src="../../js/theme.js"></script>
+<script defer="" src="../../js/mermaid.min.js"></script>
+<script defer="" src="../../js/custom.js"></script>
+<script defer="">
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(false);
+        };
+    </script>
+</body>
+</html>

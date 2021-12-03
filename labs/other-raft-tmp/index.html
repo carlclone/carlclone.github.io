@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
+<head>
+<meta charset="utf-8"/>
+<meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="../../img/favicon.ico" rel="shortcut icon"/>
+<title>Other raft tmp - Log0c</title>
+<link href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" rel="stylesheet">
+<link href="../../css/theme.css" rel="stylesheet"/>
+<link href="../../css/theme_extra.css" rel="stylesheet"/>
+<script>
+    // Current page data
+    var mkdocs_page_name = "Other raft tmp";
+    var mkdocs_page_input_path = "labs/other-raft-tmp.md";
+    var mkdocs_page_url = null;
+  </script>
+<script defer="" src="../../js/jquery-2.1.1.min.js"></script>
+<script defer="" src="../../js/modernizr-2.8.3.min.js"></script>
+</link></head>
+<body class="wy-body-for-nav" role="document">
+<div class="wy-grid-for-nav">
+<nav class="wy-nav-side stickynav" data-toggle="wy-nav-shift">
+<div class="wy-side-scroll">
+<div class="wy-side-nav-search">
+<a class="icon icon-home" href="../.."> Log0c</a>
+</div>
+<div aria-label="main navigation" class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../..">主页</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">问题排查</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../tomchfd/black-box-netease-music-problem/">mac 网易云音乐 cpu 占用高排查</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../mac/osx86_external_ssd_swap_problem/">mac 外部 SSD Swap 分区开启问题</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../mac/mac-note-stalled/">mac Notes.app 卡死问题</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../tomchfd/go-pprof-memory-leak/">go 使用 pprof 排查内存泄漏</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../tomchfd/go-bytebufferpool-leak-doubt/">go bytebufferpool 错误使用一例</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../tomchfd/go-shadowing-variable/">go shadowing variable 造成的歧义</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../tomchfd/go-concurrent-map-read-write-bug/">go 并发读写 map 问题一例</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../tomchfd/db-metadatalock/">db metadata lock 问题排查</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../tomchfd/db-deadlock/">db 间隙锁造成的死锁</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../tomchfd/db-deadlock-2/">db 复现不同索引之间的死锁</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../tomchfd/black-box-io-problem/">io 黑盒排查磁盘空间告警/IO问题</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../tomchfd/black-box-cpu-high-problem/">cpu 排查的几个案例</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../tomchfd/black-box-network-problem/">network 排查的几个案例</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../tomchfd/black-box-tcp-troubleshooting/">network tcp 常见状态异常</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../tomchfd/black-box-troubleshooting-cheatsheet/">all 问题排查速查表</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">源码阅读</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../tomchfd/go-doc-reading-technique/">go 源码阅读小技巧</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../tomchfd/go-valyala-bytebufferpool/">valyala/bytebufferpool</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../tomchfd/go-atomic/">atomic LoadInt64 / LoadInt32</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">labs</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../6824-mapreduce/">MIT 6.824 - MapReduce</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../6824-raft/">MIT 6.824 - Raft</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../6824-kv/">MIT 6.824 - KV</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../csapp-shell/">CSAPP - Shell</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../csapp-proxy/">CSAPP - Proxy</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../cs144/">CS144</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">xv6</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../tomchfd/xv6-cheatsheet/">xv6 速查表</a>
+</li>
+<li class="toctree-l1"><a class="" href="../../asd.md">xv6 riscv64 寄存器</a>
+</li>
+<li class="toctree-l1"><a class="" href="../../tomchfd/xv6-structure.md">xv6 整体源码结构</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../tomchfd/xv6-utils/">xv6 添加用户态程序</a>
+</li>
+<li class="toctree-l1"><a class="" href="../../tomchfd/xv6-syscall.md   添加系统调用的步骤 , 调试跟着系统调用过程">xv6 添加系统调用</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../tomchfd/xv6-pgtbl/">xv6 优化- kernel 通过 MMU 解引用 user 指针</a>
+</li>
+<li class="toctree-l1"><a class="" href="../../asd.md">xv6 实现用户态 trap 处理</a>
+</li>
+<li class="toctree-l1"><a class="" href="../../asd.md">xv6 优化-延迟分配用户态内存申请</a>
+</li>
+<li class="toctree-l1"><a class="" href="../../asd.md">xv6 优化-实现 fork copy on write</a>
+</li>
+<li class="toctree-l1"><a class="" href="../../asd.md">xv6 实现用户态协程</a>
+</li>
+<li class="toctree-l1"><a class="" href="../../asd.md">xv6 优化锁开销</a>
+</li>
+<li class="toctree-l1"><a class="" href="../../asd.md">xv6 支持大文件</a>
+</li>
+<li class="toctree-l1"><a class="" href="../../asd.md">xv6 实现 mmap</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">工具</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../tools/xdebug/">Xdebug</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../tools/chrome-dev-tools/">Chrome Dev Tools</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../tools/markdown-diagram/">Markdown Diagram 功能</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../tomchfd/tool-yaml-lint/">yaml lint</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">算法</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../algos/int-to-binary-str/">整数转二进制字符串</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../algos/multiple-field-sort/">多字段排序</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../algos/lru-cache-go/">LRU 线程安全和高并发</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">PHP</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../php/how-composer-work/">Composer 是如何工作的</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../php/business-logic-framework/">业务代码的框架</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../php/symfony-lock/">Symfony Lock Component</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../build-my-own-x/php-framework/">构建自己的 PHP 框架</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">杂项</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../others/mac_py_env_deploy/">Mac Python环境 miniConda 搭建</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../others/taylor-otwell-interview/">Taylor otwell 采访文章</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">零碎知识点</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../knowledge-reduce/tricks/">编程技巧/方法</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../knowledge-reduce/network_programming/">网络编程</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../knowledge-reduce/problem_trace/">问题排查</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../knowledge-reduce/network-course/">计算机网络课程分享</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../knowledge-reduce/mysql/">MYSQL</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../knowledge-reduce/language_trait_and_implementation/">语言特性/底层实现</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../knowledge-reduce/computer_composition/">计算机组成原理</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">归档</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/blog_deploy_log/">博客服务器环境搭建记录</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../redis/redis_code_book_reading/">Redis 设计与实现笔记</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/laracasts_learning_path/">Laracasts学习记录</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/black_sierra/">K480N 黑苹果安装记录</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/php_career_guide_line/">从框架看PHP的五种境界[转]</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/laravel_marcoable/">Laravel中的Marcoable</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/laravel_code_book_reading/">Laravel框架关键技术-阅读总结</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/laravel_admin_code_reading/">Laravel-Admin源码阅读</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/first_internship/">实习</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../summary/2017/">2017 总结</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/second_job/">2018 总结</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../summary/2019/">2019 总结</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../summary/2020/">2020 总结</a>
+</li>
+</ul>
+</div>
+</div>
+</nav>
+<section class="wy-nav-content-wrap" data-toggle="wy-nav-shift">
+<nav aria-label="top navigation" class="wy-nav-top" role="navigation">
+<i class="fa fa-bars" data-toggle="wy-nav-top"></i>
+<a href="../..">Log0c</a>
+</nav>
+<div class="wy-nav-content">
+<div class="rst-content">
+<div aria-label="breadcrumbs navigation" role="navigation">
+<ul class="wy-breadcrumbs">
+<li><a href="../..">Docs</a> »</li>
+<li>Other raft tmp</li>
+<li class="wy-breadcrumbs-aside">
+</li>
+</ul>
+<hr/>
+</div>
+<div role="main">
+<div class="section">
+<p>MIT6.824 Lab2 总结</p>
+<p>go select 的超时机制</p>
+<p>2B 部分是日志复制阶段,主要工作:</p>
+<p>增加选举限制
+基本日志复制逻辑
+处理 leader 崩溃情况
+candidate 和 follower 崩溃,只需要重试 , 请求是幂等的</p>
+<p>维护index 和任期的过程很崩溃 , 得先搞清楚各个属性的定义</p>
+<p>我遇到的问题:</p>
+<p>append , commit , apply 的区别?
+append 是在 client 添加(或者说 请求agreement) entry的时候附加到 log 尾部
+commit 是在 过半 server 已经复制了之后 , leader commit 该 entry (commitIndex++ , 触发 commited 事件)
+apply 则是应用该 entry 的指令 (执行指令 , 课程里是发送指令到 applyCh ,如果上层应用是数据库,就是执行一条存储指令吧)</p>
+<p>其他问题 课程的FAQ</p>
+<p>新增技能, 使用 goland 断点调试多线程 ,可以选择特定线程</p>
+<p>其他感想</p>
+<p>要严格遵循 figure2 的规则, 然后看论文 , 看两个 fault-tolerance 的 lecture 和 faq</p>
+<p>lab2 part b </p>
+<p>randomized delays are a common pattern in network protocols</p>
+<p>记录8 当选leader后又卡在candidate的倒计时处了 , 另外开了个线程来跑发心跳包 , 不然其他follower又超时开始新选举了</p>
+<p>Your first goal should be to pass TestBasicAgree2B(). Start by implementing Start(), then write the code to send and receive new log entries via AppendEntries RPCs, following Figure 2.</p>
+<p>You will need to implement the election restriction (section 5.4.1 in the paper).</p>
+<p>梳理一下</p>
+<p>客户端调用 Start() 带上指令 , 请求 raft 发起一次 agreement ,<br/>
+要维护的新状态 , 除了 log , 大部分都是处理网络失败,延迟, 服务器崩溃的</p>
+<p>所有 server:
+log[ ] 
+commitIndex
+lastApplied</p>
+<p>leader:
+nextIndex [ ]  维护每个 server 的下一个要发过去的 index
+matchIndex [ ] 每个 server 已经复制(提交)的 index</p>
+<p>投票请求新增状态:
+lastLogIndex
+lastLogTerm</p>
+<p>心跳请求新增:
+prevLogIndex
+prevLogTerm
+entries [ ]
+leaderCommitIndex</p>
+<p>基本功能,正常情况 , 假设 server 和 network 一直正常:
+raft 存到leader的 log 中 , 
+在下一个心跳包带上新的 entries 发出 (比对 lastApplied 和 commitIndex
+所有 follower收到, 并添加到自己的 log 中 (比对 leader的prevLogIndex 和 prevTerm ,一致则写入)
+告知 leader 成功
+leader 把该指令置为 commited  (修改commitIndex </p>
+<p>测试用例的情况:</p>
+<p>BasicAgree2B :</p>
+<p>每个 server 提交一次 Start() , 只有 leader 才会响应请求
+等待一段时间后 , 检查有多少 server 已经提交了这个指令 , 并且指令相等</p>
+<p>Figure2 里的处理 和这样处理的原因:</p>
+<p>Figure2里的疑惑</p>
+<p>AERPC
+￼
+如果上一个log的Index的任期不一致 , 返回false<br/>
+1 保证幂等性 , 防重复请求
+2 一致性</p>
+<p>￼
+如果一个leader临时掉线 且log没被replicate , 过段时间上线的时候就要面临这个问题了 , 这个选举限制也没法保证 , 并且没有commit所以在客户端不算丢失数据</p>
+<p>在 Raft 算法中，leader 通过强制 follower 复制它的日志来解决不一致的问题。这意味着 follower 中跟 leader 冲突的日志条目会被 leader 的日志条目覆盖。5.4 节会证明通过增加一个限制可以保证安全性。</p>
+<p>要使得 follower 的日志跟自己一致，leader 必须找到两者达成一致的最大的日志条目（索引最大），删除 follower 日志中从那个点之后的所有日志条目，并且将自己从那个点之后的所有日志条目发送给 follower 。所有的这些操作都发生在对 AppendEntries RPCs 中一致性检查的回复中。Leader 针对每一个 follower 都维护了一个 nextIndex ，表示 leader 要发送给 follower 的下一个日志条目的索引。当选出一个新 leader 时，该 leader 将所有 nextIndex 的值都初始化为自己最后一个日志条目的 index 加1（图 7 中的 11）。如果 follower 的日志和 leader 的不一致，那么下一次 AppendEntries RPC 中的一致性检查就会失败。在被 follower 拒绝之后，leaer 就会减小 nextIndex 值并重试 AppendEntries RPC 。最终 nextIndex 会在某个位置使得 leader 和 follower 的日志达成一致。此时，AppendEntries RPC 就会成功，将 follower 中跟 leader 冲突的日志条目全部删除然后追加 leader 中的日志条目（如果有需要追加的日志条目的话）。一旦 AppendEntries RPC 成功，follower 的日志就和 leader 一致，并且在该任期接下来的时间里保持一致。</p>
+<p>通过这种机制，leader 在当权之后就不需要任何特殊的操作来使日志恢复到一致状态。Leader 只需要进行正常的操作，然后日志就能在回复 AppendEntries 一致性检查失败的时候自动趋于一致。Leader 从来不会覆盖或者删除自己的日志条目（图 3 的 Leader Append-Only 属性）。</p>
+<p>当leader崩溃时 , 新leader 和老leader log不一致 , 老leader强行删除保持一致       (导致丢失数据 , 解决方法是 ?</p>
+<p>￼</p>
+<p>￼
+更新commitIndex的规则</p>
+<p>RVRPC
+后半句?
+￼
+如果候选人的log和接收者的log一样新或者更新 , 获得投票  ( 保证leader崩溃后 , 新的leader拥有最新的log</p>
+<p>Raft 通过比较两份日志中最后一条日志条目的索引值和任期号来定义谁的日志比较新。如果两份日志最后条目的任期号不同，那么任期号大的日志更新。如果两份日志最后条目的任期号相同，那么日志较长的那个更新。</p>
+<p>Rules for server</p>
+<p>￼
+更新lastApplied的规则</p>
+<p>￼
+append , commit和applied的区别 , state machine在这里表示什么 ?</p>
+<p>￼</p>
+<p>￼
+一旦创建该日志条目的 leader 将它复制到过半的服务器上，该日志条目就会被提交
+同时，leader 日志中该日志条目之前的所有日志条目也都会被提交 ，包括由其他 leader 创建的条目</p>
+<p>发生在 commited 事件</p>
+<p>一个Entry 包含term和command</p>
+<p>复制阶段摘要:</p>
+<p>客户端的每一个请求都包含一条将被复制状态机执行的指令</p>
+<p>并行的发起 AppendEntries RPC 给其他的服务器，让它们复制该条目</p>
+<p>条目被安全地复制 , leader 会应用该条目到它的状态机中（状态机执行该指令）然后把执行的结果返回给客户端</p>
+<p>任期号用来检测多个日志副本之间的不一致情况</p>
+<p>一旦创建该日志条目的 leader 将它复制到过半的服务器上，该日志条目就会被提交
+同时，leader 日志中该日志条目之前的所有日志条目也都会被提交 ，包括由其他 leader 创建的条目</p>
+<p>Follower 一旦知道某个日志条目已经被提交就会将该日志条目应用到自己的本地状态机中</p>
+<p>如果不同日志中的两个条目拥有相同的索引和任期号，那么他们存储了相同的指令。如果不同日志中的两个条目拥有相同的索引和任期号，那么他们之前的所有日志条目也都相同。</p>
+<p>Leader 在特定的任期号内的一个日志索引处最多创建一个日志条目，同时日志条目在日志中的位置也从来不会改变。该点保证了上面的第一条特性。
+第二个特性是由 AppendEntries RPC 执行一个简单的一致性检查所保证的。在发送 AppendEntries RPC 的时候，leader 会将前一个日志条目的索引位置和任期号包含在里面。如果 follower 在它的日志中找不到包含相同索引位置和任期号的条目，那么他就会拒绝该新的日志条目。</p>
+<p>leader 崩溃的情况会使日志处于不一致的状态（老的 leader 可能还没有完全复制它日志里的所有条目）</p>
+<p>Follower 可能缺少一些在新 leader 中有的日志条目，也可能拥有一些新 leader 没有的日志条目，或者同时发生。缺失或多出日志条目的情况可能会涉及到多个任期</p>
+<p>leader 通过强制 follower 复制它的日志来解决不一致的问题。这意味着 follower 中跟 leader 冲突的日志条目会被 leader 的日志条目覆盖。5.4 节会证明通过增加一个限制可以保证安全性。</p>
+<p>要使得 follower 的日志跟自己一致，leader 必须找到两者达成一致的最大的日志条目（索引最大），删除 follower 日志中从那个点之后的所有日志条目，并且将自己从那个点之后的所有日志条目发送给 follower 。所有的这些操作都发生在对 AppendEntries RPCs 中一致性检查的回复中。Leader 针对每一个 follower 都维护了一个 nextIndex ，表示 leader 要发送给 follower 的下一个日志条目的索引。当选出一个新 leader 时，该 leader 将所有 nextIndex 的值都初始化为自己最后一个日志条目的 index 加1（图 7 中的 11）。如果 follower 的日志和 leader 的不一致，那么下一次 AppendEntries RPC 中的一致性检查就会失败。在被 follower 拒绝之后，leaer 就会减小 nextIndex 值并重试 AppendEntries RPC 。最终 nextIndex 会在某个位置使得 leader 和 follower 的日志达成一致。此时，AppendEntries RPC 就会成功，将 follower 中跟 leader 冲突的日志条目全部删除然后追加 leader 中的日志条目（如果有需要追加的日志条目的话）。一旦 AppendEntries RPC 成功，follower 的日志就和 leader 一致，并且在该任期接下来的时间里保持一致。</p>
+<p>Raft 使用投票的方式来阻止 candidate 赢得选举除非该 candidate 包含了所有已经提交的日志条目</p>
+<p>Raft 永远不会通过计算副本数目的方式来提交之前任期内的日志条目。只有 leader 当前任期内的日志条目才通过计算副本数目的方式来提交</p>
+<p>一旦当前任期的某个日志条目以这种方式被提交，那么由于日志匹配特性，之前的所有日志条目也都会被间接地提交</p>
+<p>lab2 guide / structure / lock 阅读笔记</p>
+<p>正如所有分布式协商一致协议一样，细节问题是非常棘手的。 在没有失败的稳定状态下，Raft 的行为很容易理解，并且可以用直观的方式解释。 例如，从可视化中可以很容易地看到，假设没有失败，领导者最终会被选举出来，并且所有发送给领导者的操作最终会被跟随者以正确的顺序应用。 但是，当引入延迟消息、网络分区和故障服务器时，每个 if、 but 和 and 都变得至关重要。 特别是，有一些错误，我们看到重复一遍又一遍，只是由于误解或疏忽时，阅读的文件。 这个问题并不是 Raft 所特有的，在所有提供正确性的复杂分布式系统中都会出现。</p>
+<p>事实上，图2是非常精确的，它所做的每一个语句都应该按照规范条款被视为必须，而不是应该。</p>
+<p>许多人遇到的另一个问题(通常是在修复上面的问题之后)是，在接收到 heartbeat 时，他们会截断 following prevLogIndex 的 follower 日志，然后附加包含在 AppendEntries 参数中的任何条目。 这也是不对的。 我们可以再次转向图2:</p>
+<p>If an existing entry conflicts with a new one (same index but different terms), delete the existing entry and all that follow it.如果现有条目与新条目(相同的索引但不同的术语)发生冲突，请删除现有条目及其后的所有条目。</p>
+<p>这里的如果是至关重要的。 如果跟随者拥有领导者发送的所有条目，跟随者必须不截断其日志。 领导发送的条目后面的任何元素都必须保留。 这是因为我们可能会收到一个过时的 appendries RPC 从领导，截断日志将意味着“收回”条目，我们可能已经告诉领导，我们有在我们的日志。</p>
+<p>不可避免地，第一次迭代您的筏实现将是错误的。 第二个也是。 第三。 第四个。 一般来说，每个 bug 都比前一个 bug 少，而且，根据经验，大多数 bug 都是由于没有忠实地遵循图2而导致的。</p>
+<p>在调试时，Raft，通常有四个主要的错误来源: 活锁、不正确或不完整的 RPC 处理程序、未遵循规则以及术语混淆。 死锁也是一个常见的问题，但通常可以通过记录所有锁和解锁，并确定使用哪些锁，而不是释放这些锁来调试死锁。 让我们依次考虑这些问题:</p>
+<p>当您的系统运行时，系统中的每个节点都在做一些事情，但是总的来说，您的节点处于一种没有任何进展的状态。 这在 Raft 中很容易实现，特别是如果您没有虔诚地遵循图2。 一种活锁的情况经常出现; 没有领导人被选举出来，或者一旦领导人被选举出来，其他节点开始选举，迫使新当选的领导人立即退位。</p>
+<p>确保在图2所示的时间重置选举计时器。 具体来说，只有当下列情况下你才应该重新启动你的选举计时器: a)你从当前领导者那里得到了一个附录条目 RPC (即，如果附录条目中的条目已经过期，你不应该重置你的计时器) ; b)你正在开始一个选举; 或者 c)你给另一个同伴一张选票。</p>
+<p>最后一种情况在不可靠的网络中尤其重要，因为关注者可能有不同的日志记录; 在这种情况下，您通常只能使用少量的服务器，而大多数服务器都愿意为这些服务器投票。 如果每当有人请求您为他们投票时，您都重置了选举计时器，那么对于日志过时的服务器和日志较长的服务器来说，重置选举计时器的可能性相同。</p>
+<p>按照图2的指示开始选举，特别要注意的是，如果你是候选人(即，你目前正在进行选举) ，但是选举计时器已经启动，你应该开始选举another 另一个 election. This is important to avoid the system stalling due to delayed or dropped RPCs. 这一点很重要，可以避免由于 rpc 延迟或丢失而导致系统失效</p>
+<p>在处理传入的 RPC 之前，请确保遵循“服务器规则”中的第二条规则。第二条规则规定:
+If RPC request or response contains term T &gt; currentTerm: set currentTerm = T, convert to follower (§5.1)如果 RPC 请求或响应包含术语 t currentTerm: 设置 currentTerm t，转换为 follower (5.1)</p>
+<p>例如，如果您已经在当前任期内进行了投票，并且传入的 RequestVote RPC 有一个比您更高的任期，那么您应该首先退出并采用他们的任期(从而重置 votedFor) ，然后处理 RPC，这将导致您授予投票权！</p>
+<p>如果一个步骤说“回复错误” ，这意味着你应该reply immediately 立即回复, and not perform any of the subsequent steps. ，而不会执行其后的任何步骤</p>
+<p>If you get an AppendEntries RPC with a prevLogIndex that points beyond the end of your log, you should handle it the same as if you did have that entry but the term did not match (i.e., reply false).</p>
+<p>Check 2 for the AppendEntries RPC handler should be executed even if the leader didn’t send any entries.</p>
+<ul>
+<li>The min in the final step (#5) of AppendEntries is necessary, and it needs to be computed with the index of the last new entry. It is not sufficient to simply have the function that applies things from your log between lastApplied and commitIndex stop when it reaches the end of your log. This is because you may have entries in your log that differ from the leader’s log after the entries that the leader sent you (which all match the ones in your log). Because #3 dictates that you only truncate your log if you have conflicting entries, those won’t be removed, and if leaderCommit is beyond the entries the leader sent you, you may apply incorrect entries.</li>
+<li>It is important to implement the “up-to-date log” check exactly as described in section 5.4. No cheating and just checking the length!</li>
+</ul>
+<p>2C 笔记</p>
+<p>lab指导:</p>
+<p>Persister</p>
+<p>Persister's ReadRaftState() and SaveRaftState() methods.</p>
+<p>persist() and readPersist() in raft.go by adding code to save and restore persistent state</p>
+<p>You will need to encode (or "serialize") the state as an array of bytes in order to pass it to the Persister. Use the labgob encoder;</p>
+<ul>
+<li>Many of the 2C tests involve servers failing and the network losing RPC requests or replies.</li>
+<li>You will probably need the optimization that backs up nextIndex by more than one entry at a time. Look at the extended Raft paper starting at the bottom of page 7 and top of page 8 (marked by a gray line). The paper is vague about the details; you will need to fill in the gaps, perhaps with the help of the 6.824 Raft lectures.</li>
+<li>A reasonable amount of time to consume for the full set of Lab 2 tests (2A+2B+2C) is 4 minutes of real time and one minute of CPU time.</li>
+</ul>
+<p>讲义:</p>
+<p>Figure 2 lists "persistent state":
+    log[], currentTerm, votedFor</p>
+<p>save after each change -- many points in code
+    or before sending any RPC or RPC reply</p>
+<p>服务器崩溃 ,  网络请求或响应丢失</p>
+<p>需要实现一个优化: nextIndex 一次回退多格 , 也就是要一次发更多个entry过去比对  ?</p>
+<p>论文第七页底部 摘抄</p>
+<p>If desired, the protocol can be optimized to reduce the number of rejected AppendEntries RPCs. For example, when rejecting an AppendEntries request, the follower 7 can include the term of the conflicting entry and the first index it stores for that term. With this information, the leader can decrement nextIndex to bypass all of the conflicting entries in that term; one AppendEntries RPC will be required for each term with conflicting entries, rather than one RPC per entry. In practice, we doubt this optimization is necessary, since failures happen infrequently and it is unlikely that there will be many inconsistent entries</p>
+<p>论文写的很模糊 , 要去参考lec ,  perhaps with the help of the 6.824 Raft lectures.</p>
+<p>lab2理想的总测试时间是4分钟</p>
+<p>最后的一个优化 </p>
+<p>不实现这个优化无法通过TestFigure8Unreliable2C 和 TestReliableChurn2C</p>
+<p>参考student’s guide</p>
+<p>We believe the protocol the authors probably want you to follow is:</p>
+<ul>
+<li>If a follower does not have prevLogIndex in its log, it should return with conflictIndex = len(log) and conflictTerm = None.</li>
+<li>If a follower does have prevLogIndex in its log, but the term does not match, it should return conflictTerm = log[prevLogIndex].Term, and then search its log for the first index whose entry has term equal to conflictTerm.</li>
+<li>Upon receiving a conflict response, the leader should first search its log for conflictTerm. If it finds an entry in its log with that term, it should set nextIndex to be the one beyond the index of the last entry in that term in its log.</li>
+<li>If it does not find an entry with that term, it should set nextIndex = conflictIndex.</li>
+</ul>
+<p>链接：https://www.jianshu.com/p/59a224fded77</p>
+<p>自己理解后的输出 :</p>
+<p>如果follower的log里没有东西 , 因为我的实现里使用了dummyHead , 所以这一步我不用处理</p>
+<p>如果F有最后一个 log , 但是term和leader的不一致 ,  那F就需要找到conflictTerm = prevlog.Term , 然后从log开头从前往后找到第一个term=conflictTerm的log ,得到这个first conflict index</p>
+<p>leader要做的事 :   从后往前找到term=conflictTerm的log , 如果找到了 , 要设置nextIndex = 该log的index</p>
+<p>如果没找到 , nextIndex=conflictIndex</p>
+<p>论文阅读笔记</p>
+<p>选举阶段摘要:</p>
+<p>如果一个服务器的当前任期号比其他的小，该服务器会将自己的任期号更新为较大的那个值。如果一个 candidate 或者 leader 发现自己的任期号过期了，它会立即回到 follower 状态。如果一个节点接收到一个包含过期的任期号的请求，它会直接拒绝这个请求</p>
+<p>基本的一致性算法只需要两种类型的 RPC。请求投票（RequestVote） RPC 由 candidate 在选举期间发起（章节 5.2），追加条目（AppendEntries）RPC 由 leader 发起，用来复制日志和提供一种心跳机制</p>
+<p>一个服务器节点只要能从 leader 或 candidate 处接收到有效的 RPC 就一直保持 follower 状态。Leader 周期性地向所有 follower 发送心跳（不包含日志条目的 AppendEntries RPC）来维持自己的地位</p>
+<p>要开始一次选举过程，follower 先增加自己的当前任期号并且转换到 candidate 状态。然后投票给自己并且并行地向集群中的其他服务器节点发送 RequestVote RPC（让其他服务器节点投票给它）。Candidate 会一直保持当前状态直到以下三件事情之一发生：(a) 它自己赢得了这次的选举（收到过半的投票），(b) 其他的服务器节点成为 leader ，(c) 一段时间之后没有任何获胜者。这些结果会在下面的章节里分别讨论。</p>
+<p>投票要保证是同一任期内 , waitgroup</p>
+<p>candidate 可能会收到另一个声称自己是 leader 的服务器节点发来的 AppendEntries RPC 。如果这个 leader 的任期号（包含在RPC中）不小于 candidate 当前的任期号，那么 candidate 会承认该 leader 的合法地位并回到 follower 状态。 如果 RPC 中的任期号比自己的小，那么 candidate 就会拒绝这次的 RPC 并且继续保持 candidate 状态</p>
+<p>candidate 既没有赢得选举也没有输：如果有多个 follower 同时成为 candidate ，那么选票可能会被瓜分以至于没有 candidate 赢得过半的投票。当这种情况发生时，每一个候选人都会超时，然后通过增加当前任期号来开始一轮新的选举。然而，如果没有其他机制的话，该情况可能会无限重复。</p>
+<p>使用随机选举超时时间的方法来确保很少发生选票瓜分的情况，就算发生也能很快地解决。为了阻止选票一开始就被瓜分，选举超时时间是从一个固定的区间（例如 150-300 毫秒）随机选择。</p>
+<p>每个 candidate 在开始一次选举的时候会重置一个随机的选举超时时间，然后一直等待直到选举超时；这样减小了在新的选举中再次发生选票瓜分情况的可能性。</p>
+<p>如果一个服务器在完成了一个 RPC，但是还没有响应的时候崩溃了，那么在它重启之后就会再次收到同样的请求。Raft 的 RPCs 都是幂等的，所以这样的重试不会造成任何伤害。</p>
+<p>Leader 选举是 Raft 中定时最为关键的方面。 只要整个系统满足下面的时间要求，Raft 就可以选举出并维持一个稳定的 leader：
+广播时间（broadcastTime） &lt;&lt; 选举超时时间（electionTimeout） &lt;&lt; 平均故障间隔时间（MTBF）</p>
+<p>所以广播时间大约是 0.5 毫秒到 20 毫秒之间，取决于存储的技术。因此，选举超时时间可能需要在 10 毫秒到 500 毫秒之间。大多数的服务器的平均故障间隔时间都在几个月甚至更长，很容易满足时间的要求。</p>
+<p>日志复制阶段:</p>
+<p>锁检查: 请求,响应 , 超时任务
+￼
+￼</p>
+<p>￼
+￼</p>
+<p>reading 摘抄</p>
+<p>没懂</p>
+<pre><code>Your scheme for duplicate detection should free server memory quickly, for example by having each RPC imply that the client has seen the reply for its previous RPC. It's OK to assume that a client will make only one call into a Clerk at a time.
+
+One way to do this is for the server to detect that it has lost leadership, by noticing that a different request has appeared at the index returned by Start(), or that Raft's term has changed
+</code></pre>
+<p>课程的渐进式测试用例/任务 </p>
+<p>build your own from scratch 的思想</p>
+<p>1  接和收RequestVote RPC   <br/>
+2 Server的选举规则
+3 各种选举状态
+4 把figure2的状态加到Raft结构体中
+5 RequestVoteArgs  RequestVoteReply    ,  Make()开启一个goroutine 周期性地开始leader选举 (当超时了发送RVote) 
+6  实现RequestVote() 来给candidate投票
+7 定义AppendEntries结构体 , 暂时用于实现heartbeat ,  实现heartbeat rpc handler 来防止进入下一次选举
+8 election timeouts 要设置随机
+9 leader send heartbeat RPCs no more than ten times per second.   暂时1秒一次好了
+10 如果旧leader failure了 , 5秒内要选出新的 (可能要进行多轮 , 由于选举失败的情况 (丢包, election timeout相等
+11 什么是split vote , 比如两个candidate各获得一半票数?
+12 paper的e timeout是150ms-300ms</p>
+<p>状态分析</p>
+<p>画个状态转移图</p>
+<p>目前的状态是所有人都是follower , 所以每个peer都需要开一个线程 , 转变成candidate ,  发送选票请求(有条件) ,<br/>
+然后有两种状态 , 
+一种是顺利选出一个 leader (也就是server发现自己的票数是majority  ) , 这时候leader会开始定时发送心跳请求 ,  之前选举阶段的candidate都会变回follower , 并在每次收到心跳包的时候重置转变成 candidate的定时器 (通过记录lastHeadFromLeader来判断)       (还有很多错误情况没判断)</p>
+<p>另一种是没有一个达成majority , 如何判断当前任期选举阶段结束? 不考虑网络问题的话 , 接收到所有人的RV响应就算结束 ? 则会等待下一次选举请求的发出 ,任期+1 ,  直到有一次成功</p>
+<p>最终会有一个leader产生 , 2A阶段不考虑partition和网络问题</p>
+<p>用channel + event driven 写</p>
+</div>
+</div>
+<footer>
+<hr/>
+<div role="contentinfo">
+<!-- Copyright etc -->
+</div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+</div>
+</div>
+</section>
+</div>
+<div aria-label="versions" class="rst-versions" role="note">
+<span class="rst-current-version" data-toggle="rst-current-version">
+</span>
+</div>
+<script>var base_url = '../..';</script>
+<script defer="" src="../../js/theme.js"></script>
+<script defer="" src="../../js/mermaid.min.js"></script>
+<script defer="" src="../../js/custom.js"></script>
+<script defer="">
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(false);
+        };
+    </script>
+</body>
+</html>

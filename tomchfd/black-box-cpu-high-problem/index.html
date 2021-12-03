@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
+<head>
+<meta charset="utf-8"/>
+<meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="../../img/favicon.ico" rel="shortcut icon"/>
+<title>cpu 排查的几个案例 - Log0c</title>
+<link href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" rel="stylesheet">
+<link href="../../css/theme.css" rel="stylesheet"/>
+<link href="../../css/theme_extra.css" rel="stylesheet"/>
+<script>
+    // Current page data
+    var mkdocs_page_name = "cpu \u6392\u67e5\u7684\u51e0\u4e2a\u6848\u4f8b";
+    var mkdocs_page_input_path = "tomchfd/black-box-cpu-high-problem.md";
+    var mkdocs_page_url = null;
+  </script>
+<script defer="" src="../../js/jquery-2.1.1.min.js"></script>
+<script defer="" src="../../js/modernizr-2.8.3.min.js"></script>
+</link></head>
+<body class="wy-body-for-nav" role="document">
+<div class="wy-grid-for-nav">
+<nav class="wy-nav-side stickynav" data-toggle="wy-nav-shift">
+<div class="wy-side-scroll">
+<div class="wy-side-nav-search">
+<a class="icon icon-home" href="../.."> Log0c</a>
+</div>
+<div aria-label="main navigation" class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../..">主页</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">问题排查</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../black-box-netease-music-problem/">mac 网易云音乐 cpu 占用高排查</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../mac/osx86_external_ssd_swap_problem/">mac 外部 SSD Swap 分区开启问题</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../mac/mac-note-stalled/">mac Notes.app 卡死问题</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../go-pprof-memory-leak/">go 使用 pprof 排查内存泄漏</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../go-bytebufferpool-leak-doubt/">go bytebufferpool 错误使用一例</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../go-shadowing-variable/">go shadowing variable 造成的歧义</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../go-concurrent-map-read-write-bug/">go 并发读写 map 问题一例</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../db-metadatalock/">db metadata lock 问题排查</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../db-deadlock/">db 间隙锁造成的死锁</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../db-deadlock-2/">db 复现不同索引之间的死锁</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../black-box-io-problem/">io 黑盒排查磁盘空间告警/IO问题</a>
+</li>
+<li class="toctree-l1 current"><a class="reference internal current" href="./">cpu 排查的几个案例</a>
+<ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="#direct_io-io">使用 direct_io 导致 io 持续高位</a>
+<ul>
+<li class="toctree-l3"><a class="reference internal" href="#_1">问题描述</a>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#_2">排查</a>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#_3">复现</a>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#_4">疑问</a>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#syn_flood">SYN_FLOOD 攻击造成软中断升高</a>
+<ul>
+<li class="toctree-l3"><a class="reference internal" href="#_5">问题描述</a>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#_6">问题排查</a>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#_7">疑问</a>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#_8">复现</a>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#cpu_1">程序循环执行 CPU 密集函数</a>
+<ul>
+<li class="toctree-l3"><a class="reference internal" href="#_9">问题描述</a>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#_10">问题排查</a>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#_11">问题复现</a>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#cpu_2">进程不停崩溃重启导致 cpu 高</a>
+<ul>
+<li class="toctree-l3"><a class="reference internal" href="#_12">问题描述</a>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#_13">排查</a>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#_14">复现</a>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../black-box-network-problem/">network 排查的几个案例</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../black-box-tcp-troubleshooting/">network tcp 常见状态异常</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../black-box-troubleshooting-cheatsheet/">all 问题排查速查表</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">源码阅读</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../go-doc-reading-technique/">go 源码阅读小技巧</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../go-valyala-bytebufferpool/">valyala/bytebufferpool</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../go-atomic/">atomic LoadInt64 / LoadInt32</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">labs</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../labs/6824-mapreduce/">MIT 6.824 - MapReduce</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../labs/6824-raft/">MIT 6.824 - Raft</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../labs/6824-kv/">MIT 6.824 - KV</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../labs/csapp-shell/">CSAPP - Shell</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../labs/csapp-proxy/">CSAPP - Proxy</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../labs/cs144/">CS144</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">xv6</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../xv6-cheatsheet/">xv6 速查表</a>
+</li>
+<li class="toctree-l1"><a class="" href="../../asd.md">xv6 riscv64 寄存器</a>
+</li>
+<li class="toctree-l1"><a class="" href="../xv6-structure.md">xv6 整体源码结构</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../xv6-utils/">xv6 添加用户态程序</a>
+</li>
+<li class="toctree-l1"><a class="" href="../xv6-syscall.md   添加系统调用的步骤 , 调试跟着系统调用过程">xv6 添加系统调用</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../xv6-pgtbl/">xv6 优化- kernel 通过 MMU 解引用 user 指针</a>
+</li>
+<li class="toctree-l1"><a class="" href="../../asd.md">xv6 实现用户态 trap 处理</a>
+</li>
+<li class="toctree-l1"><a class="" href="../../asd.md">xv6 优化-延迟分配用户态内存申请</a>
+</li>
+<li class="toctree-l1"><a class="" href="../../asd.md">xv6 优化-实现 fork copy on write</a>
+</li>
+<li class="toctree-l1"><a class="" href="../../asd.md">xv6 实现用户态协程</a>
+</li>
+<li class="toctree-l1"><a class="" href="../../asd.md">xv6 优化锁开销</a>
+</li>
+<li class="toctree-l1"><a class="" href="../../asd.md">xv6 支持大文件</a>
+</li>
+<li class="toctree-l1"><a class="" href="../../asd.md">xv6 实现 mmap</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">工具</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../tools/xdebug/">Xdebug</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../tools/chrome-dev-tools/">Chrome Dev Tools</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../tools/markdown-diagram/">Markdown Diagram 功能</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../tool-yaml-lint/">yaml lint</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">算法</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../algos/int-to-binary-str/">整数转二进制字符串</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../algos/multiple-field-sort/">多字段排序</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../algos/lru-cache-go/">LRU 线程安全和高并发</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">PHP</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../php/how-composer-work/">Composer 是如何工作的</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../php/business-logic-framework/">业务代码的框架</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../php/symfony-lock/">Symfony Lock Component</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../build-my-own-x/php-framework/">构建自己的 PHP 框架</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">杂项</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../others/mac_py_env_deploy/">Mac Python环境 miniConda 搭建</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../others/taylor-otwell-interview/">Taylor otwell 采访文章</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">零碎知识点</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../knowledge-reduce/tricks/">编程技巧/方法</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../knowledge-reduce/network_programming/">网络编程</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../knowledge-reduce/problem_trace/">问题排查</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../knowledge-reduce/network-course/">计算机网络课程分享</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../knowledge-reduce/mysql/">MYSQL</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../knowledge-reduce/language_trait_and_implementation/">语言特性/底层实现</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../knowledge-reduce/computer_composition/">计算机组成原理</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">归档</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/blog_deploy_log/">博客服务器环境搭建记录</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../redis/redis_code_book_reading/">Redis 设计与实现笔记</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/laracasts_learning_path/">Laracasts学习记录</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/black_sierra/">K480N 黑苹果安装记录</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/php_career_guide_line/">从框架看PHP的五种境界[转]</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/laravel_marcoable/">Laravel中的Marcoable</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/laravel_code_book_reading/">Laravel框架关键技术-阅读总结</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/laravel_admin_code_reading/">Laravel-Admin源码阅读</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/first_internship/">实习</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../summary/2017/">2017 总结</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/second_job/">2018 总结</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../summary/2019/">2019 总结</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../summary/2020/">2020 总结</a>
+</li>
+</ul>
+</div>
+</div>
+</nav>
+<section class="wy-nav-content-wrap" data-toggle="wy-nav-shift">
+<nav aria-label="top navigation" class="wy-nav-top" role="navigation">
+<i class="fa fa-bars" data-toggle="wy-nav-top"></i>
+<a href="../..">Log0c</a>
+</nav>
+<div class="wy-nav-content">
+<div class="rst-content">
+<div aria-label="breadcrumbs navigation" role="navigation">
+<ul class="wy-breadcrumbs">
+<li><a href="../..">Docs</a> »</li>
+<li>问题排查 »</li>
+<li>cpu 排查的几个案例</li>
+<li class="wy-breadcrumbs-aside">
+</li>
+</ul>
+<hr/>
+</div>
+<div role="main">
+<div class="section">
+<h1 id="cpu">cpu 排查的几个案例</h1>
+<h2 id="direct_io-io">使用 direct_io 导致 io 持续高位</h2>
+<h3 id="_1">问题描述</h3>
+<p>iowait 很高,且有大量不可中断进程和僵尸进程</p>
+<h3 id="_2">排查</h3>
+<ul>
+<li><code>top</code> 发现平均负载很高, iowait 也很高 ,  且有许多僵尸进程 , 有 D 状态的进程</li>
+<li>没有 cpu 占用高的, 为什么负载会高呢</li>
+<li>查阅资料, 平均负载包含R 状态的和 D 状态的进程 , D 状态表示不可中断睡眠, 大概率在等待 IO</li>
+<li>查看 D 状态的进程有两个 , 查看 IO 情况</li>
+<li>使用 <code>dstat 1 10</code> 同时查看 cpu 和 io 详细情况 , iowait 升高时磁盘读也很大</li>
+<li>使用 <code>pidstat -d -p xxx</code> 查看进程 io 情况 , 发现两个D 状态进程都没读数据</li>
+<li>使用 <code>pidstat -d</code> 看所有进程 io , 发现确实是 D 状态进程 , 但进程号变了</li>
+<li>使用 <code>strace -p 进程 id</code> 报错 permission denied , 发现进程很快消失 , <code>ps aux|grep 6082</code> 验证</li>
+<li><code>perf record -g</code> / <code>perf report</code></li>
+<li>sys_read 和 direct_io 函数 , 直接 IO 造成</li>
+<li>
+<p>改为使用普通 IO , 享受系统缓存读优化</p>
+</li>
+<li>
+<p>还有僵尸进程问题 , 找出父进程然后让父进程回收</p>
+</li>
+<li><code>pstree -aps 3084</code> ( a 表示输出命令行选项 , p 表示 pid , s 表示指定进程的父进程)</li>
+</ul>
+<h3 id="_3">复现</h3>
+<p>TODO</p>
+<h3 id="_4">疑问</h3>
+<ul>
+<li>为什么 iowait 高会导致负载变高 , cpu 不是空闲着吗   (磁盘 IO 也是耗能操作 , 同样算做电力负载)</li>
+</ul>
+<p>参考电路基础第六版一书 : 负载是接收能量的元件(能量吸收器) , 它与提供能量的发电机(能量源)相反 , 参见 4.9.1 节</p>
+<ul>
+<li>不可中断睡眠状态(TASK_UNINTERRUPTIBLE)的定义</li>
+</ul>
+<p>不可中断睡眠的意思是该进程在执行系统调用后睡眠期间不能被类似 SIGKILL 之类的信号中断唤醒, 只能在该系统调用完成后被唤醒, 参考<a href="https://blog.csdn.net/Rong_Toa/article/details/108226571">Uninterruptible Sleep</a></p>
+<h2 id="syn_flood">SYN_FLOOD 攻击造成软中断升高</h2>
+<h3 id="_5">问题描述</h3>
+<p>正常服务无法响应或超时</p>
+<h3 id="_6">问题排查</h3>
+<ul>
+<li>服务响应缓慢, 先排除客户端和服务端的问题, 再检查链路 , 造成服务端缓慢的原因 : CPU,内存,磁盘 IO,网络     , 一个个排查</li>
+<li>客户端访问其他服务正常</li>
+<li>检查服务端</li>
+<li>top cpu 占用不高, 也没有 iowait , 平均负载很低</li>
+<li>softireq 某个核心很高  , ksoftirqd 进程占最多</li>
+<li>查看软终端次数 <code>watch -d cat /proc/softirqs</code>  , 网络接收软中断次数变得很快</li>
+<li><code>sar -n DEV 1</code> 查看每秒接收的包 PPS , 和每秒接收的字节数 , 发现都是小包 (664 * 1024) / 12607 = 54 字节</li>
+<li><code>tcpdump -i eth0 -n tcp port 80</code> 检查包 , 发现都是Flag(S ) SYN 包, 确认是 SYN FLOOD 攻击</li>
+<li>从交换机 or 硬件防火墙封原 IP</li>
+<li>开启 SYN_COOKIE ,增大半连接队列, 不能用 iptable 封,因为同样走软中断 , 导致其他网络包延迟(如 ssh)  (参考 linux 内核实战 11, linux 性能优化 43,44)</li>
+</ul>
+<h3 id="_7">疑问</h3>
+<ul>
+<li>为什么软中断只占用一个核心</li>
+</ul>
+<p>因为默认情况下网卡都是单队列,绑定某个核心,所以只有一个 CPU 能处理</p>
+<ul>
+<li>可以使用 iptable 缓解 SYN_FLOOD 吗</li>
+</ul>
+<p>可以,但是效果不大,因为包已经进入网络协议栈的处理阶段,还是会造成软中断问题,但至少可以缓解 tcp 半连接队列被堆满</p>
+<h3 id="_8">复现</h3>
+<p>TODO</p>
+<h2 id="cpu_1">程序循环执行 CPU 密集函数</h2>
+<h3 id="_9">问题描述</h3>
+<p>使用ab 压测 web 服务, QPS 只有两位数, 且 cpu 占用已经满了</p>
+<h3 id="_10">问题排查</h3>
+<ul>
+<li>使用 top 查看各项指标, CPU us 项偏高, 接近百分百 , 分别为几个 php-fpm 进程</li>
+<li>使用 <code>perf top -g -p 进程 id</code> , 查看某一 php-fpm 进程的 cpu 采样结果 (-g 表示显示调用关系)</li>
+<li>方向键切换到 php-fpm , 回车展开调用关系 , 定位到 <code>sqrt</code> 和<code>add_function</code></li>
+<li><code>grep 'sqrt' -r app/</code>  代码查找调用</li>
+<li>修复代码</li>
+</ul>
+<h3 id="_11">问题复现</h3>
+<ul>
+<li><code>docker run --name nginx -p 10000:80 -itd feisky/nginx</code></li>
+<li><code>docker run --name phpfpm -itd --network container:nginx feisky/php-fpm</code></li>
+<li><code>docker exec nginx ip addr</code></li>
+<li><code>curl http://[nginx 的 ip]:10000</code>确认服务启动</li>
+<li>
+<p><code>ab -c 10 -n 10000 http://[nginx 的 ip]:10000</code></p>
+</li>
+<li>
+<p><code>docker cp phpfpm:/app .</code>  将容器中 php 源码拷贝出来</p>
+</li>
+<li>
+<p><code>docker rm -f nginx phpfpm</code></p>
+</li>
+<li><code>docker run --name nginx -p 10000:80 -itd feisky/nginx:cpu-fix</code></li>
+<li><code>docker run --name phpfpm -itd --network container:nginx feisky/php-fpm:cpu-fix</code></li>
+<li>再次验证 QPS</li>
+</ul>
+<h2 id="cpu_2">进程不停崩溃重启导致 cpu 高</h2>
+<h3 id="_12">问题描述</h3>
+<p>cpu 占用高却找不到占用高的进程 </p>
+<h3 id="_13">排查</h3>
+<ul>
+<li>top 发现 cpu us占用高, 却没有占用高的进程 ( 短时进程, 很快就退出了 , 或是进程在不断崩溃重启 )</li>
+<li><code>pidstat 1</code> 也是一样看不到占用高的情况</li>
+<li>top 的 running 队列有 6 个之多 (双核,竞争激烈) , 且 running 的进程都是 stress 进程, php-fpm 都处于 sleep</li>
+<li><code>pidstat -p 24344</code> 检查其中一个,  找不到 , <code>ps aux|grep 24344</code> , 也一样</li>
+<li>查看启动这些进程的父进程 <code>pstree |grep stress</code></li>
+<li>php-fpm 调用的, 查看 stress 输出, 发现是php 调用外部 stress 命令没有权限创建临时文件</li>
+<li>大量的 stress 命令在初始化阶段就失败了,导致 cpu 升高, 但是没有看到大量 stress 进程 , 如何进一步确认</li>
+<li><code>perf record -g</code>   大概 15 秒  / <code>perf report</code></li>
+<li>发现 stress 占了百分之 77</li>
+<li>其他工具 , <code>execsnoop</code> , 可以查看系统的所有 exec 调用进程 id,父进程 id,命令, 如果有大量相同命令, 就可以怀疑这里有问题了</li>
+</ul>
+<h3 id="_14">复现</h3>
+<p>TODO</p>
+</div>
+</div>
+<footer>
+<div aria-label="footer navigation" class="rst-footer-buttons" role="navigation">
+<a class="btn btn-neutral float-right" href="../black-box-network-problem/" title="network 排查的几个案例">Next <span class="icon icon-circle-arrow-right"></span></a>
+<a class="btn btn-neutral" href="../black-box-io-problem/" title="io 黑盒排查磁盘空间告警/IO问题"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+</div>
+<hr/>
+<div role="contentinfo">
+<!-- Copyright etc -->
+</div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+</div>
+</div>
+</section>
+</div>
+<div aria-label="versions" class="rst-versions" role="note">
+<span class="rst-current-version" data-toggle="rst-current-version">
+<span><a href="../black-box-io-problem/" style="color: #fcfcfc;">« Previous</a></span>
+<span style="margin-left: 15px"><a href="../black-box-network-problem/" style="color: #fcfcfc">Next »</a></span>
+</span>
+</div>
+<script>var base_url = '../..';</script>
+<script defer="" src="../../js/theme.js"></script>
+<script defer="" src="../../js/mermaid.min.js"></script>
+<script defer="" src="../../js/custom.js"></script>
+<script defer="">
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(false);
+        };
+    </script>
+</body>
+</html>
