@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
+<head>
+<meta charset="utf-8"/>
+<meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="../../img/favicon.ico" rel="shortcut icon"/>
+<title>xv6 优化锁开销 - Log0c</title>
+<link href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" rel="stylesheet">
+<link href="../../css/theme.css" rel="stylesheet"/>
+<link href="../../css/theme_extra.css" rel="stylesheet"/>
+<script>
+    // Current page data
+    var mkdocs_page_name = "xv6 \u4f18\u5316\u9501\u5f00\u9500";
+    var mkdocs_page_input_path = "tomchfd/xv6-lock.md";
+    var mkdocs_page_url = null;
+  </script>
+<script defer="" src="../../js/jquery-2.1.1.min.js"></script>
+<script defer="" src="../../js/modernizr-2.8.3.min.js"></script>
+</link></head>
+<body class="wy-body-for-nav" role="document">
+<div class="wy-grid-for-nav">
+<nav class="wy-nav-side stickynav" data-toggle="wy-nav-shift">
+<div class="wy-side-scroll">
+<div class="wy-side-nav-search">
+<a class="icon icon-home" href="../.."> Log0c</a>
+</div>
+<div aria-label="main navigation" class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../..">主页</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">问题排查</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../black-box-netease-music-problem/">mac 网易云音乐 cpu 占用高排查</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../mac/osx86_external_ssd_swap_problem/">mac 外部 SSD Swap 分区开启问题</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../mac/mac-note-stalled/">mac Notes.app 卡死问题</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../go-pprof-memory-leak/">go 使用 pprof 排查内存泄漏</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../go-bytebufferpool-leak-doubt/">go bytebufferpool 错误使用一例</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../go-shadowing-variable/">go shadowing variable 造成的歧义</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../go-concurrent-map-read-write-bug/">go 并发读写 map 问题一例</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../db-metadatalock/">db metadata lock 问题排查</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../db-deadlock/">db 间隙锁造成的死锁</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../db-deadlock-2/">db 复现不同索引之间的死锁</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../black-box-io-problem/">io 黑盒排查磁盘空间告警/IO问题</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../black-box-cpu-high-problem/">cpu 排查的几个案例</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../black-box-network-problem/">network 排查的几个案例</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../black-box-tcp-troubleshooting/">network tcp 常见状态异常</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../black-box-troubleshooting-cheatsheet/">all 问题排查速查表</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">源码阅读</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../go-doc-reading-technique/">go 源码阅读小技巧</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../go-valyala-bytebufferpool/">valyala/bytebufferpool</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../go-atomic/">atomic LoadInt64 / LoadInt32</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../go-preempt/">go 是如何收回 goroutine 执行权的</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">labs</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../labs/6824-mapreduce/">MIT 6.824 - MapReduce</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../labs/6824-raft/">MIT 6.824 - Raft</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../labs/6824-kv/">MIT 6.824 - KV</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../labs/csapp-shell/">CSAPP - Shell</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../labs/csapp-proxy/">CSAPP - Proxy</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../labs/cs144/">CS144</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../misc-lox/">Lox</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">xv6 lab</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../xv6-utils/">xv6 添加用户态程序</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../xv6-syscall/">xv6 添加系统调用</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../xv6-pgtbl/">xv6 优化- 共用页表</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../xv6-traps/">xv6 实现用户态 trap 处理 (信号)</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../xv6-lazy/">xv6 优化-延迟分配用户态内存</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../xv6-cow/">xv6 优化-实现 fork copy on write</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../xv6-thread/">xv6 实现用户态协程</a>
+</li>
+<li class="toctree-l1 current"><a class="reference internal current" href="./">xv6 优化锁开销</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../xv6-fs/">xv6 实现大文件和符号逻辑</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">工具</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../tools/xdebug/">Xdebug</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../tools/chrome-dev-tools/">Chrome Dev Tools</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../tools/markdown-diagram/">Markdown Diagram 功能</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../tool-yaml-lint/">yaml lint</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">算法</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../algos/int-to-binary-str/">整数转二进制字符串</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../algos/multiple-field-sort/">多字段排序</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../algos/lru-cache-go/">LRU 线程安全和高并发</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">PHP</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../php/how-composer-work/">Composer 是如何工作的</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../php/business-logic-framework/">业务代码的框架</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../php/symfony-lock/">Symfony Lock Component</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../build-my-own-x/php-framework/">构建自己的 PHP 框架</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">杂项</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../others/mac_py_env_deploy/">Mac Python环境 miniConda 搭建</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../others/taylor-otwell-interview/">Taylor otwell 采访文章</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">零碎知识点</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../knowledge-reduce/tricks/">编程技巧/方法</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../knowledge-reduce/network_programming/">网络编程</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../knowledge-reduce/problem_trace/">问题排查</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../knowledge-reduce/network-course/">计算机网络课程分享</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../knowledge-reduce/mysql/">MYSQL</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../knowledge-reduce/language_trait_and_implementation/">语言特性/底层实现</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../knowledge-reduce/computer_composition/">计算机组成原理</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">归档</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/blog_deploy_log/">博客服务器环境搭建记录</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../redis/redis_code_book_reading/">Redis 设计与实现笔记</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/laracasts_learning_path/">Laracasts学习记录</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/black_sierra/">K480N 黑苹果安装记录</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/php_career_guide_line/">从框架看PHP的五种境界[转]</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/laravel_marcoable/">Laravel中的Marcoable</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/laravel_code_book_reading/">Laravel框架关键技术-阅读总结</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/laravel_admin_code_reading/">Laravel-Admin源码阅读</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/first_internship/">实习</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../summary/2017/">2017 总结</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/second_job/">2018 总结</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../summary/2019/">2019 总结</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../summary/2020/">2020 总结</a>
+</li>
+</ul>
+</div>
+</div>
+</nav>
+<section class="wy-nav-content-wrap" data-toggle="wy-nav-shift">
+<nav aria-label="top navigation" class="wy-nav-top" role="navigation">
+<i class="fa fa-bars" data-toggle="wy-nav-top"></i>
+<a href="../..">Log0c</a>
+</nav>
+<div class="wy-nav-content">
+<div class="rst-content">
+<div aria-label="breadcrumbs navigation" role="navigation">
+<ul class="wy-breadcrumbs">
+<li><a href="../..">Docs</a> »</li>
+<li>xv6 lab »</li>
+<li>xv6 优化锁开销</li>
+<li class="wy-breadcrumbs-aside">
+</li>
+</ul>
+<hr/>
+</div>
+<div role="main">
+<div class="section">
+<p>这节主要是优化锁开销的实操,默认的 xv6 实现里 , block cache 和memlist 两个结构都有个大锁,这个大锁的存在就会导致各种操作的锁竞争激烈</p>
+<p>要做的就是减小锁的粒度</p>
+<p>先是 memlist 的方案, memlist 锁的竞争发生在 cpu 之间, 为了减小锁开销,给每个 cpu 一份自己的 memlist (把整个物理内存平分给各个 cpu) , 此时每个 cpu 就只需要在自己的 memlist 里取空闲页 , </p>
+<p>但也有个例外情况是自己的 cpu 可能没有空闲页了,但其他 cpu 还有, 这时候就使用 steal 的策略从其他 cpu 偷取空闲的页 , </p>
+<p>正常情况下 steal 的操作应该很少发生 , 并且 steal 后会释放会当前 cpu 下 , 所以这个策略也有balance 的特性</p>
+<p>go 里的 scheduler 也有个 work-steal 的策略, 类似</p>
+<p>这里有个问题是 cpuid 的获取需要配合 pushoff 和 popoff , 否则可能在这个 cpu 发生中断,进程被调度到其他 cpu 上, 却拿着之前 cpu 的锁, 然后又产生锁竞争</p>
+<p>第二个是 block cache 的大锁 , 这个锁原先其实是保护其中的 lru cache 链表的 , 
+我个人使用的策略是把 block cache 也分 bucket , 然后每个 bucket 一个 lru cache 链表 , 
+这时候就涉及到一个问题 , 如果对于的 bucket 已经没有空闲 cache 可用了怎么办 , 和memlist 一样,从其他 bucket 找受害者(victim)</p>
+<p>这里由于把xv6 原来的 lru cache 代码都改写了一遍 (感觉不好理解就重写了) , 耗费了比较多时间</p>
+<p>有哪些可能会交错执行 , 访问的数据</p>
+<p>proc 列表
+kmem </p>
+<p>并发一词指的是由于多处理器并行、线程切换或中断，导致多个指令流交错的情况</p>
+<p>竞争条件是一种内存位置被并发访问的情况，并且至少有一次访问是写操作</p>
+<p>lab hint 里有一些可能的 bug , 可以写到文章里</p>
+<p>锁优化 , 比如之前那个kfree 的 memset 拆分出来</p>
+<p>还有 freelist 分 bucket 锁</p>
+<p>xv6 chapter 8 很重要</p>
+<p>不变式,  原子 , 序列化</p>
+<p>使用锁的一个困难部分是决定使用多少个锁，以及每个锁应该保护哪些数据和不变量。有几个基本原则。首先，当一个CPU可以写一个变量的同时，另一个CPU可以读或写它的时候，应该使用锁来防止这两个操作重叠。第二，记住锁是保护不变性的：如果一个不变性涉及多个内存位置，通常所有这些位置都需要由一个锁来保护，以确保不变性得到维护</p>
+<p>锁的颗粒度决定需要由性能测量和复杂性考虑来驱动。在随后的章节中解释xv6的每个部分时，他们将提到xv6使用锁来处理并发的例子。</p>
+<p>make lookup in the buffer cache lock-free. Hint: use gcc's __sync_* functions. How do you convince yourself that your implementation is correct?</p>
+<p>如何convince yourself 实现的正确性</p>
+<p>锁和中断</p>
+<p>一些xv6自旋锁保护线程和中断处理程序都使用的数据。例如，clockintr定时器中断处理程序可能在内核线程读取sys_sleep（kernel/sysproc.c:64）中的ticks（kernel/trap.c:163）的同时增加ticks。锁tickslock将这两个访问序列化。自旋锁和中断的交互引起了一个潜在的危险。假设sys_sleep持有tickslock，而它的CPU被一个定时器中断所打断，clockintr将试图获取tickslock，看到它被持有，并等待它被释放。在这种情况下，tickslock将永远不会被释放：只有sys_sleep可以释放它，但是sys_sleep不会继续运行，直到clockintr返回。因此，CPU会死锁，任何需要这两个锁的代码也会被冻结。为了避免这种情况，如果一个自旋锁被一个中断处理程序使用，CPU决不能在启用中断的情况下持有该锁。Xv6更保守：当一个CPU获得任何锁时，xv6总是禁用该CPU上的中断。中断仍然可以在其他CPU上发生，所以中断的获取可以等待线程释放自旋锁；只是不能在同一个CPU上发生。</p>
+<p>CPU的排序规则被称为内存模型。例如，在这段推送的代码中，如果编译器或CPU将第4行对应的存储移到第4行的释放后的某一点，那将是一场灾难</p>
+<p>为了告诉硬件和编译器不要进行这样的重新排序，xv6 在获取（kernel/spinlock.c:22）和释放（kernel/spinlock.c:47）中都使用了 __sync_synchronize() 。__sync_synchronize()是一个内存屏障：它告诉编译器和CPU不要在屏障上重新排序加载或存储。xv6的获取和释放屏障在几乎所有重要的情况下都会强制排序，因为xv6使用锁来访问共享数据。第9章讨论了一些例外情况</p>
+<p>管多年来对并发原语和并行性的研究，用锁进行编程仍然具有挑战性。通常最好的办法是将锁隐藏在更高层次的结构中，如同步队列，尽管xv6没有这样做。如果你用锁编程，使用一个试图识别竞赛条件的工具是明智的，因为很容易错过一个需要锁的不变量。</p>
+<p>sleeplock 不能用在哪些地方 , 看 chapter 8 </p>
+<p>bcache</p>
+<p>为什么使用时间戳之后就不用 bcache.lock 了呢</p>
+<p>换成小粒度锁了? 为啥不继续用movetoHead 的方法</p>
+<p>新思路: 可以用时间戳优化 get (不是这里的 bget) 时候的链表操作消耗 , 用原子的时间戳更新方式 , 使得 get 的速度更快</p>
+<p>在 note.app 里 xv6 lock 的截图</p>
+</div>
+</div>
+<footer>
+<div aria-label="footer navigation" class="rst-footer-buttons" role="navigation">
+<a class="btn btn-neutral float-right" href="../xv6-fs/" title="xv6 实现大文件和符号逻辑">Next <span class="icon icon-circle-arrow-right"></span></a>
+<a class="btn btn-neutral" href="../xv6-thread/" title="xv6 实现用户态协程"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+</div>
+<hr/>
+<div role="contentinfo">
+<!-- Copyright etc -->
+</div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+</div>
+</div>
+</section>
+</div>
+<div aria-label="versions" class="rst-versions" role="note">
+<span class="rst-current-version" data-toggle="rst-current-version">
+<span><a href="../xv6-thread/" style="color: #fcfcfc;">« Previous</a></span>
+<span style="margin-left: 15px"><a href="../xv6-fs/" style="color: #fcfcfc">Next »</a></span>
+</span>
+</div>
+<script>var base_url = '../..';</script>
+<script defer="" src="../../js/theme.js"></script>
+<script defer="" src="../../js/mermaid.min.js"></script>
+<script defer="" src="../../js/custom.js"></script>
+<script defer="">
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(false);
+        };
+    </script>
+</body>
+</html>

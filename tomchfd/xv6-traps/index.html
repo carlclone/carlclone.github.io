@@ -7,13 +7,13 @@
 <meta content="IE=edge" http-equiv="X-UA-Compatible"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <link href="../../img/favicon.ico" rel="shortcut icon"/>
-<title>Xv6 traps - Log0c</title>
+<title>xv6 实现用户态 trap 处理 (信号) - Log0c</title>
 <link href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" rel="stylesheet">
 <link href="../../css/theme.css" rel="stylesheet"/>
 <link href="../../css/theme_extra.css" rel="stylesheet"/>
 <script>
     // Current page data
-    var mkdocs_page_name = "Xv6 traps";
+    var mkdocs_page_name = "xv6 \u5b9e\u73b0\u7528\u6237\u6001 trap \u5904\u7406 (\u4fe1\u53f7)";
     var mkdocs_page_input_path = "tomchfd/xv6-traps.md";
     var mkdocs_page_url = null;
   </script>
@@ -73,6 +73,8 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../go-atomic/">atomic LoadInt64 / LoadInt32</a>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="../go-preempt/">go 是如何收回 goroutine 执行权的</a>
+</li>
 </ul>
 <p class="caption"><span class="caption-text">labs</span></p>
 <ul>
@@ -88,34 +90,30 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../labs/cs144/">CS144</a>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="../misc-lox/">Lox</a>
+</li>
 </ul>
-<p class="caption"><span class="caption-text">xv6</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../xv6-cheatsheet/">xv6 速查表</a>
-</li>
-<li class="toctree-l1"><a class="" href="../../asd.md">xv6 riscv64 寄存器</a>
-</li>
-<li class="toctree-l1"><a class="" href="../xv6-structure.md">xv6 整体源码结构</a>
-</li>
+<p class="caption"><span class="caption-text">xv6 lab</span></p>
+<ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../xv6-utils/">xv6 添加用户态程序</a>
 </li>
-<li class="toctree-l1"><a class="" href="../xv6-syscall.md   添加系统调用的步骤 , 调试跟着系统调用过程">xv6 添加系统调用</a>
+<li class="toctree-l1"><a class="reference internal" href="../xv6-syscall/">xv6 添加系统调用</a>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../xv6-pgtbl/">xv6 优化- kernel 通过 MMU 解引用 user 指针</a>
+<li class="toctree-l1"><a class="reference internal" href="../xv6-pgtbl/">xv6 优化- 共用页表</a>
 </li>
-<li class="toctree-l1"><a class="" href="../../asd.md">xv6 实现用户态 trap 处理</a>
+<li class="toctree-l1 current"><a class="reference internal current" href="./">xv6 实现用户态 trap 处理 (信号)</a>
+<ul class="current">
+</ul>
 </li>
-<li class="toctree-l1"><a class="" href="../../asd.md">xv6 优化-延迟分配用户态内存申请</a>
+<li class="toctree-l1"><a class="reference internal" href="../xv6-lazy/">xv6 优化-延迟分配用户态内存</a>
 </li>
-<li class="toctree-l1"><a class="" href="../../asd.md">xv6 优化-实现 fork copy on write</a>
+<li class="toctree-l1"><a class="reference internal" href="../xv6-cow/">xv6 优化-实现 fork copy on write</a>
 </li>
-<li class="toctree-l1"><a class="" href="../../asd.md">xv6 实现用户态协程</a>
+<li class="toctree-l1"><a class="reference internal" href="../xv6-thread/">xv6 实现用户态协程</a>
 </li>
-<li class="toctree-l1"><a class="" href="../../asd.md">xv6 优化锁开销</a>
+<li class="toctree-l1"><a class="reference internal" href="../xv6-lock/">xv6 优化锁开销</a>
 </li>
-<li class="toctree-l1"><a class="" href="../../asd.md">xv6 支持大文件</a>
-</li>
-<li class="toctree-l1"><a class="" href="../../asd.md">xv6 实现 mmap</a>
+<li class="toctree-l1"><a class="reference internal" href="../xv6-fs/">xv6 实现大文件和符号逻辑</a>
 </li>
 </ul>
 <p class="caption"><span class="caption-text">工具</span></p>
@@ -215,7 +213,8 @@
 <div aria-label="breadcrumbs navigation" role="navigation">
 <ul class="wy-breadcrumbs">
 <li><a href="../..">Docs</a> »</li>
-<li>Xv6 traps</li>
+<li>xv6 lab »</li>
+<li>xv6 实现用户态 trap 处理 (信号)</li>
 <li class="wy-breadcrumbs-aside">
 </li>
 </ul>
@@ -223,6 +222,11 @@
 </div>
 <div role="main">
 <div class="section">
+<p>任务是实现类似 linux 信号的东西, sigalarm , 类似定时器执行的功能 , 也称作用户态的 trap , 也称作 coroutine (因为处理程序是主要让出的)</p>
+<p>用户态先通过 sigalarm 设置时间间隔和触发程序到 proc 结构体中</p>
+<p>内核在每次时钟中断的时候递增时间, 如果达到了时间间隔, 便将指令寄存器 ip 指向触发程序, 回到用户态 , 触发程序执行完后执行 sigreturn 系统调用, 进入内核态,内核态再恢复到原来的用户态程序上下文 </p>
+<p>借用 linux 信号实现的图 , 其实是一样的原理 , 但在 xv6 里把进程上下文存在内核里了, linux 是存在用户态的栈里,提供了在用户态修改的机会 (go 抢占式调度的实现利用了这一点)</p>
+<p>这里为什么一定要关掉中断呢 , 其实是一个和锁类似的并发问题, 如果不关掉中断的话 , 可能会有另一个中断过来 , 中断里的中断, 从而导致代码的执行不是原子的 , 在后面获取 cpuid 的时候也需要关闭中断, 如果不关闭的话, 当进程执行下一行代码的时候可能就在另一个 cpu 里了!</p>
 <p>== Test   alarmtest: test2 ==
 alarmtest: test2: FAIL
 ...
@@ -241,9 +245,143 @@ test2 start
 test2 passed
 $ qemu-system-riscv64: terminating on signal 15 from pid 25655 (<unknown process="">)
 MISSING '^.?test1 passed$'</unknown></p>
+<p>作業問題</p>
+<p>Which registers contain arguments to functions? For example, which register holds 13 in main's call to printf?</p>
+<p>a2 holds 13 ,   a0-a7 保存参数,超出则存放在 stack 里</p>
+<p>Where is the call to function f in the assembly code for main? Where is the call to g? (Hint: the compiler may inline functions.)</p>
+<p>26: 45b1                    li  a1,12</p>
+<p>被编译器优化成内联 , 没有函数调用了 , 直接计算出结果</p>
+<p>g 也被 inline 了
+14: 250d                    addiw   a0,a0,3</p>
+<p>At what address is the function printf located?</p>
+<p>0000000000000628 <printf>:</printf></p>
+<p>What value is in the register ra just after the jalr to printf in main?</p>
+<p>38: 4501                    li  a0,0</p>
+<p>Run the following code.</p>
+<pre><code>unsigned int i = 0x00646c72;
+printf("H%x Wo%s", 57616, &amp;i);
+</code></pre>
+<p>What is the output? Here's an ASCII table that maps bytes to characters.
+The output depends on that fact that the RISC-V is little-endian. If the RISC-V were instead big-endian what would you set i to in order to yield the same output? Would you need to change 57616 to a different value?</p>
+<p>Here's a description of little- and big-endian and a more whimsical description.</p>
+<p>57616=0xe110</p>
+<p>He110,World</p>
+<p>72=r , 6c=l , 64=d</p>
+<p>小端序</p>
+<p>如果 riscv 是大端, 倒转过来, 0x726c6400</p>
+<p>如何把小端变大端?</p>
+<p>c = 0x0
+a = 0x00646c72
+b = 0x000000ff</p>
+<p>c = a &amp; b = 0x00000072
+a &gt;&gt;8 ( a= 0x0000646c)
+c &lt;&lt; 8 ( c = 0x00007200 )
+d = a &amp; b = 0x0000006c
+c = c | d = 0x0000726c
+...</p>
+<p>while (a!=0) {
+c = c | (a &amp; b )
+a &gt;&gt; 8
+c &lt;&lt; 8
+}</p>
+<p>In the following code, what is going to be printed after 'y='? (note: the answer is not a specific value.) Why does this happen?</p>
+<pre><code>printf("x=%d y=%d", 3);
+</code></pre>
+<p>x=3 y=5218</p>
+<p>因为第二个参数没传, 内核直接取第二个寄存器的值, 第二个寄存器的值可能是之前遗留的任何值</p>
+<p>汇编全部加上注释 , 画出 stack
+https://chenlangping.github.io/2021/04/19/xv6-2020-lab4%E8%A7%A3%E6%9E%90/
+riscv  c 汇编 调用 解析   用到的寄存器 指令 可能在课程里有讲到，看视频，你跳过了
+https://mit-public-courses-cn-translatio.gitbook.io/mit6-s081/lec05-calling-conventions-and-stack-frames-risc-v/5.5-stack</p>
+<p>user/_call:     file format elf64-littleriscv</p>
+<p>Disassembly of section .text:</p>
+<p>0000000000000000 <g>:</g></p>
+<h1 id="include-kernelparamh">include "kernel/param.h"</h1>
+<h1 id="include-kerneltypesh">include "kernel/types.h"</h1>
+<h1 id="include-kernelstath">include "kernel/stat.h"</h1>
+<h1 id="include-useruserh">include "user/user.h"</h1>
+<p>int g(int x) {
+0:  1141                    addi    sp,sp,-16
+2:  e422                    sd  s0,8(sp)
+4:  0800                    addi    s0,sp,16
+return x+3;
+}
+6:  250d                    addiw   a0,a0,3
+8:  6422                    ld  s0,8(sp)
+a:  0141                    addi    sp,sp,16
+c:  8082                    ret</p>
+<p>000000000000000e <f>:</f></p>
+<p>int f(int x) {
+e:  1141                    addi    sp,sp,-16
+10: e422                    sd  s0,8(sp)
+12: 0800                    addi    s0,sp,16
+return g(x);
+}
+14: 250d                    addiw   a0,a0,3
+16: 6422                    ld  s0,8(sp)
+18: 0141                    addi    sp,sp,16
+1a: 8082                    ret</p>
+<p>000000000000001c <main>:</main></p>
+<p>void main(void) {
+1c: 1141                    addi    sp,sp,-16
+1e: e406                    sd  ra,8(sp)
+20: e022                    sd  s0,0(sp)
+22: 0800                    addi    s0,sp,16
+printf("%d %d\n", f(8)+1, 13);
+24: 4635                    li  a2,13
+26: 45b1                    li  a1,12
+28: 00000517            auipc   a0,0x0
+2c: 7b850513            addi    a0,a0,1976 # 7e0 <malloc+0xea>
+30: 00000097            auipc   ra,0x0
+34: 608080e7            jalr    1544(ra) # 638 <printf>
+exit(0);
+38: 4501                    li  a0,0
+3a: 00000097            auipc   ra,0x0
+3e: 276080e7            jalr    630(ra) # 2b0 <exit></exit></printf></malloc+0xea></p>
+<p>0000000000000042 <strcpy>:</strcpy></p>
+<h1 id="include-kernelfcntlh">include "kernel/fcntl.h"</h1>
+<h1 id="include-useruserh_1">include "user/user.h"</h1>
+<p>Stack
+.
+.
++-&gt;          .
+|   +-----------------+   |
+|   | return address  |   |
+|   |   previous fp ------+
+|   | saved registers |
+|   | local variables |
+|   |       ...       | &lt;-+
+|   +-----------------+   |
+|   | return address  |   |
++------ previous fp   |   |
+| saved registers |   |
+| local variables |   |
++-&gt; |       ...       |   |
+|   +-----------------+   |
+|   | return address  |   |
+|   |   previous fp ------+
+|   | saved registers |
+|   | local variables |
+|   |       ...       | &lt;-+
+|   +-----------------+   |
+|   | return address  |   |
++------ previous fp   |   |
+| saved registers |   |
+| local variables |   |
+$fp --&gt; |       ...       |   |
++-----------------+   |
+| return address  |   |
+|   previous fp ------+
+| saved registers |
+$sp --&gt; | local variables |
++-----------------+</p>
 </div>
 </div>
 <footer>
+<div aria-label="footer navigation" class="rst-footer-buttons" role="navigation">
+<a class="btn btn-neutral float-right" href="../xv6-lazy/" title="xv6 优化-延迟分配用户态内存">Next <span class="icon icon-circle-arrow-right"></span></a>
+<a class="btn btn-neutral" href="../xv6-pgtbl/" title="xv6 优化- 共用页表"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+</div>
 <hr/>
 <div role="contentinfo">
 <!-- Copyright etc -->
@@ -257,6 +395,8 @@ MISSING '^.?test1 passed$'</unknown></p>
 </div>
 <div aria-label="versions" class="rst-versions" role="note">
 <span class="rst-current-version" data-toggle="rst-current-version">
+<span><a href="../xv6-pgtbl/" style="color: #fcfcfc;">« Previous</a></span>
+<span style="margin-left: 15px"><a href="../xv6-lazy/" style="color: #fcfcfc">Next »</a></span>
 </span>
 </div>
 <script>var base_url = '../..';</script>

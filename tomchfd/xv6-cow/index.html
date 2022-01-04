@@ -7,13 +7,13 @@
 <meta content="IE=edge" http-equiv="X-UA-Compatible"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <link href="../../img/favicon.ico" rel="shortcut icon"/>
-<title>Xv6 cow - Log0c</title>
+<title>xv6 优化-实现 fork copy on write - Log0c</title>
 <link href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" rel="stylesheet">
 <link href="../../css/theme.css" rel="stylesheet"/>
 <link href="../../css/theme_extra.css" rel="stylesheet"/>
 <script>
     // Current page data
-    var mkdocs_page_name = "Xv6 cow";
+    var mkdocs_page_name = "xv6 \u4f18\u5316-\u5b9e\u73b0 fork copy on write";
     var mkdocs_page_input_path = "tomchfd/xv6-cow.md";
     var mkdocs_page_url = null;
   </script>
@@ -73,6 +73,8 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../go-atomic/">atomic LoadInt64 / LoadInt32</a>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="../go-preempt/">go 是如何收回 goroutine 执行权的</a>
+</li>
 </ul>
 <p class="caption"><span class="caption-text">labs</span></p>
 <ul>
@@ -88,34 +90,28 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../labs/cs144/">CS144</a>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="../misc-lox/">Lox</a>
+</li>
 </ul>
-<p class="caption"><span class="caption-text">xv6</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../xv6-cheatsheet/">xv6 速查表</a>
-</li>
-<li class="toctree-l1"><a class="" href="../../asd.md">xv6 riscv64 寄存器</a>
-</li>
-<li class="toctree-l1"><a class="" href="../xv6-structure.md">xv6 整体源码结构</a>
-</li>
+<p class="caption"><span class="caption-text">xv6 lab</span></p>
+<ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../xv6-utils/">xv6 添加用户态程序</a>
 </li>
-<li class="toctree-l1"><a class="" href="../xv6-syscall.md   添加系统调用的步骤 , 调试跟着系统调用过程">xv6 添加系统调用</a>
+<li class="toctree-l1"><a class="reference internal" href="../xv6-syscall/">xv6 添加系统调用</a>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../xv6-pgtbl/">xv6 优化- kernel 通过 MMU 解引用 user 指针</a>
+<li class="toctree-l1"><a class="reference internal" href="../xv6-pgtbl/">xv6 优化- 共用页表</a>
 </li>
-<li class="toctree-l1"><a class="" href="../../asd.md">xv6 实现用户态 trap 处理</a>
+<li class="toctree-l1"><a class="reference internal" href="../xv6-traps/">xv6 实现用户态 trap 处理 (信号)</a>
 </li>
-<li class="toctree-l1"><a class="" href="../../asd.md">xv6 优化-延迟分配用户态内存申请</a>
+<li class="toctree-l1"><a class="reference internal" href="../xv6-lazy/">xv6 优化-延迟分配用户态内存</a>
 </li>
-<li class="toctree-l1"><a class="" href="../../asd.md">xv6 优化-实现 fork copy on write</a>
+<li class="toctree-l1 current"><a class="reference internal current" href="./">xv6 优化-实现 fork copy on write</a>
 </li>
-<li class="toctree-l1"><a class="" href="../../asd.md">xv6 实现用户态协程</a>
+<li class="toctree-l1"><a class="reference internal" href="../xv6-thread/">xv6 实现用户态协程</a>
 </li>
-<li class="toctree-l1"><a class="" href="../../asd.md">xv6 优化锁开销</a>
+<li class="toctree-l1"><a class="reference internal" href="../xv6-lock/">xv6 优化锁开销</a>
 </li>
-<li class="toctree-l1"><a class="" href="../../asd.md">xv6 支持大文件</a>
-</li>
-<li class="toctree-l1"><a class="" href="../../asd.md">xv6 实现 mmap</a>
+<li class="toctree-l1"><a class="reference internal" href="../xv6-fs/">xv6 实现大文件和符号逻辑</a>
 </li>
 </ul>
 <p class="caption"><span class="caption-text">工具</span></p>
@@ -215,7 +211,8 @@
 <div aria-label="breadcrumbs navigation" role="navigation">
 <ul class="wy-breadcrumbs">
 <li><a href="../..">Docs</a> »</li>
-<li>Xv6 cow</li>
+<li>xv6 lab »</li>
+<li>xv6 优化-实现 fork copy on write</li>
 <li class="wy-breadcrumbs-aside">
 </li>
 </ul>
@@ -223,6 +220,21 @@
 </div>
 <div role="main">
 <div class="section">
+<p>和上一个 lab 一样, 利用 page fault 的特性实现的功能优化</p>
+<p>在进程 fork 的时候直接拷贝父进程的各级页表,但共用物理地址 , 并将物理地址的 PTE_W 置为 0 , 这样写入时就会触发 pgfault
+, 触发 pgfault 后在 handler 里给该进程分配一个新的物理地址, 将旧内容拷贝过来 , 映射到进程的地址空间上 , 返回用户态</p>
+<p>实现方案 :
+首先给所有物理地址增加引用计数, 只有计数为 0 才能释放</p>
+<p>不是所有物理地址,是以页为单位的引用计数 , 大概几十 M 就能放下</p>
+<p>在 kfree 函数, 计数为 0 才释放会 freelist , 这里有个优化 , memset 置1 的操作是个耗时操作, 此时可以解锁以减小锁的粒度提高并发 , 因为这时候该页还未释放,不会有其他人访问</p>
+<p>在 PTE 的冗余 flag 上增加了一位 PTE_COW , 用于判断该页是否是COW 触发的</p>
+<p>定义 duppage 函数, 参数为进程 pagetable 和触发 pgfault 的内存地址 , 含义是复制该内存地址的物理页, 并映射到新的物理页 
+-1 为错误</p>
+<p>在 uvmcopy (通过 fork 调用) , 不再调用 kalloc , 而是增加引用计数并使用相同的物理地址 , 记得要清除双方的 PTE_W , 加上 PTE_COW , mappages 用于将物理地址映射到页表中</p>
+<p>在 copyout 中, 内核要复制数据到用户页表中 , 也可能触发 cow</p>
+<p>时刻都要检查用户态参数, 我们只允许合法的用户内存地址复制, 
+合法的地址特征: PTE_U 为 1, PTE_V 为 1 , 处于地址空间范围内 , PTE_COW 为 1
+接着便是复制数据和还原 flag (PTE_W 为 1,PTE_COW 为 0) , 并且还需要调用 kfree , 因为这可能是最后一个引用该物理地址的进程 ( 这里其实可以优化 )</p>
 <p>优化代码, memset 耗时并且可以并发执行 , 减小锁粒度 kfree
 // Free the page of physical memory pointed at by v,
 // which normally should have been returned by a
@@ -377,6 +389,10 @@ QEMU: Terminated</p>
 </div>
 </div>
 <footer>
+<div aria-label="footer navigation" class="rst-footer-buttons" role="navigation">
+<a class="btn btn-neutral float-right" href="../xv6-thread/" title="xv6 实现用户态协程">Next <span class="icon icon-circle-arrow-right"></span></a>
+<a class="btn btn-neutral" href="../xv6-lazy/" title="xv6 优化-延迟分配用户态内存"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+</div>
 <hr/>
 <div role="contentinfo">
 <!-- Copyright etc -->
@@ -390,6 +406,8 @@ QEMU: Terminated</p>
 </div>
 <div aria-label="versions" class="rst-versions" role="note">
 <span class="rst-current-version" data-toggle="rst-current-version">
+<span><a href="../xv6-lazy/" style="color: #fcfcfc;">« Previous</a></span>
+<span style="margin-left: 15px"><a href="../xv6-thread/" style="color: #fcfcfc">Next »</a></span>
 </span>
 </div>
 <script>var base_url = '../..';</script>

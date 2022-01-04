@@ -7,13 +7,13 @@
 <meta content="IE=edge" http-equiv="X-UA-Compatible"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <link href="../../img/favicon.ico" rel="shortcut icon"/>
-<title>Xv6 lazy - Log0c</title>
+<title>xv6 优化-延迟分配用户态内存 - Log0c</title>
 <link href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" rel="stylesheet">
 <link href="../../css/theme.css" rel="stylesheet"/>
 <link href="../../css/theme_extra.css" rel="stylesheet"/>
 <script>
     // Current page data
-    var mkdocs_page_name = "Xv6 lazy";
+    var mkdocs_page_name = "xv6 \u4f18\u5316-\u5ef6\u8fdf\u5206\u914d\u7528\u6237\u6001\u5185\u5b58";
     var mkdocs_page_input_path = "tomchfd/xv6-lazy.md";
     var mkdocs_page_url = null;
   </script>
@@ -73,6 +73,8 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../go-atomic/">atomic LoadInt64 / LoadInt32</a>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="../go-preempt/">go 是如何收回 goroutine 执行权的</a>
+</li>
 </ul>
 <p class="caption"><span class="caption-text">labs</span></p>
 <ul>
@@ -88,34 +90,28 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../labs/cs144/">CS144</a>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="../misc-lox/">Lox</a>
+</li>
 </ul>
-<p class="caption"><span class="caption-text">xv6</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../xv6-cheatsheet/">xv6 速查表</a>
-</li>
-<li class="toctree-l1"><a class="" href="../../asd.md">xv6 riscv64 寄存器</a>
-</li>
-<li class="toctree-l1"><a class="" href="../xv6-structure.md">xv6 整体源码结构</a>
-</li>
+<p class="caption"><span class="caption-text">xv6 lab</span></p>
+<ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../xv6-utils/">xv6 添加用户态程序</a>
 </li>
-<li class="toctree-l1"><a class="" href="../xv6-syscall.md   添加系统调用的步骤 , 调试跟着系统调用过程">xv6 添加系统调用</a>
+<li class="toctree-l1"><a class="reference internal" href="../xv6-syscall/">xv6 添加系统调用</a>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../xv6-pgtbl/">xv6 优化- kernel 通过 MMU 解引用 user 指针</a>
+<li class="toctree-l1"><a class="reference internal" href="../xv6-pgtbl/">xv6 优化- 共用页表</a>
 </li>
-<li class="toctree-l1"><a class="" href="../../asd.md">xv6 实现用户态 trap 处理</a>
+<li class="toctree-l1"><a class="reference internal" href="../xv6-traps/">xv6 实现用户态 trap 处理 (信号)</a>
 </li>
-<li class="toctree-l1"><a class="" href="../../asd.md">xv6 优化-延迟分配用户态内存申请</a>
+<li class="toctree-l1 current"><a class="reference internal current" href="./">xv6 优化-延迟分配用户态内存</a>
 </li>
-<li class="toctree-l1"><a class="" href="../../asd.md">xv6 优化-实现 fork copy on write</a>
+<li class="toctree-l1"><a class="reference internal" href="../xv6-cow/">xv6 优化-实现 fork copy on write</a>
 </li>
-<li class="toctree-l1"><a class="" href="../../asd.md">xv6 实现用户态协程</a>
+<li class="toctree-l1"><a class="reference internal" href="../xv6-thread/">xv6 实现用户态协程</a>
 </li>
-<li class="toctree-l1"><a class="" href="../../asd.md">xv6 优化锁开销</a>
+<li class="toctree-l1"><a class="reference internal" href="../xv6-lock/">xv6 优化锁开销</a>
 </li>
-<li class="toctree-l1"><a class="" href="../../asd.md">xv6 支持大文件</a>
-</li>
-<li class="toctree-l1"><a class="" href="../../asd.md">xv6 实现 mmap</a>
+<li class="toctree-l1"><a class="reference internal" href="../xv6-fs/">xv6 实现大文件和符号逻辑</a>
 </li>
 </ul>
 <p class="caption"><span class="caption-text">工具</span></p>
@@ -215,7 +211,8 @@
 <div aria-label="breadcrumbs navigation" role="navigation">
 <ul class="wy-breadcrumbs">
 <li><a href="../..">Docs</a> »</li>
-<li>Xv6 lazy</li>
+<li>xv6 lab »</li>
+<li>xv6 优化-延迟分配用户态内存</li>
 <li class="wy-breadcrumbs-aside">
 </li>
 </ul>
@@ -223,6 +220,52 @@
 </div>
 <div role="main">
 <div class="section">
+<p>任务是利用 page fault , 实现延迟分配内存 , 好处是: 比如分配大数组时其实没有立刻用到所有元素 , 分配内存的开销减少了 , 而且内存的利用率也高了</p>
+<p>sbrk 是用户态增长堆的系统调用 , 参数是要增长的大小 , 返回值是原大小 </p>
+<p>原始实现是立即给用户 alloc 并映射到页表中</p>
+<p>现在 sbrk 只增长 size 变量 , 不分配内存</p>
+<p>然后在 page fault 触发的时候再分配内存 </p>
+<p>这里遇到了一个官方 bug , 导致 debug 了一整天</p>
+<p>细节有点多, 要修改的地方有点多</p>
+<p>1</p>
+<p>总结:</p>
+<p>有很多坏习惯 , 养成了就难改</p>
+<p>每个函数都要加定义注释 , 说明函数是做什么用的, 参数, 返回什么</p>
+<p>代码设计
+函数接口设计 , 参数设计 , 定义 什么的</p>
+<p>代码里的 if else 代码块 含义 设计 , 变量定义</p>
+<p>xv6 int addr 的 bug , 地址应该是 uint64 ,</p>
+<p>stval 是 被调用方不会还原的寄存器 , 要在一开始就存好</p>
+<p>一个函数别做太多事, 还把 p-&gt;killed 写里面了,  内核里的 walkaddr 根本不需要 kill 进程 , 而且内核里是软件 walk 页表,根本没有触发 pgfault , 也就没有 stval , 还傻傻的去 stval 取</p>
+<p>这两个地方还是不知道 &lt; 和 &gt;= 是怎么判断出来的</p>
+<p>PGROUNDUP 是往高地址 ROUND 的</p>
+<p>if (va &lt; PGROUNDUP(ustack)) {
+        return 0;</p>
+<pre><code>} else if (va &gt;= p-&gt;sz) {
+    return 0;
+} else {
+
+
+}
+
+
+使用某个函数的时候看其他地方是怎么调用的, 看看函数接口定义 , 要做好错误处理
+
+
+
+不要用 ide 的 refactor 功能随便把某块代码封装成函数 , 如果要封装得先定义好函数接口 , 清楚函数是做什么用的
+
+
+lazy alloc , walk 页表的可能情况 , 没有 pte ( pte 为 0) , 或 pte_v 为 0, pte_u 为 0
+
+修改某个函数时也要清楚函数的定义, 参数 , 返回值定义 , 理解函数的作用 , 避免把函数语义给篡改了
+
+找本书或课程看看 , 关于代码设计, 维护的 , 坏习惯
+
+列出所有的坏习惯, 写代码前看看
+
+学习 lazy-debug 的写法
+</code></pre>
 <p>Make this modification, boot xv6, and type echo hi to the shell. You should see something like this:</p>
 <p>$ echo hi
 usertrap(): unexpected scause 0x000000000000000f pid=3
@@ -407,9 +450,23 @@ asd!0x0000000080002d94
 0x0000000000000030
 asd!0x0000000080002d94
 0x0000000080002c44</p>
+<p>需要修改 sbrk 只增加 sz 不分配内存 . 但是缩小堆则直接释放内存</p>
+<p>定义一个函数 pgfault_alloc , 参数是 pgfault 触发时的内存地址,含义是给对应的地址分配,映射内存到页表,成功返回物理地址,失败返回 0</p>
+<p>在内核态是不可能发生 lazy pgfault 的,不需要添加,只需要在 usertrap 加</p>
+<p>但是内核态有个 walkaddr 通过代码模拟 MMU 走用户进程页表, 如果地址是合法的话,也需要 pgfault 分配 , 并且这里需要用到 pa 物理地址</p>
+<p>uvmunmap 取消页表映射的时候, 由于增加了 lazy 功能, 现在 PTE_V 为 0 也可能是合法的地址,不再 panic , pte 也可能不存在 ( 因为 lazy 只到用到的时候才分配和映射)</p>
+<p>freewalk 函数也需要取消panic  ( 错误,不需要修改)</p>
+<p>uvmcopy 的时候和 uvmunmap 类似</p>
+<p>和内存相关的修改, 需要考虑 fork , exec , 第一个进程 , 释放进程 , 释放内存 ,
+内核态里内存的操作</p>
+<p>对 pgfault 产生的地址进行校验, 不能小于 stack 的上界, 不能大于 sz , 并且要 rounddown 到 pg , 因为内存分配是按 page 分的 , 发送错误要记得 kfree</p>
 </div>
 </div>
 <footer>
+<div aria-label="footer navigation" class="rst-footer-buttons" role="navigation">
+<a class="btn btn-neutral float-right" href="../xv6-cow/" title="xv6 优化-实现 fork copy on write">Next <span class="icon icon-circle-arrow-right"></span></a>
+<a class="btn btn-neutral" href="../xv6-traps/" title="xv6 实现用户态 trap 处理 (信号)"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+</div>
 <hr/>
 <div role="contentinfo">
 <!-- Copyright etc -->
@@ -423,6 +480,8 @@ asd!0x0000000080002d94
 </div>
 <div aria-label="versions" class="rst-versions" role="note">
 <span class="rst-current-version" data-toggle="rst-current-version">
+<span><a href="../xv6-traps/" style="color: #fcfcfc;">« Previous</a></span>
+<span style="margin-left: 15px"><a href="../xv6-cow/" style="color: #fcfcfc">Next »</a></span>
 </span>
 </div>
 <script>var base_url = '../..';</script>
