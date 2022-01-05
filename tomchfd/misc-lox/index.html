@@ -92,28 +92,31 @@
 </li>
 <li class="toctree-l1 current"><a class="reference internal current" href="./">Lox</a>
 <ul class="current">
-</ul>
+<li class="toctree-l2"><a class="reference internal" href="#scanner">scanner 部分</a>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#parser">parser 部分</a>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#resolver">resolver</a>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#interpreter">interpreter</a>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#class">class</a>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#array">array</a>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#closure">closure 的实现</a>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#_1">收获</a>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#_2">资料</a>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#_3">后续</a>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#misc">misc</a>
 </li>
 </ul>
-<p class="caption"><span class="caption-text">xv6 lab</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../xv6-utils/">xv6 添加用户态程序</a>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../xv6-syscall/">xv6 添加系统调用</a>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="../xv6-pgtbl/">xv6 优化- 共用页表</a>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="../xv6-traps/">xv6 实现用户态 trap 处理 (信号)</a>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="../xv6-lazy/">xv6 优化-延迟分配用户态内存</a>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="../xv6-cow/">xv6 优化-实现 fork copy on write</a>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="../xv6-thread/">xv6 实现用户态协程</a>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="../xv6-lock/">xv6 优化锁开销</a>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="../xv6-fs/">xv6 实现大文件和符号逻辑</a>
+<li class="toctree-l1"><a class="reference internal" href="../xv6-0-summary/">xv6</a>
 </li>
 </ul>
 <p class="caption"><span class="caption-text">工具</span></p>
@@ -222,9 +225,11 @@
 </div>
 <div role="main">
 <div class="section">
+<h1 id="lox">Lox</h1>
+<p>笔记,未整理...</p>
 <p>跟随着 crafting interpreter , 使用 go 写了一遍 lox 的解释器</p>
 <p>分别是手写的词法 scanner , 语法 parser , 每个AST 节点的解释 ,  类的实现 , 环境变量的实现 , 简单的语义分析(解决 shadow variable) , 使对变量的操作关联到正确的 scope 上</p>
-<h1 id="scanner">scanner 部分</h1>
+<h2 id="scanner">scanner 部分</h2>
 <p>使用了一个简单的状态机实现 , 基本是 by case 地写就行  , 还可以用 flex 生成</p>
 <p>context-free grammer  compare to REGULAR EXP</p>
 <p>if i want to add new grammar , how ?</p>
@@ -238,7 +243,7 @@ the way I do in go , and some small technique (like go generate)
 what problem i solved and by what tech in the process
 what i learned? (go error handle https://lailin.xyz/post/go-training-03.html , go generate)
 can this use in production , daily work ? (custom script/conf lang , document / web page parse)</p>
-<h1 id="parser">parser 部分</h1>
+<h2 id="parser">parser 部分</h2>
 <p>职责: token stream -&gt; ast</p>
 <p>是几个里面比较复杂的一个 , 主要分为表达式和语句 , 对表达式 eval 会产生值 , 对语句 eval 会产生副作用</p>
 <p>表达式需要解决关联和优先级 , 左递归等问题 , 目前除了赋值是右关联的,其他都是左关联 , 也就是 a=b=c 等价于 a = (b = c) </p>
@@ -247,7 +252,7 @@ can this use in production , daily work ? (custom script/conf lang , document / 
 <p>优先级参考表格</p>
 <p>问自己一个问题, 如何加新的语法(如数组,字典) 到 上下文无关文法里 , 优先级要怎么确定</p>
 <p>除了手写外, 可以用 bison 生成</p>
-<h1 id="resolver">resolver</h1>
+<h2 id="resolver">resolver</h2>
 <p>这部分只做了一件事, 遍历 AST 生成各个遍历的 scope step , 使得诸如</p>
 <p>var a =1;</p>
 <p>if true {
@@ -257,7 +262,7 @@ can this use in production , daily work ? (custom script/conf lang , document / 
 <p>之后语义分析可以加在这里 , 修饰 AST
 declaration binding , shadow scope problem</p>
 <p>resolver 是通过 scope stack 入栈出栈完成的分析</p>
-<h1 id="interpreter">interpreter</h1>
+<h2 id="interpreter">interpreter</h2>
 <p>树的遍历, visitor 模式</p>
 <p>各个表达式节点, 语句节点的eval函数编写</p>
 <p>表达式节点只需要 DFS 然后返回值就行了</p>
@@ -265,7 +270,7 @@ declaration binding , shadow scope problem</p>
 <p>语句节点有不同的副作用 ,
 赋值语句需要环境/作用域的支持 , 每个代码块是一个作用域 , 如果在本作用域找不到就往父级作用域找 , 这里的作用域层级是静态的 , 也就是编译期确定的 , 有一门热门语言是奇葩的动态作用域(JavaScript) 
 还有一类可归类为 IO 副作用的语句 , 如 print</p>
-<h1 id="class">class</h1>
+<h2 id="class">class</h2>
 <p>class 作为一个新功能添加到解释器中 , 提供了一个新功能添加步骤的参考</p>
 <p>类其实是把数据和代码捆绑在一起</p>
 <p>1.类提供的功能:</p>
@@ -367,12 +372,12 @@ m(argument);</p>
 <p>这里需要为 this 在原先 env 基础上 , 创建一个新的 env scope , 保存在里面, 为什么呢? </p>
 <p>保存在原来的 env 里有什么问题吗, 因为解释的时候是分成两步的 , 一部是 cake.taste , eval get expr 并产生 env 包含 this , 一步是 call expr , () , 又产生一个新的 env 执行</p>
 <p>我觉得合到一起也没什么问题</p>
-<h1 id="array">array</h1>
+<h2 id="array">array</h2>
 <p>为了检验学习效果 , 尝试着添加数组的功能 , 跟随 class 的步骤</p>
-<h1 id="closure">closure 的实现</h1>
-<h1 id="_1">收获</h1>
+<h2 id="closure">closure 的实现</h2>
+<h2 id="_1">收获</h2>
 <p>对编译原理的前端有了初步的认识</p>
-<h1 id="_2">资料</h1>
+<h2 id="_2">资料</h2>
 <p>go 自带的 AST 生成工具</p>
 <p>cs143 cool 编程语言 实验指导</p>
 <p>reference source
@@ -385,15 +390,15 @@ hashicorp configuration language
 go-workwx ast
 json
 https://calebschoepp.com/blog/2020/adding-a-list-data-type-to-lox/  Adding A List Data Type To Lox - Caleb Schoepp</p>
-<h1 id="_3">后续</h1>
+<h2 id="_3">后续</h2>
 <p>添加新功能 数组和字典 , 词法,语法设计</p>
 <p>把 byte code machine 看了</p>
-<h1 id="misc">misc</h1>
+<h2 id="misc">misc</h2>
 </div>
 </div>
 <footer>
 <div aria-label="footer navigation" class="rst-footer-buttons" role="navigation">
-<a class="btn btn-neutral float-right" href="../xv6-utils/" title="xv6 添加用户态程序">Next <span class="icon icon-circle-arrow-right"></span></a>
+<a class="btn btn-neutral float-right" href="../xv6-0-summary/" title="xv6">Next <span class="icon icon-circle-arrow-right"></span></a>
 <a class="btn btn-neutral" href="../../labs/cs144/" title="CS144"><span class="icon icon-circle-arrow-left"></span> Previous</a>
 </div>
 <hr/>
@@ -410,7 +415,7 @@ https://calebschoepp.com/blog/2020/adding-a-list-data-type-to-lox/  Adding A Lis
 <div aria-label="versions" class="rst-versions" role="note">
 <span class="rst-current-version" data-toggle="rst-current-version">
 <span><a href="../../labs/cs144/" style="color: #fcfcfc;">« Previous</a></span>
-<span style="margin-left: 15px"><a href="../xv6-utils/" style="color: #fcfcfc">Next »</a></span>
+<span style="margin-left: 15px"><a href="../xv6-0-summary/" style="color: #fcfcfc">Next »</a></span>
 </span>
 </div>
 <script>var base_url = '../..';</script>

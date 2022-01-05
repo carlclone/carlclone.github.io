@@ -102,26 +102,7 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../misc-lox/">Lox</a>
 </li>
-</ul>
-<p class="caption"><span class="caption-text">xv6 lab</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../xv6-utils/">xv6 添加用户态程序</a>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="../xv6-syscall/">xv6 添加系统调用</a>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="../xv6-pgtbl/">xv6 优化- 共用页表</a>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="../xv6-traps/">xv6 实现用户态 trap 处理 (信号)</a>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="../xv6-lazy/">xv6 优化-延迟分配用户态内存</a>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="../xv6-cow/">xv6 优化-实现 fork copy on write</a>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="../xv6-thread/">xv6 实现用户态协程</a>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="../xv6-lock/">xv6 优化锁开销</a>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="../xv6-fs/">xv6 实现大文件和符号逻辑</a>
+<li class="toctree-l1"><a class="reference internal" href="../xv6-0-summary/">xv6</a>
 </li>
 </ul>
 <p class="caption"><span class="caption-text">工具</span></p>
@@ -321,7 +302,7 @@ getattrlist("/Users/lin/Library/Containers/com.netease.163music/Data/Caches/onli
 <h2 id="_3">末</h2>
 <ul>
 <li>
-<p>为什么系统调用高上下文切换也高呢? 因为系统调用需要从用户态陷入(trap)内核态, 保存寄存器数据,切换页表, 参考 6.S081 xv6 课程和 OSTEP</p>
+<p>为什么系统调用高上下文切换也高呢? 因为系统调用需要从用户态陷入(trap)内核态, 切换运行上下文, 如保存寄存器数据 , 参考 6.S081 xv6 课程和 OSTEP</p>
 </li>
 <li>
 <p>时间过得真快, 老系统都已经有不兼容的情况了, 真没想到啊</p>

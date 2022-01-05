@@ -7,14 +7,14 @@
 <meta content="IE=edge" http-equiv="X-UA-Compatible"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <link href="../../img/favicon.ico" rel="shortcut icon"/>
-<title>配置 go 的 debug - Log0c</title>
+<title>xv6 添加用户态程序 - Log0c</title>
 <link href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" rel="stylesheet">
 <link href="../../css/theme.css" rel="stylesheet"/>
 <link href="../../css/theme_extra.css" rel="stylesheet"/>
 <script>
     // Current page data
-    var mkdocs_page_name = "\u914d\u7f6e go \u7684 debug";
-    var mkdocs_page_input_path = "xb/go-debug-setup.md";
+    var mkdocs_page_name = "xv6 \u6dfb\u52a0\u7528\u6237\u6001\u7a0b\u5e8f";
+    var mkdocs_page_input_path = "tomchfd/xv6-1-utils.md";
     var mkdocs_page_url = null;
   </script>
 <script defer="" src="../../js/jquery-2.1.1.min.js"></script>
@@ -34,46 +34,46 @@
 </ul>
 <p class="caption"><span class="caption-text">问题排查</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../tomchfd/black-box-netease-music-problem/">mac 网易云音乐 cpu 占用高排查</a>
+<li class="toctree-l1"><a class="reference internal" href="../black-box-netease-music-problem/">mac 网易云音乐 cpu 占用高排查</a>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../mac/osx86_external_ssd_swap_problem/">mac 外部 SSD Swap 分区开启问题</a>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../mac/mac-note-stalled/">mac Notes.app 卡死问题</a>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../../tomchfd/go-pprof-memory-leak/">go 使用 pprof 排查内存泄漏</a>
+<li class="toctree-l1"><a class="reference internal" href="../go-pprof-memory-leak/">go 使用 pprof 排查内存泄漏</a>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../../tomchfd/go-bytebufferpool-leak-doubt/">go bytebufferpool 错误使用一例</a>
+<li class="toctree-l1"><a class="reference internal" href="../go-bytebufferpool-leak-doubt/">go bytebufferpool 错误使用一例</a>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../../tomchfd/go-shadowing-variable/">go shadowing variable 造成的歧义</a>
+<li class="toctree-l1"><a class="reference internal" href="../go-shadowing-variable/">go shadowing variable 造成的歧义</a>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../../tomchfd/go-concurrent-map-read-write-bug/">go 并发读写 map 问题一例</a>
+<li class="toctree-l1"><a class="reference internal" href="../go-concurrent-map-read-write-bug/">go 并发读写 map 问题一例</a>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../../tomchfd/db-metadatalock/">db metadata lock 问题排查</a>
+<li class="toctree-l1"><a class="reference internal" href="../db-metadatalock/">db metadata lock 问题排查</a>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../../tomchfd/db-deadlock/">db 间隙锁造成的死锁</a>
+<li class="toctree-l1"><a class="reference internal" href="../db-deadlock/">db 间隙锁造成的死锁</a>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../../tomchfd/db-deadlock-2/">db 复现不同索引之间的死锁</a>
+<li class="toctree-l1"><a class="reference internal" href="../db-deadlock-2/">db 复现不同索引之间的死锁</a>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../../tomchfd/black-box-io-problem/">io 黑盒排查磁盘空间告警/IO问题</a>
+<li class="toctree-l1"><a class="reference internal" href="../black-box-io-problem/">io 黑盒排查磁盘空间告警/IO问题</a>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../../tomchfd/black-box-cpu-high-problem/">cpu 排查的几个案例</a>
+<li class="toctree-l1"><a class="reference internal" href="../black-box-cpu-high-problem/">cpu 排查的几个案例</a>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../../tomchfd/black-box-network-problem/">network 排查的几个案例</a>
+<li class="toctree-l1"><a class="reference internal" href="../black-box-network-problem/">network 排查的几个案例</a>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../../tomchfd/black-box-tcp-troubleshooting/">network tcp 常见状态异常</a>
+<li class="toctree-l1"><a class="reference internal" href="../black-box-tcp-troubleshooting/">network tcp 常见状态异常</a>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../../tomchfd/black-box-troubleshooting-cheatsheet/">all 问题排查速查表</a>
+<li class="toctree-l1"><a class="reference internal" href="../black-box-troubleshooting-cheatsheet/">all 问题排查速查表</a>
 </li>
 </ul>
 <p class="caption"><span class="caption-text">源码阅读</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../tomchfd/go-doc-reading-technique/">go 源码阅读小技巧</a>
+<li class="toctree-l1"><a class="reference internal" href="../go-doc-reading-technique/">go 源码阅读小技巧</a>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../../tomchfd/go-valyala-bytebufferpool/">valyala/bytebufferpool</a>
+<li class="toctree-l1"><a class="reference internal" href="../go-valyala-bytebufferpool/">valyala/bytebufferpool</a>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../../tomchfd/go-atomic/">atomic LoadInt64 / LoadInt32</a>
+<li class="toctree-l1"><a class="reference internal" href="../go-atomic/">atomic LoadInt64 / LoadInt32</a>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../../tomchfd/go-preempt/">go 是如何收回 goroutine 执行权的</a>
+<li class="toctree-l1"><a class="reference internal" href="../go-preempt/">go 是如何收回 goroutine 执行权的</a>
 </li>
 </ul>
 <p class="caption"><span class="caption-text">labs</span></p>
@@ -90,9 +90,9 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../labs/cs144/">CS144</a>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../../tomchfd/misc-lox/">Lox</a>
+<li class="toctree-l1"><a class="reference internal" href="../misc-lox/">Lox</a>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../../tomchfd/xv6-0-summary/">xv6</a>
+<li class="toctree-l1"><a class="reference internal" href="../xv6-0-summary/">xv6</a>
 </li>
 </ul>
 <p class="caption"><span class="caption-text">工具</span></p>
@@ -103,7 +103,7 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../tools/markdown-diagram/">Markdown Diagram 功能</a>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../../tomchfd/tool-yaml-lint/">yaml lint</a>
+<li class="toctree-l1"><a class="reference internal" href="../tool-yaml-lint/">yaml lint</a>
 </li>
 </ul>
 <p class="caption"><span class="caption-text">算法</span></p>
@@ -192,7 +192,7 @@
 <div aria-label="breadcrumbs navigation" role="navigation">
 <ul class="wy-breadcrumbs">
 <li><a href="../..">Docs</a> »</li>
-<li>配置 go 的 debug</li>
+<li>xv6 添加用户态程序</li>
 <li class="wy-breadcrumbs-aside">
 </li>
 </ul>
@@ -200,19 +200,10 @@
 </div>
 <div role="main">
 <div class="section">
-<h1 id="go-debug">配置 go 的 debug</h1>
-<p>delve</p>
-<p>dlv debug main.go --wd /Users/lin/go/src/xiaobu/biz_server/output/game_biz/bin -- -config /Users/lin/go/src/xiaobu/biz_server/output/game_biz/conf/application.yml</p>
-<p>goland</p>
-<p>自定义 debug 配置 </p>
-<p>output dir 配上运行目录 /Users/lin/go/src/xiaobu/biz_server/output/game_biz/bin</p>
-<p>program arg 加程序运行参数 -config /Users/lin/go/src/xiaobu/biz_server/output/game_biz/conf/application.yml</p>
-<p>all done !</p>
-<p>https://www.jetbrains.com/help/go/creating-and-editing-run-debug-configurations.html#create-go-build-configuration</p>
-<p>https://github.com/go-delve/delve/issues/562</p>
-<p>https://github.com/go-delve/delve/blob/master/Documentation/usage/dlv_debug.md</p>
-<p>https://github.com/go-delve/delve/blob/master/Documentation/installation/README.md</p>
-<p>https://www.bilibili.com/video/BV1pb411i7nw?from=search&amp;seid=7748383152437991388</p>
+<h1 id="xv6">xv6 添加用户态程序</h1>
+<p>6.s081 的第一个 lab , 给xv6 添加几个用户态程序</p>
+<h2 id="sleep">sleep</h2>
+<p>支持在命令行输入 <code>sleep n</code> 睡眠 , n 为 cpu 的 tick 数, 默认一次 tick 为 10ms</p>
 </div>
 </div>
 <footer>

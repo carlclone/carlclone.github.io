@@ -92,26 +92,7 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../misc-lox/">Lox</a>
 </li>
-</ul>
-<p class="caption"><span class="caption-text">xv6 lab</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../xv6-utils/">xv6 添加用户态程序</a>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="../xv6-syscall/">xv6 添加系统调用</a>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="../xv6-pgtbl/">xv6 优化- 共用页表</a>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="../xv6-traps/">xv6 实现用户态 trap 处理 (信号)</a>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="../xv6-lazy/">xv6 优化-延迟分配用户态内存</a>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="../xv6-cow/">xv6 优化-实现 fork copy on write</a>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="../xv6-thread/">xv6 实现用户态协程</a>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="../xv6-lock/">xv6 优化锁开销</a>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="../xv6-fs/">xv6 实现大文件和符号逻辑</a>
+<li class="toctree-l1"><a class="reference internal" href="../xv6-0-summary/">xv6</a>
 </li>
 </ul>
 <p class="caption"><span class="caption-text">工具</span></p>
@@ -373,6 +354,14 @@ rax 通用寄存器</p>
 <p>熟悉链接库和编译那一套，Makefile什么的会用就行了。不熟悉编译的去编译个LFS（Linux from Scratch）就差不多了。</p>
 <p>指针是进程内存地址空间上的一个地址
 引用是高级语言里的一种语法糖 , 有点像 linux 的硬链接, 两个名词指向同一个容器,只有两个引用都没了,容器才会删除</p>
+<p>描述符 0 1 2 分别是标准输入,标准输出,错误输出</p>
+<ul>
+<li>exit syscall</li>
+</ul>
+<p>exit 也是个系统调用, 接收一个 int 参数,
+https://mit-public-courses-cn-translatio.gitbook.io/mit6-s081/lec13-sleep-and-wakeup-robert/13.6-exit-systemcall
+传入-1时 , 一般表示错误, 父进程据此判断
+传入 0时 , 表示正常退出</p>
 </div>
 </div>
 <footer>

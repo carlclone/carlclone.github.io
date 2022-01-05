@@ -94,26 +94,7 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../misc-lox/">Lox</a>
 </li>
-</ul>
-<p class="caption"><span class="caption-text">xv6 lab</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../xv6-utils/">xv6 添加用户态程序</a>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="../xv6-syscall/">xv6 添加系统调用</a>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="../xv6-pgtbl/">xv6 优化- 共用页表</a>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="../xv6-traps/">xv6 实现用户态 trap 处理 (信号)</a>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="../xv6-lazy/">xv6 优化-延迟分配用户态内存</a>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="../xv6-cow/">xv6 优化-实现 fork copy on write</a>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="../xv6-thread/">xv6 实现用户态协程</a>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="../xv6-lock/">xv6 优化锁开销</a>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="../xv6-fs/">xv6 实现大文件和符号逻辑</a>
+<li class="toctree-l1"><a class="reference internal" href="../xv6-0-summary/">xv6</a>
 </li>
 </ul>
 <p class="caption"><span class="caption-text">工具</span></p>
@@ -232,6 +213,7 @@
 <p>到这里看起来好像很简单,也就和内核类似,保存寄存器,还原寄存器. 但是还有一个地方不明白的是, <strong>在信号处理程序里要如何拿到对应协程的寄存器值</strong>,毕竟当前的寄存器值已经是信号处理程序的值了</p>
 <p>查阅信号相关的系统调用也没找到和寄存器相关的参数 , 如果系统调用提供了修改和获取的参数那就最好了 , 但是没有</p>
 <p>后来查阅资料得知, linux 在进入信号处理程序后, 会在栈中保存被中断的程序的寄存器值,sigcontext , 并且在还原的时候会从这里取, 这样就解决了寄存器获取和修改的问题</p>
+<p><img alt="Paste_Image.png" src="/img/signal-stack.png"/></p>
 <p><strong>问题 3:为什么没有在信号处理程序里做调度?</strong></p>
 <p>这个问题在查看 gophercon 的一个视频后得到了解答: 在信号处理程序中处理调度会引发很多问题 , 于是作者把调度移到了正常状态下的程序运行</p>
 <p><strong>问题 4:为什么只能在安全状态下运行调度</strong></p>
@@ -239,6 +221,7 @@
 <h2 id="_1">参考资料</h2>
 <ul>
 <li><a href="http://www.noobyard.com/article/p-uypbzgui-ng.html">c 实现的用户态抢占式调度</a> 关键词: linux 信号 修改寄存器</li>
+<li><a href="https://www.cnblogs.com/charlesblc/p/6263114.html">内核信号处理 &amp; CPU8个通用寄存器</a> </li>
 <li><a href="https://golang.design/under-the-hood/zh-cn/part2runtime/ch06sched/preemption/">go 语言原本 - 抢占式调度</a> 关键词： go pushcall</li>
 <li><a href="https://golang.design/under-the-hood/zh-cn/part2runtime/ch06sched/signal/">go 语言原本 - 信号</a> 关键词： go pushcall</li>
 <li><a href="https://in1t.top/2020/04/11/Linux%E5%86%85%E6%A0%B8%E6%BA%90%E7%A0%81%E9%98%85%E8%AF%BB-kernel%EF%BC%88%E4%B8%89%EF%BC%89/">linux 0.11 信号源码阅读</a> 关键词： linux 信号 源码</li>
