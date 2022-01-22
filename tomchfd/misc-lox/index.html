@@ -7,13 +7,13 @@
 <meta content="IE=edge" http-equiv="X-UA-Compatible"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <link href="../../img/favicon.ico" rel="shortcut icon"/>
-<title>Lox - Log0c</title>
+<title>lox - Log0c</title>
 <link href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" rel="stylesheet">
 <link href="../../css/theme.css" rel="stylesheet"/>
 <link href="../../css/theme_extra.css" rel="stylesheet"/>
 <script>
     // Current page data
-    var mkdocs_page_name = "Lox";
+    var mkdocs_page_name = "lox";
     var mkdocs_page_input_path = "tomchfd/misc-lox.md";
     var mkdocs_page_url = null;
   </script>
@@ -78,6 +78,8 @@
 </ul>
 <p class="caption"><span class="caption-text">labs</span></p>
 <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../xv6-00-a/">xv6</a>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="../../labs/6824-mapreduce/">MIT 6.824 - MapReduce</a>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../labs/6824-raft/">MIT 6.824 - Raft</a>
@@ -90,7 +92,7 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../labs/cs144/">CS144</a>
 </li>
-<li class="toctree-l1 current"><a class="reference internal current" href="./">Lox</a>
+<li class="toctree-l1 current"><a class="reference internal current" href="./">lox</a>
 <ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="#scanner">scanner 部分</a>
 </li>
@@ -115,8 +117,6 @@
 <li class="toctree-l2"><a class="reference internal" href="#misc">misc</a>
 </li>
 </ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="../xv6-0-summary/">xv6</a>
 </li>
 </ul>
 <p class="caption"><span class="caption-text">工具</span></p>
@@ -217,7 +217,7 @@
 <ul class="wy-breadcrumbs">
 <li><a href="../..">Docs</a> »</li>
 <li>labs »</li>
-<li>Lox</li>
+<li>lox</li>
 <li class="wy-breadcrumbs-aside">
 </li>
 </ul>
@@ -256,7 +256,7 @@ can this use in production , daily work ? (custom script/conf lang , document / 
 <p>这部分只做了一件事, 遍历 AST 生成各个遍历的 scope step , 使得诸如</p>
 <p>var a =1;</p>
 <p>if true {
-  a = a +1;   //第一个 a 在内部作用域 (声明并赋值) , 第二个 a 是外层作用域
+  var a = a +1;   //第一个 a 在内部作用域 (声明并赋值) , 第二个 a 是外层作用域
 }</p>
 <p>能够符合正确的作用域</p>
 <p>之后语义分析可以加在这里 , 修饰 AST
@@ -398,7 +398,7 @@ https://calebschoepp.com/blog/2020/adding-a-list-data-type-to-lox/  Adding A Lis
 </div>
 <footer>
 <div aria-label="footer navigation" class="rst-footer-buttons" role="navigation">
-<a class="btn btn-neutral float-right" href="../xv6-0-summary/" title="xv6">Next <span class="icon icon-circle-arrow-right"></span></a>
+<a class="btn btn-neutral float-right" href="../../tools/xdebug/" title="Xdebug">Next <span class="icon icon-circle-arrow-right"></span></a>
 <a class="btn btn-neutral" href="../../labs/cs144/" title="CS144"><span class="icon icon-circle-arrow-left"></span> Previous</a>
 </div>
 <hr/>
@@ -415,7 +415,7 @@ https://calebschoepp.com/blog/2020/adding-a-list-data-type-to-lox/  Adding A Lis
 <div aria-label="versions" class="rst-versions" role="note">
 <span class="rst-current-version" data-toggle="rst-current-version">
 <span><a href="../../labs/cs144/" style="color: #fcfcfc;">« Previous</a></span>
-<span style="margin-left: 15px"><a href="../xv6-0-summary/" style="color: #fcfcfc">Next »</a></span>
+<span style="margin-left: 15px"><a href="../../tools/xdebug/" style="color: #fcfcfc">Next »</a></span>
 </span>
 </div>
 <script>var base_url = '../..';</script>

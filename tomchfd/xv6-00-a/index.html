@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
+<head>
+<meta charset="utf-8"/>
+<meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="../../img/favicon.ico" rel="shortcut icon"/>
+<title>xv6 - Log0c</title>
+<link href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" rel="stylesheet">
+<link href="../../css/theme.css" rel="stylesheet"/>
+<link href="../../css/theme_extra.css" rel="stylesheet"/>
+<script>
+    // Current page data
+    var mkdocs_page_name = "xv6";
+    var mkdocs_page_input_path = "tomchfd/xv6-00-a.md";
+    var mkdocs_page_url = null;
+  </script>
+<script defer="" src="../../js/jquery-2.1.1.min.js"></script>
+<script defer="" src="../../js/modernizr-2.8.3.min.js"></script>
+</link></head>
+<body class="wy-body-for-nav" role="document">
+<div class="wy-grid-for-nav">
+<nav class="wy-nav-side stickynav" data-toggle="wy-nav-shift">
+<div class="wy-side-scroll">
+<div class="wy-side-nav-search">
+<a class="icon icon-home" href="../.."> Log0c</a>
+</div>
+<div aria-label="main navigation" class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../..">主页</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">问题排查</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../black-box-netease-music-problem/">mac 网易云音乐 cpu 占用高排查</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../mac/osx86_external_ssd_swap_problem/">mac 外部 SSD Swap 分区开启问题</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../mac/mac-note-stalled/">mac Notes.app 卡死问题</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../go-pprof-memory-leak/">go 使用 pprof 排查内存泄漏</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../go-bytebufferpool-leak-doubt/">go bytebufferpool 错误使用一例</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../go-shadowing-variable/">go shadowing variable 造成的歧义</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../go-concurrent-map-read-write-bug/">go 并发读写 map 问题一例</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../db-metadatalock/">db metadata lock 问题排查</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../db-deadlock/">db 间隙锁造成的死锁</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../db-deadlock-2/">db 复现不同索引之间的死锁</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../black-box-io-problem/">io 黑盒排查磁盘空间告警/IO问题</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../black-box-cpu-high-problem/">cpu 排查的几个案例</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../black-box-network-problem/">network 排查的几个案例</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../black-box-tcp-troubleshooting/">network tcp 常见状态异常</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../black-box-troubleshooting-cheatsheet/">all 问题排查速查表</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">源码阅读</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../go-doc-reading-technique/">go 源码阅读小技巧</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../go-valyala-bytebufferpool/">valyala/bytebufferpool</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../go-atomic/">atomic LoadInt64 / LoadInt32</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../go-preempt/">go 是如何收回 goroutine 执行权的</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">labs</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal current" href="./">xv6</a>
+<ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="#trace">实现 trace</a>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#_1">给进程页表添加内核页表映射</a>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#trap-alarm">实现用户态 trap alarm (类似信号)</a>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#lazy-allocation">lazy allocation</a>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#fork-cow">实现 fork cow</a>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#_2">实现用户态线程 (协程)</a>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#_3">优化锁粒度</a>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#_4">实现大文件支持和符号链接</a>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#mmap">mmap</a>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#network-driver">network driver</a>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#gdb-xv6">gdb 调试 xv6 的一些技巧</a>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#_5">有用的图示</a>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#_6">资料汇总</a>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../labs/6824-mapreduce/">MIT 6.824 - MapReduce</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../labs/6824-raft/">MIT 6.824 - Raft</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../labs/6824-kv/">MIT 6.824 - KV</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../labs/csapp-shell/">CSAPP - Shell</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../labs/csapp-proxy/">CSAPP - Proxy</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../labs/cs144/">CS144</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../misc-lox/">lox</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">工具</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../tools/xdebug/">Xdebug</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../tools/chrome-dev-tools/">Chrome Dev Tools</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../tools/markdown-diagram/">Markdown Diagram 功能</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../tool-yaml-lint/">yaml lint</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">算法</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../algos/int-to-binary-str/">整数转二进制字符串</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../algos/multiple-field-sort/">多字段排序</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../algos/lru-cache-go/">LRU 线程安全和高并发</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">PHP</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../php/how-composer-work/">Composer 是如何工作的</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../php/business-logic-framework/">业务代码的框架</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../php/symfony-lock/">Symfony Lock Component</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../build-my-own-x/php-framework/">构建自己的 PHP 框架</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">杂项</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../others/mac_py_env_deploy/">Mac Python环境 miniConda 搭建</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../others/taylor-otwell-interview/">Taylor otwell 采访文章</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">零碎知识点</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../knowledge-reduce/tricks/">编程技巧/方法</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../knowledge-reduce/network_programming/">网络编程</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../knowledge-reduce/problem_trace/">问题排查</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../knowledge-reduce/network-course/">计算机网络课程分享</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../knowledge-reduce/mysql/">MYSQL</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../knowledge-reduce/language_trait_and_implementation/">语言特性/底层实现</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../knowledge-reduce/computer_composition/">计算机组成原理</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">归档</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/blog_deploy_log/">博客服务器环境搭建记录</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../redis/redis_code_book_reading/">Redis 设计与实现笔记</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/laracasts_learning_path/">Laracasts学习记录</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/black_sierra/">K480N 黑苹果安装记录</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/php_career_guide_line/">从框架看PHP的五种境界[转]</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/laravel_marcoable/">Laravel中的Marcoable</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/laravel_code_book_reading/">Laravel框架关键技术-阅读总结</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/laravel_admin_code_reading/">Laravel-Admin源码阅读</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/first_internship/">实习</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../summary/2017/">2017 总结</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../archive/second_job/">2018 总结</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../summary/2019/">2019 总结</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../summary/2020/">2020 总结</a>
+</li>
+</ul>
+</div>
+</div>
+</nav>
+<section class="wy-nav-content-wrap" data-toggle="wy-nav-shift">
+<nav aria-label="top navigation" class="wy-nav-top" role="navigation">
+<i class="fa fa-bars" data-toggle="wy-nav-top"></i>
+<a href="../..">Log0c</a>
+</nav>
+<div class="wy-nav-content">
+<div class="rst-content">
+<div aria-label="breadcrumbs navigation" role="navigation">
+<ul class="wy-breadcrumbs">
+<li><a href="../..">Docs</a> »</li>
+<li>labs »</li>
+<li>xv6</li>
+<li class="wy-breadcrumbs-aside">
+</li>
+</ul>
+<hr/>
+</div>
+<div role="main">
+<div class="section">
+<h1 id="xv6">xv6</h1>
+<h2 id="trace">实现 trace</h2>
+<ul>
+<li><a href="https://pdos.csail.mit.edu/6.S081/2020/labs/syscall.html">实验指导</a></li>
+<li>实现一个跟踪 syscall 的 syscall </li>
+<li>阅读这篇 <a href="https://mit-public-courses-cn-translatio.gitbook.io/mit6-s081/lec06-isolation-and-system-call-entry-exit-robert">lec06 syscall</a> 了解系统调用的整个过程  , 然后参考其中一个 syscall 代码即可 :</li>
+</ul>
+<pre><code>
+在 syscall 入口判断进程 trace_mask
+void
+syscall(void)
+{
+  .......
+
+    //trace
+    if ( (1 &lt;&lt; num) &amp; p-&gt;trace_mask ) {
+        printf("%d: syscall %s -&gt; %d\n", p-&gt;pid, syscall_name[num], p-&gt;trapframe-&gt;a0);
+    }
+  .........
+}
+
+
+
+trace 系统调用,设置 trace_mask
+uint64
+sys_trace(void) {
+    int mask;
+    if (argint(0, &amp;mask) &lt; 0) {
+        return -1;
+    }
+    struct proc* p = myproc();
+    p-&gt;trace_mask = mask;
+    return 0;
+}
+
+</code></pre>
+<h2 id="_1">给进程页表添加内核页表映射</h2>
+<ul>
+<li><a href="https://pdos.csail.mit.edu/6.S081/2020/labs/pgtbl.html">实验指导</a></li>
+<li>阅读这篇 <a href="https://mit-public-courses-cn-translatio.gitbook.io/mit6-s081/lec04-page-tables-frans">lec04 page table</a> 了解 xv6 的地址空间构成 , 页 entry 结构</li>
+<li>为什么要添加内核页表映射 ?  因为当前的 xv6 实现中 , 在内核态要访问用户进程指针是通过软件模拟的形式访问的 , 效率没有用 mmu 访问高</li>
+<li>如何实现 ? 类似 linux , 将整个地址空间划分成两大部分 , 上面部分是内核空间 , 下面部分是用户空间 (xv6 里用户进程最多只有 100 多 MB)</li>
+<li>在创建进程的时候 , 除了页目录的第一项之外 , 其他都映射为内核页表 , 第一项比较特殊,因为里面还包含了内核态的硬件寄存器,这一项得生成用户独立的页表,然后把硬件寄存器映射过去</li>
+<li>然后在 copyin 的时候直接 dereference 用户指针即可 , 不用再 walk 页表</li>
+</ul>
+<pre><code>pagetable_t
+proc_kpagetable()
+{
+    pagetable_t pagetable = uvmcreate();
+    int i;
+    for (i=1;i&lt;512;i++) {
+        pagetable[i] = kernel_pagetable[i];
+    }
+
+    ukvmmap(pagetable, UART0, UART0, PGSIZE, PTE_R | PTE_W);
+    ukvmmap(pagetable, VIRTIO0, VIRTIO0, PGSIZE, PTE_R | PTE_W);
+    ukvmmap(pagetable, CLINT, CLINT, 0x10000, PTE_R | PTE_W);
+    ukvmmap(pagetable, PLIC, PLIC, 0x400000, PTE_R | PTE_W);
+    return pagetable;
+}
+
+free 的时候也要小心,别把 kernel 的entry 和物理地址给 free 掉了 , kernel 地址的 PTE_V 为 0
+void
+proc_freekpagetable(pagetable_t level1)
+{
+    pte_t pte = level1[0];
+
+    pagetable_t level2 = (pagetable_t) PTE2PA(pte);
+
+    for (int i=0;i&lt;512;i++) {
+        pte_t p = level2[i];
+        if (p &amp; PTE_V) {
+            uint64 level3 = PTE2PA(p);
+            kfree((void*)level3);
+            level2[i]=0;
+        }
+    }
+    kfree((void*)level2);
+    kfree((void *) level1);
+
+}
+
+在调度的时候切换到进程的 k 页表 , 而不是全局的 k 页表
+void
+scheduler(void)
+{
+  ..........
+
+        w_satp(MAKE_SATP(p-&gt;kpagetable));
+        sfence_vma();
+
+ ............
+}
+</code></pre>
+<p>问题记录:</p>
+<p>把 kernel 的 pagetable 也 free 掉了,导致 kerneltrap</p>
+<pre><code>init: starting sh
+$ usertests
+usertests starting
+scause 0x000000000000000d
+sepc=0x0000000080001d88 stval=0x000000021fdcc000
+panic: kerneltrap
+QEMU: Terminated
+
+kernel.asm
+
+80001d84:   01248f63            beq s1,s2,80001da2 &lt;proc_freekpagetable+0x40&gt;
+pte_t p = level2[i];
+80001d88:   6088                    ld  a0,0(s1)
+if (p &amp; PTE_V) {
+80001d8a:   00157793            andi    a5,a0,1
+
+
+
+</code></pre>
+<p>一个 helper function , 可以打印执行栈:</p>
+<p>原理, 取当前的 frame pointer, 然后-8得到 return address ,  打印出来 , 然后可以配合 elf 文件获得函数名</p>
+<pre><code>void backtrace() {
+    uint64 fp = r_fp();
+    uint64 down = PGROUNDDOWN(fp);
+
+    while (fp&gt;down) {
+        printptr(* (uint64*)(fp-8));
+        consputc('\n');
+        fp = *(uint64*)(fp-16);
+    }
+}
+</code></pre>
+<h2 id="trap-alarm">实现用户态 trap alarm (类似信号)</h2>
+<ul>
+<li><a href="https://pdos.csail.mit.edu/6.S081/2020/labs/traps.html">实验指导</a></li>
+<li>阅读<a href="https://mit-public-courses-cn-translatio.gitbook.io/mit6-s081/lec05-calling-conventions-and-stack-frames-risc-v">lec05</a> 和 <a href="https://mit-public-courses-cn-translatio.gitbook.io/mit6-s081/lec06-isolation-and-system-call-entry-exit-robert">lec06</a> </li>
+<li>整个流程是: 用户态通过sigalarm 设置定时触发的 handler </li>
+<li>当时钟中断时发现已经到时间, 则把上下文切换到 handler , 并返回用户态执行 </li>
+<li>当 handler 执行到末尾的时候, 执行 sigreturn 系统调用, 进入内核态,并切换回进程的原上下文, 然后返回用户态</li>
+<li>这里需要模拟 syscall 的上下文切换 swtch.S , 在时钟中断中把进程的上下文保存起来,然后切换到 handler 的上下文</li>
+<li>xv6 把从用户态进入 interrupt , exception , syscall 的代码都写在 usertrap 里了</li>
+<li>上面三者任何一个触发, 都会跳到 trapoline 的代码执行 , 然后把当前的寄存器值保存在 trapframe</li>
+</ul>
+<pre><code>uint64 sys_sigalarm(void) {
+    struct proc *p = myproc();
+    int n;
+    uint64 handler;
+    if (argint(0,&amp;n) &lt;0) {
+        return -1;
+    }
+    if (argaddr (1,&amp;handler)&lt;0) {
+        return -1;
+    }
+
+    p-&gt;alarm_ticks = n;
+    p-&gt;alarm_ticked = 0;
+    p-&gt;alarm_handler =  handler;
+
+    return 0;
+}
+
+uint64 sys_sigreturn(void) {
+    struct proc *p = myproc();
+    memmove(p-&gt;trapframe,&amp;(p-&gt;etpfm),sizeof(struct trapframe));
+    p-&gt;alarm_ticked = 0;
+
+    // is this atomic ?
+    p-&gt;alarming = 0;
+    return 0;
+}
+
+
+void usertrap() {
+......
+
+ // give up the CPU if this is a timer interrupt.
+  if(which_dev == 2) {
+      if (p-&gt;alarm_ticks&gt;0) {
+          p-&gt;alarm_ticked++;
+
+          if (p-&gt;alarming==0 &amp;&amp; p-&gt;alarm_ticked &gt;= p-&gt;alarm_ticks) {
+              // is this atomic ?
+              p-&gt;alarming = 1;
+
+              memmove(&amp;(p-&gt;etpfm),p-&gt;trapframe,sizeof(struct trapframe));
+              p-&gt;trapframe-&gt;epc = p-&gt;alarm_handler;
+          }
+
+      }
+
+      yield();
+  }
+......
+}
+</code></pre>
+<p>之前看 linux 信号存的一张流程图 , 帮助理解</p>
+<p><img alt="image.png" src="/img/signal.png"/></p>
+<p><a href="https://www.jianshu.com/p/4fd8e35a6580">linux系统下进程的信号处理流程</a></p>
+<h2 id="lazy-allocation">lazy allocation</h2>
+<ul>
+<li><a href="https://pdos.csail.mit.edu/6.S081/2020/labs/lazy.html">实验指导</a></li>
+<li><a href="https://mit-public-courses-cn-translatio.gitbook.io/mit6-s081/lec08-page-faults-frans">阅读 lec08</a> </li>
+<li>实现延迟分配的理由 ? 大部分时候, 进程要求的内存可能并不会被立即用到</li>
+<li>比如申请一个 10000 大小的数组 , 一开始可能只存了一两个元素, 这时候如果先分配完整的空间是一种浪费</li>
+<li>如何实现 ? 先不映射物理地址, 而是等到访问到的时候再映射</li>
+<li>如果某个进程的地址没有相应的映射 (PTE_U 为 0) , 那么 MMU 访问的时候就会触发一个 page fault </li>
+<li>我们可以在 page fault handler 中为这个地址添加映射, 然后返回用户态正常运行</li>
+</ul>
+<pre><code>void usertrap(void){
+    ....
+
+    } else if (r_scause() == 13 || r_scause() == 15) {
+    uint64 f_addr = r_stval();
+
+    char* mem = kalloc();
+    if (mem==0) {
+        p-&gt;killed = 1;
+    } else {
+        memset(mem,0,PGSIZE);
+        if (mappages(p-&gt;pagetable,f_addr,PGSIZE,(uint64)mem,PTE_W|PTE_R|PTE_X|PTE_U) &lt;0) {
+            p-&gt;killed = 1;
+            kfree(mem);
+        }
+        //kpagetable map needed ? oh right , there is no kpagetable !
+    }
+    f_addr = PGROUNDDOWN(f_addr);
+
+  } else {
+    ....
+}
+
+
+uint64 pgfault_alloc(uint64 va) {
+//    uint64 va = r_stval();
+    struct proc* p = myproc();
+    uint64 ustack = p-&gt;trapframe-&gt;sp;
+    char* mem;
+    // for understand
+    int top_addr = p-&gt;sz - 1;
+
+    if (va &lt; PGROUNDUP(ustack)) {
+        return 0;
+
+    } else if (va &gt; top_addr) {
+        return 0;
+    } else {
+
+        va = PGROUNDDOWN(va);
+         mem = kalloc();
+        if (mem==0) {
+
+            return 0;
+        } else {
+            memset(mem,0,PGSIZE);
+            if (mappages(p-&gt;pagetable,va,PGSIZE,(uint64)mem,PTE_W|PTE_R|PTE_X|PTE_U) &lt;0) {
+                kfree(mem);
+                return 0;
+            }
+            return (uint64)mem;
+            //kpagetable map needed ? oh right , there is no kpagetable in the lab !
+            //xxxxxxxxxx
+        }
+    }
+
+
+
+}
+</code></pre>
+<h2 id="fork-cow">实现 fork cow</h2>
+<ul>
+<li><a href="https://pdos.csail.mit.edu/6.S081/2020/labs/cow.html">实验指导</a></li>
+<li><a href="https://mit-public-courses-cn-translatio.gitbook.io/mit6-s081/lec08-page-faults-frans">阅读 lec08</a></li>
+<li>和 lazy 的理由差不多 , 延迟到访问的时候再分配内存 ,同样也是使用 page fault 实现</li>
+<li>当一个被多个进程使用的地址被访问时 , 会触发 pg fault 然后 alloc 一个新页面, 把旧页面数据复制过来 , 再映射到新页面上</li>
+<li>同时需要增加引用计数做内存回收 , 只有一个地址的计数为 0 才可以安全 free</li>
+</ul>
+<pre><code>kmem 结构里增加 refcnt 做计数
+struct {
+  struct spinlock lock;
+  struct run *freelist;
+  int refcnt[PHYSTOP/PGSIZE];
+} kmem;
+
+
+void usertrap(){
+........
+
+  if(r_scause() == 13 || r_scause() == 15){
+        if (duppage(p-&gt;pagetable,r_stval()) &lt;0 ) {
+            p-&gt;killed = 1;
+        }
+    } else if(r_scau
+........
+}
+
+
+int
+uvmcopy(pagetable_t old, pagetable_t new, uint64 sz)
+{
+.............
+
+    // if page is writable , clear the PTE_W bit ( to trigger pg fault)
+    if (*pte &amp; PTE_W) {
+        *pte &amp;= ~ PTE_W;
+        *pte |= PTE_COW;
+//        printf("ucmcopy:COW set");
+    }
+    flags = PTE_FLAGS(*pte);
+    incr(pa,1);
+    if(mappages(new, i, PGSIZE, (uint64)pa, flags) != 0){
+        printf("ucmopy:mappage error");
+//      kfree(mem);
+        *pte &amp;= ~(PTE_COW | PTE_W);
+        *pte |= pte_w_cow_before;
+...........
+}
+
+// copy the va page data to a new pa ,
+// and point ppn(physical page num) to new pa
+int duppage(pagetable_t pagetable,uint64 va) {
+    pte_t* pte;
+//    uint64 pa;
+    //va = PGROUNDDOWN(va);
+
+    if (va &gt;=MAXVA) {
+        printf("duppage: &gt;=MAXVA");
+        return -1;
+    }
+
+    pte = walk(pagetable,va,0);
+
+    //user operate on a invalid page , throw error
+    if (pte==0) {
+        printf("duppage: pte=0");
+        return -1;
+    }
+
+    if ((*pte &amp; PTE_U) == 0) {
+        printf("duppage: PTE_U ==0");
+        return -1;
+    }
+
+    if ((*pte &amp; PTE_V) == 0) {
+        printf("duppage: PTE_V==0");
+        return -1;
+    }
+
+    // no need to duppage
+    if ((*pte &amp; PTE_COW) ==0) {
+//        printf("duppage: COW==0");
+        return -2;
+    }
+
+    uint64 oldpa = PTE2PA(*pte);
+    uint64 newpa = (uint64)kalloc();
+    if (newpa==0) {
+        return -1;
+    }
+
+    memmove((void*)newpa,(void*)oldpa,PGSIZE);
+    uint64 flags = PTE_FLAGS(*pte);
+    flags = (flags &amp; ~PTE_COW) | PTE_W;
+    *pte = PA2PTE(newpa) | flags;
+
+//    printf("duppage in");
+    kfree((void*)oldpa);
+    return 0;
+}
+
+</code></pre>
+<h2 id="_2">实现用户态线程 (协程)</h2>
+<ul>
+<li><a href="https://pdos.csail.mit.edu/6.S081/2020/labs/thread.html">实验指导</a> </li>
+<li>阅读 <a href="https://mit-public-courses-cn-translatio.gitbook.io/mit6-s081/lec11-thread-switching-robert">Lec11 Thread switching</a></li>
+<li>这里要实现的其实是协程 , 即协作式调度(主动让出控制权)的两个执行栈 , 称为 coroutine</li>
+<li>用户态是可以访问和修改部分寄存器的 , 只需要在切换到另一个协程前保存好上下文,切换到另一个协程的上下文即可,参考 swtch.S 的汇编代码</li>
+<li>这里其实不需要保存那么多寄存器, 但是因为懒就直接复制过来吧</li>
+</ul>
+<pre><code>
+</code></pre>
+<h2 id="_3">优化锁粒度</h2>
+<ul>
+<li><a href="https://pdos.csail.mit.edu/6.S081/2020/labs/lock.html">实验指导</a></li>
+<li>阅读 <a href="https://mit-public-courses-cn-translatio.gitbook.io/mit6-s081/lec10-multiprocessors-and-locking">Lec10 Multiprocessors and locking</a></li>
+<li>优化 memlist 和 bcache 锁粒度</li>
+<li>内存链表是个大锁,在多核的情况下会发生争用,优化方案是每个 cpu 都有自己的内存链表</li>
+<li>那这样岂不是有点浪费? 如果某个 cpu 没跑任何程序 . 所以还有个 steal 的策略, 如果不够用就从其他 cpu 偷点内存过来</li>
+<li>go 中也有类似的设计, work steal , 还有 P 上的 mcache</li>
+</ul>
+<pre><code>
+</code></pre>
+<ul>
+<li>bcache 全称 block cache , 是磁盘 block 在内存中的缓存 , 由于 bcache 链表大小固定且有淘汰策略, 读取新的 block 的时候需要锁整个 bcache,产生争用</li>
+<li>优化方案, 把 bcache 做分区 , 按 hash 分成多个区 , 减小锁粒度</li>
+<li>那淘汰的时候本分区没有可以淘汰的怎么办? 遍历其他分区找 , 也是 steal 的策略</li>
+<li>以什么作为分区key , block id</li>
+<li>可能会导致倾斜</li>
+</ul>
+<h2 id="_4">实现大文件支持和符号链接</h2>
+<ul>
+<li><a href="https://pdos.csail.mit.edu/6.S081/2020/labs/fs.html">实验指导</a></li>
+<li>阅读 <a href="https://mit-public-courses-cn-translatio.gitbook.io/mit6-s081/lec14-file-systems-frans">Lec14 File systems , Lec15 Crash recovery , Lec16 File system performance and fast crash recovery</a></li>
+</ul>
+<p>大文件支持:</p>
+<ul>
+<li>xv6 的 inode 共有13个 block , 12 个 direct block , 一个 indirect block , 12 + 1* block size / entry size</li>
+<li>增加一个三级 indirect block , 11个 direct block ,一个一级 Block , 一个三级 block</li>
+</ul>
+<p>符号链接:</p>
+<ul>
+<li>符号链接也是一个 inode , 当文件对待, 不同的是inode data 部分不存 block num , 而是存目标路径字符串</li>
+</ul>
+<h2 id="mmap">mmap</h2>
+<p>todo</p>
+<h2 id="network-driver">network driver</h2>
+<p>todo</p>
+<h2 id="gdb-xv6">gdb 调试 xv6 的一些技巧</h2>
+<p>todo</p>
+<h2 id="_5">有用的图示</h2>
+<p>todo</p>
+<h2 id="_6">资料汇总</h2>
+<p>todo</p>
+</div>
+</div>
+<footer>
+<div aria-label="footer navigation" class="rst-footer-buttons" role="navigation">
+<a class="btn btn-neutral float-right" href="../../labs/6824-mapreduce/" title="MIT 6.824 - MapReduce">Next <span class="icon icon-circle-arrow-right"></span></a>
+<a class="btn btn-neutral" href="../go-preempt/" title="go 是如何收回 goroutine 执行权的"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+</div>
+<hr/>
+<div role="contentinfo">
+<!-- Copyright etc -->
+</div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+</div>
+</div>
+</section>
+</div>
+<div aria-label="versions" class="rst-versions" role="note">
+<span class="rst-current-version" data-toggle="rst-current-version">
+<span><a href="../go-preempt/" style="color: #fcfcfc;">« Previous</a></span>
+<span style="margin-left: 15px"><a href="../../labs/6824-mapreduce/" style="color: #fcfcfc">Next »</a></span>
+</span>
+</div>
+<script>var base_url = '../..';</script>
+<script defer="" src="../../js/theme.js"></script>
+<script defer="" src="../../js/mermaid.min.js"></script>
+<script defer="" src="../../js/custom.js"></script>
+<script defer="">
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(false);
+        };
+    </script>
+</body>
+</html>
