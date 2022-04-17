@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
+<head>
+<meta charset="utf-8"/>
+<meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="../../img/favicon.ico" rel="shortcut icon"/>
+<title>rookie db - Log0c</title>
+<link href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" rel="stylesheet">
+<link href="../../css/theme.css" rel="stylesheet"/>
+<link href="../../css/theme_extra.css" rel="stylesheet"/>
+<script>
+    // Current page data
+    var mkdocs_page_name = "rookie db";
+    var mkdocs_page_input_path = "tomchfd/unfin-rookiedb.md";
+    var mkdocs_page_url = null;
+  </script>
+<script defer="" src="../../js/jquery-2.1.1.min.js"></script>
+<script defer="" src="../../js/modernizr-2.8.3.min.js"></script>
+</link></head>
+<body class="wy-body-for-nav" role="document">
+<div class="wy-grid-for-nav">
+<nav class="wy-nav-side stickynav" data-toggle="wy-nav-shift">
+<div class="wy-side-scroll">
+<div class="wy-side-nav-search">
+<a class="icon icon-home" href="../.."> Log0c</a>
+</div>
+<div aria-label="main navigation" class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../..">主页</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">labs</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../xv6-00-a/">xv6</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../labs/6824-mapreduce/">MIT 6.824 - MapReduce</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../labs/6824-raft/">MIT 6.824 - Raft</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../labs/6824-kv/">MIT 6.824 - KV (3A)</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../6824-lab3b/">MIT 6.824 - KV (3B)</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../labs/csapp-shell/">CSAPP - Shell</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../labs/csapp-proxy/">CSAPP - Proxy</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../labs/cs144/">CS144</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../misc-lox/">lox</a>
+</li>
+</ul>
+</div>
+</div>
+</nav>
+<section class="wy-nav-content-wrap" data-toggle="wy-nav-shift">
+<nav aria-label="top navigation" class="wy-nav-top" role="navigation">
+<i class="fa fa-bars" data-toggle="wy-nav-top"></i>
+<a href="../..">Log0c</a>
+</nav>
+<div class="wy-nav-content">
+<div class="rst-content">
+<div aria-label="breadcrumbs navigation" role="navigation">
+<ul class="wy-breadcrumbs">
+<li><a href="../..">Docs</a> »</li>
+<li>rookie db</li>
+<li class="wy-breadcrumbs-aside">
+</li>
+</ul>
+<hr/>
+</div>
+<div role="main">
+<div class="section">
+<h1 id="rookie-db">rookie db</h1>
+<ul>
+<li>[x] LeafNode::fromBytes</li>
+<li>[x] Core APIS</li>
+<li>[x] Iterators</li>
+<li>[x] BulkLoad</li>
+<li>[x] Simple Nested Loop Joins</li>
+<li>[x] Block (叫Chunk更合适) Nested Loop Joins</li>
+<li>[x] Simple hash join</li>
+<li>[x] Grace Hash Join</li>
+<li>[x] Sort Operator</li>
+<li>[x] Sort Merge Join</li>
+<li>[ ] Single Table Access Selection</li>
+<li>[ ] Join Selection</li>
+<li>[ ] Optimal Plan Selection</li>
+<li>[ ] LockType</li>
+<li>[ ] LockManager</li>
+<li>[ ] LockContext</li>
+<li>[ ] LockUtil</li>
+<li>[ ] Two-Phase Locking</li>
+<li>[ ] Transaction Status Logs</li>
+<li>[ ] logPageWrite</li>
+<li>[ ] rollbackToSavepoint</li>
+<li>[ ] Checkpoints</li>
+<li>[ ] Analysis phase</li>
+<li>[ ] Redo Phase</li>
+<li>
+<p>[ ] Undo Phase</p>
+</li>
+<li>
+<p>[ ] 完整阅读 index 目录</p>
+</li>
+</ul>
+<p>rookiedb 是 2021 年 cs186 出的新的教学数据库 , 之前的一个叫做 simpledb , 相比 simpledb , rookiedb 的结构更加可读 , 理解起来更简单 , 同时配有不少图辅助教学 , lab 的内容和之前总体一致</p>
+<p>lab1 是一些简单的 sql 语句学习, 跳过直接从 lab2 开始</p>
+<p>lab2 实现一个 b+ tree , 一开始就是个很可怕的 lab</p>
+<p>Q1: 如何从叶子节点的 page 中读取出 recordID ?</p>
+<p>A: 叶子节点的构造如图:</p>
+<p>使用 java 的 byteStream 读出 header  (nodetype 右节点 pageNum , recordid 数 ) , 然后就是record id 的数组 , 最后将byte 读取出来的数据还原成 LeafNode</p>
+<p>| nodeType | rightPgN | rIdNum | key,recordid | key , recordid | ......</p>
+<p>Q2: 树的对象结构是如何表示的?</p>
+<p>由于内部节点和叶子节点存储的数据和操作方式(存取,合并分裂)不同, 代码结构上分为了 InnerNode 和 LeafNode 两个类, 对他们分别操作</p>
+<p>BPlusTree 表示一颗树,作为门面对外部提供接口</p>
+<p>Q3: 节点之间如何调用</p>
+<p>根节点 root 是预加载进内存的 , 然后由根节点递归调用子节点的方法,由子节点负责完成其余操作</p>
+<p>根节点的 pageNum 在 bplustree metadata 里</p>
+<p>Q4: 根节点插入数据时如何变化?</p>
+<p>往 InnerNode 节点插入数据 , 如果溢出了 , 则分裂成左右两个节点,并把数据平分成两半,把右节点的最小 key 作为 splitKey 往上面的节点 put</p>
+<p>root InnerNode 节点的更新比较特殊, 分裂后还需要更新 BplusTree 的 root 属性 , 调用 updateRoot , 会更新 root page 的 metadata</p>
+<p>Q4.1: InnerNode 插入数据如何变化?</p>
+<p>往子节点递归插入, 子节点如果有分裂动作 , 则会往父节点返回 pair 包含新的 splitKey 和新的 child , 然后检查自己是否也溢出了需要分裂 , 
+并调用 sync()持久化到磁盘</p>
+<p>Q5:删除数据如何变化?</p>
+<p>本来删除数据也可以做合并分裂重平衡 节省空间 , 但 lab 不要求 , 所以直接删除即可 , 保留空节点</p>
+<p>Q6: 内部节点如何进行查询操作?</p>
+<p>二分法找到子节点的索引,取出子节点的 pgNo , 读取并递归操作 , 得到LeafNode</p>
+<p>Q7: 如何拿到最左边的 Leaf</p>
+<p>增加一个属性保存 , 或者一直往左递归</p>
+<p>Q8: 为什么要分 InnerNode 和 LeafNode ?</p>
+<p>因为两个节点存储的内容不同 , inner 存 key 和子节点 pgno , leaf 存 key 和 rid , 并且 leaf 节点会连接成一个链表 , 特殊化处理会好很多</p>
+<p>Q9: 如何实现树的顺序遍历?</p>
+<p>获取最左边的节点,然后是链表遍历 , 使用 iterator 抽象</p>
+<p>Q10: 为什么需要 BulkLoad , 和一个一个插入有什么不同</p>
+<p>比如导入大量新数据的操作 , https://www.bilibili.com/video/BV13a411c7Qo?p=52</p>
+<p>可以从LeafNode 开始顺序插入,IO 次数更少</p>
+<p>如果每次都从 root 节点插入,那每次都需要访问多个 InnerNode , 这些是 bulkload 时可以优化掉的额外 IO</p>
+<p>自下而上生成节点</p>
+<p>Lab 里要求的 bulkload 和视频里讲的不一样 , lab 里的 bulkload 和 put 很类似,就两点不一样:</p>
+<pre><code> * 1. Leaf nodes do not fill up to 2*d+1 and split, but rather, fill up to
+ * be 1 record more than fillFactor full, then "splits" by creating a right
+ * sibling that contains just one record (leaving the original node with
+ * the desired fill factor).
+ *
+ * 2. Inner nodes should repeatedly try to bulk load the rightmost child
+ * until either the inner node is full (in which case it should split)
+ * or there is no more data.
+
+
+ * n.bulkLoad(data, fillFactor) bulk loads pairs of (k, r) from data into
+ * the tree with the given fill factor.
+ *
+ * This method is very similar to n.put, with a couple of differences:
+ *
+ * 1. Leaf nodes do not fill up to 2*d+1 and split, but rather, fill up to
+ * be 1 record more than fillFactor full, then "splits" by creating a right
+ * sibling that contains just one record (leaving the original node with
+ * the desired fill factor).
+ *
+ * 2. Inner nodes should repeatedly try to bulk load the rightmost child
+ * until either the inner node is full (in which case it should split)
+ * or there is no more data.
+ *
+ * fillFactor should ONLY be used for determining how full leaf nodes are
+ * (not inner nodes), and calculations should round up, i.e. with d=5
+ * and fillFactor=0.75, leaf nodes should be 8/10 full.
+ *
+ * You can assume that 0 &lt; fillFactor &lt;= 1 for testing purposes, and that
+ * a fill factor outside of that range will result in undefined behavior
+ * (you're free to handle those cases however you like).
+</code></pre>
+<p>Q11: block nested join 的逻辑是什么? </p>
+<p>Q12: BNLJ 为什么比 simple nested join 好 ? </p>
+<p>要理解 BNLJ 的代码 , 建议先看 SNLJ 的代码实现</p>
+<p>为什么比 SNLJ 好,这个要基于磁盘的角度看 , 其实就是二层循环 , BNLJ 的第一层循环的 IO 操作比 SNLJ 少了 record / per block record 倍的次数</p>
+<p>看那个视频!! 再回来解答 , 现在的理解好像不对 TODO;</p>
+<p>Q13: BNLJ 第二层循环也有优化到吗? </p>
+<p>Q14: SNLJ 是一个 record 一个 io 吗?</p>
+<p>好像不是, 这个得看 iterator 的代码 , 看视频,看官网资料!!</p>
+<p>看project-gitbook 的nested-loop-join-animations.md</p>
+<p>SNLJ 类似普通的二层循环 , 表 A 取出一个 page , 遍历 page 里每个 record , 和表 B 的所有 page 的所有 record 遍历 </p>
+<p>分析一下消耗, 假设每个 page 有 4 个 record , 每个表有4个 page</p>
+<p>(1page + 4record * 4page) X 4page = 68</p>
+<p>左边每个 record 都造成了 4 次 IO ! 4 个 record 就 16 次右表 IO, PNLJ 则解决了这个问题, 把 IO 数减少到了4个 , 左边一个 page 造成 4 次 右表IO</p>
+<p>那么 BNLJ 又在哪里优化了 IO 呢?</p>
+<p>https://en.wikipedia.org/wiki/Block_nested_loop</p>
+<p>看公式! PNLJ 的公式是  (1+1<em>4) * 4 = 20 , 现在1变成 2 的话 ,  (2+1</em>4)*2 = 12 , IO 次数又减少了!!  </p>
+<p>Q15:那 Block 可以包含尽可能多的 page 吗? 一个 block 包含的page 的极限是多少?</p>
+<p>一半! 超过一半就都一样!!!</p>
+<p>比如 (3+1<em>4) + (1+1</em>4) = 12 </p>
+<p>Q16: backTrackIterator 是什么?</p>
+<p>就是一个可以 mark 位置然后 reset 的类! 和递归无关,别被名字误导了</p>
+<p>Q17: sourceIterator 是seqScanIterator 吗? 在哪里被传入? 看看 test 代码</p>
+<p>TODO; 不重要</p>
+<p>Q18: leftBlock 大小为什么是 numBuffers-2 ? rightBlock 为什么是1</p>
+<p>左边用到越多 bufferpage , 右表的扫描次数就越少 , 所以左边是 numBuffers-2 , 然后留一个 page 放右表的一个 page , 留一个放 output buffer</p>
+<p>https://cs186berkeley.net/resources/static/notes/n08-Joins.pdf</p>
+<p>留下一个用来存放 merge 后的结果吗? 好像不是 </p>
+<p>Q19:为什么需要 markNext ?</p>
+<p>看 gif 动图, 因为需要回溯 scan</p>
+<p>Q20: hash join 比 NLJ 好在哪? 又有什么不足?</p>
+<p>NLJ 左边的复杂度是 On , 而 HJ 则是 O1 , HJ 在数据量大实更合适</p>
+<p>Q21: GRACE hash join 比 SHJ  快在哪?</p>
+<p>减少了SHJ rescanning 右表的操作 , SHJ 如果左边不能完全放入内存 hashtable,那右表则需要被重复扫描多次</p>
+<p>Q22: SHJ 执行过程描述</p>
+<p>把左边放入内存 hash table </p>
+<p>Q23: GHJ 执行过程描述
+https://en.wikipedia.org/wiki/Hash_join#Grace_hash_join</p>
+<p>这里有个演示 https://www.youtube.com/watch?v=59C8c7p_hII</p>
+<p>左边和右表都做 partition , 使得右表的每个元素都只被 scan 一次</p>
+<p>Q24: GHJ 代码里的 run 是什么?</p>
+<p>/Users/lin/Downloads/java/RookieDB1/src/main/java/edu/berkeley/cs186/database/query/disk/Run.java</p>
+<ul>
+<li>A run represents a section of space on disk that we can append records to or</li>
+<li>read from. This is useful for external sorting to store records while we</li>
+<li>aren't using them and free up memory. Automatically buffers reads and writes</li>
+<li>to minimize I/Os incurred.</li>
+</ul>
+<p>Under the hood we'll be storing all the records in a temporary table</p>
+<p>under the hood 实际上是存在一个临时表中</p>
+<p>Q25: sortOperator 为什么要用到优先队列?  好像跟我想象的 mergeSort 的 merge 过程不一样 , 不是双指针方式?</p>
+<p>用于排序, 如果用双指针的话, merge 多个 sortedRun 的过程中 , 一个元素可能会被 rescan 多次!!! 用优先队列只需要scan 一次, 不过每次存元素操作是 logN</p>
+<p>上面的理解是错误的 , 如果两个 sortedRUN已经是排序的了,为什么还要用到优先队列 , 而且一个元素还是会被 rescan 多次,mergesort 就是这样 , rescan logn 树高次</p>
+<p>Q27: 项目里的 pass 是什么意思?</p>
+<p>pass 的意思是遍历一次全部元素算做一个 pass , 比如 sorting 那一章 , 第一次 pass 是把所有子 page sort , 然后是 mergeSort 的树高 log2N 次 pass</p>
+<p>https://cs186berkeley.net/resources/static/notes/n06-Sorting.pdf</p>
+<p>Q28: Full external sort 比简单版快在哪</p>
+<p>和多叉树一样, 每个子节点存放更多的元素, 减少了树高 , 减少了 pass 次数</p>
+<p>简单版每次 sort 一个 page , 但由于内存里有超过一个的 page buffer , 所以一次可以 sort 多个 page , 减少了树高 , 形成更大的 sortedRun</p>
+<p>Q29: 描述一下外部排序的过程</p>
+<p>简单版本, 比如有10个 page 的数组, pool 只能放下三个 page , 先把每个 page 的元素排序(称为一个 sortedRun), 然后取出两个  排序后的 run , 写入一个新的 run , 一直重复此操作直到只剩下一个大 sortedRUN</p>
+<p>full external sort 和 block nested join 类似,充分利用内存空间</p>
+<p>Q30: sort merge join 比 nestloop 好在哪  , 比 hash joinhoo 在哪 , 不好在哪</p>
+<p>由于已经排序了,所以有额外的信息可以利用, 比如前面的元素都比现在的小 , 不可能再匹配到了, 所以可以减少遍历的次数 , 但多了两次额外的排序 , 所以不一定比 nlj 快 , 元素多的时候比较快吧</p>
+<p>Q31: smj 的过程描述一下 , how it work</p>
+<p>todod</p>
+<p>Q32: why smj design this way , saad ali , design principle of kubernetes , what design principle it use</p>
+<p>todo</p>
+<p>Q33: smj io cost 复杂度多少, 怎么计算的</p>
+<p>todo</p>
+<p>Q34:一条复杂语句在代码里是怎么执行的</p>
+<p>看 proj3 skeleton code , 火山模型, queryplan 的代码</p>
+<p>---------------------------------------------------------------- 锁 -------------------------------------------------------</p>
+<p>Q14: 锁之间的兼容性?</p>
+<pre><code>  } else if (a == NL || b == NL) {
+            return true;
+        } else if (a == IS || b == IS) {
+            return a != X &amp;&amp; b != X;
+        } else {
+            return a == IX &amp;&amp; b == IX || a == S &amp;&amp; b == S;
+        }
+
+这代码写的真好 ,如果是我的话就直接对着表格一格一格地写 if else 了 ,  if (a == IS || b == IS) {
+            return a != X &amp;&amp; b != X;
+            直接排除了第一行和第一列
+
+            return a == IX &amp;&amp; b == IX || a == S &amp;&amp; b == S;
+
+            排除了(2,2)坐标和(3,3)坐标
+
+</code></pre>
+<p>主要是和意向锁有关的部分比较复杂 , 意向锁有 IS , IX , SIX</p>
+<pre><code>IS  IX  S   SIX X
+</code></pre>
+<p>IS  ✓   ✓   ✓   ✓ <br/>
+IX  ✓   ✓         <br/>
+S   ✓       ✓     <br/>
+SIX ✓             <br/>
+X                     </p>
+<p>除开 SIX , 总体的理解方式是 , 
+如果 A 的意向锁的更细粒度的锁和 B 的非意向锁冲突 , 就不能同时加
+意向锁和意向锁之间都是兼容的
+SIX 只和 IS 兼容</p>
+<p>如果在一个资源上加了意向读 , 另一个事务可以在同一个资源上加除了 X 的其他锁  , IS 和 IX 不冲突的原因是 , 他们都是表示在更细粒度的资源上加锁 , 虽然更细粒度的锁还是可能冲突 , 但那是另一个资源的冲突问题 , 交给下层解决</p>
+<p>如果在一个资源上加了意向读,同一个事务可以把意向读升级成 SIX</p>
+<p>A 加了意向写 , B 不能加写和 SIX 锁 , 因为 A 要对 children 写操作 , B 的父粒度写锁冲突了(意味着也锁了 children) , SIX 同理 , 和 S 冲突</p>
+<p>Q15:为什么会有意向锁这个东西呢? 主要是为了实现更细粒度的加锁 , 形成一个多粒度共存的锁机制 . 为了在更低粒度的资源上加锁 , 需要在当前粒度上加意向锁 </p>
+<p>这样不同粒度的锁不需要互相比对 , 如果没有 intention ,  想在表上加锁的时候可能得遍历确认行上有没有互斥的锁 </p>
+<p>如果会话 1 使用表锁，而会话 2 对表的一行使用不兼容的锁，则这两个锁不在同一个资源上，SQL Server 不会检测到冲突</p>
+<p>IS  : can req shared and intention-shard lock on all children of A
+IX : can req X and intentions-X lock on all children of A
+SIX: can do anything  that S and IX lets it do , except req S / IS / SIX lock on children of A</p>
+<p>Q16: SIX 锁存在的意义是什么</p>
+<p>https://dba.stackexchange.com/questions/45284/understanding-six-lock-in-microsoft-sql-server</p>
+<p>现在，SQL Server 可以在多个级别上进行锁定：Table、Partition、Page 和 Row。因此，如果会话 1 使用表锁，而会话 2 对表的一行使用不兼容的锁，则这两个锁不在同一个资源上，SQL Server 不会检测到冲突。为了防止这种情况，SQL Server 总是开始在表级别上锁定并沿着层次结构向下工作。现在页锁和行锁的重点是更高的并发性，所以如果一个会话想要写入一行，另一个会话想要写入另一行，它们不应该互相阻塞。如果一个会话除了对一行进行锁定之外，还必须对表进行相同的锁定，那么这种优势就消失了。因此，会话不是在表上获取排他锁 (X)，而是请求一个意向排他锁 (IX)。此锁与其他意图锁兼容，但与其他“真实”锁不兼容。所以另一个会话也可以在同一个表上获得一个排他锁。意向排他锁表示会话打算对较低级别的资源进行排他锁。同样的情况发生在页面级别，如果预期的锁是行锁，那么在完成之后，会话在表和其中一个页面上具有 IX 锁，在该页面中的其中一行上具有 X 锁.这也意味着，您永远不会在行上找到意向锁，因为行是锁层次结构中的最低级别。</p>
+<p>在某些情况下，会话持有表或页面上的 S 锁。如果会话现在（在同一个事务中）请求对同一个表中的行进行 X 锁，它首先必须在表/页上获取 IX 锁。但是，会话只能对任何给定资源持有一个锁。因此，要获取 IX 锁，它必须释放 S 锁，这可能是不希望的，因此 SQL Server 提供了一个组合：SIX。</p>
+<p>Q17: 如何判断持有的父级锁是否能在子级加某个锁</p>
+<pre><code>    public static boolean canBeParentLock(LockType parentLockType, LockType childLockType) {
+        if (parentLockType == null || childLockType == null) {
+            throw new NullPointerException("null lock type");
+        } else if (childLockType == NL || parentLockType == IX) {
+            return true;
+        } else if (parentLockType == NL || parentLockType == S || parentLockType == X) {
+            return false;
+        } else {
+            return parentLockType == IS &amp;&amp; (childLockType == IS || childLockType == S) ||
+                parentLockType == SIX &amp;&amp; (childLockType == IX || childLockType == X);
+        }
+    }
+</code></pre>
+<p>IS , IX , SIX ,S ,X</p>
+<p>IX 可以在子级加任何锁</p>
+<p>NL , S , X 都不可以在子级加锁</p>
+<p>IS 可以在子级加 IS 和 S
+ SIX 可以在子级加 IX 和 X</p>
+<p>SIX 相当于 S + IX  ,  A 在已经持有 S 的时候 , 想要对子级加一个 X 锁 , 这时候又不能释放 S , 于是就有了 SIX</p>
+<p>Q18:锁之间的替换关系? </p>
+<p>新的锁一定包含旧锁的所有可以做的事情 , 画个表格看看</p>
+<pre><code>    public static boolean substitutable(LockType substitute, LockType required) {
+        if (required == null || substitute == null) {
+            throw new NullPointerException("null lock type");
+        } else if (required == NL || required == substitute) {
+            return true;
+        } else if (required == IX || required == SIX || required == X) {
+            return false;
+        } else {
+            return required == IS &amp;&amp; substitute == IX ||
+                required == S &amp;&amp; (substitute == SIX || substitute == X);
+        }
+    }
+</code></pre>
+<p>Q19: 为什么要检查是否可以替换 ?</p>
+<p>大多数时候需要是在锁升级之前进行检查 , 除了 SIX 是一个合并锁 而不是升级</p>
+</div>
+</div>
+<footer>
+<hr/>
+<div role="contentinfo">
+<!-- Copyright etc -->
+</div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+</div>
+</div>
+</section>
+</div>
+<div aria-label="versions" class="rst-versions" role="note">
+<span class="rst-current-version" data-toggle="rst-current-version">
+</span>
+</div>
+<script>var base_url = '../..';</script>
+<script defer="" src="../../js/theme.js"></script>
+<script defer="" src="../../js/mermaid.min.js"></script>
+<script defer="" src="../../js/custom.js"></script>
+<script defer="">
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(false);
+        };
+    </script>
+</body>
+</html>

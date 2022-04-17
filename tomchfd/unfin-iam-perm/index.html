@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
+<head>
+<meta charset="utf-8"/>
+<meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="../../img/favicon.ico" rel="shortcut icon"/>
+<title>IAM / 鉴权的相关调研 - Log0c</title>
+<link href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" rel="stylesheet">
+<link href="../../css/theme.css" rel="stylesheet"/>
+<link href="../../css/theme_extra.css" rel="stylesheet"/>
+<script>
+    // Current page data
+    var mkdocs_page_name = "IAM / \u9274\u6743\u7684\u76f8\u5173\u8c03\u7814";
+    var mkdocs_page_input_path = "tomchfd/unfin-iam-perm.md";
+    var mkdocs_page_url = null;
+  </script>
+<script defer="" src="../../js/jquery-2.1.1.min.js"></script>
+<script defer="" src="../../js/modernizr-2.8.3.min.js"></script>
+</link></head>
+<body class="wy-body-for-nav" role="document">
+<div class="wy-grid-for-nav">
+<nav class="wy-nav-side stickynav" data-toggle="wy-nav-shift">
+<div class="wy-side-scroll">
+<div class="wy-side-nav-search">
+<a class="icon icon-home" href="../.."> Log0c</a>
+</div>
+<div aria-label="main navigation" class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../..">主页</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">labs</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../xv6-00-a/">xv6</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../labs/6824-mapreduce/">MIT 6.824 - MapReduce</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../labs/6824-raft/">MIT 6.824 - Raft</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../labs/6824-kv/">MIT 6.824 - KV (3A)</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../6824-lab3b/">MIT 6.824 - KV (3B)</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../labs/csapp-shell/">CSAPP - Shell</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../labs/csapp-proxy/">CSAPP - Proxy</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../labs/cs144/">CS144</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../misc-lox/">lox</a>
+</li>
+</ul>
+</div>
+</div>
+</nav>
+<section class="wy-nav-content-wrap" data-toggle="wy-nav-shift">
+<nav aria-label="top navigation" class="wy-nav-top" role="navigation">
+<i class="fa fa-bars" data-toggle="wy-nav-top"></i>
+<a href="../..">Log0c</a>
+</nav>
+<div class="wy-nav-content">
+<div class="rst-content">
+<div aria-label="breadcrumbs navigation" role="navigation">
+<ul class="wy-breadcrumbs">
+<li><a href="../..">Docs</a> »</li>
+<li>IAM / 鉴权的相关调研</li>
+<li class="wy-breadcrumbs-aside">
+</li>
+</ul>
+<hr/>
+</div>
+<div role="main">
+<div class="section">
+<h1 id="iam">IAM / 鉴权的相关调研</h1>
+<p>四个 W, why , what , when , where</p>
+<h2 id="why-iam">why iam  问题 , 背景是什么</h2>
+<p>主要的问题出现在 B 端, 云产品</p>
+<p>B 端的系统通常会有很多个子系统组成, 许多公司的这些子系统之间账号体系并不相通 , 造成的问题:
+员工: 入职时操作繁琐 , 反复注册各种账号
+企业管理员,如 HR, 员工信息各系统之间打不通, 难以查看和管理 (追踪员工行为, 离职回收各种账号)
+公司的内部开发者: 重复开发注册登录授权鉴权等功能,不同子系统要打通数据的时候困难</p>
+<h2 id="iam_1">iam 是什么</h2>
+<p>简单理解的话其实就是把认证和鉴权从各个系统抽离, 形成一个单独的服务 , 用户访问每个已经接入 iam 的子系统时, 子系统通过访问 iam 的接口进行注册,登录,认证,鉴权. 相当于用户先在 iam 注册了一个 iam user, 通过 iam user 的 id 和每个子系统进行关联</p>
+<p>这是 iam 的一个架构图</p>
+<p>使用的例子: 老王打开电脑，输入应用门户的地址，使用账号密码或扫码登录，在工作台中就可以看到阿里云、企业微信、Gitlab、禅道、OA等各种平时需要用到的应用。 <a href="http://www.woshipm.com/it/4681031.html/comment-page-1">来源</a></p>
+<p>从工作台到子应用(如阿里云) 有多种实现方案
+1 如微信公众号平台的方案 , oauth2 授权, 然后子系统自身生成一个用户并和 iam user id 关联</p>
+<p>2 iam 创建用户之后, 管理员给 iam 授予对应的应用权限 , 此时自动创建各应用的子账号并和 iam user id 关联</p>
+<p>IAM 的一般功能组成 , 主要是4A</p>
+<p>账号（Account）
+认证（Authentication）
+权限（Authorization）
+应用（Application）</p>
+<p>审计（Audit）</p>
+<p>EIAM是 Employee Identity and Access Management 的缩写，指管理企业内部员工的IAM，主要解决员工使用的便捷性和企业管理的安全性相关问题。</p>
+<p>需要集成企业的云应用、本地应用
+需要集成不同的身份源
+SSO和MFA很常用
+不同企业所需的访问控制力度不同</p>
+<h2 id="_1">认证模块</h2>
+<p>提供的接口有</p>
+<p>register()
+login()</p>
+<h2 id="_2">鉴权模块</h2>
+<p>set_perm()
+check_perm()</p>
+<h2 id="_3">主要参考的系统</h2>
+<h3 id="go-iam">go iam</h3>
+<p><img alt="image-20220302111040533" src="../assets/images/image-20220302111040533.png"/></p>
+<p>这里的 user 是各种内部服务</p>
+<p><img alt="image-20220302111231992" src="../assets/images/image-20220302111231992.png"/></p>
+<p>api-server : 用户的注册登录 , 权限配置</p>
+<p>auth server: 从 api server 拉取权限策略 , 请求/v1/authz 查询是否有权限</p>
+<p>其他部分是一些日志, 客户端 , sdk</p>
+<p>webconsole 是运营平台</p>
+<p>redis 用来缓存</p>
+<p>mariadb 存主要数据</p>
+<p>mongodb 操作日志</p>
+<p>提供的接口: </p>
+<p>/v1/authz 检查权限</p>
+<p>...</p>
+<blockquote>
+<p>权限部分</p>
+</blockquote>
+<p>使用了开源库 ladon ,  当一个用户调用接口检查权限时 , 需要发过来一条请求相关的策略信息 , 主要信息有:</p>
+<p>subject : 相当于 who 在调用 , 比如 users:peter  , service: saas , 或者域名</p>
+<p>action : 比如 crud , </p>
+<p>effect: 允许 或拒绝 , 又 auth server 提供</p>
+<p>resource: 资源 , 如 resources: article: ladon-intro</p>
+<p>condition:</p>
+<p>desc:</p>
+<p><img alt="image-20220302115304101" src="../assets/images/image-20220302115304101.png"/></p>
+<p><img alt="image-20220302115312654" src="../assets/images/image-20220302115312654.png"/></p>
+<p>ladon 还支持其他 condition 匹配</p>
+<p>ladon 里存的是一条一条的 policy , 每个 Policy 就是上面的 6 个元素 , 也就是要给每个用户分配 policy 列表</p>
+<p>如何改成 RBAC , 接口粒度的?  condition 里匹配?   </p>
+<p>表还是那几张表, 但是生成策略到缓存里的时候用 ladon (看 api   server , 还有和 auth s 的交互)</p>
+<p><img alt="image-20220302134330902" src="../assets/images/image-20220302134330902.png"/></p>
+<blockquote>
+<p>源码?</p>
+<p>重要章节 31 29 28 27 26 25 24 01</p>
+</blockquote>
+<p>总结, server 存各种用户的策略表 ,  authz 接口做策略匹配 , 十分通用 , 十分复杂 , 目前没必要... 因为没有各个系统(内部服务)互相访问的需求 , 权限校验甚至做在网关就行了</p>
+<h3 id="tencent-blueking-iam">tencent blueking iam</h3>
+<h3 id="bhatti-saas-rbac">bhatti saas rbac</h3>
+<h2 id="_4">参考资料</h2>
+<ul>
+<li><a href="http://www.woshipm.com/it/4681031.html/comment-page-1">一文读懂IAM（身份与访问管理）</a></li>
+<li><a href="https://github.com/ory/ladon">ladon</a></li>
+<li><a href="https://www.mscodecloud.com/product">mscode</a></li>
+<li><a href="https://github.com/marmotedu/iam">go iam 项目实战</a></li>
+<li><a href="http://icyfenix.cn/architect-perspective/general-architecture/system-security/authorization.html">授权-凤凰架构</a></li>
+<li><a href="">abac vs rbac</a></li>
+<li><a href="">tencent 蓝鲸 iam</a>  估计是 go iam 差不多</li>
+<li><a href="https://github.com/bhatti/saas_rbac">bhatti saas rbac</a></li>
+<li><a href="">staffjoy</a></li>
+<li>其他 micro service 教程里的系统 , 如凤凰架构(就是 rbac + oauth2)</li>
+</ul>
+</div>
+</div>
+<footer>
+<hr/>
+<div role="contentinfo">
+<!-- Copyright etc -->
+</div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+</div>
+</div>
+</section>
+</div>
+<div aria-label="versions" class="rst-versions" role="note">
+<span class="rst-current-version" data-toggle="rst-current-version">
+</span>
+</div>
+<script>var base_url = '../..';</script>
+<script defer="" src="../../js/theme.js"></script>
+<script defer="" src="../../js/mermaid.min.js"></script>
+<script defer="" src="../../js/custom.js"></script>
+<script defer="">
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(false);
+        };
+    </script>
+</body>
+</html>

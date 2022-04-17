@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
+<head>
+<meta charset="utf-8"/>
+<meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="../../img/favicon.ico" rel="shortcut icon"/>
+<title>Unfin neetcode - Log0c</title>
+<link href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" rel="stylesheet">
+<link href="../../css/theme.css" rel="stylesheet"/>
+<link href="../../css/theme_extra.css" rel="stylesheet"/>
+<script>
+    // Current page data
+    var mkdocs_page_name = "Unfin neetcode";
+    var mkdocs_page_input_path = "tomchfd/unfin-neetcode.md";
+    var mkdocs_page_url = null;
+  </script>
+<script defer="" src="../../js/jquery-2.1.1.min.js"></script>
+<script defer="" src="../../js/modernizr-2.8.3.min.js"></script>
+</link></head>
+<body class="wy-body-for-nav" role="document">
+<div class="wy-grid-for-nav">
+<nav class="wy-nav-side stickynav" data-toggle="wy-nav-shift">
+<div class="wy-side-scroll">
+<div class="wy-side-nav-search">
+<a class="icon icon-home" href="../.."> Log0c</a>
+</div>
+<div aria-label="main navigation" class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../..">主页</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">labs</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../xv6-00-a/">xv6</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../labs/6824-mapreduce/">MIT 6.824 - MapReduce</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../labs/6824-raft/">MIT 6.824 - Raft</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../labs/6824-kv/">MIT 6.824 - KV (3A)</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../6824-lab3b/">MIT 6.824 - KV (3B)</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../labs/csapp-shell/">CSAPP - Shell</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../labs/csapp-proxy/">CSAPP - Proxy</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../labs/cs144/">CS144</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../misc-lox/">lox</a>
+</li>
+</ul>
+</div>
+</div>
+</nav>
+<section class="wy-nav-content-wrap" data-toggle="wy-nav-shift">
+<nav aria-label="top navigation" class="wy-nav-top" role="navigation">
+<i class="fa fa-bars" data-toggle="wy-nav-top"></i>
+<a href="../..">Log0c</a>
+</nav>
+<div class="wy-nav-content">
+<div class="rst-content">
+<div aria-label="breadcrumbs navigation" role="navigation">
+<ul class="wy-breadcrumbs">
+<li><a href="../..">Docs</a> »</li>
+<li>Unfin neetcode</li>
+<li class="wy-breadcrumbs-aside">
+</li>
+</ul>
+<hr/>
+</div>
+<div role="main">
+<div class="section">
+<p>有一个bool数组存放当前字母是否存在
+另一个数组存放每个字母的下一个节点的指针</p>
+<p>一个属性存放是否有字符串在当前节点结束了 isEnd</p>
+<p>Q2: 新字符串如何插入?</p>
+<p>从根节点递归插入 , 然后 +1 , 把每个节点的当前字母设为 true , 如果节点不存在则创建 , 还得存放某个字符串是否在当前节点结束</p>
+<p>Q3: 字符串如何删除?</p>
+<p>?? 不知道 , 好像会误删掉其他字符串的值 , 用计数法?  删去的时候 -1 不行! 会被当做还在</p>
+<p>不,不可能误删! 到达某个节点的路径都是唯一的,没有交叉 , 所以和插入的时候一样删除就行了</p>
+<p>Q4: 有什么优化版本的 trie 吗 , 他是怎么优化的</p>
+<p>有个 prefix tree ? 忘记叫什么了, gin 里面用的那个 , radix tree ?</p>
+<p>radix tree , 又叫基数树或压缩前缀树</p>
+<p>Q5: 第一个节点为什么不存东西? 为了匹配空字符串?</p>
+<p>是你理解错误了 , 树的连接才表示一个字母 , 每个树节点表示一个字符串!!</p>
+<p>Q6: go 写一遍trie 的代码</p>
+<p>struct TrieNode {
+    next []*TrieNode
+    isEnd bool
+}</p>
+<p>func (t *TrieNode) Search(s string,offset int) {</p>
+<p>}</p>
+<p>func (t *TrieNode) Insert(s string,offset int) {</p>
+<pre><code>rune alpha:=s[offset]
+if alpha==' ' {
+    return
+}
+
+var nextNode *TrieNode
+idx:=alpha - 'a'
+if  t.next[idx]!=nil {
+    nextNode=t.next[idx]
+} else {
+    nextNode = t.next[idx] = &amp;TrieNode{}
+}
+if offset==len(s)-1 {
+    t.isEnd=true
+    return
+}
+nextNode.Insert(s,offset+1)
+</code></pre>
+<p>}</p>
+</div>
+</div>
+<footer>
+<hr/>
+<div role="contentinfo">
+<!-- Copyright etc -->
+</div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+</div>
+</div>
+</section>
+</div>
+<div aria-label="versions" class="rst-versions" role="note">
+<span class="rst-current-version" data-toggle="rst-current-version">
+</span>
+</div>
+<script>var base_url = '../..';</script>
+<script defer="" src="../../js/theme.js"></script>
+<script defer="" src="../../js/mermaid.min.js"></script>
+<script defer="" src="../../js/custom.js"></script>
+<script defer="">
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(false);
+        };
+    </script>
+</body>
+</html>

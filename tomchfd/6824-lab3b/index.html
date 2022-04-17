@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
+<head>
+<meta charset="utf-8"/>
+<meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="../../img/favicon.ico" rel="shortcut icon"/>
+<title>MIT 6.824 - KV (3B) - Log0c</title>
+<link href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" rel="stylesheet">
+<link href="../../css/theme.css" rel="stylesheet"/>
+<link href="../../css/theme_extra.css" rel="stylesheet"/>
+<script>
+    // Current page data
+    var mkdocs_page_name = "MIT 6.824 - KV (3B)";
+    var mkdocs_page_input_path = "tomchfd/6824-lab3b.md";
+    var mkdocs_page_url = null;
+  </script>
+<script defer="" src="../../js/jquery-2.1.1.min.js"></script>
+<script defer="" src="../../js/modernizr-2.8.3.min.js"></script>
+</link></head>
+<body class="wy-body-for-nav" role="document">
+<div class="wy-grid-for-nav">
+<nav class="wy-nav-side stickynav" data-toggle="wy-nav-shift">
+<div class="wy-side-scroll">
+<div class="wy-side-nav-search">
+<a class="icon icon-home" href="../.."> Log0c</a>
+</div>
+<div aria-label="main navigation" class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../..">主页</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">labs</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../xv6-00-a/">xv6</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../labs/6824-mapreduce/">MIT 6.824 - MapReduce</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../labs/6824-raft/">MIT 6.824 - Raft</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../labs/6824-kv/">MIT 6.824 - KV (3A)</a>
+</li>
+<li class="toctree-l1 current"><a class="reference internal current" href="./">MIT 6.824 - KV (3B)</a>
+<ul class="current">
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../labs/csapp-shell/">CSAPP - Shell</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../labs/csapp-proxy/">CSAPP - Proxy</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../labs/cs144/">CS144</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../misc-lox/">lox</a>
+</li>
+</ul>
+</div>
+</div>
+</nav>
+<section class="wy-nav-content-wrap" data-toggle="wy-nav-shift">
+<nav aria-label="top navigation" class="wy-nav-top" role="navigation">
+<i class="fa fa-bars" data-toggle="wy-nav-top"></i>
+<a href="../..">Log0c</a>
+</nav>
+<div class="wy-nav-content">
+<div class="rst-content">
+<div aria-label="breadcrumbs navigation" role="navigation">
+<ul class="wy-breadcrumbs">
+<li><a href="../..">Docs</a> »</li>
+<li>labs »</li>
+<li>MIT 6.824 - KV (3B)</li>
+<li class="wy-breadcrumbs-aside">
+</li>
+</ul>
+<hr/>
+</div>
+<div role="main">
+<div class="section">
+<h1 id="6824-lab3b">6824 lab3b 压缩日志逻辑 流程</h1>
+<ul>
+<li>每个 kv server / raft 负责自己的 snapshot ? 只有新加入或者落后太多的 kv / raft 才会从 leader 那里 installed ? </li>
+</ul>
+<p>3B 总结 : 差不多隔了一年多开始做的Lab 3B , 真的有点看不懂自己写的代码了 , 第二个问题是想到如果没有这完善的 test case , 不知道在做的过程中会摧毁多少之前的约束条件和功能 , 一次性完成整个大功能也是不可能的 , 得把大功能拆成很多小的 , 可以验证的子功能 , 然后最好按顺序完成这些子功能 , 验证后再做下一个</p>
+<p>不过这样也会有问题 , 失去了全局架构感知 , 之前lab2 raft就出过这个问题 , 最后是推倒重来了 , 现在看, 解决方法有两个 , 一个是在做每个子功能的时候 , 发现腐烂代码立刻清除/修改 , 渐进式的架构演进 , 第二个是先设计好整体的代码架构 , 并且先过一遍所有子功能 , 然后才开始做每一个子功能 . </p>
+<h1 id="1">1 压缩日志 / 产生快照</h1>
+<p>kv server 检测到 raft 日志体积过大 , 用 gob 编码自己的必要状态 , 发送快照给 raft 做持久化</p>
+<pre><code>//need snapshot
+                if maxraftstate != -1 &amp;&amp; kv.rf.GetPerisistSize() &gt; maxraftstate {
+                    w := new(bytes.Buffer)
+                    e := gob.NewEncoder(w)
+                    e.Encode(kv.db)
+                    e.Encode(kv.ack)
+                    data := w.Bytes()
+                    go kv.rf.StartSnapshot(data,msg.Index)
+                }
+
+// raft 收到要求压缩(切割)日志的请求   
+func (rf *Raft) StartSnapshot(snapshot []byte, index int) {
+
+    // 改日志得加锁
+    rf.mu.Lock()
+    defer rf.mu.Unlock()
+
+
+    baseIndex := rf.log[0].LogIndex
+    lastIndex := rf.getLastIndex()
+
+    // 小于 baseIndex 的原因: 从 leader 处安装了 snapshot
+    // 大于 lastIndex 的原因 ?
+    if index &lt;= baseIndex || index &gt; lastIndex {
+        // in case having installed a snapshot from leader before snapshotting
+        // second condition is a hack
+        return
+    }
+
+    var newLogEntries []LogEntry
+
+    // 保留 [index,..... lastindex]
+    newLogEntries = append(newLogEntries, LogEntry{LogIndex: index, LogTerm: rf.log[index-baseIndex].LogTerm})
+
+    for i := index + 1; i &lt;= lastIndex; i++ {
+        newLogEntries = append(newLogEntries, rf.log[i-baseIndex])
+    }
+
+    rf.log = newLogEntries
+
+    // 对 raft 发生了修改 , 做持久化
+    rf.persist()
+
+    //保存快照 和 第一个 log entry 的 index 和 teerm
+    w := new(bytes.Buffer)
+    e := gob.NewEncoder(w)
+    e.Encode(newLogEntries[0].LogIndex)
+    e.Encode(newLogEntries[0].LogTerm)
+
+    data := w.Bytes()
+    data = append(data, snapshot...)
+    rf.persister.SaveSnapshot(data)
+}
+
+func (ps *Persister) SaveSnapshot(snapshot []byte) {
+    ps.mu.Lock()
+    defer ps.mu.Unlock()
+    ps.snapshot = snapshot
+}
+
+func truncateLog(lastIncludedIndex int, lastIncludedTerm int, log []LogEntry) []LogEntry {
+
+    var newLogEntries []LogEntry
+    newLogEntries = append(newLogEntries, LogEntry{LogIndex: lastIncludedIndex, LogTerm: lastIncludedTerm})
+
+    for index := len(log) - 1; index &gt;= 0; index-- {
+        if log[index].LogIndex == lastIncludedIndex &amp;&amp; log[index].LogTerm == lastIncludedTerm {
+            newLogEntries = append(newLogEntries, log[index+1:]...)
+            break
+        }
+    }
+
+    return newLogEntries
+}
+
+
+</code></pre>
+<h1 id="2-follower-snapshot">2 新加入/落后的 follower , 安装 snapshot</h1>
+<ul>
+<li>L 收到 F 请求,发现 index 过于落后 (已经被压缩裁剪掉了) , 发送 snapshot 让 F 先安装</li>
+</ul>
+<pre><code>
+    if rf.nextIndex[i] &gt; baseIndex {
+            ...............
+            ..............
+            ...............
+            } else {
+                var args InstallSnapshotArgs
+                args.Term = rf.currentTerm
+                args.LeaderId = rf.me
+                args.LastIncludedIndex = rf.log[0].LogIndex
+                args.LastIncludedTerm = rf.log[0].LogTerm
+                args.Data = rf.persister.snapshot
+                go func(server int,args InstallSnapshotArgs) {
+                    reply := &amp;InstallSnapshotReply{}
+                    rf.sendInstallSnapshot(server, args, reply)
+                }(i,args)
+            }
+        }
+
+</code></pre>
+<pre><code>func (rf *Raft) sendInstallSnapshot(server int,args InstallSnapshotArgs,reply *InstallSnapshotReply) bool {
+    ok := rf.peers[server].Call("Raft.InstallSnapshot", args, reply)
+    if ok {
+        if reply.Term &gt; rf.currentTerm {
+            rf.currentTerm = reply.Term
+            rf.state = STATE_FLLOWER
+            rf.votedFor = -1
+            return ok
+        }
+
+        rf.nextIndex[server] = args.LastIncludedIndex + 1
+        rf.matchIndex[server] = args.LastIncludedIndex
+    }
+    return ok
+}
+</code></pre>
+<ul>
+<li>F 收到请求,安装 snapshot</li>
+</ul>
+<pre><code>
+type InstallSnapshotArgs struct {
+    Term              int
+    LeaderId          int
+    LastIncludedIndex int
+    LastIncludedTerm  int
+    Data              []byte
+}
+
+type InstallSnapshotReply struct {
+    Term int
+}
+
+
+func (rf *Raft) InstallSnapshot(args InstallSnapshotArgs,reply *InstallSnapshotReply) {
+    // Your code here.
+    rf.mu.Lock()
+    defer rf.mu.Unlock()
+    if args.Term &lt; rf.currentTerm {
+        reply.Term = rf.currentTerm
+        return
+    }
+    rf.chanHeartbeat &lt;- true
+    rf.state = STATE_FLLOWER
+    rf.currentTerm = rf.currentTerm
+
+    rf.persister.SaveSnapshot(args.Data)
+
+    rf.log = truncateLog(args.LastIncludedIndex, args.LastIncludedTerm, rf.log)
+
+    msg := ApplyMsg{UseSnapshot: true, Snapshot: args.Data}
+
+    rf.lastApplied = args.LastIncludedIndex
+    rf.commitIndex = args.LastIncludedIndex
+
+    rf.persist()
+
+    rf.chanApply &lt;- msg
+}
+</code></pre>
+<ul>
+<li>leader/follower KV server 安装 snapshot</li>
+</ul>
+<pre><code>if msg.UseSnapshot {
+                var LastIncludedIndex int
+                var LastIncludedTerm int
+
+                r := bytes.NewBuffer(msg.Snapshot)
+                d := gob.NewDecoder(r)
+
+                kv.mu.Lock()
+                d.Decode(&amp;LastIncludedIndex)
+                d.Decode(&amp;LastIncludedTerm)
+                kv.db = make(map[string]string)
+                kv.ack = make(map[int64]int)
+                d.Decode(&amp;kv.db)
+                d.Decode(&amp;kv.ack)
+                kv.mu.Unlock()
+            }
+</code></pre>
+<h1 id="_1">其他流程</h1>
+<p>重启的时候从 Snapshot 恢复</p>
+<pre><code>
+rf.readSnapshot(persister.ReadSnapshot())
+
+func (rf *Raft) readSnapshot(data []byte) {
+
+    rf.readPersist(rf.persister.ReadRaftState())
+
+    if len(data) == 0 {
+        return
+    }
+
+    r := bytes.NewBuffer(data)
+    d := gob.NewDecoder(r)
+
+    var LastIncludedIndex int
+    var LastIncludedTerm int
+
+    d.Decode(&amp;LastIncludedIndex)
+    d.Decode(&amp;LastIncludedTerm)
+
+    rf.commitIndex = LastIncludedIndex
+    rf.lastApplied = LastIncludedIndex
+
+    rf.log = truncateLog(LastIncludedIndex, LastIncludedTerm, rf.log)
+
+    msg := ApplyMsg{UseSnapshot: true, Snapshot: data}
+
+    go func() {
+        rf.chanApply &lt;- msg
+    }()
+}
+</code></pre>
+</div>
+</div>
+<footer>
+<div aria-label="footer navigation" class="rst-footer-buttons" role="navigation">
+<a class="btn btn-neutral float-right" href="../../labs/csapp-shell/" title="CSAPP - Shell">Next <span class="icon icon-circle-arrow-right"></span></a>
+<a class="btn btn-neutral" href="../../labs/6824-kv/" title="MIT 6.824 - KV (3A)"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+</div>
+<hr/>
+<div role="contentinfo">
+<!-- Copyright etc -->
+</div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+</div>
+</div>
+</section>
+</div>
+<div aria-label="versions" class="rst-versions" role="note">
+<span class="rst-current-version" data-toggle="rst-current-version">
+<span><a href="../../labs/6824-kv/" style="color: #fcfcfc;">« Previous</a></span>
+<span style="margin-left: 15px"><a href="../../labs/csapp-shell/" style="color: #fcfcfc">Next »</a></span>
+</span>
+</div>
+<script>var base_url = '../..';</script>
+<script defer="" src="../../js/theme.js"></script>
+<script defer="" src="../../js/mermaid.min.js"></script>
+<script defer="" src="../../js/custom.js"></script>
+<script defer="">
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(false);
+        };
+    </script>
+</body>
+</html>

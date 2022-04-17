@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
+<head>
+<meta charset="utf-8"/>
+<meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="../../img/favicon.ico" rel="shortcut icon"/>
+<title>Deploy service Api - Log0c</title>
+<link href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" rel="stylesheet">
+<link href="../../css/theme.css" rel="stylesheet"/>
+<link href="../../css/theme_extra.css" rel="stylesheet"/>
+<script>
+    // Current page data
+    var mkdocs_page_name = "Deploy service Api";
+    var mkdocs_page_input_path = "tomchfd/unfin-cloudformation-api.md";
+    var mkdocs_page_url = null;
+  </script>
+<script defer="" src="../../js/jquery-2.1.1.min.js"></script>
+<script defer="" src="../../js/modernizr-2.8.3.min.js"></script>
+</link></head>
+<body class="wy-body-for-nav" role="document">
+<div class="wy-grid-for-nav">
+<nav class="wy-nav-side stickynav" data-toggle="wy-nav-shift">
+<div class="wy-side-scroll">
+<div class="wy-side-nav-search">
+<a class="icon icon-home" href="../.."> Log0c</a>
+</div>
+<div aria-label="main navigation" class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../..">主页</a>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">labs</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../xv6-00-a/">xv6</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../labs/6824-mapreduce/">MIT 6.824 - MapReduce</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../labs/6824-raft/">MIT 6.824 - Raft</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../labs/6824-kv/">MIT 6.824 - KV (3A)</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../6824-lab3b/">MIT 6.824 - KV (3B)</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../labs/csapp-shell/">CSAPP - Shell</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../labs/csapp-proxy/">CSAPP - Proxy</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../labs/cs144/">CS144</a>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../misc-lox/">lox</a>
+</li>
+</ul>
+</div>
+</div>
+</nav>
+<section class="wy-nav-content-wrap" data-toggle="wy-nav-shift">
+<nav aria-label="top navigation" class="wy-nav-top" role="navigation">
+<i class="fa fa-bars" data-toggle="wy-nav-top"></i>
+<a href="../..">Log0c</a>
+</nav>
+<div class="wy-nav-content">
+<div class="rst-content">
+<div aria-label="breadcrumbs navigation" role="navigation">
+<ul class="wy-breadcrumbs">
+<li><a href="../..">Docs</a> »</li>
+<li>Deploy service Api</li>
+<li class="wy-breadcrumbs-aside">
+</li>
+</ul>
+<hr/>
+</div>
+<div role="main">
+<div class="section">
+<h1 id="deploy-service-api">Deploy service Api</h1>
+<h2 id="stack">创建 Stack</h2>
+<p>stack : 一个部署单元 , 例如一个租户可以在 region1 创建 stack1 , 也可以在 region2 创建 stack2 , 两个 region 的 stack 可以分别部署和维护</p>
+<p>目前可以视为一个租户有一个对应的 stack</p>
+<p><strong>接口</strong></p>
+<p>post /stack</p>
+<p><strong>请求参数</strong></p>
+<pre><code>
+{
+    // 替换到模板中的参数 , 如数据库账号密码
+    "parameters":{
+        "common":{
+            "tenant_id":1
+        },
+        "network":{
+            "enabled":true
+            "custom_subdomain":"tenant1"
+        },
+
+        "database":{
+            "enabled":true,
+            "account":"",
+            "password":"",
+            "init_sql_url":"",
+            "type":"mysql",
+            "instance":"advanced",
+            "version":"5.7",
+        },
+
+        "cloud_block_storage":{
+            "enabled":true,
+            "size":"50GB"
+        }
+        "web_service":{
+            "container_img_url":"www.7niu.com/product-service-image"
+            "replica":3,
+        }
+    },       
+
+
+    "stack_name":"stack-1",
+
+    // 预设好的部署 template , 不用修改
+    "preset_template":"stateful_web_service",
+
+    //第一版暂时不做
+    "template_body":  {
+        "template_format_version":"20220407",
+        "resources":{
+            "container1":{
+                "type":"web_container",
+                ""
+            }
+        },
+
+    }
+
+
+
+}
+
+</code></pre>
+<p><strong>响应内容</strong></p>
+<pre><code>// 正确响应
+{
+
+    "code": 10001,
+    "msg":"success",
+    "data":{
+        "stack_id": 1
+    }
+}
+</code></pre>
+<pre><code>// 错误响应
+{
+    "code":20001,
+    "msg":"deploy timeout",
+    "data":{}
+}
+</code></pre>
+<h2 id="stack_1">删除 Stack</h2>
+<p><strong>接口</strong></p>
+<p>del /stack</p>
+<p><strong>请求参数</strong></p>
+<p>{
+    "stack_name":"stack-1"
+}</p>
+<p><strong>响应内容</strong></p>
+<pre><code>// 正确响应
+{
+
+    "code": 10001,
+    "msg":"success",
+    "data":{
+
+    }
+}
+</code></pre>
+<pre><code>// 错误响应
+{
+    "code":20001,
+    "msg":"deploy timeout",
+    "data":{}
+}
+</code></pre>
+<h2 id="stack_2">更新 Stack   // 暂时不做, 通过删除和重新创建两个接口组合实现</h2>
+<p>put /stack</p>
+<p><strong>请求参数</strong></p>
+<p>{
+    "stack_name":"stack-1"
+}</p>
+<p><strong>响应内容</strong></p>
+<pre><code>// 正确响应
+{
+
+    "code": 10001,
+    "msg":"success",
+    "data":{
+
+    }
+}
+</code></pre>
+<pre><code>// 错误响应
+{
+    "code":20001,
+    "msg":"deploy timeout",
+    "data":{}
+}
+</code></pre>
+<h2 id="stack_3">检查 stack 状态</h2>
+<p>get /stack/info</p>
+<p><strong>请求参数</strong></p>
+<p>{
+    "stack_name":"stack-1"
+}</p>
+<p><strong>响应内容</strong></p>
+<p>{Q</p>
+<pre><code>"code": 10001,
+"msg":"success",
+"data":{
+    "stack_status":"DEPLOY_SUCCESS"  // DEPLOY_SUCCESS , DEPLOY_PENDING , DEPLOY_FAIL
+}
+</code></pre>
+<p>}</p>
+<h2 id="_1">不属于部署服务的接口</h2>
+<p>get /database/engines</p>
+</div>
+</div>
+<footer>
+<hr/>
+<div role="contentinfo">
+<!-- Copyright etc -->
+</div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+</div>
+</div>
+</section>
+</div>
+<div aria-label="versions" class="rst-versions" role="note">
+<span class="rst-current-version" data-toggle="rst-current-version">
+</span>
+</div>
+<script>var base_url = '../..';</script>
+<script defer="" src="../../js/theme.js"></script>
+<script defer="" src="../../js/mermaid.min.js"></script>
+<script defer="" src="../../js/custom.js"></script>
+<script defer="">
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(false);
+        };
+    </script>
+</body>
+</html>
